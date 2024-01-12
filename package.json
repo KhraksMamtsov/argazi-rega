@@ -1,0 +1,36 @@
+{
+  "name": "test122",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "db:client:generate": "prisma generate",
+    "db:migrations:apply": "npx prisma migrate deploy",
+    "typecheck": "tsc --noEmit",
+    "typecheck:watch": "tsc --noEmit --watch",
+    "build": "tsc -b tsconfig.build.json",
+    "build:watch": "tsc -b tsconfig.build.json --watch",
+    "start": "node build/esm/src/index.js",
+    "start:watch": "node --watch build/esm/src/index.js",
+    "docker:start:watch": "pnpm run build:watch & pnpm run start:watch"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@effect/platform": "^0.41.0",
+    "@effect/platform-node": "^0.41.0",
+    "@effect/schema": "^0.59.1",
+    "@prisma/client": "5.8.0",
+    "effect": "^2.0.3",
+    "effect-http": "^0.49.1",
+    "effect-log": "^0.25.0",
+    "prisma": "^5.8.0",
+    "schema-openapi": "^0.28.0",
+    "typescript": "^5.3.3"
+  },
+  "devDependencies": {
+    "prettier": "^3.1.1"
+  }
+}

@@ -1,0 +1,226 @@
+lockfileVersion: '6.0'
+
+settings:
+  autoInstallPeers: true
+  excludeLinksFromLockfile: false
+
+dependencies:
+  '@effect/platform':
+    specifier: ^0.41.0
+    version: 0.41.0(@effect/schema@0.59.1)(effect@2.0.3)
+  '@effect/platform-node':
+    specifier: ^0.41.0
+    version: 0.41.0(@effect/platform@0.41.0)(effect@2.0.3)
+  '@effect/schema':
+    specifier: ^0.59.1
+    version: 0.59.1(effect@2.0.3)(fast-check@3.15.0)
+  '@prisma/client':
+    specifier: 5.8.0
+    version: 5.8.0(prisma@5.8.0)
+  effect:
+    specifier: ^2.0.3
+    version: 2.0.3
+  effect-http:
+    specifier: ^0.49.1
+    version: 0.49.1(@effect/platform@0.41.0)(@effect/schema@0.59.1)(effect@2.0.3)
+  effect-log:
+    specifier: ^0.25.0
+    version: 0.25.0(effect@2.0.3)
+  prisma:
+    specifier: ^5.8.0
+    version: 5.8.0
+  schema-openapi:
+    specifier: ^0.28.0
+    version: 0.28.0(@effect/schema@0.59.1)(effect@2.0.3)
+  typescript:
+    specifier: ^5.3.3
+    version: 5.3.3
+
+devDependencies:
+  prettier:
+    specifier: ^3.1.1
+    version: 3.1.1
+
+packages:
+
+  /@effect/platform-node@0.41.0(@effect/platform@0.41.0)(effect@2.0.3):
+    resolution: {integrity: sha512-sZDL2bHG5uW0cpOD1qyZ8UvadjLcRHIbRNaSRnM59FTIhhHtESA6mFJtOethv3q/ubfR2EZgQnFR35Zm8rFWSA==}
+    peerDependencies:
+      '@effect/platform': ^0.41.0
+      effect: ^2.0.3
+    dependencies:
+      '@effect/platform': 0.41.0(@effect/schema@0.59.1)(effect@2.0.3)
+      effect: 2.0.3
+      mime: 3.0.0
+      multipasta: 0.1.21
+    dev: false
+
+  /@effect/platform@0.41.0(@effect/schema@0.59.1)(effect@2.0.3):
+    resolution: {integrity: sha512-iR5sFcFubZRLTsvZiL6gOlIvD/FPFq47t2D+ju8bxfO7I5ZwapoogHWSGOU1PrhvRZNplPxJiUK18miNVi0ZFg==}
+    peerDependencies:
+      '@effect/schema': ^0.59.1
+      effect: ^2.0.3
+    dependencies:
+      '@effect/schema': 0.59.1(effect@2.0.3)(fast-check@3.15.0)
+      effect: 2.0.3
+      find-my-way-ts: 0.1.1
+      multipasta: 0.1.21
+      path-browserify: 1.0.1
+    dev: false
+
+  /@effect/schema@0.59.1(effect@2.0.3)(fast-check@3.15.0):
+    resolution: {integrity: sha512-dighL1fSjOLNupETYaN4hvUo9zxvdi4w+lgJ9lHKYFZapaFxR2f8ZKB2WunsSGnF5mCyWLDS3GMtfLeqz2I2ug==}
+    peerDependencies:
+      effect: ^2.0.3
+      fast-check: ^3.13.2
+    dependencies:
+      effect: 2.0.3
+      fast-check: 3.15.0
+    dev: false
+
+  /@prisma/client@5.8.0(prisma@5.8.0):
+    resolution: {integrity: sha512-QxO6C4MaA/ysTIbC+EcAH1aX/YkpymhXtO6zPdk+FvA7+59tNibIYpd+7koPdViLg2iKES4ojsxWNUGNJaEcbA==}
+    engines: {node: '>=16.13'}
+    requiresBuild: true
+    peerDependencies:
+      prisma: '*'
+    peerDependenciesMeta:
+      prisma:
+        optional: true
+    dependencies:
+      prisma: 5.8.0
+    dev: false
+
+  /@prisma/debug@5.8.0:
+    resolution: {integrity: sha512-ZqPpkvbovu/kQJ1bvy57NO4dw97fpQGcbQSCtsqlwSE1UNKJP75R3BKxdznk8ZPMY+GJdMRetWNv4oAvSbWn8Q==}
+    dev: false
+
+  /@prisma/engines-version@5.8.0-37.0a83d8541752d7582de2ebc1ece46519ce72a848:
+    resolution: {integrity: sha512-cXcoVweYbnv8xRfkWq9oj8BECOdzHUazrSpYCa0ehp5TNz4l5Spa8jbq/VROCTzj3ZncH5D9Q2TmySYTOUeKlw==}
+    dev: false
+
+  /@prisma/engines@5.8.0:
+    resolution: {integrity: sha512-Qhqm9WWLujNEC13AuZlUO14SQ15tNLe5puaz+tOk7UqINqJ3PtqMmuSuzomiw2diGVqZ+HYiSQzlR3+pPucVHA==}
+    requiresBuild: true
+    dependencies:
+      '@prisma/debug': 5.8.0
+      '@prisma/engines-version': 5.8.0-37.0a83d8541752d7582de2ebc1ece46519ce72a848
+      '@prisma/fetch-engine': 5.8.0
+      '@prisma/get-platform': 5.8.0
+    dev: false
+
+  /@prisma/fetch-engine@5.8.0:
+    resolution: {integrity: sha512-1CAuE+JoYsPNggMEn6qk0zos06Uc9bYZBJ0VBPHD6R7REL05614koAbOCmn52IaYz3nobb7f25hqW6AY7rLkIw==}
+    dependencies:
+      '@prisma/debug': 5.8.0
+      '@prisma/engines-version': 5.8.0-37.0a83d8541752d7582de2ebc1ece46519ce72a848
+      '@prisma/get-platform': 5.8.0
+    dev: false
+
+  /@prisma/get-platform@5.8.0:
+    resolution: {integrity: sha512-Nk3rhTFZ1LYkFZJnpSvQcLPCaBWgJQfteHII6UEENOOkYlmP0k3FuswND54tzzEr4qs39wOdV9pbXKX9U2lv7A==}
+    dependencies:
+      '@prisma/debug': 5.8.0
+    dev: false
+
+  /effect-http@0.49.1(@effect/platform@0.41.0)(@effect/schema@0.59.1)(effect@2.0.3):
+    resolution: {integrity: sha512-ZuMuIQrmakVQi6hVuvW3b6FxA/SWUip64WqcLJLF85hfdefLf3Hm27RQHj9VR5O+1NJRkl90xcOEwwXovU/wPQ==}
+    peerDependencies:
+      '@effect/platform': ^0.41.0
+      '@effect/schema': ^0.59.0
+      effect: ^2.0.0
+    dependencies:
+      '@effect/platform': 0.41.0(@effect/schema@0.59.1)(effect@2.0.3)
+      '@effect/schema': 0.59.1(effect@2.0.3)(fast-check@3.15.0)
+      effect: 2.0.3
+      schema-openapi: 0.28.0(@effect/schema@0.59.1)(effect@2.0.3)
+      swagger-ui-dist: 5.11.0
+    dev: false
+
+  /effect-log@0.25.0(effect@2.0.3):
+    resolution: {integrity: sha512-pvOUMD9ZitjYOaC8TXI8+zLvztCXjmZaz8gxsufGfafZSvEKqzKOYyprs+Jo6Pt1sTJcArRuKk3+vsptogBHZA==}
+    peerDependencies:
+      effect: ^2.0.0
+    dependencies:
+      effect: 2.0.3
+    dev: false
+
+  /effect@2.0.3:
+    resolution: {integrity: sha512-I/XvcbHypegNFWCr/arbfIR6pA+8JpSqv9wS4xOrgXypQMRj8H3wRorTcUiPmcQ0e6Ko67CdI2XZpjx7z0Ev/A==}
+    dev: false
+
+  /fast-check@3.15.0:
+    resolution: {integrity: sha512-iBz6c+EXL6+nI931x/sbZs1JYTZtLG6Cko0ouS8LRTikhDR7+wZk4TYzdRavlnByBs2G6+nuuJ7NYL9QplNt8Q==}
+    engines: {node: '>=8.0.0'}
+    dependencies:
+      pure-rand: 6.0.4
+    dev: false
+
+  /fast-decode-uri-component@1.0.1:
+    resolution: {integrity: sha512-WKgKWg5eUxvRZGwW8FvfbaH7AXSh2cL+3j5fMGzUMCxWBJ3dV3a7Wz8y2f/uQ0e3B6WmodD3oS54jTQ9HVTIIg==}
+    dev: false
+
+  /fast-querystring@1.1.2:
+    resolution: {integrity: sha512-g6KuKWmFXc0fID8WWH0jit4g0AGBoJhCkJMb1RmbsSEUNvQ+ZC8D6CUZ+GtF8nMzSPXnhiePyyqqipzNNEnHjg==}
+    dependencies:
+      fast-decode-uri-component: 1.0.1
+    dev: false
+
+  /find-my-way-ts@0.1.1:
+    resolution: {integrity: sha512-nXUdq29JRQ1tYa1/n+DHTVChMARJHz+gi7sDZibwQukzHP7Hrr6s+sxKbaIM8xB3LzhSBJy5yLb0JhIUmHmOiA==}
+    dependencies:
+      fast-querystring: 1.1.2
+    dev: false
+
+  /mime@3.0.0:
+    resolution: {integrity: sha512-jSCU7/VB1loIWBZe14aEYHU/+1UMEHoaO7qxCOVJOw9GgH72VAWppxNcjU+x9a2k3GSIBXNKxXQFqRvvZ7vr3A==}
+    engines: {node: '>=10.0.0'}
+    hasBin: true
+    dev: false
+
+  /multipasta@0.1.21:
+    resolution: {integrity: sha512-HpF9156uifsQu1L8KKW1EqXIt3DacHJTzQ+JSm6IShkcyyf+krOWzfOgT3OLHzesM40hbs6/QW5CJWSEdDPQag==}
+    dev: false
+
+  /path-browserify@1.0.1:
+    resolution: {integrity: sha512-b7uo2UCUOYZcnF/3ID0lulOJi/bafxa1xPe7ZPsammBSpjSWQkjNxlt635YGS2MiR9GjvuXCtz2emr3jbsz98g==}
+    dev: false
+
+  /prettier@3.1.1:
+    resolution: {integrity: sha512-22UbSzg8luF4UuZtzgiUOfcGM8s4tjBv6dJRT7j275NXsy2jb4aJa4NNveul5x4eqlF1wuhuR2RElK71RvmVaw==}
+    engines: {node: '>=14'}
+    hasBin: true
+    dev: true
+
+  /prisma@5.8.0:
+    resolution: {integrity: sha512-hDKoEqPt2qEUTH5yGO3l27CBnPtwvte0CGMKrpCr9+/A919JghfqJ3qgCGgMbOwdkXUOzdho0RH9tyUF3UhpMw==}
+    engines: {node: '>=16.13'}
+    hasBin: true
+    requiresBuild: true
+    dependencies:
+      '@prisma/engines': 5.8.0
+    dev: false
+
+  /pure-rand@6.0.4:
+    resolution: {integrity: sha512-LA0Y9kxMYv47GIPJy6MI84fqTd2HmYZI83W/kM/SkKfDlajnZYfmXFTxkbY+xSBPkLJxltMa9hIkmdc29eguMA==}
+    dev: false
+
+  /schema-openapi@0.28.0(@effect/schema@0.59.1)(effect@2.0.3):
+    resolution: {integrity: sha512-1kS2f9i3PGWXfw0EWtc+Q8Py1LxZUsLkUg8wQn4fi713UJRDoRCbRc2MoXpFLoMPHpfbUMgpt/VxEYB1r35B8Q==}
+    peerDependencies:
+      '@effect/schema': ^0.59.0
+      effect: ^2.0.0
+    dependencies:
+      '@effect/schema': 0.59.1(effect@2.0.3)(fast-check@3.15.0)
+      effect: 2.0.3
+    dev: false
+
+  /swagger-ui-dist@5.11.0:
+    resolution: {integrity: sha512-j0PIATqQSEFGOLmiJOJZj1X1Jt6bFIur3JpY7+ghliUnfZs0fpWDdHEkn9q7QUlBtKbkn6TepvSxTqnE8l3s0A==}
+    dev: false
+
+  /typescript@5.3.3:
+    resolution: {integrity: sha512-pXWcraxM0uxAS+tN0AG/BF2TyqmHO014Z070UsJ+pFvYuRSq8KH8DmWpnbXe0pEPDHXZV3FcAbJkijJ5oNEnWw==}
+    engines: {node: '>=14.17'}
+    hasBin: true
+    dev: false

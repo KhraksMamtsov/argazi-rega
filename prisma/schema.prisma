@@ -1,0 +1,317 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("PRISMA_DB_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Event {
+  id          String             @id @default(uuid()) @db.Uuid
+  name        String
+  dateStart   DateTime
+  dateFinish  DateTime
+  place       Place              @relation(fields: [idPlace], references: [id], onDelete: Restrict, onUpdate: Restrict)
+  idPlace     String             @db.Uuid
+  users UserOnEvent[]
+  visitors    VisitorOnEvent[]
+  lectures    Lecture[]
+  meals       Meal[]
+  transports  TransportOnEvent[]
+  priceDay    Decimal            @db.Money
+  priceEvent  Decimal            @db.Money
+  dateCreated DateTime           @default(now())
+  dateUpdated DateTime           @updatedAt
+}
+
+model Lecture {
+  id          String           @id @default(uuid()) @db.Uuid
+  event       Event            @relation(fields: [idEvent], references: [id], onDelete: Restrict, onUpdate: Restrict)
+  idEvent     String           @db.Uuid
+  //
+  name        String
+  dateStart   DateTime
+  dateFinish  DateTime?
+  price       Decimal          @db.Money
+  //
+  users       UserOnEvent[]
+  visitors    VisitorOnEvent[]
+  //
+  dateCreated DateTime         @default(now())
+  dateUpdated DateTime         @updatedAt
+}
+
+enum UserType {
+  ADULT
+  STUDENT
+  PENSIONER
+}
+
+enum VisitorType {
+  ADULT
+  STUDENT
+  CHILD
+  PENSIONER
+}
+
+model Meal {
+  id          String           @id @default(uuid()) @db.Uuid
+  event       Event            @relation(fields: [idEvent], references: [id], onDelete: Restrict, onUpdate: Restrict)
+  idEvent     String           @db.Uuid
+  //
+  name        String
+  dateStart   DateTime
+  dateFinish  DateTime?
+  price       Decimal          @db.Money
+  //
+  users       UserOnEvent[]
+  visitors    VisitorOnEventMeal[]
+  //
+  dateCreated DateTime         @default(now())
+  dateUpdated DateTime         @updatedAt
+}
+
+model Place {
+  id          String       @id @default(uuid()) @db.Uuid
+  geoPoint    GeoPoint     @relation(fields: [idGeoPoint], references: [id], onDelete: Restrict, onUpdate: Restrict)
+  idGeoPoint  String       @db.Uuid
+  //
+  name        String
+  //
+  admins      PlaceAdmin[]
+  events      Event[]
+  //
+  dateCreated DateTime     @default(now())
+  dateUpdated DateTime     @updatedAt
+}
+
+model PlaceAdmin {
+  id          String                           @id @default(uuid()) @db.Uuid
+  user        User                             @relation(fields: [idUser], references: [id])
+  idUser      String                           @db.Uuid
+  place       Place                            @relation(fields: [idPlace], references: [id])
+  idPlace     String                           @db.Uuid
+  //
+  enrollments UserOnEventPaymentToPlaceAdmin[]
+  //
+  dateCreated DateTime                         @default(now())
+  dateUpdated DateTime                         @updatedAt
+}
+
+model User {
+  id          String        @id @default(uuid()) @db.Uuid
+  //
+  email       String        @unique
+  phone       String?       @unique
+  password    String
+  firstName   String
+  lastName    String?
+  isAdmin     Boolean
+  type        UserType
+  //
+  transports  Transport[]
+  events      UserOnEvent[]
+  visitors    Visitor[]
+  geoPoints   GeoPoint[]
+  //
+  dateCreated DateTime      @default(now())
+  dateUpdated DateTime      @updatedAt
+  places      PlaceAdmin[]
+}
+
+model GeoPoint {
+  id          String      @id @default(uuid()) @db.Uuid
+  user        User        @relation(fields: [idUser], references: [id], onDelete: Restrict, onUpdate: Restrict)
+  idUser      String      @db.Uuid
+  //
+  name        String?
+  latitude    Float
+  longitude   Float
+  //
+  routesTo    RouteTo[]
+  routesFrom  RouteFrom[]
+  place       Place[]
+  //
+  dateCreated DateTime    @default(now())
+  dateUpdated DateTime    @updatedAt
+}
+
+model Transport {
+  id          String             @id @default(uuid()) @db.Uuid
+  user        User               @relation(fields: [idUser], references: [id], onDelete: Restrict, onUpdate: Restrict)
+  idUser      String             @db.Uuid
+  //
+  number      String             @unique
+  model       String?
+  color       String
+  seatsNumber Int
+  //
+  events      TransportOnEvent[]
+  //
+  dateCreated DateTime           @default(now())
+  dateUpdated DateTime           @updatedAt
+}
+
+model Visitor {
+  id          String           @id @default(uuid()) @db.Uuid
+  user        User             @relation(fields: [idUser], references: [id], onDelete: Restrict, onUpdate: Restrict)
+  idUser      String           @db.Uuid
+  //
+  email       String?          @unique
+  name        String
+  type        VisitorType
+  //
+  events      VisitorOnEvent[]
+  //
+  dateCreated DateTime         @default(now())
+  dateUpdated DateTime         @updatedAt
+}
+
+model TransportOnEvent {
+  id          String           @id @default(uuid()) @db.Uuid
+  transport   Transport        @relation(fields: [idTransport], references: [id], onDelete: Restrict, onUpdate: Restrict)
+  idTransport String           @db.Uuid
+  event       Event            @relation(fields: [idEvent], references: [id], onDelete: Restrict, onUpdate: Restrict)
+  idEvent     String           @db.Uuid
+  //
+  price       Decimal          @db.Money
+  //
+  users       UserOnEvent[]
+  visitors    VisitorOnEvent[]
+  routeFrom   RouteFrom?
+  routeTo     RouteTo?
+  //
+  dateCreated DateTime         @default(now())
+  dateUpdated DateTime         @updatedAt
+}
+
+model RouteTo {
+  id                 String           @id @default(uuid()) @db.Uuid
+  geoPoint           GeoPoint         @relation(fields: [idGeoPoint], references: [id])
+  idGeoPoint         String           @db.Uuid
+  transportOnEvent   TransportOnEvent @relation(fields: [idTransportOnEvent], references: [id], onDelete: Restrict, onUpdate: Restrict)
+  idTransportOnEvent String           @unique @db.Uuid
+  //
+  name               String?
+  dateStart          DateTime?
+  dateFinish         DateTime?
+  //
+  dateCreated        DateTime         @default(now())
+  dateUpdated        DateTime         @updatedAt
+}
+
+model RouteFrom {
+  id                 String           @id @default(uuid()) @db.Uuid
+  geoPoint           GeoPoint         @relation(fields: [idGeoPoint], references: [id])
+  idGeoPoint         String           @db.Uuid
+  transportOnEvent   TransportOnEvent @relation(fields: [idTransportOnEvent], references: [id], onDelete: Restrict, onUpdate: Restrict)
+  idTransportOnEvent String           @unique @db.Uuid
+  //
+  name               String?
+  dateStart          DateTime?
+  dateFinish         DateTime?
+  //
+  dateCreated        DateTime         @default(now())
+  dateUpdated        DateTime          @updatedAt
+}
+
+enum UserOnEventRole {
+  ADMIN
+  LEAD
+  CHIEF
+  CASHIER
+  NONE
+}
+
+model UserOnEventPayment {
+  id            String      @id @default(uuid()) @db.Uuid
+  user          UserOnEvent @relation(name: "UserPayments", fields: [idUserOnEvent], references: [id], onDelete: Restrict, onUpdate: Restrict)
+  idUserOnEvent String      @db.Uuid
+  cashier       UserOnEvent @relation(name: "UserEnrollments", fields: [idCashier], references: [id], onDelete: Restrict, onUpdate: Restrict)
+  idCashier     String      @db.Uuid
+  //
+  payed         Decimal     @db.Money
+  //
+  dateCreated   DateTime    @default(now())
+  dateUpdated   DateTime    @updatedAt
+}
+
+model UserOnEventPaymentToPlaceAdmin {
+  id            String      @id @default(uuid()) @db.Uuid
+  user          UserOnEvent @relation(fields: [idUserOnEvent], references: [id], onDelete: Restrict, onUpdate: Restrict)
+  idUserOnEvent String      @db.Uuid
+  placeAdmin    PlaceAdmin  @relation(fields: [idPlaceAdmin], references: [id], onDelete: Restrict, onUpdate: Restrict)
+  idPlaceAdmin  String      @db.Uuid
+  //
+  payed         Decimal     @db.Money
+  //
+  dateCreated   DateTime    @default(now())
+  dateUpdated   DateTime    @updatedAt
+}
+
+model UserOnEvent {
+  id                   String                           @id @default(uuid()) @db.Uuid
+  user                 User                             @relation(fields: [idUser], references: [id], onDelete: Restrict, onUpdate: Restrict)
+  idUser               String                           @db.Uuid
+  event                Event                            @relation(fields: [idEvent], references: [id], onDelete: Restrict, onUpdate: Restrict)
+  idEvent              String                           @db.Uuid
+  transport            TransportOnEvent?                @relation(fields: [idTransport], references: [id], onDelete: Restrict, onUpdate: Restrict)
+  idTransport          String?                          @db.Uuid
+  //
+  totalCost            Decimal                          @db.Money
+  role                 UserOnEventRole
+  //
+  lectures             Lecture[]
+  meals                Meal[]
+  paymentsToPlaceAdmin UserOnEventPaymentToPlaceAdmin[]
+  payments             UserOnEventPayment[]             @relation("UserPayments")
+  enrollments          UserOnEventPayment[]              @relation("UserEnrollments")
+  visitorsEnrollments  VisitorOnEventPayment[]
+  //
+  dateCreated          DateTime                         @default(now())
+  dateUpdated          DateTime                         @updatedAt
+}
+
+model VisitorOnEventPayment {
+  id               String         @id @default(uuid()) @db.Uuid
+  visitor          VisitorOnEvent @relation(fields: [idVisitorOnEvent], references: [id])
+  idVisitorOnEvent String         @db.Uuid
+  cashier          UserOnEvent    @relation(fields: [idCashier], references: [id], onDelete: Restrict, onUpdate: Restrict)
+  idCashier        String         @db.Uuid
+  //
+  payed            Decimal        @db.Money
+  //
+  dateCreated      DateTime       @default(now())
+  dateUpdated      DateTime       @updatedAt
+}
+
+model VisitorOnEventMeal {
+  id               String         @id @default(uuid()) @db.Uuid
+  visitor          VisitorOnEvent @relation(fields: [idVisitorOnEvent], references: [id])
+  idVisitorOnEvent        String         @db.Uuid
+  idMeal        String         @db.Uuid
+  meal Meal @relation(fields: [idMeal], references: [id])
+  //
+  dateCreated      DateTime       @default(now())
+  dateUpdated      DateTime       @updatedAt
+}
+
+model VisitorOnEvent {
+  id          String                  @id @default(uuid()) @db.Uuid
+  visitor     Visitor                 @relation(fields: [idVisitor], references: [id], onDelete: Restrict, onUpdate: Restrict)
+  idVisitor   String                  @db.Uuid
+  event       Event                   @relation(fields: [idEvent], references: [id], onDelete: Restrict, onUpdate: Restrict)
+  idEvent     String                  @db.Uuid
+  transport   TransportOnEvent?       @relation(fields: [idTransport], references: [id], onDelete: Restrict, onUpdate: Restrict)
+  idTransport String?                 @default(uuid()) @db.Uuid
+  //
+  totalCost   Decimal                 @db.Money
+  //
+  lectures    Lecture[]
+  meals       VisitorOnEventMeal[]
+  payments    VisitorOnEventPayment[]
+  //
+  dateCreated DateTime                @default(now())
+  dateUpdated DateTime                @updatedAt
+}

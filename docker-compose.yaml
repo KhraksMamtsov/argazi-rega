@@ -1,0 +1,94 @@
+version: "3.8"
+services:
+  database:
+    container_name: database
+    command: [
+      "postgres",
+      "-c", "log_destination=stderr,csvlog,jsonlog",
+      "-c", "logging_collector=on",
+      "-c", "log_statement=all",
+      "-c", "log_directory=/logs"
+    ]
+    networks:
+      - application_network
+    build: ./database/
+    ports:
+      - "${POSTGRES_PORT}:${POSTGRES_PORT}"
+    restart: always
+    # https://stackoverflow.com/questions/65115627/safe-ways-to-specify-postgres-parameters-for-healthchecks-in-docker-compose
+    healthcheck:
+      test: [ "CMD-SHELL", "sh -c 'pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}'" ]
+      interval: 10s
+      timeout: 3s
+      retries: 3
+    volumes:
+      - database_data:/var/lib/postgresql/data
+      - database_logs:/logs:z
+    environment:
+      POSTGRES_PORT: "${POSTGRES_PORT}"
+      POSTGRES_USER: "${POSTGRES_USER}"
+      POSTGRES_PASSWORD: "${POSTGRES_PASSWORD}"
+      POSTGRES_DB: "${POSTGRES_DB}"
+
+  development:
+    networks:
+      - application_network
+    depends_on:
+      database:
+        condition: service_healthy
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: dependencies
+    command: ["pnpm", "run", "start:watch"]
+    volumes:
+      - ./build:/usr/app/build
+      - /usr/app/node_modules
+    ports:
+      - "${PORT}:${PORT}"
+    restart: always
+    environment:
+      LOG_LEVEL: "${LOG_LEVEL}"
+      CRYPT_SALT: "${CRYPT_SALT}"
+      LOG_MAX_FILE_SIZE: "${LOG_MAX_FILE_SIZE}"
+      JWT_SECRET_KEY: "${JWT_SECRET_KEY}"
+      JWT_SECRET_REFRESH_KEY: "${JWT_SECRET_REFRESH_KEY}"
+      TOKEN_EXPIRE_TIME: "${TOKEN_EXPIRE_TIME}"
+      TOKEN_REFRESH_EXPIRE_TIME: "${TOKEN_REFRESH_EXPIRE_TIME}"
+      PORT: "${PORT}"
+      PRISMA_DB_URL: "postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${POSTGRES_HOST}:${POSTGRES_PORT}/${POSTGRES_DB}?schema=public&connect_timeout=60"
+
+  production:
+    networks:
+      - application_network
+    depends_on:
+      database:
+        condition: service_healthy
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: production
+    ports:
+      - "${PORT}:${PORT}"
+    volumes:
+      - ./application-logs:/usr/app/application-logs
+    restart: always
+    environment:
+      PORT: "${PORT}"
+      PRISMA_DB_URL: "postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${POSTGRES_HOST}:${POSTGRES_PORT}/${POSTGRES_DB}?schema=public&connect_timeout=60"
+
+networks:
+  application_network:
+    name: argazi-network
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.28.0.0/16
+          gateway: 172.28.0.1
+
+volumes:
+  database_data:
+    name: argazi-database
+  database_logs:
+    name: argazi-database-logs
