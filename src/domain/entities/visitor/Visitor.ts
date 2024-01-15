@@ -1,21 +1,22 @@
 import { Schema } from "@effect/schema";
-import { BaseSchema } from "../common/Base.js";
+
+import { IdVisitorSchema } from "./IdVisitor.js";
 import { VisitorTypeSchema } from "./VisitorType.js";
-import { VisitorIdSchema } from "./VisitorId.js";
-import { UserIdSchema } from "../user/UserId.js";
+
+import { IdUserSchema } from "../../user/entity/IdUser.js";
+import { BaseSchema } from "../common/Base.js";
 
 const _VisitorSchema = Schema.struct({
-  id: VisitorIdSchema,
-  idUser: UserIdSchema,
-  //
-  email: Schema.Trim.pipe(Schema.nonEmpty(), Schema.optionFromSelf),
-  name: Schema.Trim.pipe(Schema.nonEmpty()),
-  type: VisitorTypeSchema,
+	//
+	email: Schema.Trim.pipe(Schema.nonEmpty(), Schema.optionFromSelf),
+	id: IdVisitorSchema,
+	idUser: IdUserSchema,
+	name: Schema.Trim.pipe(Schema.nonEmpty()),
+	type: VisitorTypeSchema,
 }).pipe(Schema.extend(BaseSchema), Schema.identifier("VisitorSchema"));
 
-export interface VisitorFrom
-  extends Schema.Schema.From<typeof _VisitorSchema> {}
-export interface Visitor extends Schema.Schema.To<typeof _VisitorSchema> {}
+export type VisitorFrom = Schema.Schema.From<typeof _VisitorSchema>;
+export type Visitor = Schema.Schema.To<typeof _VisitorSchema>;
 
-export const VisitorSchema: Schema.Schema<VisitorFrom, Visitor> =
-  _VisitorSchema;
+export const VisitorSchema: Schema.Schema<Visitor, VisitorFrom> =
+	_VisitorSchema;

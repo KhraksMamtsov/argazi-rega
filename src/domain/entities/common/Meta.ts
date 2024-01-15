@@ -1,16 +1,20 @@
 import { Schema } from "@effect/schema";
+
+import { IdUserSchema } from "../../user/entity/IdUser.js";
 import { DateCreatedSchema } from "../../value-objects/DateCreated.js";
+import { DateDeletedSchema } from "../../value-objects/DateDeleted.js";
 import { DateUpdatedSchema } from "../../value-objects/DateUpdated.js";
-import { UserIdSchema } from "../user/UserId.js";
 
 const _MetaSchema = Schema.struct({
-  dateCreated: DateCreatedSchema,
-  idUserCreator: UserIdSchema,
-  dateUpdated: DateUpdatedSchema,
-  idUserUpdater: UserIdSchema,
-}).pipe(Schema.identifier("MetaSchema"));
+	dateCreated: DateCreatedSchema,
+	dateDeleted: Schema.optionFromSelf(DateDeletedSchema),
+	dateUpdated: DateUpdatedSchema,
+	//
+	idUserCreator: IdUserSchema,
+	idUserDeleter: Schema.optionFromSelf(IdUserSchema),
+	idUserUpdater: IdUserSchema,
+}).pipe(Schema.to, Schema.identifier("MetaSchema"));
 
-export type MetaFrom = Schema.Schema.From<typeof _MetaSchema>;
 export type Meta = Schema.Schema.To<typeof _MetaSchema>;
 
-export const MetaSchema: Schema.Schema<MetaFrom, Meta> = _MetaSchema;
+export const MetaSchema: Schema.Schema<Meta> = _MetaSchema;

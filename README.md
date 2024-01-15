@@ -1,11 +1,11 @@
 ```bash
-pnpm run build:watch
+pnpm run all:build:watch
 ```
 
 ```bash
-docker-compose up development
+docker-compose up api_development
 ```
 
 ```bash
-docker-compose up production
+docker-compose up telegram_bot_development
 ```

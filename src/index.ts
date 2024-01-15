@@ -1,190 +1,628 @@
-import { runMain } from "@effect/platform-node/Runtime";
-import * as Schema from "@effect/schema/Schema";
-import { Context, Effect, Layer, Logger, LogLevel, pipe } from "effect";
-import { Api, NodeServer, RouterBuilder } from "effect-http";
+import { HttpClient } from "@effect/platform";
+import { runMain } from "@effect/platform-node/NodeRuntime";
+import { Effect, flow, Layer, Logger, LogLevel, Option, pipe } from "effect";
+import { RouterBuilder, ServerError } from "effect-http";
+import { isServerError } from "effect-http/ServerError";
+import { NodeServer } from "effect-http-node";
 import { PrettyLogger } from "effect-log";
 
+import { CreateEventUseCase } from "./application/use-cases/event/create/CreateEvent.use-case.js";
+import { GetEventByIdUseCase } from "./application/use-cases/event/get/GetEventById.use-case.js";
+import { CreateGeoPointUseCase } from "./application/use-cases/geo-point/create/CreateGeoPoint.use-case.js";
+import { GetPlaceGeoPointUseCase } from "./application/use-cases/place/_geo-point/get-place-geo-point/GetPlaceGeoPoint.use-case.js";
+import { GetPlaceActualEventsUseCase } from "./application/use-cases/place/_subscription/get-place-actual-events/GetPlaceActualEvents.use-case.js";
+import { GetPlaceSubscriptionsUseCase } from "./application/use-cases/place/_subscription/get-place-subscriptions/GetPlaceSubscriptions.use-case.js";
+import { CreatePlaceUseCase } from "./application/use-cases/place/create/CreatePlace.use-case.js";
+import { GetPlaceByIdUseCase } from "./application/use-cases/place/get/GetPlaceById.use-case.js";
+import { GetPlacesUseCase } from "./application/use-cases/place/get/GetPlaces.use-case.js";
+import { CreateSubscriptionUseCase } from "./application/use-cases/subscription/create/CreateSubscription.use-case.js";
+import { GetSubscriptionByIdUseCase } from "./application/use-cases/subscription/get/GetSubscriptionById.use-case.js";
+import { CreateTransportUseCase } from "./application/use-cases/transport/create/CreateTransport.use-case.js";
+import { DeleteUserSubscriptionUseCase } from "./application/use-cases/user/_subscription/delete/DeleteUserSubscription.use-case.js";
+import { GetUserSubscriptionsUseCase } from "./application/use-cases/user/_subscription/get-many/GetUserSubscriptions.use-case.js";
+import { BookTicketUseCase } from "./application/use-cases/user/_ticket/book-ticket/BookTicket.use-case.js";
+import { GetUserTicketByIdUseCase } from "./application/use-cases/user/_ticket/get-by-id/GetUserTicketById.use-case.js";
+import { GetUserTicketsUseCase } from "./application/use-cases/user/_ticket/get-tickets/GetUserTickets.use-case.js";
+import { ReturnTicketUseCase } from "./application/use-cases/user/_ticket/return-ticket/ReturnTicket.use-case.js";
+import { CreateUserUseCase } from "./application/use-cases/user/create/CreateUser.use-case.js";
+import { GetUserUseCase } from "./application/use-cases/user/get/GetUser.use-case.js";
+import { GetManyUsersUseCase } from "./application/use-cases/user/get-many/GetManyUsers.use-case.js";
+import { UpdateUserUseCase } from "./application/use-cases/user/update/UpdateUser.use-case.js";
+import { PrismaServiceTag } from "./infrastructure/database/Prisma.service.js";
+import { NotificationServiceLive } from "./infrastructure/message-broker/MessageBroker.js";
+import { IdAdmin } from "./infrastructure/rest-api/authentication/constants.js";
+import { JwtServiceTag } from "./infrastructure/rest-api/authentication/Jwt.service.js";
+import { LoginBasicHandler } from "./infrastructure/rest-api/authentication/login-basic/LoginBasic.handler.js";
+import { LoginDwbnHandler } from "./infrastructure/rest-api/authentication/login-dwbn/LoginDwbn.handler.js";
+import { RefreshTokenHandler } from "./infrastructure/rest-api/authentication/refresh-token/RefreshToken.handler.js";
+import { BearerAuthGuard } from "./infrastructure/rest-api/BearerAuth.guard.js";
+import { RestApi } from "./infrastructure/rest-api/RestApi.js";
+
 export const debugLogger = pipe(
-  PrettyLogger.layer(),
-  Layer.merge(Logger.minimumLogLevel(LogLevel.All)),
-);
-
-const Lesnek = Schema.struct({ name: Schema.string });
-
-const Standa = Schema.record(
-  Schema.string.pipe(Schema.trimmed()),
-  Schema.union(
-    Schema.Trim.pipe(Schema.description("qweqqqqq")),
-    Schema.number.pipe(Schema.greaterThan(5), Schema.lessThan(7), Schema.int()),
-  ).pipe(Schema.identifier("Standa"), Schema.description("awesome union")),
-).pipe(Schema.identifier("Standa11"));
-
-const HumanSchema = Schema.struct({
-  height: Schema.optional(Schema.number, { exact: true }),
-  name: Schema.string.pipe(Schema.description("qqq name")),
-  asd: Standa.pipe(Schema.description("asd-asd")),
-}).pipe(Schema.identifier("Human"));
-
-const StuffService = Context.Tag<{ value: number }>();
-
-const dummyStuff = pipe(
-  Effect.succeed({ value: 42 }),
-  Layer.effect(StuffService),
-);
-
-// Api
-const api = pipe(
-  Api.api({
-    title: "My awesome pets API",
-    version: "1.0.0",
-    description:
-      "This is a sample Pet Store Server based on the OpenAPI 3.0 specification.  You can find out more about\n" +
-      "Swagger at [https://swagger.io](https://swagger.io). In the third iteration of the pet store, we've switched to the design first approach!\n" +
-      "You can now help us improve the API whether it's by making changes to the definition itself or to the code.\n" +
-      "That way, with time, we can improve the API in general, and expose some of the new features in OAS3.\n" +
-      "\n" +
-      "_If you're looking for the Swagger 2.0/OAS 2.0 version of Petstore, then click [here](https://editor.swagger.io/?url=https://petstore.swagger.io/v2/swagger.yaml). Alternatively, you can load via the `Edit > Load Petstore OAS 2.0` menu option!_\n" +
-      "\n" +
-      "Some useful links:\n" +
-      "- [The Pet Store repository](https://github.com/swagger-api/swagger-petstore)\n" +
-      "- [The source API definition for the Pet Store](https://github.com/swagger-api/swagger-petstore/blob/master/src/main/resources/openapi.yaml)",
-    license: {
-      name: "licenseName",
-      url: "licenseUrl",
-    },
-  }),
-
-  Api.addGroup(
-    Api.apiGroup("group", {
-      description: "asd",
-      externalDocs: {
-        url: "qweqweqwe",
-        description: "qweqweqweqweqweqweqwe12312",
-      },
-    }).pipe(
-      Api.get(
-        "getMilan",
-        "/milan",
-        {
-          response: [
-            {
-              status: 200,
-              content: Schema.string,
-            },
-            {
-              status: 401,
-              headers: Schema.struct({
-                "X-Client-Id": Schema.string.pipe(Schema.description("qqq2")),
-              }),
-              content: Schema.string.pipe(
-                Schema.description("401 description"),
-                Schema.examples(["qwe", "asd", "zxc"]),
-              ),
-            },
-          ],
-        },
-        {
-          description: "test Descri 22 ption",
-          summary: "test summary33 22",
-        },
-      ),
-    ),
-  ),
-  Api.get("getLesnek", "/lesnek/:params2", {
-    response: [
-      {
-        status: 200,
-        content: Schema.string.pipe(Schema.description("asdasd qweqwe zxczxc")),
-      },
-      {
-        status: 404,
-      },
-    ],
-    request: {
-      params: Schema.struct({ params2: Schema.string }),
-      query: Lesnek,
-    },
-  }),
-  Api.get(
-    "test",
-    "/test",
-    {
-      response: Standa,
-      request: { query: Lesnek },
-    },
-    {
-      description: "descriptiondescriptiondescriptiondescription",
-    },
-  ),
-  Api.post("standa", "/standa", {
-    response: Standa,
-    request: {
-      body: Standa,
-    },
-  }),
-  Api.post("handleMilan", "/petr", {
-    response: HumanSchema,
-    request: {
-      body: HumanSchema,
-    },
-  }),
-  Api.put("callStanda", "/api/zdar", {
-    response: {
-      status: 200,
-      content: Schema.string,
-      headers: Schema.struct({
-        "X-Client-Id": Schema.string.pipe(Schema.description("qqq2")),
-      }),
-    },
-    request: {
-      body: Schema.struct({ zdar: Schema.literal("zdar") }),
-    },
-  }),
+	PrettyLogger.layer(),
+	Layer.merge(Logger.minimumLogLevel(LogLevel.All))
 );
 
 const app = pipe(
-  RouterBuilder.make(api, { parseOptions: { errors: "all" } }),
-  RouterBuilder.handle("handleMilan", ({ body }) =>
-    Effect.map(StuffService, ({ value }) => ({
-      ...body,
-      randomValue: body.height ?? 2 + value,
-    })),
-  ),
-  RouterBuilder.handle("test", ({ query: { name } }) =>
-    Effect.succeed({ name }),
-  ),
-  RouterBuilder.handle("standa", ({ body }) =>
-    Effect.succeed({ ...body, standa: "je borec" }),
-  ),
-  RouterBuilder.handle("getLesnek", (x) => {
-    console.log("getLesnek");
-    return pipe(
-      Effect.succeed({
-        status: 200 as const,
-        content: `hello22 ${x.query.name}`,
-      }),
-      Effect.tap(() => Effect.logInfo(x)),
-    );
-  }),
-  RouterBuilder.handle("callStanda", () =>
-    Effect.succeed({
-      status: 200 as const,
-      content: "zdar",
-      headers: {
-        "x-client-id": "2",
-      },
-    }),
-  ),
-  RouterBuilder.handle("getMilan", () =>
-    Effect.succeed({ status: 200 as const, content: "test" }),
-  ),
+	RouterBuilder.make(RestApi, { parseOptions: { errors: "all" } }),
+	// region Authentications handlers
+	flow(
+		RouterBuilder.handle("loginDwbn", ({ body }) =>
+			Effect.gen(function* (_) {
+				const loginResult = yield* _(LoginDwbnHandler(body));
+
+				return loginResult;
+			}).pipe(
+				Effect.tapBoth({
+					onFailure: Effect.logError,
+					onSuccess: Effect.logInfo,
+				})
+			)
+		),
+		RouterBuilder.handle("loginBasic", (_, { basic: { token } }) =>
+			Effect.gen(function* (_) {
+				const loginResult = yield* _(LoginBasicHandler({ token }));
+
+				if (isServerError(loginResult)) {
+					return yield* _(loginResult);
+				}
+
+				return {
+					content: loginResult,
+					status: 200 as const,
+				};
+			}).pipe(
+				Effect.tapBoth({
+					onFailure: Effect.logError,
+					onSuccess: Effect.logInfo,
+				})
+			)
+		),
+		RouterBuilder.handle("refreshAuthentication", ({ body }) =>
+			Effect.gen(function* (_) {
+				const loginResult = yield* _(RefreshTokenHandler(body));
+
+				if (Option.isNone(loginResult)) {
+					return yield* _(
+						ServerError.unauthorizedError({
+							content: "User not found",
+						})
+					);
+				}
+
+				return {
+					content: loginResult.value,
+					status: 200 as const,
+				};
+			}).pipe(
+				Effect.tapBoth({
+					onFailure: Effect.logError,
+					onSuccess: Effect.logInfo,
+				})
+			)
+		)
+	),
+	// endregion
+	// region Users handlers
+	flow(
+		RouterBuilder.handle("createUser", ({ body }) =>
+			Effect.gen(function* (_) {
+				const newUser = yield* _(
+					CreateUserUseCase({
+						idInitiator: IdAdmin,
+						payload: body,
+					})
+				);
+
+				return { content: newUser, status: 201 as const };
+			}).pipe(
+				Effect.tapBoth({
+					onFailure: Effect.logError,
+					onSuccess: Effect.logInfo,
+				})
+			)
+		),
+		RouterBuilder.handle("updateUser", ({ body, params }) =>
+			Effect.gen(function* (_) {
+				const newUser = yield* _(
+					UpdateUserUseCase({
+						idInitiator: IdAdmin,
+						payload: { id: params.id, ...body },
+					})
+				);
+
+				return { content: newUser, status: 200 as const };
+			}).pipe(
+				Effect.tapBoth({
+					onFailure: Effect.logError,
+					onSuccess: Effect.logInfo,
+				})
+			)
+		),
+		RouterBuilder.handle("getUser", ({ params }) =>
+			Effect.gen(function* (_) {
+				const newUser = yield* _(
+					GetUserUseCase({ payload: { id: params.idUser, type: "id" } }),
+					Effect.flatten,
+					Effect.mapError(() => ServerError.notFoundError("NotFound1"))
+				);
+
+				return newUser;
+			}).pipe(
+				Effect.tapBoth({
+					onFailure: Effect.logError,
+					onSuccess: Effect.logInfo,
+				})
+			)
+		),
+		RouterBuilder.handle("getManyUsers", ({ body }) =>
+			Effect.gen(function* (_) {
+				if (body.idsUser === undefined) {
+					return [];
+				}
+
+				const newUserOption = yield* _(
+					GetManyUsersUseCase({
+						payload: { idsUser: body.idsUser, type: "id" },
+					})
+				);
+
+				return newUserOption;
+			}).pipe(
+				Effect.tapBoth({
+					onFailure: Effect.logError,
+					onSuccess: Effect.logInfo,
+				})
+			)
+		),
+
+		RouterBuilder.handle("getUserSubscriptions", ({ params }) =>
+			Effect.gen(function* (_) {
+				const content = yield* _(
+					GetUserSubscriptionsUseCase({
+						idInitiator: params.idUser, // Todo: take from security
+						payload: {
+							idUser: params.idUser,
+						},
+					})
+				);
+
+				return content;
+			}).pipe(
+				Effect.tapBoth({
+					onFailure: Effect.logError,
+					onSuccess: Effect.logInfo,
+				})
+			)
+		),
+		RouterBuilder.handle("createUserSubscription", ({ params, body }) =>
+			Effect.gen(function* (_) {
+				const content = yield* _(
+					CreateSubscriptionUseCase({
+						idInitiator: params.idUser, // Todo: take from security
+						payload: {
+							idPlace: body.idPlace,
+							idUser: params.idUser,
+						},
+					})
+				);
+
+				return content;
+			}).pipe(
+				Effect.tapBoth({
+					onFailure: Effect.logError,
+					onSuccess: Effect.logInfo,
+				})
+			)
+		),
+		RouterBuilder.handle("deleteUserSubscription", ({ params }) =>
+			Effect.gen(function* (_) {
+				const content = yield* _(
+					DeleteUserSubscriptionUseCase({
+						idInitiator: params.idUser, // Todo: take from security
+						payload: {
+							idSubscription: params.idSubscription,
+							idUser: params.idUser,
+						},
+					})
+				);
+
+				return content;
+			}).pipe(
+				Effect.tapBoth({
+					onFailure: Effect.logError,
+					onSuccess: Effect.logInfo,
+				})
+			)
+		)
+	),
+	flow(
+		RouterBuilder.handle("bookTicket", ({ params, body }) =>
+			Effect.gen(function* (_) {
+				const content = yield* _(
+					BookTicketUseCase({
+						idInitiator: params.idUser, // Todo: take from security
+						payload: {
+							idEvent: body.idEvent,
+							idUser: params.idUser,
+						},
+					})
+				);
+
+				return {
+					content,
+					status: 200 as const,
+				};
+			}).pipe(
+				Effect.tapBoth({
+					onFailure: Effect.logError,
+					onSuccess: Effect.logInfo,
+				})
+			)
+		),
+		RouterBuilder.handle("returnTicket", ({ params }) =>
+			Effect.gen(function* (_) {
+				const content = yield* _(
+					ReturnTicketUseCase({
+						idInitiator: params.idUser, // Todo: take from security
+						payload: {
+							id: params.idTicket,
+							idUser: params.idUser,
+						},
+					})
+				);
+
+				return content;
+			}).pipe(
+				Effect.tapBoth({
+					onFailure: Effect.logError,
+					onSuccess: Effect.logInfo,
+				})
+			)
+		),
+		RouterBuilder.handle("getUserTicketById", ({ params }) =>
+			Effect.gen(function* (_) {
+				const ticket = yield* _(
+					GetUserTicketByIdUseCase({
+						idInitiator: params.idUser, // Todo: take from security
+						payload: {
+							idTicket: params.idTicket,
+							idUser: params.idUser,
+						},
+					}),
+					Effect.flatten,
+					Effect.tapError(Effect.logError),
+					Effect.mapError(() => ServerError.notFoundError("NotFound2"))
+				);
+
+				return ticket;
+			}).pipe(
+				Effect.tapBoth({
+					onFailure: Effect.logError,
+					onSuccess: Effect.logInfo,
+				})
+			)
+		)
+	),
+	// endregion
+	// region Transport handlers
+	RouterBuilder.handle("createTransport", ({ body }) =>
+		Effect.gen(function* (_) {
+			const newTransport = yield* _(
+				CreateTransportUseCase({
+					idInitiator: IdAdmin,
+					payload: body,
+				})
+			);
+
+			return newTransport;
+		}).pipe(
+			Effect.tapBoth({
+				onFailure: Effect.logError,
+				onSuccess: Effect.logInfo,
+			})
+		)
+	),
+	// endregion
+	// region Event handlers
+	RouterBuilder.handle("createEvent", ({ body }) =>
+		Effect.gen(function* (_) {
+			const newEvent = yield* _(
+				CreateEventUseCase({
+					idInitiator: IdAdmin,
+					payload: body,
+				})
+			);
+
+			return newEvent;
+		}).pipe(
+			Effect.tapBoth({
+				onFailure: Effect.logError,
+				onSuccess: Effect.logInfo,
+			})
+		)
+	),
+	RouterBuilder.handle("getEvent", ({ params }) =>
+		Effect.gen(function* (_) {
+			const newEventOption = yield* _(
+				GetEventByIdUseCase({
+					idInitiator: IdAdmin,
+					payload: { id: params.idEvent },
+				}),
+				Effect.flatten,
+				Effect.mapError(() => ServerError.notFoundError("NotFound3"))
+			);
+
+			return newEventOption;
+		}).pipe(
+			Effect.tapBoth({
+				onFailure: Effect.logError,
+				onSuccess: Effect.logInfo,
+			})
+		)
+	),
+	// endregion
+	// region Place handlers
+	flow(
+		RouterBuilder.handle("createPlace", ({ body }) =>
+			Effect.gen(function* (_) {
+				const newPlace = yield* _(
+					CreatePlaceUseCase({
+						idInitiator: IdAdmin,
+						payload: body,
+					})
+				);
+
+				return newPlace;
+			}).pipe(
+				Effect.tapBoth({
+					onFailure: Effect.logError,
+					onSuccess: Effect.logInfo,
+				})
+			)
+		),
+		RouterBuilder.handle("getPlaceById", ({ params }) =>
+			Effect.gen(function* (_) {
+				const newPlace = yield* _(
+					GetPlaceByIdUseCase({
+						idInitiator: IdAdmin,
+						payload: { id: params.id },
+					}),
+					Effect.flatten,
+					Effect.mapError(() => ServerError.notFoundError("NotFound4"))
+				);
+
+				return newPlace;
+			}).pipe(
+				Effect.tapBoth({
+					onFailure: Effect.logError,
+					onSuccess: Effect.logInfo,
+				})
+			)
+		),
+		RouterBuilder.handle("getPlaceGeoPoint", ({ params }) =>
+			Effect.gen(function* (_) {
+				const geoPoint = yield* _(
+					GetPlaceGeoPointUseCase({
+						idInitiator: IdAdmin,
+						payload: { idPlace: params.idPlace },
+					}),
+					Effect.flatten,
+					Effect.mapError(() => ServerError.notFoundError("NotFound4"))
+				);
+
+				return geoPoint;
+			}).pipe(
+				Effect.tapBoth({
+					onFailure: Effect.logError,
+					onSuccess: Effect.logInfo,
+				})
+			)
+		),
+		RouterBuilder.handle("getPlaces", () =>
+			Effect.gen(function* (_) {
+				const places = yield* _(
+					GetPlacesUseCase({
+						idInitiator: IdAdmin,
+						payload: {},
+					})
+				);
+
+				return places;
+			}).pipe(
+				Effect.tapBoth({
+					onFailure: Effect.logError,
+					onSuccess: Effect.logInfo,
+				})
+			)
+		),
+		RouterBuilder.handle("getPlaceSubscriptions", ({ params }) =>
+			Effect.gen(function* (_) {
+				const placeSubscriptions = yield* _(
+					GetPlaceSubscriptionsUseCase({
+						idInitiator: IdAdmin,
+						payload: { idPlace: params.idPlace },
+					})
+				);
+
+				return {
+					content: placeSubscriptions,
+					status: 200 as const,
+				};
+			}).pipe(
+				Effect.tapBoth({
+					onFailure: Effect.logError,
+					onSuccess: Effect.logInfo,
+				})
+			)
+		),
+
+		RouterBuilder.handle("getPlaceActualEvents", ({ params }) =>
+			Effect.gen(function* (_) {
+				const placeActualEvents = yield* _(
+					GetPlaceActualEventsUseCase({
+						idInitiator: IdAdmin,
+						payload: { idPlace: params.idPlace },
+					})
+				);
+
+				return placeActualEvents;
+			}).pipe(
+				Effect.tapBoth({
+					onFailure: Effect.logError,
+					onSuccess: Effect.logInfo,
+				})
+			)
+		)
+	),
+	// endregion
+	// region Subscriptions handlers
+	RouterBuilder.handle("getSubscription", ({ params }) =>
+		Effect.gen(function* (_) {
+			const subscriptionOption = yield* _(
+				GetSubscriptionByIdUseCase({
+					idInitiator: IdAdmin,
+					payload: { idSubscription: params.idSubscription },
+				}),
+				Effect.tapError((x) => Effect.logError(x))
+			);
+
+			return subscriptionOption.pipe(
+				Option.match({
+					onNone: () => ({ content: "Not found!!", status: 404 as const }),
+					onSome: (subscription) => ({
+						content: subscription,
+						status: 200 as const,
+					}),
+				})
+			);
+		}).pipe(
+			Effect.tapBoth({
+				onFailure: Effect.logError,
+				onSuccess: Effect.logInfo,
+			})
+		)
+	),
+	// endregion
+	// region GeoPoints handlers
+	RouterBuilder.handle(
+		"createGeoPoint",
+		BearerAuthGuard(({ body }, { idInitiator }) =>
+			CreateGeoPointUseCase({
+				idInitiator,
+				payload: body,
+			})
+		)
+	),
+	// endregion
+	// region My handlers
+	flow(
+		RouterBuilder.handle(
+			"getMySubscriptions",
+			BearerAuthGuard((_, { idInitiator }) =>
+				GetUserSubscriptionsUseCase({
+					idInitiator,
+					payload: {
+						idUser: idInitiator,
+					},
+				})
+			)
+		),
+		RouterBuilder.handle(
+			"deleteMySubscription",
+			BearerAuthGuard(({ params }, { idInitiator }) =>
+				DeleteUserSubscriptionUseCase({
+					idInitiator,
+					payload: {
+						idSubscription: params.idSubscription,
+						idUser: idInitiator,
+					},
+				})
+			)
+		),
+		RouterBuilder.handle(
+			"createMySubscription",
+			BearerAuthGuard((input, { idInitiator }) =>
+				CreateSubscriptionUseCase({
+					idInitiator,
+					payload: {
+						idPlace: input.body.idPlace,
+						idUser: idInitiator,
+					},
+				})
+			)
+		),
+		RouterBuilder.handle(
+			"getMyTicketById",
+			BearerAuthGuard((input, { idInitiator }) =>
+				GetUserTicketByIdUseCase({
+					idInitiator,
+					payload: {
+						idTicket: input.params.idTicket,
+						idUser: idInitiator,
+					},
+				}).pipe(
+					Effect.flatten,
+					Effect.tapError(Effect.logError),
+					Effect.mapError(() => ServerError.notFoundError("NotFound2"))
+				)
+			)
+		),
+		RouterBuilder.handle(
+			"returnMyTicket",
+			BearerAuthGuard((input, { idInitiator }) =>
+				ReturnTicketUseCase({
+					idInitiator,
+					payload: {
+						id: input.params.idTicket,
+						idUser: idInitiator,
+					},
+				})
+			)
+		),
+		RouterBuilder.handle(
+			"getMyTickets",
+			BearerAuthGuard((_, { idInitiator }) =>
+				GetUserTicketsUseCase({
+					idInitiator,
+					payload: { idUser: idInitiator },
+				})
+			)
+		),
+		RouterBuilder.handle(
+			"bookMyTicket",
+			BearerAuthGuard((input, { idInitiator }) =>
+				BookTicketUseCase({
+					idInitiator,
+					payload: {
+						idEvent: input.body.idEvent,
+						idUser: idInitiator,
+					},
+				}).pipe(
+					Effect.map((content) => ({
+						content,
+						status: 200 as const,
+					}))
+				)
+			)
+		)
+	),
+	// endregion
+	// region Healthcheck handlers
+	RouterBuilder.handle("healthcheckPing", () =>
+		Effect.succeed("pong" as const).pipe(Effect.tap(Effect.logInfo))
+	)
+	// endregion
 );
 
 pipe(
-  RouterBuilder.build(app),
-  (x) => x,
-  NodeServer.listen({ port: 4000 }),
-  Effect.provide(dummyStuff),
-  Effect.provide(debugLogger),
-  runMain,
+	RouterBuilder.build(app),
+	NodeServer.listen({ port: 80 }),
+	Effect.provide(debugLogger),
+	Effect.provide(PrismaServiceTag.Live()),
+	Effect.provide(NotificationServiceLive),
+	Effect.provide(HttpClient.client.layer),
+	Effect.provide(JwtServiceTag.Live),
+	Effect.scoped,
+	runMain
 );

@@ -1,5 +1,47 @@
 version: "3.8"
 services:
+  cache:
+    image: redis:7.2-alpine
+    container_name: cache
+    restart: always
+    healthcheck:
+      test: [ "CMD", "redis-cli", "--raw", "incr", "ping" ]
+    networks:
+      - application_network
+    command:
+      - /bin/sh
+      - -c
+      # - Double dollars, so that the variable is not expanded by Docker Compose
+      # - Surround by quotes, so that the shell does not split the password
+      # - The ${variable:?message} syntax causes shell to exit with a non-zero
+      #   code and print a message, when the variable is not set or empty
+      - redis-server --requirepass "$${REDIS_PASSWORD:?REDIS_PASSWORD variable is not set}"
+    ports:
+      - "${REDIS_PORT}:6379"
+#    volumes:
+#      - redis:/var/lib/redis/data
+#      - /path/to/local/redis.conf:/usr/local/etc/redis/redis.conf
+    environment:
+      REDIS_PASSWORD: "${REDIS_PASSWORD}"
+
+  message_broker:
+    image: rabbitmq:3-management-alpine
+    container_name: message_broker
+    restart: always
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "check_port_connectivity"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+    ports:
+      - "${RABBITMQ_PORT}:5672"
+      - "${RABBITMQ_MANAGEMENT_PORT}:15672"
+    networks:
+      - application_network
+    environment:
+      RABBITMQ_DEFAULT_USER: "${RABBITMQ_DEFAULT_USER}"
+      RABBITMQ_DEFAULT_PASS: "${RABBITMQ_DEFAULT_PASS}"
+
   database:
     container_name: database
     command: [
@@ -11,57 +53,141 @@ services:
     ]
     networks:
       - application_network
-    build: ./database/
+    build: ./prisma/
     ports:
-      - "${POSTGRES_PORT}:${POSTGRES_PORT}"
+      - "${POSTGRES_PORT}:5432"
     restart: always
     # https://stackoverflow.com/questions/65115627/safe-ways-to-specify-postgres-parameters-for-healthchecks-in-docker-compose
     healthcheck:
       test: [ "CMD-SHELL", "sh -c 'pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}'" ]
       interval: 10s
       timeout: 3s
-      retries: 3
+      retries: 5
     volumes:
       - database_data:/var/lib/postgresql/data
       - database_logs:/logs:z
     environment:
-      POSTGRES_PORT: "${POSTGRES_PORT}"
       POSTGRES_USER: "${POSTGRES_USER}"
       POSTGRES_PASSWORD: "${POSTGRES_PASSWORD}"
       POSTGRES_DB: "${POSTGRES_DB}"
 
-  development:
+  telegram_web_app:
+      container_name: telegram_web_app
+      build: ./src/infrastructure/telegram-bot/telegram-auth-mini-app/
+      healthcheck:
+        test: ["CMD", "service", "nginx", "status"]
+        interval: 5s
+        timeout: 3s
+        retries: 5
+      ports:
+        - "${TELEGRAM_AUTH_MINI_APP_PORT}:80"
+      restart: always
+
+  telegram_bot_development:
+    networks:
+      - application_network
+    container_name: telegram_bot
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: dependencies
+    command: ["pnpm", "run", "bot:start:watch"]
+    volumes:
+      - ./build:/usr/app/build
+      - /usr/app/node_modules
+      - ./prisma:/usr/app/prisma
+    depends_on:
+      api_development:
+        condition: service_healthy
+      cache:
+        condition: service_healthy
+      telegram_web_app:
+        condition: service_healthy
+      message_broker:
+        condition: service_healthy
+    ports:
+      - "${TELEGRAM_BOT_PORT}:${TELEGRAM_BOT_PORT}"
+    healthcheck:
+      test: wget --quiet --tries=1 --spider http://localhost:${TELEGRAM_BOT_PORT} || exit 1
+      interval: 5s
+      timeout: 3s
+      retries: 5
+    restart: always
+    environment:
+      TELEGRAM_BOT_PORT: "${TELEGRAM_BOT_PORT}"
+      TELEGRAM_BOT_TOKEN: "${TELEGRAM_BOT_TOKEN}"
+      API_URL: "http://api_development"
+      API_PORT: "80"
+      REDIS_PASSWORD: "${REDIS_PASSWORD}"
+      REDIS_PORT: "${REDIS_PORT}"
+      REDIS_HOST: "${REDIS_HOST}"
+      RABBITMQ_DEFAULT_USER: "${RABBITMQ_DEFAULT_USER}"
+      RABBITMQ_DEFAULT_PASS: "${RABBITMQ_DEFAULT_PASS}"
+      RABBITMQ_PORT: "${RABBITMQ_PORT}"
+      RABBITMQ_HOSTNAME: "${RABBITMQ_HOSTNAME}"
+      DWBN_SSO_AUTHORIZE_URL: "${DWBN_SSO_AUTHORIZE_URL}"
+      DWBN_SSO_REDIRECT_URL: "${DWBN_SSO_REDIRECT_URL}"
+      DWBN_SSO_CLIENT_ID: "${DWBN_SSO_CLIENT_ID}"
+      DWBN_SSO_SCOPE: "${DWBN_SSO_SCOPE}"
+
+  api_development:
     networks:
       - application_network
     depends_on:
+      message_broker:
+        condition: service_healthy
       database:
         condition: service_healthy
     build:
       context: .
       dockerfile: Dockerfile
       target: dependencies
-    command: ["pnpm", "run", "start:watch"]
+    command: ["pnpm", "run", "api:docker:start:dev"]
     volumes:
       - ./build:/usr/app/build
       - /usr/app/node_modules
+      - ./prisma:/usr/app/prisma
     ports:
-      - "${PORT}:${PORT}"
+      - "${API_PORT}:80"
+      - "5555:5555" # prisma studio
+    healthcheck:
+      test: wget --quiet --tries=1 --spider http://localhost/healthcheck/ping || exit 1
+      interval: 5s
+      timeout: 3s
+      retries: 5
     restart: always
     environment:
-      LOG_LEVEL: "${LOG_LEVEL}"
-      CRYPT_SALT: "${CRYPT_SALT}"
-      LOG_MAX_FILE_SIZE: "${LOG_MAX_FILE_SIZE}"
-      JWT_SECRET_KEY: "${JWT_SECRET_KEY}"
-      JWT_SECRET_REFRESH_KEY: "${JWT_SECRET_REFRESH_KEY}"
-      TOKEN_EXPIRE_TIME: "${TOKEN_EXPIRE_TIME}"
-      TOKEN_REFRESH_EXPIRE_TIME: "${TOKEN_REFRESH_EXPIRE_TIME}"
-      PORT: "${PORT}"
+      API_PORT: "${API_PORT}"
+      POSTGRES_USER: "${POSTGRES_USER}"
+      POSTGRES_PASSWORD: "${POSTGRES_PASSWORD}"
+      POSTGRES_HOST: "${POSTGRES_HOST}"
+      POSTGRES_PORT: "${POSTGRES_PORT}"
+      POSTGRES_DB: "${POSTGRES_DB}"
+      RABBITMQ_DEFAULT_USER: "${RABBITMQ_DEFAULT_USER}"
+      RABBITMQ_DEFAULT_PASS: "${RABBITMQ_DEFAULT_PASS}"
+      RABBITMQ_PORT: "${RABBITMQ_PORT}"
+      RABBITMQ_HOSTNAME: "${RABBITMQ_HOSTNAME}"
+      RABBITMQ_MANAGEMENT_PORT: "${RABBITMQ_MANAGEMENT_PORT}"
+      DWBN_ID_ADMIN: "${DWBN_ID_ADMIN}"
+      DWBN_SSO_AUTHORIZE_URL: "${DWBN_SSO_AUTHORIZE_URL}"
+      DWBN_SSO_OAUTH2_URL: "${DWBN_SSO_OAUTH2_URL}"
+      DWBN_SSO_REDIRECT_URL: "${DWBN_SSO_REDIRECT_URL}"
+      DWBN_SSO_CLIENT_ID: "${DWBN_SSO_CLIENT_ID}"
+      DWBN_SSO_SCOPE: "${DWBN_SSO_SCOPE}"
+      JWT_ACCESS_TOKEN_SECRET: "${JWT_ACCESS_TOKEN_SECRET}"
+      JWT_ACCESS_TOKEN_TTL: "${JWT_ACCESS_TOKEN_TTL}"
+      JWT_REFRESH_TOKEN_SECRET: "${JWT_REFRESH_TOKEN_SECRET}"
+      JWT_REFRESH_TOKEN_TTL: "${JWT_REFRESH_TOKEN_TTL}"
+      BASIC_AUTH_BOT_SECRET: "${BASIC_AUTH_BOT_SECRET}"
+      BASIC_AUTH_ADMIN_SECRET: "${BASIC_AUTH_ADMIN_SECRET}"
       PRISMA_DB_URL: "postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${POSTGRES_HOST}:${POSTGRES_PORT}/${POSTGRES_DB}?schema=public&connect_timeout=60"
 
-  production:
+  api_production:
     networks:
       - application_network
     depends_on:
+      message_broker:
+        condition: service_healthy
       database:
         condition: service_healthy
     build:
@@ -69,23 +195,17 @@ services:
       dockerfile: Dockerfile
       target: production
     ports:
-      - "${PORT}:${PORT}"
+      - "${API_PORT}:${API_PORT}"
     volumes:
       - ./application-logs:/usr/app/application-logs
     restart: always
     environment:
-      PORT: "${PORT}"
+      API_PORT: "${API_PORT}"
       PRISMA_DB_URL: "postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${POSTGRES_HOST}:${POSTGRES_PORT}/${POSTGRES_DB}?schema=public&connect_timeout=60"
 
 networks:
   application_network:
     name: argazi-network
-    driver: bridge
-    ipam:
-      driver: default
-      config:
-        - subnet: 172.28.0.0/16
-          gateway: 172.28.0.1
 
 volumes:
   database_data:

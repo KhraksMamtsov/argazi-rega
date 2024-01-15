@@ -1,4 +1,4 @@
-{
+{"extends": "@tsconfig/node20/tsconfig.json",
   "compilerOptions": {
     "target": "esnext",
     "module": "nodenext",
@@ -8,7 +8,13 @@
     "strict": true,
     "composite": true,
     "declaration": true,
+    "downlevelIteration": true,
     "incremental": true,
+    "verbatimModuleSyntax": true,
+    "noImplicitOverride": true,
+    "skipDefaultLibCheck": true,
+    "resolveJsonModule": true,
+    "noPropertyAccessFromIndexSignature": true,
     "declarationMap": true,
     "skipLibCheck": true,
     "exactOptionalPropertyTypes": true,
@@ -27,6 +33,8 @@
     "noUncheckedIndexedAccess": true,
     "strictNullChecks": true
   },
+  "include": ["src"],
+  "exclude": ["node_modules"],
   "watchOptions": {
     // Use native file system events for files and directories
     "watchFile": "priorityPollingInterval",

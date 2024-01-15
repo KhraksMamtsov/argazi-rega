@@ -1,9 +1,8 @@
 import { Schema } from "@effect/schema";
 
-export const LatitudeSchema = Schema.Trim.pipe(
-  Schema.nonEmpty(),
-  Schema.brand("Latitude"),
-  Schema.identifier("Latitude"),
+export const LatitudeSchema = Schema.SecretFromSelf.pipe(
+	Schema.identifier("Latitude"),
+	Schema.brand("Latitude")
 );
 
 export type LatitudeFrom = Schema.Schema.From<typeof LatitudeSchema>;

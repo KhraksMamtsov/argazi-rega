@@ -1,26 +1,22 @@
 import { Schema } from "@effect/schema";
-import { BaseSchema } from "../common/Base.js";
-import { LectureIdSchema } from "./LectureId.js";
-import { EventIdSchema } from "../event/EventId.js";
+
+import { IdLectureSchema } from "./IdLecture.js";
+
+import { IdEventSchema } from "../../event/entity/IdEvent.js";
 import { PriceSchema } from "../../value-objects/Price.js";
 
 const _LectureSchema = Schema.struct({
-  id: LectureIdSchema,
-  idEvent: EventIdSchema,
-  name: Schema.Trim.pipe(Schema.nonEmpty()),
-  dateStart: Schema.Date,
-  dateFinish: Schema.option(Schema.Date),
-  priceDay: PriceSchema,
-  priceLecture: PriceSchema,
-}).pipe(
-  //
-  Schema.extend(BaseSchema),
-  Schema.identifier("LectureSchema"),
-);
+	dateFinish: Schema.option(Schema.Date),
+	dateStart: Schema.Date,
+	id: IdLectureSchema,
+	idEvent: IdEventSchema,
+	name: Schema.Trim.pipe(Schema.nonEmpty()),
+	priceDay: PriceSchema,
+	priceLecture: PriceSchema,
+}).pipe(Schema.identifier("LectureSchema"));
 
-export interface LectureFrom
-  extends Schema.Schema.From<typeof _LectureSchema> {}
-export interface Lecture extends Schema.Schema.To<typeof _LectureSchema> {}
+export type LectureFrom = Schema.Schema.From<typeof _LectureSchema>;
+export type Lecture = Schema.Schema.To<typeof _LectureSchema>;
 
-export const LectureSchema: Schema.Schema<LectureFrom, Lecture> =
-  _LectureSchema;
+export const LectureSchema: Schema.Schema<Lecture, LectureFrom> =
+	_LectureSchema;
