@@ -33,7 +33,7 @@
     "noUncheckedIndexedAccess": true,
     "strictNullChecks": true
   },
-  "include": ["src"],
+  "include": ["src", "prisma"],
   "exclude": ["node_modules"],
   "watchOptions": {
     // Use native file system events for files and directories
