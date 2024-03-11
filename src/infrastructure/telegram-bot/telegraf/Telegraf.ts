@@ -1,13 +1,4 @@
-import {
-	Context,
-	Data,
-	Effect,
-	Layer,
-	pipe,
-	Schedule,
-	Secret,
-	Fiber,
-} from "effect";
+import { Data, Effect, Layer, pipe, Schedule, Secret, Fiber } from "effect";
 import * as _Telegraf from "telegraf";
 import { useNewReplies } from "telegraf/future";
 
@@ -118,7 +109,7 @@ export interface Telegraf {
 }
 export type TelegrafService = Effect.Effect.Success<typeof makeLive>;
 
-export class TelegrafTag extends Context.Tag("@telegraf/Telegraf")<
+export class TelegrafTag extends Effect.Tag("@telegraf/Telegraf")<
 	Telegraf,
 	TelegrafService
 >() {

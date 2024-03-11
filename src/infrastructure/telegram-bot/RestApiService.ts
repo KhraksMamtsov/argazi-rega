@@ -1,7 +1,6 @@
 import {
 	Cache,
 	Config,
-	Context,
 	Data,
 	Duration,
 	Effect,
@@ -19,9 +18,10 @@ import { RestApi } from "../rest-api/RestApi.js";
 
 import type { IdTelegramChat } from "../../domain/user/entity/IdTelegramChat.js";
 
-export type RestApiService = Effect.Effect.Success<ReturnType<typeof makeLive>>;
+export interface RestApiService
+	extends Effect.Effect.Success<ReturnType<typeof makeLive>> {}
 
-export class RestApiServiceTag extends Context.Tag(
+export class RestApiServiceTag extends Effect.Tag(
 	"@argazi/infrastructure/telegram-bot/RestApiClientService"
 )<RestApiServiceTag, RestApiService>() {
 	public static readonly Live = () => Layer.effect(this, makeLive());
@@ -153,7 +153,7 @@ export const makeLive = () =>
 				capacity: Infinity,
 				lookup: (idTelegramChat: IdTelegramChat) =>
 					createUserApiClient({ idTelegramChat }),
-				timeToLive: "1 seconds",
+				timeToLive: "60 minutes",
 			})
 		);
 

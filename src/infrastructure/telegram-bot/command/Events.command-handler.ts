@@ -36,7 +36,11 @@ export const EventsCommandHandler = (args: {
 			Effect.allWith({
 				concurrency: 4,
 			}),
-			Effect.map(flow(ReadonlyArray.flatten, fromArray))
+			Effect.map(flow(ReadonlyArray.flatten, fromArray)),
+			Effect.tapBoth({
+				onFailure: Effect.logError,
+				onSuccess: Effect.logInfo,
+			})
 		);
 
 		const replies = pipe(
@@ -68,10 +72,12 @@ export const EventsCommandHandler = (args: {
 						].join(": "),
 						[
 							"Участие",
-							Option.match(eventTicket, {
-								onNone: () => "-",
-								onSome: (x) => x.role,
-							}),
+							escapeMarkdown(
+								Option.match(eventTicket, {
+									onNone: () => "-",
+									onSome: (x) => x.role,
+								})
+							),
 						].join(": "),
 					].join("\n");
 
@@ -81,6 +87,7 @@ export const EventsCommandHandler = (args: {
 		);
 
 		return yield* _(
-			Effect.all(replies, { concurrency: "unbounded", mode: "either" })
+			Effect.all(replies, { concurrency: "unbounded", mode: "either" }),
+			Effect.tap(Effect.log)
 		);
 	});

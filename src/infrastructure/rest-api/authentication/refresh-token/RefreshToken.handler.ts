@@ -7,10 +7,8 @@ import type { RefreshTokenRequestBody } from "./RefreshToken.api.js";
 
 export const RefreshTokenHandler = (body: RefreshTokenRequestBody) =>
 	Effect.gen(function* (_) {
-		const jwtService = yield* _(JwtServiceTag);
-
 		const refreshTokenPayload = yield* _(
-			jwtService.verifyAndDecode({
+			JwtServiceTag.verifyAndDecode({
 				token: body.refreshToken,
 				type: "refreshToken",
 			})
@@ -24,7 +22,7 @@ export const RefreshTokenHandler = (body: RefreshTokenRequestBody) =>
 
 		if (Option.isSome(registeredUserOption)) {
 			const tokens = yield* _(
-				jwtService.sign({
+				JwtServiceTag.sign({
 					isAdmin: registeredUserOption.value.isAdmin,
 					sub: registeredUserOption.value.id,
 				})

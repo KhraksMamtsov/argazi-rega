@@ -1,7 +1,7 @@
 import {
 	Chunk,
-	Config,
 	Context,
+	Config,
 	Data,
 	Effect,
 	Layer,
@@ -15,7 +15,7 @@ import { createClient, type RedisClientOptions } from "redis";
 
 import type { Simplify } from "../../libs/Typescript.js";
 
-export type RedisClient = ReturnType<typeof createClient>;
+export interface RedisClient extends ReturnType<typeof createClient> {}
 
 export const create = (
 	options?: RedisClientOptions
@@ -37,6 +37,7 @@ export class CacheHSetError extends Data.TaggedError("CacheHSetError")<{
 	readonly cause: unknown;
 }> {}
 
+export interface RedisOptions extends RedisClientOptions {}
 export type GetParameters = Parameters<RedisClient["get"]>;
 export type HGetParameters = Parameters<RedisClient["hGet"]>;
 export type HDelParameters = Parameters<RedisClient["hDel"]>;
@@ -134,9 +135,9 @@ export class CacheServiceTag extends Context.Tag("CacheService")<
 	CacheServiceTag,
 	CacheService
 >() {
-	public static Live = (options?: RedisClientOptions) =>
+	public static Live = (options?: RedisOptions) =>
 		Layer.effect(
-			CacheServiceTag,
+			this,
 			Effect.gen(function* (_) {
 				const password = yield* _(Config.secret("REDIS_PASSWORD"));
 				const port = yield* _(Config.secret("REDIS_PORT"));

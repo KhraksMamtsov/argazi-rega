@@ -10,7 +10,6 @@ import { JwtServiceTag } from "../Jwt.service.js";
 
 export const LoginBasicHandler = (args: { readonly token: Secret.Secret }) =>
 	Effect.gen(function* (_) {
-		const jwtService = yield* _(JwtServiceTag);
 		const basicAuthSecrets = yield* _(
 			Effect.all({
 				admin: Config.secret("BASIC_AUTH_ADMIN_SECRET"),
@@ -43,7 +42,7 @@ export const LoginBasicHandler = (args: { readonly token: Secret.Secret }) =>
 				);
 
 				return yield* _(
-					jwtService.sign({
+					JwtServiceTag.sign({
 						isAdmin: newlyRegisteredArgazipaBot.isAdmin,
 						sub: newlyRegisteredArgazipaBot.id,
 					})
@@ -51,7 +50,7 @@ export const LoginBasicHandler = (args: { readonly token: Secret.Secret }) =>
 			}
 
 			return yield* _(
-				jwtService.sign({
+				JwtServiceTag.sign({
 					isAdmin: registeredArgazipaBotOption.value.isAdmin,
 					sub: registeredArgazipaBotOption.value.id,
 				})
@@ -68,7 +67,7 @@ export const LoginBasicHandler = (args: { readonly token: Secret.Secret }) =>
 			}
 
 			return yield* _(
-				jwtService.sign({
+				JwtServiceTag.sign({
 					isAdmin: registeredAdminOption.value.isAdmin,
 					sub: registeredAdminOption.value.id,
 				})

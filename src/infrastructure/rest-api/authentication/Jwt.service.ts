@@ -1,5 +1,5 @@
 import { Schema } from "@effect/schema";
-import { Config, Context, Effect, Layer, ReadonlyRecord, Secret } from "effect";
+import { Config, Effect, Layer, ReadonlyRecord, Secret } from "effect";
 
 import { AccessTokenSchema } from "./AccessToken.js";
 import { RefreshTokenSchema } from "./RefreshToken.js";
@@ -73,7 +73,7 @@ const makeLive = () =>
 
 export type JwtService = Effect.Effect.Success<ReturnType<typeof makeLive>>;
 
-export class JwtServiceTag extends Context.Tag("@argazi/infrastructure/rest")<
+export class JwtServiceTag extends Effect.Tag("@argazi/infrastructure/rest")<
 	JwtServiceTag,
 	JwtService
 >() {

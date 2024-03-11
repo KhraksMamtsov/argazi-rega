@@ -19,7 +19,6 @@ export const LoginDwbnHandler = (body: LoginDwbnRequestBody) =>
 		const idDwbnAdmin = yield* _(Config.secret("DWBN_ID_ADMIN"));
 		const notificationService = yield* _(NotificationServiceTag);
 		const dwbnOAuth2Service = yield* _(DwbnOAuth2Service);
-		const jwtService = yield* _(JwtServiceTag);
 
 		const accessTokenResult = yield* _(dwbnOAuth2Service.fetchToken(body.code));
 
@@ -66,7 +65,7 @@ export const LoginDwbnHandler = (body: LoginDwbnRequestBody) =>
 			);
 
 			return yield* _(
-				jwtService.sign({
+				JwtServiceTag.sign({
 					isAdmin: newlyRegisteredUser.isAdmin,
 					sub: newlyRegisteredUser.id,
 				}),
@@ -77,7 +76,7 @@ export const LoginDwbnHandler = (body: LoginDwbnRequestBody) =>
 			);
 		} else {
 			return yield* _(
-				jwtService.sign({
+				JwtServiceTag.sign({
 					isAdmin: registeredUserOption.value.isAdmin,
 					sub: registeredUserOption.value.id,
 				}),

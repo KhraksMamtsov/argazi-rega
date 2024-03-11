@@ -1,4 +1,4 @@
-import { Context, Effect, flow, Layer, Option, Secret, Struct } from "effect";
+import { Effect, flow, Layer, Option, Secret, Struct } from "effect";
 
 import { CacheServiceTag } from "../cache/Cache.service.js";
 import * as AT from "../rest-api/authentication/AccessToken.js";
@@ -98,7 +98,7 @@ export const makeLive = () =>
 export interface SessionService
 	extends Effect.Effect.Success<ReturnType<typeof makeLive>> {}
 
-export class SessionServiceTag extends Context.Tag(
+export class SessionServiceTag extends Effect.Tag(
 	"@argazi/infrastructure/telegram-bot/SessionService"
 )<SessionServiceTag, SessionService>() {
 	public static readonly Live = () => Layer.effect(this, makeLive());

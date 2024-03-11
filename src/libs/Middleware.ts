@@ -79,7 +79,7 @@
 //   (next) =>
 //     Effect.flatMap(mw(_in)(next), fn);
 //
-// const asd22 = Context.Tag<11, { asd: 2 }>();
+// const asd22 = Effect.Tag<11, { asd: 2 }>();
 //
 // const asd =
 //     (income: number) =>

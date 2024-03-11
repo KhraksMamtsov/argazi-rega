@@ -16,16 +16,14 @@ export const TicketCreatedNotificationHandler = (args: {
 	readonly user: User;
 }) =>
 	Effect.gen(function* (_) {
-		const restApiClient = yield* _(RestApiServiceTag);
-
 		const event = yield* _(
-			restApiClient.getEvent({
+			RestApiServiceTag.getEvent({
 				params: { idEvent: args.createdTicket.idEvent },
 			})
 		);
 
 		const place = yield* _(
-			restApiClient.getPlaceById({
+			RestApiServiceTag.getPlaceById({
 				params: { id: event.idPlace },
 			})
 		);

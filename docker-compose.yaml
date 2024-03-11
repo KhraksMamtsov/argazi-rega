@@ -91,6 +91,8 @@ services:
       context: .
       dockerfile: Dockerfile
       target: dependencies
+      args:
+        NODE_ENV: 'development'
     command: ["pnpm", "run", "bot:start:watch"]
     volumes:
       - ./build:/usr/app/build

@@ -1,4 +1,4 @@
-import { Context, Stream, Effect } from "effect";
+import { Stream, Effect } from "effect";
 
 import * as Notification from "../notification/Notification.js";
 
@@ -11,7 +11,7 @@ export interface NotificationService {
 	readonly stream$: Stream.Stream<NotificationMessage>;
 }
 
-export class NotificationServiceTag extends Context.Tag(
+export class NotificationServiceTag extends Effect.Tag(
 	"@argazi/domain/NotificationService"
 )<NotificationServiceTag, NotificationService>() {}
 

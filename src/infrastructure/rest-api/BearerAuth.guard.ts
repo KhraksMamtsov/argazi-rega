@@ -21,10 +21,8 @@ export const BearerAuthGuard =
 		security: S
 	) =>
 		Effect.gen(function* (_) {
-			const jwtService = yield* _(JwtServiceTag);
-
 			const { sub } = yield* _(
-				jwtService.verifyAndDecode({
+				JwtServiceTag.verifyAndDecode({
 					token: security.bearer.token,
 					type: "accessToken",
 				}),

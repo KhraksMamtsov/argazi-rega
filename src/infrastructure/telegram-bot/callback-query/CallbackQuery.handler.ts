@@ -17,8 +17,6 @@ export const CallbackQueryHandler = (args: {
 	readonly callbackQueryPayload: CallbackQueryPayload;
 }) =>
 	Effect.gen(function* (_) {
-		const restApiClient = yield* _(RestApiServiceTag);
-
 		const callbackQuery = yield* _(
 			decode(args.callbackQueryPayload.callback_query.data)
 		);
@@ -26,7 +24,7 @@ export const CallbackQueryHandler = (args: {
 		if (callbackQuery.type === "Ticket") {
 			if (callbackQuery.action === "delete") {
 				return yield* _(
-					restApiClient.returnMyTicket(
+					RestApiServiceTag.returnMyTicket(
 						{
 							params: {
 								idTicket: callbackQuery.id,
@@ -39,7 +37,7 @@ export const CallbackQueryHandler = (args: {
 				);
 			} else if (callbackQuery.action === "create") {
 				return yield* _(
-					restApiClient.bookMyTicket(
+					RestApiServiceTag.bookMyTicket(
 						{
 							body: {
 								idEvent: callbackQuery.id,
@@ -54,7 +52,7 @@ export const CallbackQueryHandler = (args: {
 		} else if (callbackQuery.type === "Subscription") {
 			if (callbackQuery.action === "delete") {
 				const deletedUserSubscription = yield* _(
-					restApiClient.deleteMySubscription(
+					RestApiServiceTag.deleteMySubscription(
 						{
 							params: { idSubscription: callbackQuery.id },
 						},
@@ -89,7 +87,7 @@ export const CallbackQueryHandler = (args: {
 			}
 			if (callbackQuery.action === "create") {
 				const createdSubscription = yield* _(
-					restApiClient.createMySubscription(
+					RestApiServiceTag.createMySubscription(
 						{
 							body: {
 								idPlace: callbackQuery.id,
@@ -128,13 +126,13 @@ export const CallbackQueryHandler = (args: {
 		if (callbackQuery.type === "Place") {
 			if (callbackQuery.action === "get") {
 				const place = yield* _(
-					restApiClient.getPlaceById({
+					RestApiServiceTag.getPlaceById({
 						params: { id: callbackQuery.id },
 					})
 				);
 
 				const geoPoint = yield* _(
-					restApiClient.getPlaceGeoPoint({
+					RestApiServiceTag.getPlaceGeoPoint({
 						params: { idPlace: place.id },
 					})
 				);

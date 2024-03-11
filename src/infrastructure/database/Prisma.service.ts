@@ -1,6 +1,6 @@
 import { Schema } from "@effect/schema";
 import { PrismaClient } from "@prisma/client";
-import { Config, Context, Data, Effect, Layer, pipe, Secret } from "effect";
+import { Config, Data, Effect, Layer, pipe, Secret } from "effect";
 
 import type { ParseError } from "@effect/schema/ParseResult";
 import type { NoInfer } from "effect/Types";
@@ -120,9 +120,9 @@ export interface PrismaServiceId {
 	readonly _: unique symbol;
 }
 
-export type PrismaService = Effect.Effect.Success<typeof makeLive>;
+export interface PrismaService extends Effect.Effect.Success<typeof makeLive> {}
 
-export class PrismaServiceTag extends Context.Tag(
+export class PrismaServiceTag extends Effect.Tag(
 	"@argazi/infrastructure/PrismaService"
 )<PrismaServiceTag, PrismaService>() {
 	public static readonly Live = () => Layer.effect(this, makeLive);

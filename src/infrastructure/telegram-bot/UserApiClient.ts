@@ -1,11 +1,11 @@
-import { Config, Context, Effect, Layer, Secret } from "effect";
+import { Config, Effect, Layer, Secret } from "effect";
 import { Client } from "effect-http";
 
 import { RestApi } from "../rest-api/RestApi.js";
 
 export type RestApiClient = Effect.Effect.Success<ReturnType<typeof makeLive>>;
 
-export class RestApiClientTag extends Context.Tag(
+export class RestApiClientTag extends Effect.Tag(
 	"@argazi/infrastructure/telegram-bot/RestApiClientService"
 )<RestApiClientTag, RestApiClient>() {
 	public static readonly Live = () => Layer.effect(this, makeLive());

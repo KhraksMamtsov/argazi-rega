@@ -13,7 +13,7 @@ export const GetPlaceActualEventsUseCase = BaseCausedUseCaseFor(
 	Effect.gen(function* (_) {
 		const prismaClient = yield* _(PrismaServiceTag);
 
-		return yield* _(
+		const asd = yield* _(
 			prismaClient.queryDecode(Schema.array(ToDomainSchema), (p) =>
 				p.event.findMany({
 					orderBy: { dateStart: "desc" },
@@ -26,5 +26,8 @@ export const GetPlaceActualEventsUseCase = BaseCausedUseCaseFor(
 				})
 			)
 		);
+		console.log(asd);
+
+		return asd;
 	})
 );
