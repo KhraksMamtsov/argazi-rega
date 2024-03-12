@@ -1,9 +1,8 @@
 import { Effect, Option, ReadonlyArray, Secret } from "effect";
 
-import { escapeMarkdown } from "../../message/message-formater.js";
-
 import type { User } from "../../../../domain/user/entity/User.js";
 import type { TelegrafBot } from "../../telegraf/TelegrafBot.js";
+import { MD } from "../../ui/Markdown.js";
 
 export const UserCreatedNotificationHandler = (args: {
 	readonly bot: TelegrafBot;
@@ -18,7 +17,7 @@ export const UserCreatedNotificationHandler = (args: {
 			ReadonlyArray.map((x) =>
 				args.bot.sendMessage(
 					x,
-					escapeMarkdown(
+					MD.escape(
 						`Создан пользователь ${Secret.value(args.createdUser.firstName)} ${args.createdUser.lastName.pipe(
 							Option.map(Secret.value),
 							Option.getOrElse(() => "")

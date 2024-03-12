@@ -26,6 +26,6 @@ const _EventSchema = EventBaseSchema.pipe(
 	Schema.identifier("EventSchema")
 );
 
-export type Event = Schema.Schema.To<typeof _EventSchema>;
+export interface Event extends Schema.Schema.To<typeof _EventSchema> {}
 
 export const EventSchema: Schema.Schema<Event> = Schema.to(_EventSchema);

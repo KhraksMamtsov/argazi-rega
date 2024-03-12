@@ -2,9 +2,9 @@ import { Effect } from "effect";
 import { Markup } from "telegraf";
 
 import { encode } from "../callback-query/CallbackQuery.js";
-import { escapeMarkdown } from "../message/message-formater.js";
 import { RestApiServiceTag } from "../RestApiService.js";
 import { CommandPayload } from "../telegraf/TelegrafBot.js";
+import { MD } from "../ui/Markdown.js";
 
 export const PlacesCommandHandler = (args: {
 	readonly command: CommandPayload<"places">;
@@ -24,7 +24,7 @@ export const PlacesCommandHandler = (args: {
 			const placeSubscription = userSubscriptions.find(
 				(x) => x.idPlace === place.id
 			);
-			const escapedPlaceName = escapeMarkdown(place.name);
+			const escapedPlaceName = MD.escape(place.name);
 			const buttons = [
 				Markup.button.callback(
 					"Подробнее",

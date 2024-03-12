@@ -2,7 +2,7 @@ import { BigDecimal, Effect, Option, ReadonlyArray, Secret } from "effect";
 import { Markup } from "telegraf";
 
 import { encode } from "../../callback-query/CallbackQuery.js";
-import { escapeMarkdown } from "../../message/message-formater.js";
+import { MD } from "../../ui/Markdown.js";
 import { RestApiServiceTag } from "../../RestApiService.js";
 
 import type { Event } from "../../../../domain/event/entity/Event.js";
@@ -51,9 +51,7 @@ export const EventCreatedNotificationHandler = (args: {
 		const message = [
 			`Создано событие *"${Secret.value(createdEvent.name)}"*:`,
 			points
-				.map(
-					(x) => ` • ${escapeMarkdown(x.label)}: *${escapeMarkdown(x.value)}*`
-				)
+				.map((x) => ` • ${MD.escape(x.label)}: *${MD.escape(x.value)}*`)
 				.join("\n"),
 		].join("\n");
 

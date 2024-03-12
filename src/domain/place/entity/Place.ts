@@ -19,6 +19,6 @@ const _PlaceSchema = PlaceBaseSchema.pipe(
 	Schema.identifier("PlaceSchema")
 );
 
-export type Place = Schema.Schema.To<typeof _PlaceSchema>;
+export interface Place extends Schema.Schema.To<typeof _PlaceSchema> {}
 
 export const PlaceSchema: Schema.Schema<Place> = _PlaceSchema;

@@ -7,12 +7,12 @@ pnpm run all:build:watch
 
 ```bash
 # rest api-server
-docker-compose up api_development
+docker-compose up api_development -d
 ```
 
 ```bash
 # rest-api server + telegram bot
-docker-compose up telegram_bot_development
+docker-compose up telegram_bot_development -d
 ```
 
 Links:

@@ -1,9 +1,9 @@
-import { Effect, Secret } from "effect";
+import { Effect } from "effect";
 import { Markup } from "telegraf";
 
 import { encode } from "../../callback-query/CallbackQuery.js";
-import { escapeMarkdown } from "../../message/message-formater.js";
 import { RestApiServiceTag } from "../../RestApiService.js";
+import { TicketReturnedMdComponent } from "./TicketReturned.md-component.js";
 
 import type { Ticket } from "../../../../domain/ticket/entity/Ticket.js";
 import type { User } from "../../../../domain/user/entity/User.js";
@@ -37,17 +37,13 @@ export const TicketReturnedNotificationHandler = (args: {
 		yield* _(
 			args.bot.sendMessage(
 				args.user.idTelegramChat,
-				[
-					"🎟️ Билет возвращен",
-					` • Место: *${escapeMarkdown(place.name)}*`,
-					` • Событие: *${escapeMarkdown(Secret.value(event.name))}*`,
-					` • Время начала: *${escapeMarkdown(
-						new Intl.DateTimeFormat("ru-RU", {
-							dateStyle: "full",
-							timeStyle: "short",
-						}).format(event.dateStart)
-					)}*`,
-				].join("\n"),
+				yield* _(
+					TicketReturnedMdComponent({
+						event,
+						place,
+						ticket: args.createdTicket,
+					})
+				),
 				{
 					parse_mode: "MarkdownV2",
 					reply_markup: Markup.inlineKeyboard([

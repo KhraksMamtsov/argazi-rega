@@ -1,11 +1,9 @@
 import { Effect, flow, Option, pipe, ReadonlyArray, Secret } from "effect";
-// import { Markup } from "telegraf";
 
-// import { encode } from "../callback-query/CallbackQuery.js";
 import { fromArray } from "../../../libs/ReadonlyArray.js";
-import { escapeMarkdown } from "../message/message-formater.js";
 import { RestApiServiceTag } from "../RestApiService.js";
 import { CommandPayload } from "../telegraf/TelegrafBot.js";
+import { MD } from "../ui/Markdown.js";
 
 export const EventsCommandHandler = (args: {
 	readonly command: CommandPayload<"events">;
@@ -51,9 +49,7 @@ export const EventsCommandHandler = (args: {
 						args.command.replyWithMarkdown("Нет актуальных событий", {})
 					),
 				onSome: ReadonlyArray.map((actualEvent) => {
-					const escapedEventName = escapeMarkdown(
-						Secret.value(actualEvent.name)
-					);
+					const escapedEventName = MD.escape(Secret.value(actualEvent.name));
 					const eventTicket = ReadonlyArray.findFirst(
 						userTickets,
 						(x) => x.idEvent === actualEvent.id
@@ -63,7 +59,7 @@ export const EventsCommandHandler = (args: {
 						`**${escapedEventName}**`,
 						[
 							"Начало",
-							escapeMarkdown(
+							MD.escape(
 								new Intl.DateTimeFormat("ru-RU", {
 									dateStyle: "short",
 									timeStyle: "short",
@@ -72,7 +68,7 @@ export const EventsCommandHandler = (args: {
 						].join(": "),
 						[
 							"Участие",
-							escapeMarkdown(
+							MD.escape(
 								Option.match(eventTicket, {
 									onNone: () => "-",
 									onSome: (x) => x.role,

@@ -6,7 +6,7 @@ import { satisfies } from "../../../libs/SchemaSatisfy.js";
 
 import type { PlaceBase } from "../../../domain/place/entity/Place.js";
 
-export const PlaceApi = Schema.struct({
+export const _PlaceApi = Schema.struct({
 	id: IdPlaceSchema,
 	idGeoPoint: IdGeoPointSchema,
 	name: Schema.compose(Schema.Trimmed, Schema.NonEmpty),
@@ -15,3 +15,8 @@ export const PlaceApi = Schema.struct({
 	satisfies.to<PlaceBase>(),
 	Schema.identifier("PlaceApi")
 );
+
+export interface PlaceApiFrom extends Schema.Schema.From<typeof _PlaceApi> {}
+export interface PlaceApi extends Schema.Schema.To<typeof _PlaceApi> {}
+
+export const PlaceApi: Schema.Schema<PlaceApi, PlaceApiFrom> = _PlaceApi;

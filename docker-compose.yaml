@@ -84,9 +84,9 @@ services:
       restart: always
 
   telegram_bot_development:
+    container_name: telegram_bot_development
     networks:
       - application_network
-    container_name: telegram_bot
     build:
       context: .
       dockerfile: Dockerfile
@@ -133,6 +133,7 @@ services:
       DWBN_SSO_SCOPE: "${DWBN_SSO_SCOPE}"
 
   api_development:
+    container_name: api_development
     networks:
       - application_network
     depends_on:
@@ -185,6 +186,7 @@ services:
       PRISMA_DB_URL: "postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${POSTGRES_HOST}:${POSTGRES_PORT}/${POSTGRES_DB}?schema=public&connect_timeout=60"
 
   api_production:
+    container_name: api_production
     networks:
       - application_network
     depends_on:
