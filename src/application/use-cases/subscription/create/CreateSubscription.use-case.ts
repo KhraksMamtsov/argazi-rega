@@ -19,7 +19,7 @@ export const CreateSubscriptionUseCase = BaseCausedUseCaseFor(
 		if (!initiator.isAdmin && initiator.id !== payload.idUser) {
 			yield* _(
 				new CreateEntityAuthorizationError({
-					entity: ["Subscription"],
+					entity: "Subscription",
 					idInitiator: initiator.id,
 					payload,
 				})

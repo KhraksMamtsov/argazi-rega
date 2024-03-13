@@ -5,22 +5,29 @@ import { GetPlaceActualEventsCommandSchema } from "./GetPlaceActualEvents.comman
 
 import { ToDomainSchema } from "../../../../../infrastructure/database/entity/Event.db.js";
 import { PrismaServiceTag } from "../../../../../infrastructure/database/Prisma.service.js";
-import { BaseCausedUseCaseFor } from "../../../common/Base.use-case.js";
+import { BaseGetCausedUseCaseFor } from "../../../common/Base.use-case.js";
 
-export const GetPlaceActualEventsUseCase = BaseCausedUseCaseFor(
+export const GetPlaceActualEventsUseCase = BaseGetCausedUseCaseFor(
 	GetPlaceActualEventsCommandSchema
-)(({ payload }) =>
+)(({ payload }, { includeDeleted }) =>
 	Effect.gen(function* (_) {
 		const prismaClient = yield* _(PrismaServiceTag);
+
+		console.log({
+			...(includeDeleted ? {} : { idUserDeleter: null }),
+			dateAnnouncement: { lte: new Date() },
+			dateFinish: { gte: new Date() },
+			idPlace: payload.idPlace,
+		});
 
 		const asd = yield* _(
 			prismaClient.queryDecode(Schema.array(ToDomainSchema), (p) =>
 				p.event.findMany({
 					orderBy: { dateStart: "desc" },
 					where: {
-						dateDeleted: null,
-						// dateAnnouncement: { lte: new Date() },
-						// dateFinish: { gte: new Date() },
+						...(includeDeleted ? {} : { idUserDeleter: null }),
+						dateAnnouncement: { lte: new Date() },
+						dateFinish: { gte: new Date() },
 						idPlace: payload.idPlace,
 					},
 				})

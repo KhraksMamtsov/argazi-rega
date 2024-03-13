@@ -2,8 +2,12 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Callback from DWBN SSO</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
+</head>
+<body>
+    <pre><code id="location"></code></pre>
+
     <script>
         /**
          * 'access_token=222&id_token=333&expires_in=3600&token_type=Bearer&state=4444&scope=openid+profile+email'
@@ -27,12 +31,9 @@
         })
 
         const authParameters = decode(currentURL.searchParams);
-
         Telegram.WebApp.sendData(JSON.stringify(message({
             ...authParameters
         })))
     </script>
-</head>
-<body>
 </body>
 </html>

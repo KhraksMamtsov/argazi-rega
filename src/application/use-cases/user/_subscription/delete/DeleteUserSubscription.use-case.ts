@@ -14,7 +14,7 @@ export const DeleteUserSubscriptionUseCase = BaseCausedUseCaseFor(
 		if (!initiator.isAdmin && initiator.id !== payload.idUser) {
 			yield* _(
 				new DeleteEntityAuthorizationError({
-					entity: ["User", "Subscription"],
+					entity: "Subscription",
 					idEntity: payload.idSubscription,
 					idInitiator: initiator.id,
 					payload,
@@ -26,14 +26,8 @@ export const DeleteUserSubscriptionUseCase = BaseCausedUseCaseFor(
 
 		return yield* _(
 			prismaClient.queryDecode(ToDomainSchema, (p) =>
-				p.subscription.update({
-					data: {
-						dateDeleted: new Date(),
-						idUserDeleter: initiator.id,
-					},
-					where: {
-						id: payload.idSubscription,
-					},
+				p.subscription.delete({
+					where: { id: payload.idSubscription },
 				})
 			)
 		);

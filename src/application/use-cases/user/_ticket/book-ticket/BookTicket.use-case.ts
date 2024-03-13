@@ -18,7 +18,7 @@ export const BookTicketUseCase = BaseCausedUseCaseFor(BookTicketCommandSchema)(
 			if (!initiator.isAdmin && initiator.id !== payload.idUser) {
 				yield* _(
 					new CreateEntityAuthorizationError({
-						entity: ["User", "Ticket"],
+						entity: "Ticket",
 						idInitiator: initiator.id,
 						payload: payload,
 					})

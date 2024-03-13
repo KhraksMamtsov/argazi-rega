@@ -6,13 +6,13 @@ import { GetUserTicketsCommandSchema } from "./GetUserTickets.command.js";
 import { ToDomainSchema } from "../../../../../infrastructure/database/entity/Ticket.db.js";
 import { PrismaServiceTag } from "../../../../../infrastructure/database/Prisma.service.js";
 import { GetEntityAuthorizationError } from "../../../common/AuthorizationError.js";
-import { BaseCausedUseCaseFor } from "../../../common/Base.use-case.js";
+import { BaseGetCausedUseCaseFor } from "../../../common/Base.use-case.js";
 
 const schema = Schema.array(ToDomainSchema);
 
-export const GetUserTicketsUseCase = BaseCausedUseCaseFor(
+export const GetUserTicketsUseCase = BaseGetCausedUseCaseFor(
 	GetUserTicketsCommandSchema
-)(({ payload, initiator }) =>
+)(({ payload, initiator }, { includeDeleted }) =>
 	Effect.gen(function* (_) {
 		if (!initiator.isAdmin && initiator.id !== payload.idUser) {
 			yield* _(
@@ -29,7 +29,10 @@ export const GetUserTicketsUseCase = BaseCausedUseCaseFor(
 		return yield* _(
 			prismaClient.queryDecode(schema, (p) =>
 				p.ticket.findMany({
-					where: { idUser: payload.idUser },
+					where: {
+						idUser: payload.idUser,
+						...(includeDeleted ? {} : { idUserDeleter: null }),
+					},
 				})
 			)
 		);

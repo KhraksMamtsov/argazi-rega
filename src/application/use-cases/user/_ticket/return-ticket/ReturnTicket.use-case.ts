@@ -6,7 +6,7 @@ import { notification } from "../../../../../domain/notification/Notification.js
 import { NotificationServiceTag } from "../../../../../domain/services/NotificationService.js";
 import { ToDomainSchema } from "../../../../../infrastructure/database/entity/Ticket.db.js";
 import { PrismaServiceTag } from "../../../../../infrastructure/database/Prisma.service.js";
-import { CreateEntityAuthorizationError } from "../../../common/AuthorizationError.js";
+import { DeleteEntityAuthorizationError } from "../../../common/AuthorizationError.js";
 import { BaseCausedUseCaseFor } from "../../../common/Base.use-case.js";
 
 export const ReturnTicketUseCase = BaseCausedUseCaseFor(
@@ -18,8 +18,9 @@ export const ReturnTicketUseCase = BaseCausedUseCaseFor(
 
 		if (!initiator.isAdmin && initiator.id !== payload.idUser) {
 			yield* _(
-				new CreateEntityAuthorizationError({
-					entity: ["User", "Ticket"],
+				new DeleteEntityAuthorizationError({
+					entity: "Ticket",
+					idEntity: payload.id,
 					idInitiator: initiator.id,
 					payload: payload,
 				})

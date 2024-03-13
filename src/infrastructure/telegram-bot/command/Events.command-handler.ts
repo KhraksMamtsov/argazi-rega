@@ -1,8 +1,11 @@
 import { Effect, flow, Option, pipe, ReadonlyArray } from "effect";
+import { Markup } from "telegraf";
 
 import { fromArray } from "../../../libs/ReadonlyArray.js";
 import { RestApiServiceTag } from "../RestApiService.js";
 import { CommandPayload } from "../telegraf/TelegrafBot.js";
+import { BookTicketCbButton } from "../ui/button/BookTicket.cb-button.js";
+import { ReturnTicketCbButton } from "../ui/button/ReturnTicket.cb-button.js";
 import { EventMdComponent } from "../ui/Event.md-component.js";
 import { MD } from "../ui/Markdown.js";
 import { TicketMdComponent } from "../ui/Ticket.md-component.js";
@@ -61,6 +64,7 @@ export const EventsCommandHandler = (args: {
 						onSome: (ticket) =>
 							MD.document(
 								MD.dl()(["Участие", "✅"]),
+								MD.br,
 								TicketMdComponent({ ticket })
 							),
 					});
@@ -73,11 +77,17 @@ export const EventsCommandHandler = (args: {
 						ticketPart
 					);
 
-					return answer.pipe(
-						Effect.flatMap((x) =>
-							args.command.replyWithMarkdown(x, {
-								parse_mode: "MarkdownV2",
-							})
+					const ticketButton = Option.match(eventTicket, {
+						onNone: () => BookTicketCbButton({ event: actualEvent }),
+						onSome: (ticket) => ReturnTicketCbButton({ ticket }),
+					});
+
+					return Effect.zip(answer, ticketButton).pipe(
+						Effect.flatMap((data) =>
+							args.command.replyWithMarkdown(
+								data[0],
+								Markup.inlineKeyboard([data[1]])
+							)
 						)
 					);
 				}),

@@ -12,7 +12,7 @@ export const GetPlaceByIdResponseSchema = PlaceApi.pipe(
 
 export const GetPlaceByIdRequest = {
 	params: Schema.struct({
-		id: IdPlaceSchema,
+		idPlace: IdPlaceSchema,
 	}),
 };
 
@@ -20,7 +20,11 @@ export const GetPlaceByIdResponse = GetPlaceByIdResponseSchema.pipe(
 	Schema.description("Place")
 );
 
-export const GetPlaceByIdEndpoint = Api.get("getPlaceById", "/places/:id", {
-	request: GetPlaceByIdRequest,
-	response: GetPlaceByIdResponse,
-});
+export const GetPlaceByIdEndpoint = Api.get(
+	"getPlaceById",
+	"/places/:idPlace",
+	{
+		request: GetPlaceByIdRequest,
+		response: GetPlaceByIdResponse,
+	}
+);

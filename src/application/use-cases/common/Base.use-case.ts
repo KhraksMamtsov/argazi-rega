@@ -34,12 +34,7 @@ export const BaseCausedUseCaseFor =
 			const initiator = yield* _(
 				prismaService.queryDecode(
 					Schema.optionFromNullable(ToDomainSchema),
-					(p) =>
-						p.user.findUnique({
-							where: {
-								id: command.idInitiator,
-							},
-						})
+					(p) => p.user.findUnique({ where: { id: command.idInitiator } })
 				),
 				Effect.flatMap(
 					Either.fromOption(
@@ -53,6 +48,53 @@ export const BaseCausedUseCaseFor =
 					initiator,
 					payload: command.payload,
 				})
+			);
+		});
+
+export const BaseGetCausedUseCaseFor =
+	<SR, I, T extends BaseCausedCommand>(
+		_commandSchema: Schema.Schema<T, I, SR>
+	) =>
+	<R, E, A>(
+		cb: (
+			args: {
+				readonly initiator: User;
+				readonly payload: T["payload"];
+			},
+			options: {
+				readonly includeDeleted: boolean;
+			}
+		) => Effect.Effect<A, E, R>
+	) =>
+	(
+		command: T,
+		options: {
+			readonly includeDeleted: boolean;
+		}
+	) =>
+		Effect.gen(function* (_) {
+			const prismaService = yield* _(PrismaServiceTag);
+
+			const initiator = yield* _(
+				prismaService.queryDecode(
+					Schema.optionFromNullable(ToDomainSchema),
+					(p) => p.user.findUnique({ where: { id: command.idInitiator } })
+				),
+				Effect.flatMap(
+					Either.fromOption(
+						() => new UnknownInitiatorBaseUseCaseError({ command })
+					)
+				)
+			);
+
+			return yield* _(
+				cb(
+					{
+						initiator,
+						payload: command.payload,
+					},
+					options
+				)
 			);
 		});
 

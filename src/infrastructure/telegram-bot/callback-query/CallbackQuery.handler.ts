@@ -142,7 +142,7 @@ export const CallbackQueryHandler = (args: {
 			if (callbackQuery.action === "get") {
 				const place = yield* _(
 					RestApiServiceTag.getPlaceById({
-						params: { id: callbackQuery.id },
+						params: { idPlace: callbackQuery.id },
 					})
 				);
 

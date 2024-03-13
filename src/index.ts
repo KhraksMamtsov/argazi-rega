@@ -386,7 +386,7 @@ const app = pipe(
 				const newPlace = yield* _(
 					GetPlaceByIdUseCase({
 						idInitiator: IdAdmin,
-						payload: { id: params.id },
+						payload: { id: params.idPlace },
 					}),
 					Effect.flatten,
 					Effect.mapError(() => ServerError.notFoundError("NotFound4"))
@@ -460,10 +460,13 @@ const app = pipe(
 		RouterBuilder.handle("getPlaceActualEvents", ({ params }) =>
 			Effect.gen(function* (_) {
 				const placeActualEvents = yield* _(
-					GetPlaceActualEventsUseCase({
-						idInitiator: IdAdmin,
-						payload: { idPlace: params.idPlace },
-					})
+					GetPlaceActualEventsUseCase(
+						{
+							idInitiator: IdAdmin,
+							payload: { idPlace: params.idPlace },
+						},
+						{ includeDeleted: false }
+					)
 				);
 
 				return placeActualEvents;
@@ -599,10 +602,13 @@ const app = pipe(
 		RouterBuilder.handle(
 			"getMyTickets",
 			BearerAuthGuard((_, { idInitiator }) =>
-				GetUserTicketsUseCase({
-					idInitiator,
-					payload: { idUser: idInitiator },
-				})
+				GetUserTicketsUseCase(
+					{
+						idInitiator,
+						payload: { idUser: idInitiator },
+					},
+					{ includeDeleted: false }
+				)
 			)
 		),
 		RouterBuilder.handle(

@@ -1,9 +1,10 @@
 import { Effect } from "effect";
 import { Markup } from "telegraf";
 
-import { encode } from "../../callback-query/CallbackQuery.js";
-import { RestApiServiceTag } from "../../RestApiService.js";
 import { TicketReturnedMdComponent } from "./TicketReturned.md-component.js";
+
+import { RestApiServiceTag } from "../../RestApiService.js";
+import { BookTicketCbButton } from "../../ui/button/BookTicket.cb-button.js";
 
 import type { Ticket } from "../../../../domain/ticket/entity/Ticket.js";
 import type { User } from "../../../../domain/user/entity/User.js";
@@ -29,7 +30,7 @@ export const TicketReturnedNotificationHandler = (args: {
 		const place = yield* _(
 			restApiClient.getPlaceById({
 				params: {
-					id: event.idPlace,
+					idPlace: event.idPlace,
 				},
 			})
 		);
@@ -44,19 +45,7 @@ export const TicketReturnedNotificationHandler = (args: {
 						ticket: args.createdTicket,
 					})
 				),
-				{
-					parse_mode: "MarkdownV2",
-					reply_markup: Markup.inlineKeyboard([
-						Markup.button.callback(
-							"🎟️ Забронировать билет",
-							encode({
-								action: "create",
-								id: event.id,
-								type: "Ticket",
-							})
-						),
-					]).reply_markup,
-				}
+				Markup.inlineKeyboard([yield* _(BookTicketCbButton({ event }))])
 			)
 		);
 	});

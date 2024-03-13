@@ -17,13 +17,13 @@ export class ValidationError extends Schema.TaggedError<ValidationError>()(
 export class CreateEntityAuthorizationError extends Schema.TaggedError<CreateEntityAuthorizationError>()(
 	"CreateEntityAuthorizationError",
 	{
-		entity: Schema.array(EntityType),
+		entity: EntityType,
 		idInitiator: IdUserSchema,
 		payload: Json.JsonRecord,
 	}
 ) {}
 
-export class GetEntityAuthorizationError extends Schema.TaggedError<CreateEntityAuthorizationError>()(
+export class GetEntityAuthorizationError extends Schema.TaggedError<GetEntityAuthorizationError>()(
 	"GetEntityAuthorizationError",
 	{
 		entity: Schema.array(EntityType),
@@ -45,7 +45,7 @@ export class UpdateEntityAuthorizationError extends Schema.TaggedError<UpdateEnt
 export class DeleteEntityAuthorizationError extends Schema.TaggedError<DeleteEntityAuthorizationError>()(
 	"DeleteEntityAuthorizationError",
 	{
-		entity: Schema.array(EntityType),
+		entity: EntityType,
 		idEntity: Schema.UUID,
 		idInitiator: IdUserSchema,
 		payload: Json.JsonRecord,

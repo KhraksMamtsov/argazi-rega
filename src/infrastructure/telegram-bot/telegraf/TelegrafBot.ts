@@ -177,7 +177,11 @@ export const makeBot = (bot: Bot) => {
 					args,
 					error: x,
 				}),
-			try: () => bot.telegram.sendMessage(...args),
+			try: () =>
+				bot.telegram.sendMessage(args[0], args[1], {
+					parse_mode: "MarkdownV2",
+					...args[2],
+				}),
 		}).pipe(Effect.tapError(Effect.logError));
 
 	return {

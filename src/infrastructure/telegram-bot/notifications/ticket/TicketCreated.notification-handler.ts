@@ -3,8 +3,8 @@ import { Markup } from "telegraf";
 
 import { TicketCreatedMdComponent } from "./TicketCreated.md-component.js";
 
-import { encode } from "../../callback-query/CallbackQuery.js";
 import { RestApiServiceTag } from "../../RestApiService.js";
+import { ReturnTicketCbButton } from "../../ui/button/ReturnTicket.cb-button.js";
 
 import type { Ticket } from "../../../../domain/ticket/entity/Ticket.js";
 import type { User } from "../../../../domain/user/entity/User.js";
@@ -25,7 +25,7 @@ export const TicketCreatedNotificationHandler = (args: {
 
 		const place = yield* _(
 			RestApiServiceTag.getPlaceById({
-				params: { id: event.idPlace },
+				params: { idPlace: event.idPlace },
 			})
 		);
 
@@ -39,19 +39,9 @@ export const TicketCreatedNotificationHandler = (args: {
 						ticket: args.createdTicket,
 					})
 				),
-				{
-					parse_mode: "MarkdownV2",
-					reply_markup: Markup.inlineKeyboard([
-						Markup.button.callback(
-							"❌ Отменить бронь билетa",
-							encode({
-								action: "delete",
-								id: args.createdTicket.id,
-								type: "Ticket",
-							})
-						),
-					]).reply_markup,
-				}
+				Markup.inlineKeyboard([
+					yield* _(ReturnTicketCbButton({ ticket: args.createdTicket })),
+				])
 			)
 		);
 	});

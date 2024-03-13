@@ -5,13 +5,13 @@ import { constVoid } from "effect/Function";
 import { RestApiServiceTag } from "./RestApiService.js";
 import { SessionServiceTag } from "./Session.service.js";
 import { TelegramAuthMiniAppDataSchema } from "./TelegramAuthMiniAppData.js";
+import { ArgazipaSayMdComponent } from "./ui/ArgazipaSay.md-component.js";
 import { MD } from "./ui/Markdown.js";
 import { UserMdComponent } from "./ui/User.md-component.js";
 
 import { IdTelegramChatSchema } from "../../domain/user/entity/IdTelegramChat.js";
 
 import type { TelegrafBot, WebAppDataPayload } from "./telegraf/TelegrafBot.js";
-import { ArgazipaSayMdComponent } from "./ui/ArgazipaSay.md-component.js";
 
 export const decode = Schema.decode(TelegramAuthMiniAppDataSchema);
 
@@ -63,7 +63,7 @@ export const AuthenticationHandler = (
 
 		const answerText = yield* _(
 			MD.document(
-				ArgazipaSayMdComponent({ phrase: "Добро пожаловать", emotion: "🙏" }),
+				ArgazipaSayMdComponent({ emotion: "🙏", phrase: "Добро пожаловать" }),
 				MD.br,
 				UserMdComponent({ user: myIdentity })
 			)
@@ -72,6 +72,7 @@ export const AuthenticationHandler = (
 		return yield* _(
 			bot.sendMessage(webAppDataPayload.message.chat.id, answerText, {
 				parse_mode: "MarkdownV2",
+				reply_markup: { remove_keyboard: true },
 			})
 		);
 	});
