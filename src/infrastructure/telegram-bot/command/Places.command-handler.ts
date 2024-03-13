@@ -1,9 +1,11 @@
 import { Effect } from "effect";
 import { Markup } from "telegraf";
 
-import { encode } from "../callback-query/CallbackQuery.js";
 import { RestApiServiceTag } from "../RestApiService.js";
 import { CommandPayload } from "../telegraf/TelegrafBot.js";
+import { AboutPlaceCbButton } from "../ui/button/AboutPlace.cb-button.js";
+import { SubscribePlaceCbButton } from "../ui/button/SubscribePlace.cb-button.js";
+import { UnsubscribePlaceCbButton } from "../ui/button/UnsubscribePlace.cb-button.js";
 import { PlaceMdComponent } from "../ui/Place.md-component.js";
 
 export const PlacesCommandHandler = (args: {
@@ -25,45 +27,18 @@ export const PlacesCommandHandler = (args: {
 				(x) => x.idPlace === place.id
 			);
 
-			const buttons = [
-				Markup.button.callback(
-					"Подробнее",
-					encode({
-						action: "get",
-						id: place.id,
-						type: "Place",
-					})
-				),
-			];
+			const buttons = [AboutPlaceCbButton({ id: place.id })];
+
 			if (placeSubscription) {
-				buttons.push(
-					Markup.button.callback(
-						"🔕 Отписаться",
-						encode({
-							action: "delete",
-							id: placeSubscription.id,
-							type: "Subscription",
-						})
-					)
-				);
+				buttons.push(UnsubscribePlaceCbButton({ id: placeSubscription.id }));
 			} else {
-				buttons.push(
-					Markup.button.callback(
-						"🔔 Подписаться",
-						encode({
-							action: "create",
-							id: place.id,
-							type: "Subscription",
-						})
-					)
-				);
+				buttons.push(SubscribePlaceCbButton({ id: place.id }));
 			}
 
-			return PlaceMdComponent({ place }).pipe(
-				Effect.flatMap((x) =>
-					args.command.replyWithMarkdown(x, {
-						...Markup.inlineKeyboard(buttons),
-						parse_mode: "MarkdownV2",
+			return Effect.zip(PlaceMdComponent({ place }), Effect.all(buttons)).pipe(
+				Effect.flatMap((data) =>
+					args.command.replyWithMarkdown(data[0], {
+						...Markup.inlineKeyboard(data[1]),
 					})
 				)
 			);

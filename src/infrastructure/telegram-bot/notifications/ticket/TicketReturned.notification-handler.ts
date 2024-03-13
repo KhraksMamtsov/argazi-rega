@@ -45,7 +45,7 @@ export const TicketReturnedNotificationHandler = (args: {
 						ticket: args.createdTicket,
 					})
 				),
-				Markup.inlineKeyboard([yield* _(BookTicketCbButton({ event }))])
+				Markup.inlineKeyboard([yield* _(BookTicketCbButton({ id: event.id }))])
 			)
 		);
 	});

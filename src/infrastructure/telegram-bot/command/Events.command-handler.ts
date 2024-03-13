@@ -78,7 +78,7 @@ export const EventsCommandHandler = (args: {
 					);
 
 					const ticketButton = Option.match(eventTicket, {
-						onNone: () => BookTicketCbButton({ event: actualEvent }),
+						onNone: () => BookTicketCbButton({ id: actualEvent.id }),
 						onSome: (ticket) => ReturnTicketCbButton({ ticket }),
 					});
 

@@ -47,7 +47,7 @@ export const EventCreatedNotificationHandler = (args: {
 		}
 
 		const answer = Effect.zip(
-			BookTicketCbButton({ event: createdEvent }),
+			BookTicketCbButton({ id: createdEvent.id }),
 			EventCreatedMdComponent({ event: createdEvent, place })
 		);
 

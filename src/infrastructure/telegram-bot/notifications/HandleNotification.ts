@@ -19,7 +19,7 @@ export const handleNotification = (args: {
 		const restApiClient = yield* _(RestApiServiceTag);
 		const { notification } = args.notificationMessage;
 
-		yield* _(args.notificationMessage.ack());
+		yield* _(args.notificationMessage.ack()); // TODO: get rid from start
 
 		yield* _(Effect.logDebug(args.notificationMessage));
 

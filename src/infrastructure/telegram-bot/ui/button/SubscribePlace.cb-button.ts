@@ -3,16 +3,16 @@ import { Markup } from "telegraf";
 
 import { encode } from "../../callback-query/CallbackQuery.js";
 
-import type { IdEvent } from "../../../../domain/event/entity/IdEvent.js";
+import type { IdPlace } from "../../../../domain/place/entity/IdPlace.js";
 
-export const BookTicketCbButton = (props: { id: IdEvent }) =>
+export const SubscribePlaceCbButton = (props: { id: IdPlace }) =>
 	Effect.succeed(
 		Markup.button.callback(
-			"🎟️ Забронировать билет",
+			"🔔 Подписаться",
 			encode({
 				action: "create",
 				id: props.id,
-				type: "Ticket",
+				type: "Subscription",
 			})
 		)
 	);
