@@ -1,5 +1,6 @@
 import { Effect, Secret, Option, pipe } from "effect";
 
+import { EmptyMdComponent } from "./Empty.md-component.js";
 import { MD } from "./Markdown.js";
 import { UserTypeMdComponent } from "./UserType.md-component.js";
 
@@ -28,7 +29,7 @@ export const UserMdComponent = (props: { user: User }) =>
 						pipe(
 							user.lastName,
 							Option.match({
-								onNone: () => "❌",
+								onNone: () => EmptyMdComponent({ length: 4 }),
 								onSome: Secret.value,
 							}),
 							MD.escape,
@@ -41,7 +42,7 @@ export const UserMdComponent = (props: { user: User }) =>
 						pipe(
 							user.phone,
 							Option.match({
-								onNone: () => "❌",
+								onNone: () => EmptyMdComponent({ length: 4 }),
 								onSome: Secret.value,
 							}),
 							MD.escape,
