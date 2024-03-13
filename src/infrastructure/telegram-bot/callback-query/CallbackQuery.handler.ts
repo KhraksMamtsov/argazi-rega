@@ -1,7 +1,6 @@
 import { absurd, Effect, Secret } from "effect";
-import { Markup } from "telegraf";
 
-import { decode, encode } from "./CallbackQuery.js";
+import { decode } from "./CallbackQuery.js";
 
 import { RestApiServiceTag } from "../RestApiService.js";
 import {
@@ -54,7 +53,7 @@ export const CallbackQueryHandler = (args: {
 			}
 		} else if (callbackQuery.type === "Subscription") {
 			if (callbackQuery.action === "delete") {
-				const deletedUserSubscription = yield* _(
+				yield* _(
 					RestApiServiceTag.deleteMySubscription(
 						{
 							params: { idSubscription: callbackQuery.id },
@@ -65,39 +64,10 @@ export const CallbackQueryHandler = (args: {
 					)
 				);
 
-				return yield* _(
-					args.callbackQueryPayload.editMessageText(
-						args.callbackQueryPayload.message.text,
-						args.callbackQueryPayload.message.message_id,
-						{
-							reply_markup: {
-								inline_keyboard: [
-									[
-										Markup.button.callback(
-											"Подробнее",
-											encode({
-												action: "get",
-												id: deletedUserSubscription.idPlace,
-												type: "Place",
-											})
-										),
-										Markup.button.callback(
-											"🔔 Подписаться",
-											encode({
-												action: "create",
-												id: deletedUserSubscription.idPlace,
-												type: "Subscription",
-											})
-										),
-									],
-								],
-							},
-						}
-					)
-				);
+				return;
 			}
 			if (callbackQuery.action === "create") {
-				const createdSubscription = yield* _(
+				yield* _(
 					RestApiServiceTag.createMySubscription(
 						{
 							body: { idPlace: callbackQuery.id },
@@ -106,36 +76,7 @@ export const CallbackQueryHandler = (args: {
 					)
 				);
 
-				return yield* _(
-					args.callbackQueryPayload.editMessageText(
-						args.callbackQueryPayload.message.text,
-						args.callbackQueryPayload.message.message_id,
-						{
-							reply_markup: {
-								inline_keyboard: [
-									[
-										Markup.button.callback(
-											"Подробнее",
-											encode({
-												action: "get",
-												id: callbackQuery.id,
-												type: "Place",
-											})
-										),
-										Markup.button.callback(
-											"🔕 Отписаться",
-											encode({
-												action: "delete",
-												id: createdSubscription.id,
-												type: "Subscription",
-											})
-										),
-									],
-								],
-							},
-						}
-					)
-				);
+				return;
 			}
 		}
 		if (callbackQuery.type === "Place") {
@@ -169,7 +110,6 @@ export const CallbackQueryHandler = (args: {
 						args.callbackQueryPayload.message.chat.id,
 						answer,
 						{
-							parse_mode: "MarkdownV2",
 							protect_content: true,
 						}
 					)
