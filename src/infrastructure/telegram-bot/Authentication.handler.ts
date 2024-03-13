@@ -63,7 +63,8 @@ export const AuthenticationHandler = (
 
 		const answerText = yield* _(
 			MD.document(
-				ArgazipaSayMdComponent({ phrase: "Добро пожаловать 🎉" }),
+				ArgazipaSayMdComponent({ phrase: "Добро пожаловать", emotion: "🙏" }),
+				MD.br,
 				UserMdComponent({ user: myIdentity })
 			)
 		);

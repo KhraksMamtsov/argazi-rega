@@ -100,10 +100,11 @@ const wrap =
 		);
 
 const codeBlockWrap = wrap("```");
+const underline = wrap("__");
 
 export const MD = {
 	bold: wrap("*"),
-	br: Effect.succeed("\n"),
+	br: Effect.succeed(""),
 	codeBlock: (language: string) => (code: string) =>
 		codeBlockWrap(language + "\n" + code),
 	dl,
@@ -112,6 +113,12 @@ export const MD = {
 	) =>
 		Effect.all(lines.map((line) => toEffect(line, Effect.succeed))).pipe(
 			Effect.map((x) => x.join("\n"))
+		),
+	line: <E = never, R = never>(
+		...parts: ReadonlyArray<string | Effect.Effect<string, E, R>>
+	) =>
+		Effect.all(parts.map((part) => toEffect(part, Effect.succeed))).pipe(
+			Effect.map((x) => x.join(""))
 		),
 	esc,
 	escape,
@@ -124,6 +131,6 @@ export const MD = {
 	pipe: pipe,
 	spoiler: wrap("||"),
 	strikethrough: wrap("~"),
-	underline: wrap("__"),
+	underline,
 	wrap,
 };

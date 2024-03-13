@@ -13,7 +13,7 @@ export const LogoutCommandHandler = (args: {
 		yield* _(sessionService.drop(args.command.idTelegramChat));
 
 		const answer = yield* _(
-			ArgazipaSayMdComponent({ phrase: "До встречи 🙏" })
+			ArgazipaSayMdComponent({ phrase: "До встречи", emotion: "👋" })
 		);
 
 		return yield* _(

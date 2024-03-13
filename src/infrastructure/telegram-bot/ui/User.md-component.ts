@@ -10,43 +10,46 @@ export const UserMdComponent = (props: { user: User }) =>
 		const { user } = props;
 
 		return yield* _(
-			MD.dl()(
-				[
-					"Имя",
-					pipe(
-						//
-						user.firstName,
-						Secret.value,
-						MD.escape,
-						MD.bold
-					),
-				],
-				[
-					"Фамилия",
-					pipe(
-						user.lastName,
-						Option.match({
-							onNone: () => "❌",
-							onSome: Secret.value,
-						}),
-						MD.escape,
-						MD.bold
-					),
-				],
-				["Email", pipe(user.email, Secret.value, MD.escape, MD.bold)],
-				[
-					"Телефон",
-					pipe(
-						user.phone,
-						Option.match({
-							onNone: () => "❌",
-							onSome: Secret.value,
-						}),
-						MD.escape,
-						MD.bold
-					),
-				],
-				["Тип", MD.bold(UserTypeMdComponent({ userType: user.type }))]
+			MD.document(
+				MD.headline("🧘 Пользователь"),
+				MD.dl()(
+					[
+						"Имя",
+						pipe(
+							//
+							user.firstName,
+							Secret.value,
+							MD.escape,
+							MD.bold
+						),
+					],
+					[
+						"Фамилия",
+						pipe(
+							user.lastName,
+							Option.match({
+								onNone: () => "❌",
+								onSome: Secret.value,
+							}),
+							MD.escape,
+							MD.bold
+						),
+					],
+					["Email", pipe(user.email, Secret.value, MD.escape, MD.bold)],
+					[
+						"Телефон",
+						pipe(
+							user.phone,
+							Option.match({
+								onNone: () => "❌",
+								onSome: Secret.value,
+							}),
+							MD.escape,
+							MD.bold
+						),
+					],
+					["Тип", MD.bold(UserTypeMdComponent({ userType: user.type }))]
+				)
 			)
 		);
 	});

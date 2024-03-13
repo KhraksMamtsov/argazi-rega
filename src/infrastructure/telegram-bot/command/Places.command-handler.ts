@@ -4,7 +4,7 @@ import { Markup } from "telegraf";
 import { encode } from "../callback-query/CallbackQuery.js";
 import { RestApiServiceTag } from "../RestApiService.js";
 import { CommandPayload } from "../telegraf/TelegrafBot.js";
-import { MD } from "../ui/Markdown.js";
+import { PlaceMdComponent } from "../ui/Place.md-component.js";
 
 export const PlacesCommandHandler = (args: {
 	readonly command: CommandPayload<"places">;
@@ -24,7 +24,7 @@ export const PlacesCommandHandler = (args: {
 			const placeSubscription = userSubscriptions.find(
 				(x) => x.idPlace === place.id
 			);
-			const escapedPlaceName = MD.escape(place.name);
+
 			const buttons = [
 				Markup.button.callback(
 					"Подробнее",
@@ -59,11 +59,14 @@ export const PlacesCommandHandler = (args: {
 				);
 			}
 
-			const { reply_markup } = Markup.inlineKeyboard(buttons);
-
-			return args.command.replyWithMarkdown(escapedPlaceName, {
-				reply_markup,
-			});
+			return PlaceMdComponent({ place }).pipe(
+				Effect.flatMap((x) =>
+					args.command.replyWithMarkdown(x, {
+						...Markup.inlineKeyboard(buttons),
+						parse_mode: "MarkdownV2",
+					})
+				)
+			);
 		});
 
 		return yield* _(

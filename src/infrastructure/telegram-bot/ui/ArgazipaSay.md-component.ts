@@ -40,9 +40,14 @@ function randomlReplace(str: string) {
 
 const NBSP = " ";
 
-export const ArgazipaSayMdComponent = (props: { phrase: string }) =>
+export const ArgazipaSayMdComponent = (props: {
+	emotion: string;
+	phrase: string;
+}) =>
 	Effect.gen(function* (_) {
 		return yield* _(
-			MD.codeBlock(["🤖", "Argazipa"].join(NBSP))(randomlReplace(props.phrase))
+			MD.codeBlock(["🤖", props.emotion].join(NBSP))(
+				randomlReplace(props.phrase)
+			)
 		);
 	});

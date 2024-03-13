@@ -12,6 +12,6 @@ export const MoneyMdComponent = (props: { money: Money }) =>
 			new Intl.NumberFormat("ru-RU", {
 				currency: "RUB",
 				style: "currency",
-			}).format(BigDecimal.unsafeToNumber(money)) + " 💰"
+			}).format(BigDecimal.unsafeToNumber(money)) // + " 💰"
 		);
 	});

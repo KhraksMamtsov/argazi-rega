@@ -43,7 +43,7 @@ export const TicketCreatedNotificationHandler = (args: {
 					parse_mode: "MarkdownV2",
 					reply_markup: Markup.inlineKeyboard([
 						Markup.button.callback(
-							"❌ Вернуть билет",
+							"❌ Отменить бронь билетa",
 							encode({
 								action: "delete",
 								id: args.createdTicket.id,

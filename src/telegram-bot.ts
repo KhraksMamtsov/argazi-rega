@@ -91,6 +91,7 @@ export const handle = (
 								const text = yield* _(
 									ArgazipaSayMdComponent({
 										phrase: "Необходимо зайти через DWBN",
+										emotion: "🔐",
 									})
 								);
 
@@ -122,6 +123,7 @@ export const handle = (
 							MD.document(
 								ArgazipaSayMdComponent({
 									phrase: "Не узнаю тебя, путник",
+									emotion: "🤨",
 								}),
 								"/login"
 							)

@@ -1,4 +1,4 @@
-import { absurd, Effect, Option, Secret } from "effect";
+import { absurd, Effect, Secret } from "effect";
 import { Markup } from "telegraf";
 
 import { decode, encode } from "./CallbackQuery.js";
@@ -8,6 +8,9 @@ import {
 	CallbackQueryPayload,
 	type TelegrafBot,
 } from "../telegraf/TelegrafBot.js";
+import { GeoPointMdComponent } from "../ui/GeoPoint.md-component.js";
+import { MD } from "../ui/Markdown.js";
+import { PlaceMdComponent } from "../ui/Place.md-component.js";
 
 import type { AccessToken } from "../../rest-api/authentication/AccessToken.js";
 
@@ -71,6 +74,14 @@ export const CallbackQueryHandler = (args: {
 								inline_keyboard: [
 									[
 										Markup.button.callback(
+											"Подробнее",
+											encode({
+												action: "get",
+												id: deletedUserSubscription.idPlace,
+												type: "Place",
+											})
+										),
+										Markup.button.callback(
 											"🔔 Подписаться",
 											encode({
 												action: "create",
@@ -89,13 +100,9 @@ export const CallbackQueryHandler = (args: {
 				const createdSubscription = yield* _(
 					RestApiServiceTag.createMySubscription(
 						{
-							body: {
-								idPlace: callbackQuery.id,
-							},
+							body: { idPlace: callbackQuery.id },
 						},
-						{
-							bearer: args.accessToken,
-						}
+						{ bearer: args.accessToken }
 					)
 				);
 
@@ -107,6 +114,14 @@ export const CallbackQueryHandler = (args: {
 							reply_markup: {
 								inline_keyboard: [
 									[
+										Markup.button.callback(
+											"Подробнее",
+											encode({
+												action: "get",
+												id: callbackQuery.id,
+												type: "Place",
+											})
+										),
 										Markup.button.callback(
 											"🔕 Отписаться",
 											encode({
@@ -137,14 +152,24 @@ export const CallbackQueryHandler = (args: {
 					})
 				);
 
+				const answer = yield* _(
+					MD.document(
+						PlaceMdComponent({
+							place,
+						}),
+						MD.br,
+						GeoPointMdComponent({
+							geoPoint,
+						})
+					)
+				);
+
 				const message = yield* _(
 					args.bot.sendMessage(
 						args.callbackQueryPayload.message.chat.id,
-						`${place.name} - ${geoPoint.name.pipe(
-							Option.map(Secret.value),
-							Option.getOrElse(() => "__")
-						)}`,
+						answer,
 						{
+							parse_mode: "MarkdownV2",
 							protect_content: true,
 						}
 					)
@@ -157,6 +182,9 @@ export const CallbackQueryHandler = (args: {
 						{
 							horizontal_accuracy: 100,
 							protect_content: true,
+							reply_parameters: {
+								message_id: message.message_id,
+							},
 						}
 					)
 				);

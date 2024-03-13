@@ -1,8 +1,10 @@
-import { Secret, Effect } from "effect";
+import { Effect } from "effect";
 
-import { EventInfoMdComponent } from "../../ui/Event.md-component.js";
+import { ArgazipaSayMdComponent } from "../../ui/ArgazipaSay.md-component.js";
+import { EventMdComponent } from "../../ui/Event.md-component.js";
 import { MD } from "../../ui/Markdown.js";
-import { PlaceInfoMdComponent } from "../../ui/Place.md-component.js";
+import { PlaceMdComponent } from "../../ui/Place.md-component.js";
+import { TicketMdComponent } from "../../ui/Ticket.md-component.js";
 
 import type { Event } from "../../../../domain/event/entity/Event.js";
 import type { Place } from "../../../../domain/place/entity/Place.js";
@@ -14,14 +16,17 @@ export const TicketCreatedMdComponent = (props: {
 	ticket: Ticket;
 }) =>
 	Effect.gen(function* (_) {
-		const { place, event } = props;
+		const { place, event, ticket } = props;
 
 		return yield* _(
 			MD.document(
-				MD.headline(MD.pipe(Secret.value(event.name), MD.escape, MD.bold)),
+				ArgazipaSayMdComponent({ phrase: "Забронирован билет", emotion: "ℹ️" }),
 				MD.br,
-				PlaceInfoMdComponent({ place }),
-				EventInfoMdComponent({ event })
+				TicketMdComponent({ ticket }),
+				MD.br,
+				PlaceMdComponent({ place }),
+				MD.br,
+				EventMdComponent({ event })
 			)
 		);
 	});

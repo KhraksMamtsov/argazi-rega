@@ -1,9 +1,11 @@
-import { Effect, flow, Option, pipe, ReadonlyArray, Secret } from "effect";
+import { Effect, flow, Option, pipe, ReadonlyArray } from "effect";
 
 import { fromArray } from "../../../libs/ReadonlyArray.js";
 import { RestApiServiceTag } from "../RestApiService.js";
 import { CommandPayload } from "../telegraf/TelegrafBot.js";
+import { EventMdComponent } from "../ui/Event.md-component.js";
 import { MD } from "../ui/Markdown.js";
+import { TicketMdComponent } from "../ui/Ticket.md-component.js";
 
 export const EventsCommandHandler = (args: {
 	readonly command: CommandPayload<"events">;
@@ -49,35 +51,35 @@ export const EventsCommandHandler = (args: {
 						args.command.replyWithMarkdown("Нет актуальных событий", {})
 					),
 				onSome: ReadonlyArray.map((actualEvent) => {
-					const escapedEventName = MD.escape(Secret.value(actualEvent.name));
 					const eventTicket = ReadonlyArray.findFirst(
 						userTickets,
 						(x) => x.idEvent === actualEvent.id
 					);
 
-					const answer = [
-						`**${escapedEventName}**`,
-						[
-							"Начало",
-							MD.escape(
-								new Intl.DateTimeFormat("ru-RU", {
-									dateStyle: "short",
-									timeStyle: "short",
-								}).format(actualEvent.dateStart)
+					const ticketPart = Option.match(eventTicket, {
+						onNone: () => MD.dl()(["Участие", "❌"]),
+						onSome: (ticket) =>
+							MD.document(
+								MD.dl()(["Участие", "✅"]),
+								TicketMdComponent({ ticket })
 							),
-						].join(": "),
-						[
-							"Участие",
-							MD.escape(
-								Option.match(eventTicket, {
-									onNone: () => "-",
-									onSome: (x) => x.role,
-								})
-							),
-						].join(": "),
-					].join("\n");
+					});
 
-					return args.command.replyWithMarkdown(answer, {});
+					const answer = MD.document(
+						EventMdComponent({
+							event: actualEvent,
+						}),
+						MD.br,
+						ticketPart
+					);
+
+					return answer.pipe(
+						Effect.flatMap((x) =>
+							args.command.replyWithMarkdown(x, {
+								parse_mode: "MarkdownV2",
+							})
+						)
+					);
 				}),
 			})
 		);
