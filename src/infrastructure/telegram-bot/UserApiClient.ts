@@ -3,7 +3,8 @@ import { Client } from "effect-http";
 
 import { RestApi } from "../rest-api/RestApi.js";
 
-export type RestApiClient = Effect.Effect.Success<ReturnType<typeof makeLive>>;
+export interface RestApiClient
+	extends Effect.Effect.Success<ReturnType<typeof makeLive>> {}
 
 export class RestApiClientTag extends Effect.Tag(
 	"@argazi/infrastructure/telegram-bot/RestApiClientService"

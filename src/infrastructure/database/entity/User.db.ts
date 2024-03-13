@@ -10,7 +10,7 @@ import { UserType } from "../../../domain/user/entity/UserType.js";
 import { satisfies } from "../../../libs/SchemaSatisfy.js";
 import { BaseDbSchema, transform } from "../Base.db.js";
 
-export type UserDbFrom = Readonly<_User>;
+export interface UserDbFrom extends Readonly<_User> {}
 
 export const UserDbSchema = Schema.struct({
 	email: Schema.Secret,

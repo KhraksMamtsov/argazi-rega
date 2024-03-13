@@ -518,6 +518,22 @@ const app = pipe(
 	// region My handlers
 	flow(
 		RouterBuilder.handle(
+			"getMyIdentity",
+			BearerAuthGuard((_, { idInitiator }) => {
+				const user = GetUserUseCase({
+					payload: {
+						id: idInitiator,
+						type: "id",
+					},
+				}).pipe(
+					Effect.flatten,
+					Effect.mapError(() => ServerError.notFoundError("NotFound2"))
+				);
+
+				return user;
+			})
+		),
+		RouterBuilder.handle(
 			"getMySubscriptions",
 			BearerAuthGuard((_, { idInitiator }) =>
 				GetUserSubscriptionsUseCase({

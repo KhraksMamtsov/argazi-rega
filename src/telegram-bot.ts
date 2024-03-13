@@ -26,6 +26,8 @@ import { NotificationServiceLive } from "./infrastructure/message-broker/Message
 import { AuthenticationHandler } from "./infrastructure/telegram-bot/Authentication.handler.js";
 import { CallbackQueryHandler } from "./infrastructure/telegram-bot/callback-query/CallbackQuery.handler.js";
 import { EventsCommandHandler } from "./infrastructure/telegram-bot/command/Events.command-handler.js";
+import { LogoutCommandHandler } from "./infrastructure/telegram-bot/command/Logout.command-handler.js";
+import { MeCommandHandler } from "./infrastructure/telegram-bot/command/Me.command-handler.js";
 import { PlacesCommandHandler } from "./infrastructure/telegram-bot/command/Places.command-handler.js";
 import { handleNotification } from "./infrastructure/telegram-bot/notifications/HandleNotification.js";
 import { RestApiServiceTag } from "./infrastructure/telegram-bot/RestApiService.js";
@@ -38,6 +40,8 @@ import {
 import { TelegrafBotPayload } from "./infrastructure/telegram-bot/telegraf/TelegrafBot.js";
 import { TelegrafOptionsTag } from "./infrastructure/telegram-bot/telegraf/TelegrafOptionsTag.js";
 import { TelegramAuthMiniAppURL } from "./infrastructure/telegram-bot/TelegramAuthMiniApp.service.js";
+import { ArgazipaSayMdComponent } from "./infrastructure/telegram-bot/ui/ArgazipaSay.md-component.js";
+import { MD } from "./infrastructure/telegram-bot/ui/Markdown.js";
 
 export const TelegrafLive = pipe(
 	TelegrafTag.Live,
@@ -58,7 +62,7 @@ export const handle = (
 	bot: TelegrafBot
 ) => {
 	return pipe(
-		bot.command$("start", "login", "places", "events"),
+		bot.command$("start", "login", "logout", "me", "places", "events"),
 		Stream.merge(bot.webAppData$),
 		Stream.merge(bot.callbackQuery$),
 		Stream.merge(notificationService.stream$),
@@ -84,15 +88,21 @@ export const handle = (
 								CommandPayload.isOfCommand("login")(context) ||
 								CommandPayload.isOfCommand("start")(context)
 							) {
+								const text = yield* _(
+									ArgazipaSayMdComponent({
+										phrase: "Необходимо зайти через DWBN",
+									})
+								);
+
 								return yield* _(
 									TelegramAuthMiniAppURL.pipe(
 										Effect.tap(Effect.logInfo),
 										Effect.flatMap((telegramAuthMiniAppURL) =>
 											context.replyWithMarkdown(
-												"🔐 DWBN Login ☸️",
+												text,
 												Markup.keyboard([
 													Markup.button.webApp(
-														"🔐 DWBN Login ☸️",
+														"🔐 Зайти через DWBN ☸️",
 														telegramAuthMiniAppURL.toString()
 													),
 												])
@@ -108,12 +118,20 @@ export const handle = (
 							sessionService.get(context.idTelegramChat)
 						);
 
+						const text = yield* _(
+							MD.document(
+								ArgazipaSayMdComponent({
+									phrase: "Не узнаю тебя, путник",
+								}),
+								"/login"
+							)
+						);
+
 						if (Option.isNone(credentialsOption)) {
 							return yield* _(
-								bot.sendMessage(
-									context.idTelegramChat,
-									"Необходимо залогиниться /start"
-								)
+								bot.sendMessage(context.idTelegramChat, text, {
+									parse_mode: "MarkdownV2",
+								})
 							);
 						}
 
@@ -124,6 +142,14 @@ export const handle = (
 
 							if (CommandPayload.isOfCommand("events")(context)) {
 								return yield* _(EventsCommandHandler({ command: context }));
+							}
+
+							if (CommandPayload.isOfCommand("me")(context)) {
+								return yield* _(MeCommandHandler({ command: context }));
+							}
+
+							if (CommandPayload.isOfCommand("logout")(context)) {
+								return yield* _(LogoutCommandHandler({ command: context }));
 							}
 						}
 

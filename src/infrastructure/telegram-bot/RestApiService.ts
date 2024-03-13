@@ -61,15 +61,15 @@ export const makeLive = () =>
 						SynchronizedRef.get(args.userCredentialsSyncRef)
 					);
 
-					const getPlacesResult = yield* _(
+					const requestResult = yield* _(
 						apiMethod(input, {
 							bearer: actualUserCredentials.accessToken,
 						}),
 						Effect.either
 					);
 
-					if (Either.isRight(getPlacesResult)) {
-						return getPlacesResult.right;
+					if (Either.isRight(requestResult)) {
+						return requestResult.right;
 					}
 
 					// TODO: check accessToken expired
@@ -141,10 +141,12 @@ export const makeLive = () =>
 
 				return {
 					getEvent: wrapMethod(restApiClient.getEvent),
+					getMyIdentity: wrapMethod(restApiClient.getMyIdentity),
 					getMySubscriptions: wrapMethod(restApiClient.getMySubscriptions),
 					getMyTickets: wrapMethod(restApiClient.getMyTickets),
 					getPlaceActualEvents: wrapMethod(restApiClient.getPlaceActualEvents),
 					getPlaces: wrapMethod(restApiClient.getPlaces),
+					loginDwbn: restApiClient.loginDwbn,
 				};
 			});
 

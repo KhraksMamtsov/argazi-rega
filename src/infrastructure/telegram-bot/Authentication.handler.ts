@@ -5,10 +5,13 @@ import { constVoid } from "effect/Function";
 import { RestApiServiceTag } from "./RestApiService.js";
 import { SessionServiceTag } from "./Session.service.js";
 import { TelegramAuthMiniAppDataSchema } from "./TelegramAuthMiniAppData.js";
+import { MD } from "./ui/Markdown.js";
+import { UserMdComponent } from "./ui/User.md-component.js";
 
 import { IdTelegramChatSchema } from "../../domain/user/entity/IdTelegramChat.js";
 
 import type { TelegrafBot, WebAppDataPayload } from "./telegraf/TelegrafBot.js";
+import { ArgazipaSayMdComponent } from "./ui/ArgazipaSay.md-component.js";
 
 export const decode = Schema.decode(TelegramAuthMiniAppDataSchema);
 
@@ -17,7 +20,7 @@ export const AuthenticationHandler = (
 	bot: TelegrafBot
 ) =>
 	Effect.gen(function* (_) {
-		const restApiClient = yield* _(RestApiServiceTag);
+		const restApiService = yield* _(RestApiServiceTag);
 		const sessionService = yield* _(SessionServiceTag);
 
 		const authenticationData = yield* _(
@@ -31,7 +34,7 @@ export const AuthenticationHandler = (
 		);
 
 		const authenticationResult = yield* _(
-			restApiClient.loginDwbn({
+			restApiService.loginDwbn({
 				body: {
 					code: authenticationData.data.code,
 					idTelegramChat,
@@ -41,7 +44,7 @@ export const AuthenticationHandler = (
 		);
 		if (Either.isLeft(authenticationResult)) {
 			console.log(authenticationResult);
-			constVoid();
+			constVoid(); // TODO: error
 			return;
 		}
 
@@ -52,7 +55,22 @@ export const AuthenticationHandler = (
 			})
 		);
 
+		const restApiUserClient = yield* _(
+			restApiService.__new.getUserApiClientFor(idTelegramChat)
+		);
+
+		const myIdentity = yield* _(restApiUserClient.getMyIdentity({}));
+
+		const answerText = yield* _(
+			MD.document(
+				ArgazipaSayMdComponent({ phrase: "Добро пожаловать 🎉" }),
+				UserMdComponent({ user: myIdentity })
+			)
+		);
+
 		return yield* _(
-			bot.sendMessage(webAppDataPayload.message.chat.id, "Вы залогинились")
+			bot.sendMessage(webAppDataPayload.message.chat.id, answerText, {
+				parse_mode: "MarkdownV2",
+			})
 		);
 	});

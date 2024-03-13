@@ -38,6 +38,25 @@ const toEffect = <T, A = never, E = never, R = never>(
 	// eslint-disable-next-line @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-argument
 > => (Effect.isEffect(x) ? x : wrap(x as any)) as any;
 
+const esc = <E = never, R = never>(
+	stringsForEscape: TemplateStringsArray,
+	...values: ReadonlyArray<string | Effect.Effect<string, E, R>>
+) =>
+	Effect.gen(function* (_) {
+		let result = "";
+		for (let i = 0; i < stringsForEscape.length; i++) {
+			// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+			result += escape(stringsForEscape[i]!);
+
+			if (i < values.length) {
+				// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+				result += yield* _(toEffect(values[i]!, Effect.succeed));
+			}
+		}
+
+		return result;
+	});
+
 type DLOptions = {
 	readonly lineSeparator?: string;
 	readonly prefix?: string;
@@ -94,10 +113,11 @@ export const MD = {
 		Effect.all(lines.map((line) => toEffect(line, Effect.succeed))).pipe(
 			Effect.map((x) => x.join("\n"))
 		),
+	esc,
 	escape,
 	headline: <E = never, R = never>(
 		child: string | Effect.Effect<string, E, R>
-	) => toEffect(child, Effect.succeed).pipe(Effect.map((x) => x.toUpperCase())),
+	) => toEffect(child, Effect.succeed),
 	inlineCode: wrap("`"),
 	italic: wrap("_"),
 	join: join,

@@ -8,7 +8,7 @@ import { satisfies } from "../../../libs/SchemaSatisfy.js";
 
 import type { UserBase } from "../../../domain/user/entity/User.js";
 
-export const UserApi = Schema.struct({
+export const _UserApi = Schema.struct({
 	email: Schema.Secret,
 	firstName: Schema.Secret,
 	id: IdUserSchema,
@@ -23,3 +23,8 @@ export const UserApi = Schema.struct({
 	satisfies.to<UserBase>(),
 	Schema.identifier("UserApi")
 );
+
+export interface UserApiFrom extends Schema.Schema.From<typeof _UserApi> {}
+export interface UserApi extends Schema.Schema.To<typeof _UserApi> {}
+
+export const UserApi: Schema.Schema<UserApi, UserApiFrom> = _UserApi;

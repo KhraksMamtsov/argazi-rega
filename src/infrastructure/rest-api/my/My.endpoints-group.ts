@@ -8,8 +8,10 @@ import { BookMyTicketEndpoint } from "./_tickets/BookMyTicket.endpoint.js";
 import { GetMyTicketByIdEndpoint } from "./_tickets/GetMyTicketById.endpoint.js";
 import { GetMyTicketsEndpoint } from "./_tickets/GetMyTickets.endpoint.js";
 import { ReturnMyTicketEndpoint } from "./_tickets/ReturnTicketOnEvent.endpoint.js";
+import { GetMyIdentityEndpoint } from "./Identity.endpoint.js";
 
 export const MyEndpointsGroup = Api.apiGroup("my").pipe(
+	GetMyIdentityEndpoint,
 	// region Subscriptions
 	flow(
 		CreateMySubscriptionEndpoint,
