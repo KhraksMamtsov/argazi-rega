@@ -2,6 +2,8 @@ import { Effect } from "effect";
 
 import { DeleteUserSubscriptionCommandSchema } from "./DeleteUserSubscription.command.js";
 
+import { notification } from "../../../../../domain/notification/Notification.js";
+import { NotificationServiceTag } from "../../../../../domain/services/NotificationService.js";
 import { ToDomainSchema } from "../../../../../infrastructure/database/entity/Subscription.db.js";
 import { PrismaServiceTag } from "../../../../../infrastructure/database/Prisma.service.js";
 import { DeleteEntityAuthorizationError } from "../../../common/AuthorizationError.js";
@@ -24,12 +26,31 @@ export const DeleteUserSubscriptionUseCase = BaseCausedUseCaseFor(
 
 		const prismaClient = yield* _(PrismaServiceTag);
 
-		return yield* _(
+		const deletedSubscription = yield* _(
 			prismaClient.queryDecode(ToDomainSchema, (p) =>
-				p.subscription.delete({
-					where: { id: payload.idSubscription },
+				p.subscription.update({
+					data: {
+						dateDeleted: new Date(),
+						idUserDeleter: initiator.id,
+					},
+					where: {
+						id: payload.idSubscription,
+					},
 				})
 			)
 		);
+
+		const notificationService = yield* _(NotificationServiceTag);
+
+		Effect.runFork(
+			notificationService.queue(
+				notification.subscription("deleted")({
+					idEntity: deletedSubscription.id,
+					idInitiator: initiator.id,
+				})
+			)
+		);
+
+		return deletedSubscription;
 	})
 );

@@ -1,6 +1,8 @@
 import { Effect } from "effect";
 
 import { EventCreatedNotificationHandler } from "./event/EventCreated.notification-handler.js";
+import { SubscriptionCancelledNotificationHandler } from "./subscription/SubscriptionCancelled.notification-handler.js";
+import { SubscriptionCreatedNotificationHandler } from "./subscription/SubscriptionCreated.notification-handler.js";
 import { TicketCreatedNotificationHandler } from "./ticket/TicketCreated.notification-handler.js";
 import { TicketReturnedNotificationHandler } from "./ticket/TicketReturned.notification-handler.js";
 import { UserCreatedNotificationHandler } from "./user/UserCreated.notification-handler.js";
@@ -79,7 +81,7 @@ export const handleNotification = (args: {
 			);
 
 			if (notification.issue === "created") {
-				return yield* _(
+				yield* _(
 					TicketCreatedNotificationHandler({
 						bot: args.bot,
 						createdTicket: affectedTicket,
@@ -87,13 +89,59 @@ export const handleNotification = (args: {
 						user,
 					})
 				);
+
+				return Effect.unit;
 			}
 
 			if (notification.issue === "deleted") {
-				return yield* _(
+				yield* _(
 					TicketReturnedNotificationHandler({
 						bot: args.bot,
 						createdTicket: affectedTicket,
+						initiator,
+						user,
+					})
+				);
+
+				return Effect.unit;
+			}
+		}
+
+		if (entity.type === "Subscription") {
+			const affectedSubscription = yield* _(
+				restApiClient.getSubscription({
+					params: { idSubscription: entity.id },
+				})
+			);
+
+			if (affectedSubscription.status !== 200) {
+				return Effect.unit;
+			}
+
+			const user = yield* _(
+				restApiClient.getUser({
+					params: {
+						idUser: affectedSubscription.content.idUser,
+					},
+				})
+			);
+
+			if (notification.issue === "created") {
+				yield* _(
+					SubscriptionCreatedNotificationHandler({
+						bot: args.bot,
+						createdSubscription: affectedSubscription.content,
+						initiator,
+						user,
+					})
+				);
+			}
+
+			if (notification.issue === "deleted") {
+				yield* _(
+					SubscriptionCancelledNotificationHandler({
+						bot: args.bot,
+						cancelledSubscription: affectedSubscription.content,
 						initiator,
 						user,
 					})

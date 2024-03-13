@@ -53,7 +53,7 @@ export const CallbackQueryHandler = (args: {
 			}
 		} else if (callbackQuery.type === "Subscription") {
 			if (callbackQuery.action === "delete") {
-				yield* _(
+				return yield* _(
 					RestApiServiceTag.deleteMySubscription(
 						{
 							params: { idSubscription: callbackQuery.id },
@@ -63,11 +63,9 @@ export const CallbackQueryHandler = (args: {
 						}
 					)
 				);
-
-				return;
 			}
 			if (callbackQuery.action === "create") {
-				yield* _(
+				return yield* _(
 					RestApiServiceTag.createMySubscription(
 						{
 							body: { idPlace: callbackQuery.id },
@@ -75,8 +73,6 @@ export const CallbackQueryHandler = (args: {
 						{ bearer: args.accessToken }
 					)
 				);
-
-				return;
 			}
 		}
 		if (callbackQuery.type === "Place") {
