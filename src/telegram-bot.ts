@@ -91,8 +91,10 @@ export const handle = (
 								const text = yield* _(
 									ArgazipaSayMdComponent({
 										emotion: "🔐",
-										phrase: "Необходимо зайти через DWBN",
-										tips: ["Кнопка входа появится под строкой ввода текста"],
+										phrase: [
+											"Необходимо войти через DWBN",
+											"Кнопка входа появится под строкой ввода текста",
+										],
 									})
 								);
 
@@ -104,7 +106,7 @@ export const handle = (
 												text,
 												Markup.keyboard([
 													Markup.button.webApp(
-														"🔐 Зайти через DWBN ☸️",
+														"🔐 Войти через DWBN ☸️",
 														telegramAuthMiniAppURL.toString()
 													),
 												])

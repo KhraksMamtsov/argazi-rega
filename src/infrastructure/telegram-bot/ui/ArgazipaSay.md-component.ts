@@ -2,8 +2,6 @@ import { Effect } from "effect";
 
 import { MD } from "./Markdown.js";
 
-import type { NonEmptyReadonlyArray } from "effect/ReadonlyArray";
-
 const changeMap = new Map([
 	["а", ["@", "α"]],
 	["б", ["6"]],
@@ -20,10 +18,9 @@ const changeMap = new Map([
 	["ф", ["φ"]],
 	["х", ["χ"]],
 	["т", ["τ"]],
-	["т", ["τ"]],
 ]);
 
-function randomReplace(str: string) {
+export const accentify = (str: string) => {
 	const arr = str.split("");
 
 	return arr
@@ -38,7 +35,7 @@ function randomReplace(str: string) {
 				: char;
 		})
 		.join("");
-}
+};
 
 const NBSP = " ";
 
@@ -48,19 +45,15 @@ export const ArgazipaEmotion = {
 
 export const ArgazipaSayMdComponent = (props: {
 	emotion: string;
-	phrase: string;
-	tips?: NonEmptyReadonlyArray<string>;
+	phrase: string | ReadonlyArray<string>;
 }) =>
 	Effect.gen(function* (_) {
 		return yield* _(
 			MD.codeBlock(["🤖", props.emotion].join(NBSP))(
-				randomReplace(props.phrase) +
-					(props.tips
-						? [
-								"\n---",
-								...props.tips.map((tip) => "💡 " + randomReplace(tip)),
-							].join("\n")
-						: "")
+				([] as Array<string>)
+					.concat(props.phrase)
+					.map((x) => accentify(x))
+					.join("\n")
 			)
 		);
 	});
