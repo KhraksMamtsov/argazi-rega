@@ -4,6 +4,7 @@ import { Markup } from "telegraf";
 import { fromArray } from "../../../libs/ReadonlyArray.js";
 import { RestApiServiceTag } from "../RestApiService.js";
 import { CommandPayload } from "../telegraf/TelegrafBot.js";
+import { ArgazipaSayMdComponent } from "../ui/ArgazipaSay.md-component.js";
 import { BookTicketCbButton } from "../ui/button/BookTicket.cb-button.js";
 import { ReturnTicketCbButton } from "../ui/button/ReturnTicket.cb-button.js";
 import { EventMdComponent } from "../ui/Event.md-component.js";
@@ -51,7 +52,12 @@ export const EventsCommandHandler = (args: {
 			Option.match({
 				onNone: () =>
 					ReadonlyArray.of(
-						args.command.replyWithMarkdown("Нет актуальных событий", {})
+						ArgazipaSayMdComponent({
+							emotion: "😳",
+							phrase: "Нет актуальных событий",
+						}).pipe(
+							Effect.flatMap((x) => args.command.replyWithMarkdown(x, {}))
+						)
 					),
 				onSome: ReadonlyArray.map((actualEvent) => {
 					const eventTicket = ReadonlyArray.findFirst(

@@ -92,6 +92,7 @@ export const handle = (
 									ArgazipaSayMdComponent({
 										emotion: "🔐",
 										phrase: "Необходимо зайти через DWBN",
+										tips: ["Кнопка входа появится под строкой ввода текста"],
 									})
 								);
 
@@ -131,9 +132,7 @@ export const handle = (
 
 						if (Option.isNone(credentialsOption)) {
 							return yield* _(
-								bot.sendMessage(context.idTelegramChat, text, {
-									parse_mode: "MarkdownV2",
-								})
+								bot.sendMessage(context.idTelegramChat, text, {})
 							);
 						}
 
