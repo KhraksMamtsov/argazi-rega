@@ -40,7 +40,7 @@ export const _BaseResponseFor = <R, I extends Json.Json, A, R1, I1, A1>(
 	const extendedData = map(data);
 
 	return Schema.transform(
-		Schema.struct({ data: Schema.from(extendedData) }),
+		Schema.struct({ data: Schema.encodedSchema(extendedData) }),
 		extendedData,
 		(from) => from.data,
 		(to) => ({ data: to })

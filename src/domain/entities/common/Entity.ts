@@ -11,6 +11,6 @@ export const EntitySchema = <
 ) =>
 	Schema.struct({
 		id: idSchema,
-	}).pipe(Schema.to, Schema.identifier("EntitySchema"));
+	}).pipe(Schema.typeSchema, Schema.identifier("EntitySchema"));
 
-export type Entity = Schema.Schema.To<typeof EntitySchema>;
+export type Entity = Schema.Schema.Type<typeof EntitySchema>;

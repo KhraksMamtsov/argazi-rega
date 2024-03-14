@@ -4,5 +4,5 @@ export const LongitudeSchema = Schema.SecretFromSelf.pipe(
 	Schema.brand("Longitude")
 );
 
-export type LongitudeFrom = Schema.Schema.From<typeof LongitudeSchema>;
-export type Longitude = Schema.Schema.To<typeof LongitudeSchema>;
+export type LongitudeFrom = Schema.Schema.Encoded<typeof LongitudeSchema>;
+export type Longitude = Schema.Schema.Type<typeof LongitudeSchema>;

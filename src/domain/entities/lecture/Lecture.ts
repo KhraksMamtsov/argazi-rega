@@ -15,8 +15,8 @@ const _LectureSchema = Schema.struct({
 	priceLecture: PriceSchema,
 }).pipe(Schema.identifier("LectureSchema"));
 
-export type LectureFrom = Schema.Schema.From<typeof _LectureSchema>;
-export type Lecture = Schema.Schema.To<typeof _LectureSchema>;
+export type LectureFrom = Schema.Schema.Encoded<typeof _LectureSchema>;
+export type Lecture = Schema.Schema.Type<typeof _LectureSchema>;
 
 export const LectureSchema: Schema.Schema<Lecture, LectureFrom> =
 	_LectureSchema;

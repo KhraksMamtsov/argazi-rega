@@ -20,8 +20,9 @@ const _BaseDbSchema = Schema.struct({
 	idUserUpdater: Schema.UUID,
 }).pipe(Schema.identifier("BaseDbSchema"));
 
-export interface BaseDbFrom extends Schema.Schema.From<typeof _BaseDbSchema> {}
-export interface BaseDb extends Schema.Schema.To<typeof _BaseDbSchema> {}
+export interface BaseDbFrom
+	extends Schema.Schema.Encoded<typeof _BaseDbSchema> {}
+export interface BaseDb extends Schema.Schema.Type<typeof _BaseDbSchema> {}
 export const BaseDbSchema: Schema.Schema<BaseDb, BaseDbFrom> = _BaseDbSchema;
 
 export const ToDomainBase = Schema.transform(

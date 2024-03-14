@@ -13,8 +13,8 @@ const _MetaSchema = Schema.struct({
 	idUserCreator: IdUserSchema,
 	idUserDeleter: Schema.optionFromSelf(IdUserSchema),
 	idUserUpdater: IdUserSchema,
-}).pipe(Schema.to, Schema.identifier("MetaSchema"));
+}).pipe(Schema.typeSchema, Schema.identifier("MetaSchema"));
 
-export type Meta = Schema.Schema.To<typeof _MetaSchema>;
+export type Meta = Schema.Schema.Type<typeof _MetaSchema>;
 
 export const MetaSchema: Schema.Schema<Meta> = _MetaSchema;

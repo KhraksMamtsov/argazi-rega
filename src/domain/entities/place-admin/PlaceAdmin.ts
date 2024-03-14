@@ -16,8 +16,8 @@ const _PlaceAdminSchema = Schema.struct({
 	Schema.identifier("PlaceAdminSchema")
 );
 
-export type PlaceAdminFrom = Schema.Schema.From<typeof _PlaceAdminSchema>;
-export type PlaceAdmin = Schema.Schema.To<typeof _PlaceAdminSchema>;
+export type PlaceAdminFrom = Schema.Schema.Encoded<typeof _PlaceAdminSchema>;
+export type PlaceAdmin = Schema.Schema.Type<typeof _PlaceAdminSchema>;
 
 export const PlaceAdminSchema: Schema.Schema<PlaceAdmin, PlaceAdminFrom> =
 	_PlaceAdminSchema;

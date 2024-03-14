@@ -9,4 +9,4 @@ export const IdSubscriptionSchema = Schema.UUID.pipe(
 	Schema.brand(IdSubscriptionSymbol)
 );
 
-export type IdSubscription = Schema.Schema.To<typeof IdSubscriptionSchema>;
+export type IdSubscription = Schema.Schema.Type<typeof IdSubscriptionSchema>;

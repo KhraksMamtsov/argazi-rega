@@ -20,13 +20,13 @@ export const UserBaseSchema = Schema.struct({
 	type: UserTypeSchema,
 }).pipe(Schema.identifier("UserBaseSchema"));
 
-export interface UserBase extends Schema.Schema.To<typeof UserBaseSchema> {}
+export interface UserBase extends Schema.Schema.Type<typeof UserBaseSchema> {}
 
 const _UserSchema = UserBaseSchema.pipe(
 	Schema.extend(BaseSchema),
 	Schema.identifier("UserSchema")
 );
 
-export interface User extends Schema.Schema.To<typeof _UserSchema> {}
+export interface User extends Schema.Schema.Type<typeof _UserSchema> {}
 
-export const UserSchema: Schema.Schema<User> = Schema.to(_UserSchema);
+export const UserSchema: Schema.Schema<User> = Schema.typeSchema(_UserSchema);

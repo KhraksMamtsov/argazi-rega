@@ -16,7 +16,7 @@ export const NotificationIssueSchema = Schema.literal(
 	"created",
 	"deleted"
 );
-export type NotificationIssue = Schema.Schema.To<
+export type NotificationIssue = Schema.Schema.Type<
 	typeof NotificationIssueSchema
 >;
 
@@ -50,7 +50,7 @@ const NotificationEntitySchema = Schema.union(
 		type: Schema.literal("Subscription"),
 	}).pipe(satisfies.from.json())
 );
-export type NotificationEntity = Schema.Schema.To<
+export type NotificationEntity = Schema.Schema.Type<
 	typeof NotificationEntitySchema
 >;
 
@@ -63,8 +63,10 @@ export const _NotificationSchema = Schema.parseJson(
 	}).pipe(satisfies.from.json())
 ).pipe(Schema.identifier("NotificationSchema"));
 
-export type NotificationFrom = Schema.Schema.From<typeof _NotificationSchema>;
-export type Notification = Schema.Schema.To<typeof _NotificationSchema>;
+export type NotificationFrom = Schema.Schema.Encoded<
+	typeof _NotificationSchema
+>;
+export type Notification = Schema.Schema.Type<typeof _NotificationSchema>;
 
 export type NotificationWithIssue<
 	I extends NotificationIssue,

@@ -6,4 +6,4 @@ export const IdTicketSchema = Schema.UUID.pipe(
 	Schema.brand(IdTicketSymbol)
 );
 
-export type IdTicket = Schema.Schema.To<typeof IdTicketSchema>;
+export type IdTicket = Schema.Schema.Type<typeof IdTicketSchema>;

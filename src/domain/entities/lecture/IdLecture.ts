@@ -7,4 +7,4 @@ export const IdLectureSchema = Schema.UUID.pipe(
 	Schema.identifier("IdLectureSchema")
 );
 
-export type IdLecture = Schema.Schema.To<typeof IdLectureSchema>;
+export type IdLecture = Schema.Schema.Type<typeof IdLectureSchema>;

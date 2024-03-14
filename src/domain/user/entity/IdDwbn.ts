@@ -6,4 +6,4 @@ export const IdDwbnSchema = Schema.string.pipe(
 	Schema.brand(IdDwbnSymbol)
 );
 
-export type IdDwbn = Schema.Schema.To<typeof IdDwbnSchema>;
+export type IdDwbn = Schema.Schema.Type<typeof IdDwbnSchema>;

@@ -6,5 +6,5 @@ export const DateUpdatedSchema = Schema.ValidDateFromSelf.pipe(
 	Schema.brand(DateUpdatedSymbol)
 );
 
-export type DateUpdatedFrom = Schema.Schema.From<typeof DateUpdatedSchema>;
-export type DateUpdated = Schema.Schema.To<typeof DateUpdatedSchema>;
+export type DateUpdatedFrom = Schema.Schema.Encoded<typeof DateUpdatedSchema>;
+export type DateUpdated = Schema.Schema.Type<typeof DateUpdatedSchema>;

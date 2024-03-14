@@ -20,10 +20,10 @@ export const _CreatePlaceCommandSchema = BaseCausedCommandFor(
 	CreatePlaceCommandPayloadSchema
 ).pipe(Schema.identifier("CreatePlaceCommandSchema"));
 
-export type CreatePlaceCommandFrom = Schema.Schema.From<
+export type CreatePlaceCommandFrom = Schema.Schema.Encoded<
 	typeof _CreatePlaceCommandSchema
 >;
-export type CreatePlaceCommand = Schema.Schema.To<
+export type CreatePlaceCommand = Schema.Schema.Type<
 	typeof _CreatePlaceCommandSchema
 >;
 

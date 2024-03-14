@@ -7,4 +7,4 @@ export const IdGeoPointSchema = Schema.UUID.pipe(
 	Schema.brand(IdGeoPointSymbol)
 );
 
-export type IdGeoPoint = Schema.Schema.To<typeof IdGeoPointSchema>;
+export type IdGeoPoint = Schema.Schema.Type<typeof IdGeoPointSchema>;

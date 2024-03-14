@@ -13,7 +13,7 @@ export const DeleteUserSubscriptionCommandPayloadSchema = Schema.struct({
 	Schema.identifier("DeleteUserSubscriptionCommandPayloadSchema")
 );
 
-export type DeleteUserSubscriptionCommandPayloadFrom = Schema.Schema.From<
+export type DeleteUserSubscriptionCommandPayloadFrom = Schema.Schema.Encoded<
 	typeof DeleteUserSubscriptionCommandPayloadSchema
 >;
 

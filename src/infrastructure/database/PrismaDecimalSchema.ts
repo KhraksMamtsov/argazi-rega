@@ -13,7 +13,7 @@ export const PrismaDecimal = Schema.transformOrFail(
 	PrismaDecimalFromSelf,
 	(num, _, ast) =>
 		ParseResult.try({
-			catch: () => ParseResult.type(ast, num),
+			catch: () => new ParseResult.Type(ast, num),
 			try: () => new Decimal(num),
 		}),
 	(val) => ParseResult.succeed(val.valueOf())

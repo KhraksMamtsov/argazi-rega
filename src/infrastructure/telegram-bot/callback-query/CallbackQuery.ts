@@ -39,7 +39,7 @@ const _CallbackQueryEntitySchema = Schema.union(
 		type: Schema.literal("Place"),
 	})
 ).pipe(
-	Schema.to,
+	Schema.typeSchema,
 	<A, I, R>(
 		x: Schema.Schema<A, I, R>
 	): Schema.Schema<
@@ -78,8 +78,10 @@ const MinifiedTypeSchema = Schema.transformLiterals(
 );
 const decodeMinifiedTypeSchema = Schema.decode(MinifiedTypeSchema);
 const encodeMinifiedTypeSchema = Schema.encode(MinifiedTypeSchema);
-const isMinifiedActionFrom = Schema.is(Schema.from(MinifiedActionSchema));
-const isMinifiedTypeFrom = Schema.is(Schema.from(MinifiedTypeSchema));
+const isMinifiedActionFrom = Schema.is(
+	Schema.encodedSchema(MinifiedActionSchema)
+);
+const isMinifiedTypeFrom = Schema.is(Schema.encodedSchema(MinifiedTypeSchema));
 const isUUID = Schema.is(Schema.UUID);
 
 export const CallbackQueryEntitySchema = Schema.transformOrFail(
@@ -88,23 +90,23 @@ export const CallbackQueryEntitySchema = Schema.transformOrFail(
 	(x, _, ast) => {
 		const splitten = x.split("|");
 		if (splitten.length !== 3) {
-			return ParseResult.fail(ParseResult.type(ast, x));
+			return ParseResult.fail(new ParseResult.Type(ast, x));
 		}
 
 		const [_action, _type, id] = splitten as [string, string, string];
 
 		if (!isMinifiedActionFrom(_action)) {
 			return ParseResult.fail(
-				ParseResult.type(ast, _action, "action is not c | d | g")
+				new ParseResult.Type(ast, _action, "action is not c | d | g")
 			);
 		}
 		if (!isMinifiedTypeFrom(_type)) {
 			return ParseResult.fail(
-				ParseResult.type(ast, _action, "type is not minified")
+				new ParseResult.Type(ast, _action, "type is not minified")
 			);
 		}
 		if (!isUUID(id)) {
-			return ParseResult.fail(ParseResult.type(ast, id, "id is not UUID"));
+			return ParseResult.fail(new ParseResult.Type(ast, id, "id is not UUID"));
 		}
 
 		return Effect.all({

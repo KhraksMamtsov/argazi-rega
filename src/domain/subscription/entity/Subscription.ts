@@ -12,7 +12,9 @@ export const SubscriptionBaseSchema = Schema.struct({
 	idUser: IdUserSchema,
 });
 
-export type SubscriptionBase = Schema.Schema.To<typeof SubscriptionBaseSchema>;
+export type SubscriptionBase = Schema.Schema.Type<
+	typeof SubscriptionBaseSchema
+>;
 
 const _SubscriptionSchema = SubscriptionBaseSchema.pipe(
 	//
@@ -20,7 +22,7 @@ const _SubscriptionSchema = SubscriptionBaseSchema.pipe(
 	Schema.identifier("SubscriptionSchema")
 );
 
-export type Subscription = Schema.Schema.To<typeof _SubscriptionSchema>;
+export type Subscription = Schema.Schema.Type<typeof _SubscriptionSchema>;
 
 export const SubscriptionSchema: Schema.Schema<Subscription> =
-	Schema.to(_SubscriptionSchema);
+	Schema.typeSchema(_SubscriptionSchema);

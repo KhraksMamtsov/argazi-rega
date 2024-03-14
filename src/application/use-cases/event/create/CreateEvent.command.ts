@@ -35,10 +35,10 @@ export const _CreateEventCommandSchema = BaseCausedCommandFor(
 	CreateEventCommandPayloadSchema
 ).pipe(Schema.identifier("CreateEventCommandSchema"));
 
-export type CreateEventCommandFrom = Schema.Schema.From<
+export type CreateEventCommandFrom = Schema.Schema.Encoded<
 	typeof _CreateEventCommandSchema
 >;
-export type CreateEventCommand = Schema.Schema.To<
+export type CreateEventCommand = Schema.Schema.Type<
 	typeof _CreateEventCommandSchema
 >;
 

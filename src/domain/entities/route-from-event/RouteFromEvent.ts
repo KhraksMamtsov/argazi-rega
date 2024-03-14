@@ -16,10 +16,10 @@ const _RouteFromEventSchema = Schema.struct({
 	name: Schema.option(Schema.Trim.pipe(Schema.nonEmpty())),
 }).pipe(Schema.extend(BaseSchema), Schema.identifier("RouteFromEventSchema"));
 
-export type RouteFromEventFrom = Schema.Schema.From<
+export type RouteFromEventFrom = Schema.Schema.Encoded<
 	typeof _RouteFromEventSchema
 >;
-export type RouteFromEvent = Schema.Schema.To<typeof _RouteFromEventSchema>;
+export type RouteFromEvent = Schema.Schema.Type<typeof _RouteFromEventSchema>;
 
 export const RouteFromEventSchema: Schema.Schema<
 	RouteFromEvent,

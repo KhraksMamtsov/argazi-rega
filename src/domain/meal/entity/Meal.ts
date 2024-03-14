@@ -17,14 +17,14 @@ export const MealBaseSchema = Schema.struct({
 	type: MealTypeSchema,
 }).pipe(Schema.identifier("MealBaseSchema"));
 
-export type MealBase = Schema.Schema.To<typeof MealBaseSchema>;
+export type MealBase = Schema.Schema.Type<typeof MealBaseSchema>;
 
 export const MealSchema = MealBaseSchema.pipe(
 	//
 	Schema.extend(BaseSchema),
-	Schema.to,
+	Schema.typeSchema,
 	Schema.identifier("MealSchema")
 );
 
-export type MealFrom = Schema.Schema.From<typeof MealSchema>;
-export type Meal = Schema.Schema.To<typeof MealSchema>;
+export type MealFrom = Schema.Schema.Encoded<typeof MealSchema>;
+export type Meal = Schema.Schema.Type<typeof MealSchema>;

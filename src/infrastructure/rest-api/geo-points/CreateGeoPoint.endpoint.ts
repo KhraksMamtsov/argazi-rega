@@ -18,10 +18,10 @@ const _CreateGeoPointResponseSchema = GeoPointApiSchema.pipe(
 	BaseResponseFor
 );
 
-export type CreateGeoPointResponseFrom = Schema.Schema.From<
+export type CreateGeoPointResponseFrom = Schema.Schema.Encoded<
 	typeof _CreateGeoPointResponseSchema
 >;
-export type CreateGeoPointResponse = Schema.Schema.To<
+export type CreateGeoPointResponse = Schema.Schema.Type<
 	typeof _CreateGeoPointResponseSchema
 >;
 

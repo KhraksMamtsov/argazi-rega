@@ -16,7 +16,7 @@ const JWTPayloadSchema = Schema.struct({
 const encodeJWT = Schema.encode(JWTPayloadSchema);
 const decodeJWT = Schema.decodeUnknown(JWTPayloadSchema);
 
-type JWTPayloadSchema = Schema.Schema.To<typeof JWTPayloadSchema>;
+type JWTPayloadSchema = Schema.Schema.Type<typeof JWTPayloadSchema>;
 
 const makeLive = () =>
 	Effect.gen(function* (_) {

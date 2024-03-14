@@ -15,8 +15,8 @@ const _VisaPaymentSchema = Schema.struct({
 	payed: PriceSchema,
 }).pipe(Schema.extend(BaseSchema), Schema.identifier("VisaPaymentSchema"));
 
-export type VisaPaymentFrom = Schema.Schema.From<typeof _VisaPaymentSchema>;
-export type VisaPayment = Schema.Schema.To<typeof _VisaPaymentSchema>;
+export type VisaPaymentFrom = Schema.Schema.Encoded<typeof _VisaPaymentSchema>;
+export type VisaPayment = Schema.Schema.Type<typeof _VisaPaymentSchema>;
 
 export const VisaPaymentSchema: Schema.Schema<VisaPayment, VisaPaymentFrom> =
 	_VisaPaymentSchema;

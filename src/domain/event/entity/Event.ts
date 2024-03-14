@@ -18,7 +18,7 @@ export const EventBaseSchema = Schema.struct({
 	priceEvent: PriceSchema,
 });
 
-export type EventBase = Schema.Schema.To<typeof EventBaseSchema>;
+export type EventBase = Schema.Schema.Type<typeof EventBaseSchema>;
 
 const _EventSchema = EventBaseSchema.pipe(
 	//
@@ -26,6 +26,7 @@ const _EventSchema = EventBaseSchema.pipe(
 	Schema.identifier("EventSchema")
 );
 
-export interface Event extends Schema.Schema.To<typeof _EventSchema> {}
+export interface Event extends Schema.Schema.Type<typeof _EventSchema> {}
 
-export const EventSchema: Schema.Schema<Event> = Schema.to(_EventSchema);
+export const EventSchema: Schema.Schema<Event> =
+	Schema.typeSchema(_EventSchema);

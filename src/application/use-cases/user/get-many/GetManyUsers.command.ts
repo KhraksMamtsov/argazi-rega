@@ -20,6 +20,6 @@ export const GetManyUsersCommandSchema = BaseCommandFor(
 	GetManyUsersCommandPayloadSchema
 ).pipe(Schema.identifier("GetManyUsersCommandSchema"));
 
-export type GetManyUsersCommand = Schema.Schema.To<
+export type GetManyUsersCommand = Schema.Schema.Type<
 	typeof GetManyUsersCommandSchema
 >;

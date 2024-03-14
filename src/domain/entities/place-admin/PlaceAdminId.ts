@@ -7,4 +7,4 @@ export const PlaceAdminIdSchema = Schema.UUID.pipe(
 	Schema.identifier("PlaceAdminIdSchema")
 );
 
-export type PlaceAdminId = Schema.Schema.To<typeof PlaceAdminIdSchema>;
+export type PlaceAdminId = Schema.Schema.Type<typeof PlaceAdminIdSchema>;

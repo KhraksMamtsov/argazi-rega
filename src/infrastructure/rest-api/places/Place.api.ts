@@ -16,7 +16,7 @@ export const _PlaceApi = Schema.struct({
 	Schema.identifier("PlaceApi")
 );
 
-export interface PlaceApiFrom extends Schema.Schema.From<typeof _PlaceApi> {}
-export interface PlaceApi extends Schema.Schema.To<typeof _PlaceApi> {}
+export interface PlaceApiFrom extends Schema.Schema.Encoded<typeof _PlaceApi> {}
+export interface PlaceApi extends Schema.Schema.Type<typeof _PlaceApi> {}
 
 export const PlaceApi: Schema.Schema<PlaceApi, PlaceApiFrom> = _PlaceApi;

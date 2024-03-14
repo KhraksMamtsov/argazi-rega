@@ -18,15 +18,16 @@ export const TicketBaseSchema = Schema.struct({
 	role: TicketRoleSchema,
 }).pipe(Schema.identifier("TicketBaseSchema"));
 
-export type TicketBase = Schema.Schema.To<typeof TicketBaseSchema>;
+export type TicketBase = Schema.Schema.Type<typeof TicketBaseSchema>;
 
 export const _TicketSchema = TicketBaseSchema.pipe(
-	Schema.to,
+	Schema.typeSchema,
 	Schema.extend(BaseSchema),
 	Schema.identifier("TicketSchema")
 );
 
-export interface TicketFrom extends Schema.Schema.From<typeof _TicketSchema> {}
-export interface Ticket extends Schema.Schema.To<typeof _TicketSchema> {}
+export interface TicketFrom
+	extends Schema.Schema.Encoded<typeof _TicketSchema> {}
+export interface Ticket extends Schema.Schema.Type<typeof _TicketSchema> {}
 
 export const TicketSchema: Schema.Schema<Ticket, TicketFrom> = _TicketSchema;

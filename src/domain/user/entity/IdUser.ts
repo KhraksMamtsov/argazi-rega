@@ -6,4 +6,4 @@ export const IdUserSchema = Schema.UUID.pipe(
 	Schema.brand(IdUserSymbol)
 );
 
-export type IdUser = Schema.Schema.To<typeof IdUserSchema>;
+export type IdUser = Schema.Schema.Type<typeof IdUserSchema>;

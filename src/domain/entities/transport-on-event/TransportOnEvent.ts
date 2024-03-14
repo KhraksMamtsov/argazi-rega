@@ -16,10 +16,12 @@ const _TransportOnEventSchema = Schema.struct({
 	seatsNumber: Schema.Int.pipe(Schema.positive()),
 }).pipe(Schema.extend(BaseSchema), Schema.identifier("TransportOnEventSchema"));
 
-export type TransportOnEventFrom = Schema.Schema.From<
+export type TransportOnEventFrom = Schema.Schema.Encoded<
 	typeof _TransportOnEventSchema
 >;
-export type TransportOnEvent = Schema.Schema.To<typeof _TransportOnEventSchema>;
+export type TransportOnEvent = Schema.Schema.Type<
+	typeof _TransportOnEventSchema
+>;
 
 export const TransportOnEventSchema: Schema.Schema<
 	TransportOnEvent,

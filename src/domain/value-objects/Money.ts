@@ -7,8 +7,7 @@ export const _MoneySchema = Schema.BigDecimalFromSelf.pipe(
 	Schema.brand(MoneySymbol)
 );
 
-export interface MoneyFrom extends Schema.Schema.From<typeof _MoneySchema> {}
-export interface Money extends Schema.Schema.To<typeof _MoneySchema> {}
+export interface MoneyFrom extends Schema.Schema.Encoded<typeof _MoneySchema> {}
+export interface Money extends Schema.Schema.Type<typeof _MoneySchema> {}
 
-export const MoneySchema: Schema.BrandSchema<Money, MoneyFrom, never> =
-	_MoneySchema;
+export const MoneySchema = _MoneySchema;

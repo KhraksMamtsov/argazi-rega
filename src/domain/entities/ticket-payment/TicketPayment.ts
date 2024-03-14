@@ -14,8 +14,10 @@ const _TicketPaymentSchema = Schema.struct({
 	payed: PriceSchema,
 }).pipe(Schema.extend(BaseSchema), Schema.identifier("TicketPaymentSchema"));
 
-export type TicketPaymentFrom = Schema.Schema.From<typeof _TicketPaymentSchema>;
-export type TicketPayment = Schema.Schema.To<typeof _TicketPaymentSchema>;
+export type TicketPaymentFrom = Schema.Schema.Encoded<
+	typeof _TicketPaymentSchema
+>;
+export type TicketPayment = Schema.Schema.Type<typeof _TicketPaymentSchema>;
 
 export const TicketPaymentSchema: Schema.Schema<
 	TicketPayment,

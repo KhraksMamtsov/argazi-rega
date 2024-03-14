@@ -25,10 +25,10 @@ export const _CreateGeoPointCommandSchema = BaseCausedCommandFor(
 	CreateGeoPointCommandPayloadSchema
 ).pipe(Schema.identifier("CreateGeoPointCommandSchema"));
 
-export type CreateGeoPointCommandFrom = Schema.Schema.From<
+export type CreateGeoPointCommandFrom = Schema.Schema.Encoded<
 	typeof _CreateGeoPointCommandSchema
 >;
-export type CreateGeoPointCommand = Schema.Schema.To<
+export type CreateGeoPointCommand = Schema.Schema.Type<
 	typeof _CreateGeoPointCommandSchema
 >;
 

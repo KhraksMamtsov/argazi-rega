@@ -24,10 +24,10 @@ const _CreatePlaceResponseSchema = Schema.struct({
 	BaseResponseFor
 );
 
-export type CreatePlaceResponseFrom = Schema.Schema.From<
+export type CreatePlaceResponseFrom = Schema.Schema.Encoded<
 	typeof _CreatePlaceResponseSchema
 >;
-export type CreatePlaceResponse = Schema.Schema.To<
+export type CreatePlaceResponse = Schema.Schema.Type<
 	typeof _CreatePlaceResponseSchema
 >;
 

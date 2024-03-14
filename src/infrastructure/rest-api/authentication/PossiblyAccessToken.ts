@@ -8,6 +8,6 @@ export const PossiblyAccessTokenSchema = Schema.string.pipe(
 	Schema.brand(PossiblyAccessTokenSymbol)
 );
 
-export type PossiblyAccessToken = Schema.Schema.To<
+export type PossiblyAccessToken = Schema.Schema.Type<
 	typeof PossiblyAccessTokenSchema
 >;

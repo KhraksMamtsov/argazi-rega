@@ -40,6 +40,10 @@ function randomlReplace(str: string) {
 
 const NBSP = " ";
 
+export const ArgazipaEmotion = {
+	INFO: "ℹ️",
+};
+
 export const ArgazipaSayMdComponent = (props: {
 	emotion: string;
 	phrase: string;

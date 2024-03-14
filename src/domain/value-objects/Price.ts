@@ -9,5 +9,5 @@ export const PriceSchema = MoneySchema.pipe(
 	Schema.brand(PriceSymbol)
 );
 
-export type PriceFrom = Schema.Schema.From<typeof PriceSchema>;
-export type Price = Schema.Schema.To<typeof PriceSchema>;
+export type PriceFrom = Schema.Schema.Encoded<typeof PriceSchema>;
+export type Price = Schema.Schema.Type<typeof PriceSchema>;

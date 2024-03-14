@@ -6,4 +6,4 @@ export const IdVisitorSchema = Schema.UUID.pipe(
 	Schema.identifier("IdVisitorSchema")
 );
 
-export type IdVisitor = Schema.Schema.To<typeof IdVisitorSchema>;
+export type IdVisitor = Schema.Schema.Type<typeof IdVisitorSchema>;

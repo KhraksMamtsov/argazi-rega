@@ -7,4 +7,4 @@ export const IdEventSchema = Schema.UUID.pipe(
 	Schema.brand(IdEventSymbol)
 );
 
-export type IdEvent = Schema.Schema.To<typeof IdEventSchema>;
+export type IdEvent = Schema.Schema.Type<typeof IdEventSchema>;

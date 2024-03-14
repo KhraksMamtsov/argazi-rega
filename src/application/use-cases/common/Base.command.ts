@@ -19,7 +19,7 @@ export const BaseCommandFor = <R, I extends Json.Json, A>(
 	}).pipe(Schema.identifier(baseAnnotation));
 };
 
-export type BaseCommand = Schema.Schema.To<ReturnType<typeof BaseCommandFor>>;
+export type BaseCommand = Schema.Schema.Type<ReturnType<typeof BaseCommandFor>>;
 
 export const BaseCausedCommandFor = <R, I extends Json.Json, A>(
 	payload: Schema.Schema<A, I, R>
@@ -36,6 +36,6 @@ export const BaseCausedCommandFor = <R, I extends Json.Json, A>(
 	}).pipe(Schema.identifier(baseAnnotation));
 };
 
-export type BaseCausedCommand = Schema.Schema.To<
+export type BaseCausedCommand = Schema.Schema.Type<
 	ReturnType<typeof BaseCausedCommandFor>
 >;

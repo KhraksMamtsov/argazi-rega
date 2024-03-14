@@ -13,7 +13,7 @@ export const RefreshTokenRequestSchema = {
 	),
 };
 
-export type RefreshTokenRequestBody = Schema.Schema.To<
+export type RefreshTokenRequestBody = Schema.Schema.Type<
 	typeof RefreshTokenRequestSchema.body
 >;
 

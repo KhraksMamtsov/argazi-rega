@@ -11,7 +11,7 @@ export const GetSubscriptionByIdCommandPayloadSchema = Schema.struct({
 	Schema.identifier("GetSubscriptionByIdCommandPayloadSchema")
 );
 
-export type GetSubscriptionByIdCommandPayloadFrom = Schema.Schema.From<
+export type GetSubscriptionByIdCommandPayloadFrom = Schema.Schema.Encoded<
 	typeof GetSubscriptionByIdCommandPayloadSchema
 >;
 

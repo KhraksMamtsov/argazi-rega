@@ -18,4 +18,4 @@ export const GeoPointApiSchema = Schema.struct({
 	),
 }).pipe(satisfies.to<GeoPointBase>(), Schema.identifier("GeoPointApiSchema"));
 
-export type GeoPointApi = Schema.Schema.To<typeof GeoPointApiSchema>;
+export type GeoPointApi = Schema.Schema.Type<typeof GeoPointApiSchema>;

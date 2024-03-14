@@ -7,4 +7,4 @@ export const IdMealSchema = Schema.UUID.pipe(
 	Schema.brand(IdMealSymbol)
 );
 
-export type IdMeal = Schema.Schema.To<typeof IdMealSchema>;
+export type IdMeal = Schema.Schema.Type<typeof IdMealSchema>;

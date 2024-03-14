@@ -10,9 +10,9 @@ export const _GetEventResponseSchema = EventApi.pipe(
 );
 
 export interface GetEventResponseFrom
-	extends Schema.Schema.From<typeof _GetEventResponseSchema> {}
+	extends Schema.Schema.Encoded<typeof _GetEventResponseSchema> {}
 export interface GetEventResponse
-	extends Schema.Schema.To<typeof _GetEventResponseSchema> {}
+	extends Schema.Schema.Type<typeof _GetEventResponseSchema> {}
 
 export const GetEventResponseSchema: Schema.Schema<
 	GetEventResponse,

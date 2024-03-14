@@ -12,7 +12,7 @@ export const LoginDwbnRequest = {
 		idTelegramChat: IdTelegramChatSchema,
 	}).pipe(Schema.identifier("LoginDwbnRequestBodySchema")),
 };
-export type LoginDwbnRequestBody = Schema.Schema.To<
+export type LoginDwbnRequestBody = Schema.Schema.Type<
 	typeof LoginDwbnRequest.body
 >;
 

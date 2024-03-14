@@ -11,9 +11,9 @@ export const _GetMyIdentityResponseSchema = UserApi.pipe(
 );
 
 export interface GetMyIdentityResponseFrom
-	extends Schema.Schema.From<typeof _GetMyIdentityResponseSchema> {}
+	extends Schema.Schema.Encoded<typeof _GetMyIdentityResponseSchema> {}
 export interface GetMyIdentityResponse
-	extends Schema.Schema.To<typeof _GetMyIdentityResponseSchema> {}
+	extends Schema.Schema.Type<typeof _GetMyIdentityResponseSchema> {}
 
 export const GetMyIdentityResponseSchema: Schema.Schema<
 	GetMyIdentityResponse,

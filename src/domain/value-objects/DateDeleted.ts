@@ -6,5 +6,5 @@ export const DateDeletedSchema = Schema.ValidDateFromSelf.pipe(
 	Schema.brand(DateDeletedSymbol)
 );
 
-export type DateDeletedFrom = Schema.Schema.From<typeof DateDeletedSchema>;
-export type DateDeleted = Schema.Schema.To<typeof DateDeletedSchema>;
+export type DateDeletedFrom = Schema.Schema.Encoded<typeof DateDeletedSchema>;
+export type DateDeleted = Schema.Schema.Type<typeof DateDeletedSchema>;

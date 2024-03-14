@@ -21,9 +21,9 @@ export const CreateTransportCommandSchema = BaseCausedCommandFor(
 	CreateTransportCommandPayloadSchema
 ).pipe(Schema.identifier("CreateTransportCommandSchema"));
 
-export type CreateTransportCommandFrom = Schema.Schema.From<
+export type CreateTransportCommandFrom = Schema.Schema.Encoded<
 	typeof CreateTransportCommandSchema
 >;
-export type CreateTransportCommand = Schema.Schema.To<
+export type CreateTransportCommand = Schema.Schema.Type<
 	typeof CreateTransportCommandSchema
 >;

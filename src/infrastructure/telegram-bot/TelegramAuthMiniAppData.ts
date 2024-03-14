@@ -12,10 +12,10 @@ export const _TelegramAuthMiniAppDataSchema = Schema.parseJson(
 	})
 );
 
-export type TelegramAuthMiniAppDataFrom = Schema.Schema.From<
+export type TelegramAuthMiniAppDataFrom = Schema.Schema.Encoded<
 	typeof _TelegramAuthMiniAppDataSchema
 >;
-export type TelegramAuthMiniAppData = Schema.Schema.To<
+export type TelegramAuthMiniAppData = Schema.Schema.Type<
 	typeof _TelegramAuthMiniAppDataSchema
 >;
 

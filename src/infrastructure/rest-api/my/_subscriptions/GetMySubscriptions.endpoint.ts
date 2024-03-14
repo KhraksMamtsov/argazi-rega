@@ -13,9 +13,9 @@ export const _GetMySubscriptionsResponseSchema = SubscriptionApiSchema.pipe(
 );
 
 export interface GetMySubscriptionsResponseFrom
-	extends Schema.Schema.From<typeof _GetMySubscriptionsResponseSchema> {}
+	extends Schema.Schema.Encoded<typeof _GetMySubscriptionsResponseSchema> {}
 export interface GetMySubscriptionsResponse
-	extends Schema.Schema.To<typeof _GetMySubscriptionsResponseSchema> {}
+	extends Schema.Schema.Type<typeof _GetMySubscriptionsResponseSchema> {}
 
 export const GetMySubscriptionsResponseSchema: Schema.Schema<
 	GetMySubscriptionsResponse,

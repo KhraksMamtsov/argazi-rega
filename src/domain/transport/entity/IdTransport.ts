@@ -6,4 +6,4 @@ export const IdTransportSchema = Schema.UUID.pipe(
 	Schema.identifier("TransportIdSchema"),
 	Schema.brand(IdTransportSymbol)
 );
-export type IdTransport = Schema.Schema.To<typeof IdTransportSchema>;
+export type IdTransport = Schema.Schema.Type<typeof IdTransportSchema>;

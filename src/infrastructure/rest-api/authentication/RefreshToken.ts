@@ -8,4 +8,4 @@ export const RefreshTokenSchema = Schema.Secret.pipe(
 	Schema.brand(RefreshTokenSymbol)
 );
 
-export type RefreshToken = Schema.Schema.To<typeof RefreshTokenSchema>;
+export type RefreshToken = Schema.Schema.Type<typeof RefreshTokenSchema>;

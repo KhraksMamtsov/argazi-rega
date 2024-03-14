@@ -6,4 +6,4 @@ export const AccessTokenSchema = Schema.Secret.pipe(
 	Schema.brand(AccessTokenSymbol)
 );
 
-export type AccessToken = Schema.Schema.To<typeof AccessTokenSchema>;
+export type AccessToken = Schema.Schema.Type<typeof AccessTokenSchema>;

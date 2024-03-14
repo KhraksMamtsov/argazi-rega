@@ -15,10 +15,10 @@ const _CreateEventResponseSchema = EventApi.pipe(
 	BaseResponseFor
 );
 
-export type CreateEventResponseFrom = Schema.Schema.From<
+export type CreateEventResponseFrom = Schema.Schema.Encoded<
 	typeof _CreateEventResponseSchema
 >;
-export type CreateEventResponse = Schema.Schema.To<
+export type CreateEventResponse = Schema.Schema.Type<
 	typeof _CreateEventResponseSchema
 >;
 

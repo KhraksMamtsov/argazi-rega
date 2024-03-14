@@ -30,10 +30,10 @@ export const _GetUserCommandSchema = BaseCommandFor(
 	GetUserCommandPayloadSchema
 ).pipe(Schema.identifier("GetUserCommandSchema"));
 
-export type GetUserCommandFrom = Schema.Schema.From<
+export type GetUserCommandFrom = Schema.Schema.Encoded<
 	typeof _GetUserCommandSchema
 >;
-export type GetUserCommand = Schema.Schema.To<typeof _GetUserCommandSchema>;
+export type GetUserCommand = Schema.Schema.Type<typeof _GetUserCommandSchema>;
 
 export const GetUserCommandSchema: Schema.Schema<
 	GetUserCommand,

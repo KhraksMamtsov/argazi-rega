@@ -1,7 +1,7 @@
 import { ParseResult, Schema } from "@effect/schema";
 import { Either, Encoding } from "effect";
 
-export type JWTStruct = Schema.Schema.To<typeof JWTStructSchema>;
+export type JWTStruct = Schema.Schema.Type<typeof JWTStructSchema>;
 
 const WithMessageSchema = Schema.struct({
 	message: Schema.string,
@@ -20,12 +20,20 @@ export const JWTStructSchema = Schema.transformOrFail(
 		Either.all([
 			Either.try({
 				catch: (e) =>
-					ParseResult.type(ast, head, isWithMessage(e) ? e.message : undefined),
+					new ParseResult.Type(
+						ast,
+						head,
+						isWithMessage(e) ? e.message : undefined
+					),
 				try: () => atob(head),
 			}),
 			Either.try({
 				catch: (e) =>
-					ParseResult.type(ast, head, isWithMessage(e) ? e.message : undefined),
+					new ParseResult.Type(
+						ast,
+						head,
+						isWithMessage(e) ? e.message : undefined
+					),
 				try: () => atob(payload),
 			}),
 		]).pipe(Either.flatMap((x) => ParseResult.succeed([...x, sign] as const))),

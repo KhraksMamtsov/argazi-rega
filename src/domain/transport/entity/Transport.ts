@@ -13,15 +13,15 @@ export const TransportBaseSchema = Schema.struct({
 	//
 	number: Schema.SecretFromSelf,
 	seatsNumber: Schema.Int.pipe(Schema.positive()),
-}).pipe(Schema.to, Schema.identifier("TransportBaseSchema"));
+}).pipe(Schema.typeSchema, Schema.identifier("TransportBaseSchema"));
 
-export type TransportBase = Schema.Schema.To<typeof TransportBaseSchema>;
+export type TransportBase = Schema.Schema.Type<typeof TransportBaseSchema>;
 
 export const _TransportSchema = TransportBaseSchema.pipe(
 	Schema.extend(BaseSchema),
 	Schema.identifier("TransportSchema")
 );
 
-export type Transport = Schema.Schema.To<typeof _TransportSchema>;
+export type Transport = Schema.Schema.Type<typeof _TransportSchema>;
 
 export const TransportSchema: Schema.Schema<Transport> = _TransportSchema;

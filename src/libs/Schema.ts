@@ -46,8 +46,8 @@ export const reverse = <R, I, A>(schema: Schema.Schema<A, I, R>) => {
 	);
 
 	return Schema.transformOrFail(
-		Schema.to(schema),
-		Schema.from(schema),
+		Schema.typeSchema(schema),
+		Schema.encodedSchema(schema),
 		flow(
 			encode,
 			Effect.mapError((x) => x.error)
@@ -64,7 +64,7 @@ export const StringFromNumber = reverse(NumberFromString);
 export const OptionNonEmptyArray = <R, I, A>(item: Schema.Schema<A, I, R>) =>
 	Schema.transform(
 		Schema.array(item),
-		Schema.optionFromSelf(Schema.nonEmptyArray(Schema.to(item))),
+		Schema.optionFromSelf(Schema.nonEmptyArray(Schema.typeSchema(item))),
 		(ss) =>
 			ReadonlyArray.match(ss, {
 				onEmpty: () => Option.none(),

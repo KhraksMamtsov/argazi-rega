@@ -15,8 +15,8 @@ const _VisitorSchema = Schema.struct({
 	type: VisitorTypeSchema,
 }).pipe(Schema.extend(BaseSchema), Schema.identifier("VisitorSchema"));
 
-export type VisitorFrom = Schema.Schema.From<typeof _VisitorSchema>;
-export type Visitor = Schema.Schema.To<typeof _VisitorSchema>;
+export type VisitorFrom = Schema.Schema.Encoded<typeof _VisitorSchema>;
+export type Visitor = Schema.Schema.Type<typeof _VisitorSchema>;
 
 export const VisitorSchema: Schema.Schema<Visitor, VisitorFrom> =
 	_VisitorSchema;

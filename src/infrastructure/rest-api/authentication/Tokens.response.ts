@@ -10,7 +10,7 @@ export const TokensResponseSchema = Schema.struct({
 	refreshToken: RefreshTokenSchema,
 }).pipe(satisfies.from.json(), Schema.identifier("TokensResponseSchema"));
 
-export type ApiCredentials = Schema.Schema.To<typeof TokensResponseSchema>;
+export type ApiCredentials = Schema.Schema.Type<typeof TokensResponseSchema>;
 
 export const TokensResponse = {
 	content: TokensResponseSchema,

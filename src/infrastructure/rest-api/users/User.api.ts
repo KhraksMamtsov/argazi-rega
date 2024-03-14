@@ -24,7 +24,7 @@ export const _UserApi = Schema.struct({
 	Schema.identifier("UserApi")
 );
 
-export interface UserApiFrom extends Schema.Schema.From<typeof _UserApi> {}
-export interface UserApi extends Schema.Schema.To<typeof _UserApi> {}
+export interface UserApiFrom extends Schema.Schema.Encoded<typeof _UserApi> {}
+export interface UserApi extends Schema.Schema.Type<typeof _UserApi> {}
 
 export const UserApi: Schema.Schema<UserApi, UserApiFrom> = _UserApi;

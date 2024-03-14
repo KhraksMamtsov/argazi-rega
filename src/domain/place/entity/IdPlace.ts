@@ -7,4 +7,4 @@ export const IdPlaceSchema = Schema.UUID.pipe(
 	Schema.brand(IdPlaceSymbol)
 );
 
-export type IdPlace = Schema.Schema.To<typeof IdPlaceSchema>;
+export type IdPlace = Schema.Schema.Type<typeof IdPlaceSchema>;

@@ -10,9 +10,9 @@ export const _GetPlacesResponseSchema = PlaceApi.pipe(
 	BaseResponseManyFor
 );
 export interface GetPlacesResponseFrom
-	extends Schema.Schema.From<typeof _GetPlacesResponseSchema> {}
+	extends Schema.Schema.Encoded<typeof _GetPlacesResponseSchema> {}
 export interface GetPlacesResponse
-	extends Schema.Schema.To<typeof _GetPlacesResponseSchema> {}
+	extends Schema.Schema.Type<typeof _GetPlacesResponseSchema> {}
 
 export const GetPlacesResponseSchema: Schema.Schema<
 	GetPlacesResponse,

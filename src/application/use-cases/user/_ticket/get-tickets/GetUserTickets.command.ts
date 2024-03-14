@@ -11,7 +11,7 @@ export const GetUserTicketsCommandPayloadSchema = Schema.struct({
 	Schema.identifier("GetUserTicketsCommandPayloadSchema")
 );
 
-export type GetUserTicketsCommandPayloadFrom = Schema.Schema.From<
+export type GetUserTicketsCommandPayloadFrom = Schema.Schema.Encoded<
 	typeof GetUserTicketsCommandPayloadSchema
 >;
 
