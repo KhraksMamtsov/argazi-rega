@@ -40,7 +40,10 @@ import {
 import { TelegrafBotPayload } from "./infrastructure/telegram-bot/telegraf/TelegrafBot.js";
 import { TelegrafOptionsTag } from "./infrastructure/telegram-bot/telegraf/TelegrafOptionsTag.js";
 import { TelegramAuthMiniAppURL } from "./infrastructure/telegram-bot/TelegramAuthMiniApp.service.js";
-import { ArgazipaSayMdComponent } from "./infrastructure/telegram-bot/ui/ArgazipaSay.md-component.js";
+import {
+	accentify,
+	ArgazipaSayMdComponent,
+} from "./infrastructure/telegram-bot/ui/ArgazipaSay.md-component.js";
 import { MD } from "./infrastructure/telegram-bot/ui/Markdown.js";
 
 export const TelegrafLive = pipe(
@@ -106,7 +109,7 @@ export const handle = (
 												text,
 												Markup.keyboard([
 													Markup.button.webApp(
-														"🔐 Войти через DWBN ☸️",
+														accentify("🔐 Войти через DWBN ☸️"),
 														telegramAuthMiniAppURL.toString()
 													),
 												])
