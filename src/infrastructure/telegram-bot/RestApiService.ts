@@ -56,7 +56,6 @@ export const makeLive = () =>
 			) =>
 			(input: I) =>
 				Effect.gen(function* (_) {
-					const sessionService = yield* _(SessionServiceTag);
 					const actualUserCredentials = yield* _(
 						SynchronizedRef.get(args.userCredentialsSyncRef)
 					);
@@ -71,6 +70,8 @@ export const makeLive = () =>
 					if (Either.isRight(requestResult)) {
 						return requestResult.right;
 					}
+
+					console.log("TOKEN REFRESHING");
 
 					// TODO: check accessToken expired
 					const refreshedCredentials = yield* _(
@@ -93,7 +94,7 @@ export const makeLive = () =>
 									);
 
 									if (Either.isLeft(refreshAuthResult)) {
-										yield* _(sessionService.drop(args.idTelegramChat));
+										yield* _(SessionServiceTag.drop(args.idTelegramChat));
 										return yield* _(
 											new RefreshTokenExpired({
 												clientError: refreshAuthResult.left,
@@ -102,7 +103,7 @@ export const makeLive = () =>
 									}
 
 									yield* _(
-										sessionService.create(
+										SessionServiceTag.create(
 											args.idTelegramChat,
 											refreshAuthResult.right.content
 										)
