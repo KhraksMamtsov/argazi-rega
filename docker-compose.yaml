@@ -145,6 +145,8 @@ services:
       context: .
       dockerfile: Dockerfile
       target: dependencies
+      args:
+        - NODE_ENV=development
     command: ["pnpm", "run", "api:docker:start:dev"]
     volumes:
       - ./build:/usr/app/build

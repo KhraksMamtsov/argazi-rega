@@ -13,7 +13,6 @@ import * as TF from "telegraf/filters";
 import * as TgP from "./TelegramPayload.js";
 
 import { IdTelegramChatSchema } from "../../../../domain/user/entity/IdTelegramChat.js";
-import { includes } from "../../../../libs/ReadonlyArray.js";
 import { TelegrafTag } from "../Telegraf.js";
 
 import type * as Types from "telegraf/types";
@@ -122,10 +121,9 @@ export const text = on(TF.message("text"))(Option.some)(
 		})
 );
 
-export const command = <const C extends string, A, E, R>(options: {
-	commands: ReadonlyArray<C>;
-	handler: (
-		context: C extends C ? TgP.CommandPayload<C> : never
+export const command = <A, E, R>(options: {
+	readonly handler: (
+		context: TgP.CommandPayload<string>
 	) => Effect.Effect<A, E, R>;
 }) =>
 	Effect.gen(function* (_) {
@@ -136,39 +134,36 @@ export const command = <const C extends string, A, E, R>(options: {
 
 		telegrafClient.command(/.+/, async (context, next) => {
 			const { command } = context;
-
-			if (includes(options.commands, command)) {
-				const handle = new Promise<Exit.Exit<A, E>>((resolve) => {
-					const fiber = runFork(
-						Effect.provideService(
-							options.handler(
-								// eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-								new TgP.CommandPayload({
-									command,
-									editMessageText: TgP.editMessageText(context),
-									idTelegramChat: IdTelegramChatSchema(context.message.chat.id),
-									message: context.message,
-									replyWithMarkdown: TgP.replyWithMarkdown(context),
-								}) as any
-							),
-							TelegrafContext,
+			const handle = new Promise<Exit.Exit<A, E>>((resolve) => {
+				const fiber = runFork(
+					Effect.provideService(
+						options.handler(
 							// eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-							context
-						).pipe(
-							Effect.tapErrorCause(Effect.logFatal),
-							Effect.tapError(Effect.logError),
-							Effect.tap(Effect.log)
-						)
-					);
+							new TgP.CommandPayload({
+								command,
+								editMessageText: TgP.editMessageText(context),
+								idTelegramChat: IdTelegramChatSchema(context.message.chat.id),
+								message: context.message,
+								replyWithMarkdown: TgP.replyWithMarkdown(context),
+							}) as any
+						),
+						TelegrafContext,
+						// eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+						context
+					).pipe(
+						Effect.tapErrorCause(Effect.logFatal),
+						Effect.tapError(Effect.logError),
+						Effect.tap(Effect.log)
+					)
+				);
 
-					fiber.addObserver((exit) => {
-						resolve(exit);
-					});
+				fiber.addObserver((exit) => {
+					resolve(exit);
 				});
+			});
 
-				const exit = await handle;
-				void exit;
-			}
+			const exit = await handle;
+			void exit;
 
 			await next();
 		});

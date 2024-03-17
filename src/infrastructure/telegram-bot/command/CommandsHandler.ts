@@ -1,10 +1,11 @@
-import { absurd, Effect, Layer, Option } from "effect";
+import { Effect, Layer, Option } from "effect";
 import * as Markup from "telegraf/markup";
 
 import { EventsCommandHandler } from "./Events.command-handler.js";
 import { LogoutCommandHandler } from "./Logout.command-handler.js";
 import { MeCommandHandler } from "./Me.command-handler.js";
 import { PlacesCommandHandler } from "./Places.command-handler.js";
+import * as TgCommand from "./TelegramCommands.js";
 
 import { SessionServiceTag } from "../Session.service.js";
 import * as TgB from "../telegraf/bot/TelegrafBot.js";
@@ -19,12 +20,11 @@ import { MD } from "../ui/Markdown.js";
 
 export const CommandsHandlerLive = Layer.scopedDiscard(
 	TgB.command({
-		commands: ["start", "login", "logout", "me", "places", "events"],
 		handler: (context) =>
 			Effect.gen(function* (_) {
 				if (
-					CommandPayload.isOfCommand("login")(context) ||
-					CommandPayload.isOfCommand("start")(context)
+					CommandPayload.isOfCommand(TgCommand.Login.command)(context) ||
+					CommandPayload.isOfCommand(TgCommand.Start.command)(context)
 				) {
 					const text = yield* _(
 						ArgazipaSayMdComponent({
@@ -73,23 +73,33 @@ export const CommandsHandlerLive = Layer.scopedDiscard(
 					return yield* _(context.replyWithMarkdown(text, {}));
 				}
 
-				if (CommandPayload.isOfCommand("places")(context)) {
+				if (CommandPayload.isOfCommand(TgCommand.Places.command)(context)) {
 					return yield* _(PlacesCommandHandler({ command: context }));
 				}
 
-				if (CommandPayload.isOfCommand("events")(context)) {
+				if (CommandPayload.isOfCommand(TgCommand.MyEvents.command)(context)) {
 					return yield* _(EventsCommandHandler({ command: context }));
 				}
 
-				if (CommandPayload.isOfCommand("me")(context)) {
+				if (CommandPayload.isOfCommand(TgCommand.Me.command)(context)) {
 					return yield* _(MeCommandHandler({ command: context }));
 				}
 
-				if (CommandPayload.isOfCommand("logout")(context)) {
+				if (CommandPayload.isOfCommand(TgCommand.Logout.command)(context)) {
 					return yield* _(LogoutCommandHandler({ command: context }));
 				}
 
-				return absurd<typeof Effect.unit>(context);
+				return yield* _(
+					context.replyWithMarkdown(
+						yield* _(
+							ArgazipaSayMdComponent({
+								emotion: "🤨",
+								phrase: ["Что-то на эльфийском...", "Не могу разобрать..."],
+							})
+						),
+						{}
+					)
+				);
 			}),
 	})
 ).pipe(Layer.provide(TelegrafTag.Live));

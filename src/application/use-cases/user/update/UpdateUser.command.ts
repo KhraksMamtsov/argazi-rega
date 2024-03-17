@@ -80,12 +80,10 @@ export const _UpdateUserCommandSchema = BaseCausedCommandFor(
 	UpdateUserCommandPayloadSchema
 ).pipe(Schema.identifier("UpdateUserCommandSchema"));
 
-export type UpdateUserCommandFrom = Schema.Schema.Encoded<
-	typeof _UpdateUserCommandSchema
->;
-export type UpdateUserCommand = Schema.Schema.Type<
-	typeof _UpdateUserCommandSchema
->;
+export interface UpdateUserCommandFrom
+	extends Schema.Schema.Encoded<typeof _UpdateUserCommandSchema> {}
+export interface UpdateUserCommand
+	extends Schema.Schema.Type<typeof _UpdateUserCommandSchema> {}
 
 export const UpdateUserCommandSchema: Schema.Schema<
 	UpdateUserCommand,

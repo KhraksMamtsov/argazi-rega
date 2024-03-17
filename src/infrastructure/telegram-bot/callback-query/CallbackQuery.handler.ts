@@ -3,7 +3,7 @@ import { absurd, Effect, Secret } from "effect";
 import { decode } from "./CallbackQuery.js";
 
 import { RestApiServiceTag } from "../RestApiService.js";
-import { TelegrafTag } from "../telegraf/Telegraf.js";
+// import { TelegrafTag } from "../telegraf/Telegraf.js";
 import { GeoPointMdComponent } from "../ui/GeoPoint.md-component.js";
 import { MD } from "../ui/Markdown.js";
 import { PlaceMdComponent } from "../ui/Place.md-component.js";
@@ -16,7 +16,7 @@ export const CallbackQueryHandler = (args: {
 	readonly callbackQueryPayload: CallbackQueryPayload;
 }) =>
 	Effect.gen(function* (_) {
-		const bot = yield* _(TelegrafTag);
+		// const _bot = yield* _(TelegrafTag);
 		const callbackQuery = yield* _(
 			decode(args.callbackQueryPayload.callback_query.data)
 		);
@@ -100,7 +100,7 @@ export const CallbackQueryHandler = (args: {
 				);
 
 				const message = yield* _(
-					bot.sendMessage(args.callbackQueryPayload.message.chat.id, answer, {
+					args.callbackQueryPayload.replyWithMarkdown(answer, {
 						protect_content: true,
 					})
 				);
@@ -110,7 +110,7 @@ export const CallbackQueryHandler = (args: {
 						Number(Secret.value(geoPoint.latitude)),
 						Number(Secret.value(geoPoint.longitude)),
 						{
-							horizontal_accuracy: 100,
+							horizontal_accuracy: 1500,
 							protect_content: true,
 							reply_parameters: {
 								message_id: message.message_id,

@@ -1,6 +1,8 @@
 import { Effect, flow, Option, pipe, ReadonlyArray } from "effect";
 import { Markup } from "telegraf";
 
+import { MyEvents } from "./TelegramCommands.js";
+
 import { fromArray } from "../../../libs/ReadonlyArray.js";
 import { RestApiServiceTag } from "../RestApiService.js";
 import { ArgazipaSayMdComponent } from "../ui/ArgazipaSay.md-component.js";
@@ -13,7 +15,7 @@ import { TicketMdComponent } from "../ui/Ticket.md-component.js";
 import type { CommandPayload } from "../telegraf/bot/TelegramPayload.js";
 
 export const EventsCommandHandler = (args: {
-	readonly command: CommandPayload<"events">;
+	readonly command: CommandPayload<typeof MyEvents.command>;
 }) =>
 	Effect.gen(function* (_) {
 		const restApiService = yield* _(RestApiServiceTag);

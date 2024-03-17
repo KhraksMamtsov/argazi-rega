@@ -5,6 +5,8 @@ import { useNewReplies } from "telegraf/future";
 
 import { TelegrafOptionsTag } from "./TelegrafOptions.js";
 
+// import { TelegramCommands } from "../command/TelegramCommands.js";
+
 export enum TelegrafErrorType {
 	SEND_MESSAGE = "SEND_MESSAGE::TelegrafErrorType",
 }
@@ -20,6 +22,10 @@ const make = Effect.gen(function* (_) {
 	const config = yield* _(TelegrafOptionsTag);
 
 	const client = new Tg.Telegraf(Secret.value(config.token)); //, config.client);
+
+	// yield* _(
+	// 	Effect.promise(() => client.telegram.setMyCommands(TelegramCommands))
+	// );
 
 	const sendMessage = (
 		...args: Parameters<Tg.Telegraf["telegram"]["sendMessage"]>
