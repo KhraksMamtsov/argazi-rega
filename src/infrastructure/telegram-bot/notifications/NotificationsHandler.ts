@@ -11,17 +11,12 @@ import { type NotificationMessage } from "../../../domain/services/NotificationS
 import { IdAdmin } from "../../rest-api/authentication/constants.js";
 import { RestApiServiceTag } from "../RestApiService.js";
 
-import type { TelegrafBot } from "../telegraf/TelegrafBot.js";
-
-export const handleNotification = (args: {
-	readonly bot: TelegrafBot;
+export const NotificationsHandler = (args: {
 	readonly notificationMessage: NotificationMessage;
 }) =>
 	Effect.gen(function* (_) {
 		const restApiClient = yield* _(RestApiServiceTag);
 		const { notification } = args.notificationMessage;
-
-		yield* _(args.notificationMessage.ack()); // TODO: get rid from start
 
 		yield* _(Effect.logDebug(args.notificationMessage));
 
@@ -39,7 +34,6 @@ export const handleNotification = (args: {
 			if (notification.issue === "created") {
 				yield* _(
 					UserCreatedNotificationHandler({
-						bot: args.bot,
 						createdUser: affectedUser,
 						initiator,
 					})
@@ -57,7 +51,6 @@ export const handleNotification = (args: {
 			if (notification.issue === "created") {
 				return yield* _(
 					EventCreatedNotificationHandler({
-						bot: args.bot,
 						createdEvent: affectedEvent,
 						initiator: initiator,
 					})
@@ -83,7 +76,6 @@ export const handleNotification = (args: {
 			if (notification.issue === "created") {
 				yield* _(
 					TicketCreatedNotificationHandler({
-						bot: args.bot,
 						createdTicket: affectedTicket,
 						initiator,
 						user,
@@ -96,7 +88,6 @@ export const handleNotification = (args: {
 			if (notification.issue === "deleted") {
 				yield* _(
 					TicketReturnedNotificationHandler({
-						bot: args.bot,
 						createdTicket: affectedTicket,
 						initiator,
 						user,
@@ -114,10 +105,6 @@ export const handleNotification = (args: {
 				})
 			);
 
-			if (affectedSubscription.status !== 200) {
-				return Effect.unit;
-			}
-
 			const user = yield* _(
 				restApiClient.getUser({
 					params: {
@@ -129,7 +116,6 @@ export const handleNotification = (args: {
 			if (notification.issue === "created") {
 				yield* _(
 					SubscriptionCreatedNotificationHandler({
-						bot: args.bot,
 						createdSubscription: affectedSubscription.content,
 						initiator,
 						user,
@@ -140,7 +126,6 @@ export const handleNotification = (args: {
 			if (notification.issue === "deleted") {
 				yield* _(
 					SubscriptionCancelledNotificationHandler({
-						bot: args.bot,
 						cancelledSubscription: affectedSubscription.content,
 						initiator,
 						user,
@@ -149,5 +134,5 @@ export const handleNotification = (args: {
 			}
 		}
 
-		return Effect.unit;
+		return yield* _(args.notificationMessage.ack());
 	});

@@ -4,19 +4,19 @@ import { Markup } from "telegraf";
 import { TicketCreatedMdComponent } from "./TicketCreated.md-component.js";
 
 import { RestApiServiceTag } from "../../RestApiService.js";
+import { TelegrafTag } from "../../telegraf/Telegraf.js";
 import { ReturnTicketCbButton } from "../../ui/button/ReturnTicket.cb-button.js";
 
 import type { Ticket } from "../../../../domain/ticket/entity/Ticket.js";
 import type { User } from "../../../../domain/user/entity/User.js";
-import type { TelegrafBot } from "../../telegraf/TelegrafBot.js";
 
 export const TicketCreatedNotificationHandler = (args: {
-	readonly bot: TelegrafBot;
 	readonly createdTicket: Ticket;
 	readonly initiator: User;
 	readonly user: User;
 }) =>
 	Effect.gen(function* (_) {
+		const telegraf = yield* _(TelegrafTag);
 		const event = yield* _(
 			RestApiServiceTag.getEvent({
 				params: { idEvent: args.createdTicket.idEvent },
@@ -30,7 +30,7 @@ export const TicketCreatedNotificationHandler = (args: {
 		);
 
 		yield* _(
-			args.bot.sendMessage(
+			telegraf.sendMessage(
 				args.user.idTelegramChat,
 				yield* _(
 					TicketCreatedMdComponent({

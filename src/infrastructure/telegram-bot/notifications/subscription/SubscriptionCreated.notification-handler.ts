@@ -4,19 +4,20 @@ import { Markup } from "telegraf";
 import { SubscriptionCreatedMdComponent } from "./SubscriptionCreated.md-component.js";
 
 import { RestApiServiceTag } from "../../RestApiService.js";
+import { TelegrafTag } from "../../telegraf/Telegraf.js";
 import { UnsubscribePlaceCbButton } from "../../ui/button/UnsubscribePlace.cb-button.js";
 
 import type { Subscription } from "../../../../domain/subscription/entity/Subscription.js";
 import type { User } from "../../../../domain/user/entity/User.js";
-import type { TelegrafBot } from "../../telegraf/TelegrafBot.js";
 
 export const SubscriptionCreatedNotificationHandler = (args: {
-	readonly bot: TelegrafBot;
 	readonly createdSubscription: Subscription;
 	readonly initiator: User;
 	readonly user: User;
 }) =>
 	Effect.gen(function* (_) {
+		const telegraf = yield* _(TelegrafTag);
+
 		const place = yield* _(
 			RestApiServiceTag.getPlaceById({
 				params: { idPlace: args.createdSubscription.idPlace },
@@ -24,7 +25,7 @@ export const SubscriptionCreatedNotificationHandler = (args: {
 		);
 
 		yield* _(
-			args.bot.sendMessage(
+			telegraf.sendMessage(
 				args.user.idTelegramChat,
 				yield* _(
 					SubscriptionCreatedMdComponent({

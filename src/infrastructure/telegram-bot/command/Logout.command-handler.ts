@@ -1,8 +1,9 @@
 import { Effect } from "effect";
 
 import { SessionServiceTag } from "../Session.service.js";
-import { CommandPayload } from "../telegraf/TelegrafBot.js";
 import { ArgazipaSayMdComponent } from "../ui/ArgazipaSay.md-component.js";
+
+import type { CommandPayload } from "../telegraf/bot/TelegramPayload.js";
 
 export const LogoutCommandHandler = (args: {
 	readonly command: CommandPayload<"logout">;
@@ -13,7 +14,7 @@ export const LogoutCommandHandler = (args: {
 		yield* _(sessionService.drop(args.command.idTelegramChat));
 
 		const answer = yield* _(
-			ArgazipaSayMdComponent({ phrase: "До встречи", emotion: "👋" })
+			ArgazipaSayMdComponent({ emotion: "👋", phrase: "До встречи" })
 		);
 
 		return yield* _(

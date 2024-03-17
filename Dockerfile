@@ -17,7 +17,7 @@ COPY --from=dependencies /usr/app ./
 COPY . .
 COPY prisma/ ./prisma/
 COPY tsconfig*.json ./
-RUN npm run build
+RUN npm run all:build
 
 FROM node:20-alpine as production
 ARG NODE_ENV=production

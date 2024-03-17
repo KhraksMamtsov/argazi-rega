@@ -75,6 +75,7 @@ const makeLive = Effect.gen(function* (_) {
 
 		return Effect.gen(function* (_) {
 			const queryResult = yield* _(_query(query));
+
 			return yield* _(
 				queryResult,
 				decode,

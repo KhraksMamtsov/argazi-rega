@@ -1,8 +1,9 @@
 import { Effect } from "effect";
 
 import { RestApiServiceTag } from "../RestApiService.js";
-import { CommandPayload } from "../telegraf/TelegrafBot.js";
 import { UserMdComponent } from "../ui/User.md-component.js";
+
+import type { CommandPayload } from "../telegraf/bot/TelegramPayload.js";
 
 export const MeCommandHandler = (args: {
 	readonly command: CommandPayload<"me">;

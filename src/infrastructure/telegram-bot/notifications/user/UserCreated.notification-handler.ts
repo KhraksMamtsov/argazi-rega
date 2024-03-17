@@ -1,18 +1,19 @@
 import { Effect, ReadonlyArray } from "effect";
 
+import { TelegrafTag } from "../../telegraf/Telegraf.js";
 import { ArgazipaSayMdComponent } from "../../ui/ArgazipaSay.md-component.js";
 import { MD } from "../../ui/Markdown.js";
 import { UserMdComponent } from "../../ui/User.md-component.js";
 
 import type { User } from "../../../../domain/user/entity/User.js";
-import type { TelegrafBot } from "../../telegraf/TelegrafBot.js";
 
 export const UserCreatedNotificationHandler = (args: {
-	readonly bot: TelegrafBot;
 	readonly createdUser: User;
 	readonly initiator: User;
 }) =>
 	Effect.gen(function* (_) {
+		const bot = yield* _(TelegrafTag);
+
 		return yield* _(
 			[args.initiator, args.createdUser],
 			ReadonlyArray.map((x) => x.idTelegramChat),
@@ -25,7 +26,7 @@ export const UserCreatedNotificationHandler = (args: {
 					}),
 					MD.br,
 					UserMdComponent({ user: args.createdUser })
-				).pipe(Effect.flatMap((text) => args.bot.sendMessage(x, text)))
+				).pipe(Effect.flatMap((text) => bot.sendMessage(x, text)))
 			),
 			Effect.allWith({
 				concurrency: "unbounded",

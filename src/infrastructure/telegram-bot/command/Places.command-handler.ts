@@ -2,11 +2,12 @@ import { Effect } from "effect";
 import { Markup } from "telegraf";
 
 import { RestApiServiceTag } from "../RestApiService.js";
-import { CommandPayload } from "../telegraf/TelegrafBot.js";
 import { AboutPlaceCbButton } from "../ui/button/AboutPlace.cb-button.js";
 import { SubscribePlaceCbButton } from "../ui/button/SubscribePlace.cb-button.js";
 import { UnsubscribePlaceCbButton } from "../ui/button/UnsubscribePlace.cb-button.js";
 import { PlaceMdComponent } from "../ui/Place.md-component.js";
+
+import type { CommandPayload } from "../telegraf/bot/TelegramPayload.js";
 
 export const PlacesCommandHandler = (args: {
 	readonly command: CommandPayload<"places">;

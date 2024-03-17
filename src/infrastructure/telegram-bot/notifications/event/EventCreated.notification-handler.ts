@@ -4,19 +4,18 @@ import { Markup } from "telegraf";
 import { EventCreatedMdComponent } from "./EventCreated.md-component.js";
 
 import { RestApiServiceTag } from "../../RestApiService.js";
+import { TelegrafTag } from "../../telegraf/Telegraf.js";
 import { BookTicketCbButton } from "../../ui/button/BookTicket.cb-button.js";
 
 import type { Event } from "../../../../domain/event/entity/Event.js";
 import type { User } from "../../../../domain/user/entity/User.js";
-import type { TelegrafBot } from "../../telegraf/TelegrafBot.js";
 
 export const EventCreatedNotificationHandler = (args: {
-	readonly bot: TelegrafBot;
 	readonly createdEvent: Event;
 	readonly initiator: User;
 }) =>
 	Effect.gen(function* (_) {
-		const { createdEvent } = args;
+		const telegraf = yield* _(TelegrafTag);
 
 		let subscribers: ReadonlyArray<Option.Option<User>> = [];
 
@@ -47,8 +46,8 @@ export const EventCreatedNotificationHandler = (args: {
 		}
 
 		const answer = Effect.zip(
-			BookTicketCbButton({ id: createdEvent.id }),
-			EventCreatedMdComponent({ event: createdEvent, place })
+			BookTicketCbButton({ id: args.createdEvent.id }),
+			EventCreatedMdComponent({ event: args.createdEvent, place })
 		);
 
 		return yield* _(
@@ -58,7 +57,7 @@ export const EventCreatedNotificationHandler = (args: {
 			ReadonlyArray.map((x) => {
 				return answer.pipe(
 					Effect.flatMap((data) =>
-						args.bot.sendMessage(x, data[1], Markup.inlineKeyboard([data[0]]))
+						telegraf.sendMessage(x, data[1], Markup.inlineKeyboard([data[0]]))
 					)
 				);
 			}),

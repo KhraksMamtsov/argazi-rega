@@ -493,7 +493,7 @@ const app = pipe(
 			return yield* _(
 				subscriptionOption.pipe(
 					Option.match({
-						onNone: () => ServerError.notFoundError("Not found!!"),
+						onNone: () => ServerError.notFoundError("Not Found"),
 						onSome: (subscription) =>
 							Effect.succeed({
 								content: subscription,

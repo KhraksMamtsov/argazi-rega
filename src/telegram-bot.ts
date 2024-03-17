@@ -1,55 +1,24 @@
-import { HttpClient } from "@effect/platform";
-import {
-	absurd,
-	Effect,
-	Exit,
-	flow,
-	Layer,
-	Logger,
-	LogLevel,
-	Option,
-	pipe,
-	Sink,
-	Stream,
-} from "effect";
+import { runMain } from "@effect/platform-node/NodeRuntime";
+import { Effect, Config, Layer, Logger, LogLevel, Option, pipe } from "effect";
 import { PrettyLogger } from "effect-log";
-import { Markup } from "telegraf";
 
 import * as http from "node:http";
 
-import {
-	type NotificationService,
-	NotificationServiceTag,
-} from "./domain/services/NotificationService.js";
 import { CacheServiceTag } from "./infrastructure/cache/Cache.service.js";
 import { NotificationServiceLive } from "./infrastructure/message-broker/MessageBroker.js";
 import { AuthenticationHandler } from "./infrastructure/telegram-bot/Authentication.handler.js";
 import { CallbackQueryHandler } from "./infrastructure/telegram-bot/callback-query/CallbackQuery.handler.js";
-import { EventsCommandHandler } from "./infrastructure/telegram-bot/command/Events.command-handler.js";
-import { LogoutCommandHandler } from "./infrastructure/telegram-bot/command/Logout.command-handler.js";
-import { MeCommandHandler } from "./infrastructure/telegram-bot/command/Me.command-handler.js";
-import { PlacesCommandHandler } from "./infrastructure/telegram-bot/command/Places.command-handler.js";
-import { handleNotification } from "./infrastructure/telegram-bot/notifications/HandleNotification.js";
+import { CommandsHandlerLive } from "./infrastructure/telegram-bot/command/CommandsHandler.js";
+// import { NotificationsHandlerLive } from "./infrastructure/telegram-bot/notifications/NotificationsHandlerLive.js";
+import { NotificationsHandlerLive } from "./infrastructure/telegram-bot/notifications/NotificationsHandlerLive.js";
 import { RestApiServiceTag } from "./infrastructure/telegram-bot/RestApiService.js";
 import { SessionServiceTag } from "./infrastructure/telegram-bot/Session.service.js";
+import * as TgBot from "./infrastructure/telegram-bot/telegraf/bot/TelegrafBot.js";
 import { TelegrafTag } from "./infrastructure/telegram-bot/telegraf/Telegraf.js";
-import {
-	CommandPayload,
-	type TelegrafBot,
-} from "./infrastructure/telegram-bot/telegraf/TelegrafBot.js";
-import { TelegrafBotPayload } from "./infrastructure/telegram-bot/telegraf/TelegrafBot.js";
-import { TelegrafOptionsTag } from "./infrastructure/telegram-bot/telegraf/TelegrafOptionsTag.js";
-import { TelegramAuthMiniAppURL } from "./infrastructure/telegram-bot/TelegramAuthMiniApp.service.js";
-import {
-	accentify,
-	ArgazipaSayMdComponent,
-} from "./infrastructure/telegram-bot/ui/ArgazipaSay.md-component.js";
+import { TelegrafOptionsTag } from "./infrastructure/telegram-bot/telegraf/TelegrafOptions.js";
+import { ArgazipaSayMdComponent } from "./infrastructure/telegram-bot/ui/ArgazipaSay.md-component.js";
 import { MD } from "./infrastructure/telegram-bot/ui/Markdown.js";
 
-export const TelegrafLive = pipe(
-	TelegrafTag.Live,
-	Layer.provide(TelegrafOptionsTag.Live({}))
-);
 export const debugLogger = pipe(
 	PrettyLogger.layer({
 		enableColors: true,
@@ -60,145 +29,66 @@ export const debugLogger = pipe(
 	Layer.merge(Logger.minimumLogLevel(LogLevel.All))
 );
 
-export const handle = (
-	notificationService: NotificationService,
-	bot: TelegrafBot
-) => {
-	return pipe(
-		bot.command$("start", "login", "logout", "me", "places", "events"),
-		Stream.merge(bot.webAppData$),
-		Stream.merge(bot.callbackQuery$),
-		Stream.merge(notificationService.stream$),
-		Stream.run(
-			Sink.forEach(
-				flow((context) =>
-					Effect.gen(function* (_) {
-						if (context._tag === "NotificationMessage") {
-							return yield* _(
-								handleNotification({
-									bot,
-									notificationMessage: context,
-								})
-							);
-						}
+const CallbackQueryHandlerLive = Layer.scopedDiscard(
+	TgBot.callBackQuery((context) =>
+		Effect.gen(function* (_) {
+			const sessionService = yield* _(SessionServiceTag);
+			const credentialsOption = yield* _(
+				sessionService.get(context.idTelegramChat)
+			);
 
-						if (context._tag === TelegrafBotPayload.WEB_APP_DATA) {
-							return yield* _(AuthenticationHandler(context, bot));
-						}
-
-						if (context._tag === TelegrafBotPayload.COMMAND) {
-							if (
-								CommandPayload.isOfCommand("login")(context) ||
-								CommandPayload.isOfCommand("start")(context)
-							) {
-								const text = yield* _(
-									ArgazipaSayMdComponent({
-										emotion: "🔐",
-										phrase: [
-											"Необходимо войти через DWBN",
-											"Кнопка входа появится под строкой ввода текста",
-										],
-									})
-								);
-
-								return yield* _(
-									TelegramAuthMiniAppURL.pipe(
-										Effect.tap(Effect.logInfo),
-										Effect.flatMap((telegramAuthMiniAppURL) =>
-											context.replyWithMarkdown(
-												text,
-												Markup.keyboard([
-													Markup.button.webApp(
-														accentify("🔐 Войти через DWBN ☸️"),
-														telegramAuthMiniAppURL.toString()
-													),
-												])
-											)
-										)
-									)
-								);
-							}
-						}
-
-						const sessionService = yield* _(SessionServiceTag);
-						const credentialsOption = yield* _(
-							sessionService.get(context.idTelegramChat)
-						);
-
-						const text = yield* _(
-							MD.document(
-								ArgazipaSayMdComponent({
-									emotion: "🤨",
-									phrase: "Не узнаю тебя, путник",
-								}),
-								"/login"
-							)
-						);
-
-						if (Option.isNone(credentialsOption)) {
-							return yield* _(
-								bot.sendMessage(context.idTelegramChat, text, {})
-							);
-						}
-
-						if (context._tag === TelegrafBotPayload.COMMAND) {
-							if (CommandPayload.isOfCommand("places")(context)) {
-								return yield* _(PlacesCommandHandler({ command: context }));
-							}
-
-							if (CommandPayload.isOfCommand("events")(context)) {
-								return yield* _(EventsCommandHandler({ command: context }));
-							}
-
-							if (CommandPayload.isOfCommand("me")(context)) {
-								return yield* _(MeCommandHandler({ command: context }));
-							}
-
-							if (CommandPayload.isOfCommand("logout")(context)) {
-								return yield* _(LogoutCommandHandler({ command: context }));
-							}
-						}
-
-						if (context._tag === TelegrafBotPayload.CALLBACK_QUERY) {
-							return yield* _(
-								CallbackQueryHandler({
-									accessToken: credentialsOption.value.accessToken,
-									bot,
-									callbackQueryPayload: context,
-								})
-							);
-						}
-
-						return absurd<typeof Effect.unit>(context);
-					})
+			const text = yield* _(
+				MD.document(
+					ArgazipaSayMdComponent({
+						emotion: "🤨",
+						phrase: "Не узнаю тебя, путник",
+					}),
+					"/login"
 				)
-			)
-		)
-	);
-};
+			);
 
-export const program = Effect.gen(function* (_) {
-	const telegrafService = yield* _(TelegrafTag);
-	const notificationService = yield* _(NotificationServiceTag);
-	const { bot, launch } = yield* _(telegrafService.init());
+			if (Option.isNone(credentialsOption)) {
+				return yield* _(context.replyWithMarkdown(text, {}));
+			}
 
-	yield* _(
-		handle(notificationService, bot),
-		Effect.provide(HttpClient.client.layer),
-		Effect.catchAll(Effect.logError),
-		Effect.tapDefect(Effect.logError),
-		launch
-	);
-});
+			return yield* _(
+				CallbackQueryHandler({
+					accessToken: credentialsOption.value.accessToken,
+					callbackQueryPayload: context,
+				})
+			);
+		})
+	)
+).pipe(Layer.provide(TelegrafTag.Live));
+
+const WebAppHandlerLive = Layer.scopedDiscard(
+	TgBot.webAppData((context) =>
+		Effect.gen(function* (_) {
+			return yield* _(AuthenticationHandler(context));
+		})
+	)
+).pipe(Layer.provide(TelegrafTag.Live));
+
+const TelegrafHandlerLive = TelegrafTag.Launch.pipe(
+	Layer.provide(CommandsHandlerLive),
+	Layer.provide(CallbackQueryHandlerLive),
+	Layer.provide(WebAppHandlerLive),
+	Layer.provide(NotificationsHandlerLive),
+	Layer.provide(
+		TelegrafOptionsTag.layerConfig({
+			token: Config.secret("TELEGRAM_BOT_TOKEN"),
+		})
+	)
+);
 
 export const runnable = pipe(
-	program,
-	Effect.provide(debugLogger),
-	Effect.provide(TelegrafLive),
-	Effect.provide(NotificationServiceLive),
-	Effect.provide(RestApiServiceTag.Live()),
-	Effect.provide(SessionServiceTag.Live()),
-	Effect.provide(CacheServiceTag.Live({})),
+	TelegrafHandlerLive,
+	Layer.provide(debugLogger),
+	Layer.provide(NotificationServiceLive),
+	Layer.provide(RestApiServiceTag.Live()),
+	Layer.provide(SessionServiceTag.Live()),
+	Layer.provide(CacheServiceTag.Live({})),
+	Layer.launch,
 	Effect.scoped
 );
 
@@ -215,14 +105,15 @@ if (port) {
 		.listen(Number(port));
 }
 
-void Effect.runPromiseExit(runnable).then(
-	Exit.match({
-		onFailure: (x) => {
-			console.log("runPromiseExit exit onFailure", x._tag);
-			console.dir(x, { depth: 1000 });
-		},
-		onSuccess: () => {
-			console.log("runPromiseExit exit onSuccess");
-		},
-	})
-);
+// void Effect.runPromiseExit(runnable).then(
+// 	Exit.match({
+// 		onFailure: (x) => {
+// 			console.log("runPromiseExit exit onFailure", x._tag);
+// 			console.dir(x, { depth: 1000 });
+// 		},
+// 		onSuccess: () => {
+// 			console.log("runPromiseExit exit onSuccess");
+// 		},
+// 	})
+// );
+runMain(runnable);

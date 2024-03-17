@@ -3,22 +3,20 @@ import { absurd, Effect, Secret } from "effect";
 import { decode } from "./CallbackQuery.js";
 
 import { RestApiServiceTag } from "../RestApiService.js";
-import {
-	CallbackQueryPayload,
-	type TelegrafBot,
-} from "../telegraf/TelegrafBot.js";
+import { TelegrafTag } from "../telegraf/Telegraf.js";
 import { GeoPointMdComponent } from "../ui/GeoPoint.md-component.js";
 import { MD } from "../ui/Markdown.js";
 import { PlaceMdComponent } from "../ui/Place.md-component.js";
 
 import type { AccessToken } from "../../rest-api/authentication/AccessToken.js";
+import type { CallbackQueryPayload } from "../telegraf/bot/TelegramPayload.js";
 
 export const CallbackQueryHandler = (args: {
 	readonly accessToken: AccessToken;
-	readonly bot: TelegrafBot;
 	readonly callbackQueryPayload: CallbackQueryPayload;
 }) =>
 	Effect.gen(function* (_) {
+		const bot = yield* _(TelegrafTag);
 		const callbackQuery = yield* _(
 			decode(args.callbackQueryPayload.callback_query.data)
 		);
@@ -102,13 +100,9 @@ export const CallbackQueryHandler = (args: {
 				);
 
 				const message = yield* _(
-					args.bot.sendMessage(
-						args.callbackQueryPayload.message.chat.id,
-						answer,
-						{
-							protect_content: true,
-						}
-					)
+					bot.sendMessage(args.callbackQueryPayload.message.chat.id, answer, {
+						protect_content: true,
+					})
 				);
 
 				const locationMessage = yield* _(

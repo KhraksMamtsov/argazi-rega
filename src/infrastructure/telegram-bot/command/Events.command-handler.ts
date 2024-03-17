@@ -3,13 +3,14 @@ import { Markup } from "telegraf";
 
 import { fromArray } from "../../../libs/ReadonlyArray.js";
 import { RestApiServiceTag } from "../RestApiService.js";
-import { CommandPayload } from "../telegraf/TelegrafBot.js";
 import { ArgazipaSayMdComponent } from "../ui/ArgazipaSay.md-component.js";
 import { BookTicketCbButton } from "../ui/button/BookTicket.cb-button.js";
 import { ReturnTicketCbButton } from "../ui/button/ReturnTicket.cb-button.js";
 import { EventMdComponent } from "../ui/Event.md-component.js";
 import { MD } from "../ui/Markdown.js";
 import { TicketMdComponent } from "../ui/Ticket.md-component.js";
+
+import type { CommandPayload } from "../telegraf/bot/TelegramPayload.js";
 
 export const EventsCommandHandler = (args: {
 	readonly command: CommandPayload<"events">;

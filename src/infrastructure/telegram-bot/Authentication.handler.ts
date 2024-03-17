@@ -11,14 +11,11 @@ import { UserMdComponent } from "./ui/User.md-component.js";
 
 import { IdTelegramChatSchema } from "../../domain/user/entity/IdTelegramChat.js";
 
-import type { TelegrafBot, WebAppDataPayload } from "./telegraf/TelegrafBot.js";
+import type { WebAppDataPayload } from "./telegraf/bot/TelegramPayload.js";
 
 export const decode = Schema.decode(TelegramAuthMiniAppDataSchema);
 
-export const AuthenticationHandler = (
-	webAppDataPayload: WebAppDataPayload,
-	bot: TelegrafBot
-) =>
+export const AuthenticationHandler = (webAppDataPayload: WebAppDataPayload) =>
 	Effect.gen(function* (_) {
 		const restApiService = yield* _(RestApiServiceTag);
 		const sessionService = yield* _(SessionServiceTag);
@@ -70,8 +67,7 @@ export const AuthenticationHandler = (
 		);
 
 		return yield* _(
-			bot.sendMessage(webAppDataPayload.message.chat.id, answerText, {
-				parse_mode: "MarkdownV2",
+			webAppDataPayload.replyWithMarkdown(answerText, {
 				reply_markup: { remove_keyboard: true },
 			})
 		);
