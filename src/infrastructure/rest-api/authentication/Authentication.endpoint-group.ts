@@ -1,4 +1,4 @@
-import Schema from "@effect/schema/Schema";
+import * as Schema from "@effect/schema/Schema";
 import { Api, SecurityScheme } from "effect-http";
 
 import * as AuthBasicEndpoint from "./login-basic/LoginBasic.endpoint.js";

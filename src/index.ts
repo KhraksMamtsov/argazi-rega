@@ -490,14 +490,17 @@ const app = pipe(
 				Effect.tapError((x) => Effect.logError(x))
 			);
 
-			return subscriptionOption.pipe(
-				Option.match({
-					onNone: () => ({ content: "Not found!!", status: 404 as const }),
-					onSome: (subscription) => ({
-						content: subscription,
-						status: 200 as const,
-					}),
-				})
+			return yield* _(
+				subscriptionOption.pipe(
+					Option.match({
+						onNone: () => ServerError.notFoundError("Not found!!"),
+						onSome: (subscription) =>
+							Effect.succeed({
+								content: subscription,
+								status: 200 as const,
+							}),
+					})
+				)
 			);
 		}).pipe(
 			Effect.tapBoth({
