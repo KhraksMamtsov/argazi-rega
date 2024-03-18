@@ -1,34 +1,62 @@
 import * as Schema from "@effect/schema/Schema";
-import { Api } from "effect-http";
+import { ApiEndpoint } from "effect-http";
 
 import { IdSubscriptionSchema } from "../../../../domain/subscription/entity/IdSubscription.js";
 import { BaseResponseFor } from "../../BaseResponseFor.js";
 import { BearerAuth } from "../../BearerAuth.security-scheme.js";
 import { SubscriptionApiSchema } from "../../subscriptions/Subscription.api.js";
 
-export const DeleteMySubscriptionResponseSchema = SubscriptionApiSchema.pipe(
-	Schema.identifier("DeleteMySubscriptionResponseSchema"),
+// #region DeleteMySubscriptionResponseBody
+const _DeleteMySubscriptionResponseBodySchema = SubscriptionApiSchema.pipe(
+	Schema.identifier("DeleteMySubscriptionResponseBodySchema"),
 	BaseResponseFor
 );
 
-export const DeleteMySubscriptionRequest = {
-	params: Schema.struct({
-		idSubscription: IdSubscriptionSchema,
-	}),
-};
+export type DeleteMySubscriptionResponseBodyContext = Schema.Schema.Context<
+	typeof _DeleteMySubscriptionResponseBodySchema
+>;
+export interface DeleteMySubscriptionResponseBodyEncoded
+	extends Schema.Schema.Encoded<
+		typeof _DeleteMySubscriptionResponseBodySchema
+	> {}
+export interface DeleteMySubscriptionResponseBody
+	extends Schema.Schema.Type<typeof _DeleteMySubscriptionResponseBodySchema> {}
 
-export const DeleteMySubscriptionResponse =
-	DeleteMySubscriptionResponseSchema.pipe(Schema.description("MySubscription"));
+export const DeleteMySubscriptionResponseBodySchema: Schema.Schema<
+	DeleteMySubscriptionResponseBody,
+	DeleteMySubscriptionResponseBodyEncoded
+> = _DeleteMySubscriptionResponseBodySchema;
+// #endregion DeleteMySubscriptionResponseBodySchema
+
+// #region DeleteMySubscriptionRequestParams
+const _DeleteMySubscriptionRequestParamsSchema = Schema.struct({
+	idSubscription: IdSubscriptionSchema,
+}).pipe(Schema.identifier("DeleteMySubscriptionRequestParamsSchema"));
+
+export type DeleteMySubscriptionRequestParamsContext = Schema.Schema.Context<
+	typeof _DeleteMySubscriptionRequestParamsSchema
+>;
+export interface DeleteMySubscriptionRequestParamsEncoded
+	extends Schema.Schema.Encoded<
+		typeof _DeleteMySubscriptionRequestParamsSchema
+	> {}
+export interface DeleteMySubscriptionRequestParams
+	extends Schema.Schema.Type<typeof _DeleteMySubscriptionRequestParamsSchema> {}
+
+export const DeleteMySubscriptionRequestParamsSchema: Schema.Schema<
+	DeleteMySubscriptionRequestParams,
+	DeleteMySubscriptionRequestParamsEncoded
+> = _DeleteMySubscriptionRequestParamsSchema;
+// #endregion DeleteMySubscriptionRequestParamsSchema
 
 export const DeleteMySubscriptionEndpoint = ApiEndpoint.delete(
 	"deleteMySubscription",
 	"/my/subscriptions/:idSubscription",
 	{
-		request: DeleteMySubscriptionRequest,
-		response: DeleteMySubscriptionResponse,
-	},
-	{
-		security: BearerAuth,
 		summary: "Unsubscribe user from events of some place",
 	}
+).pipe(
+	ApiEndpoint.setRequestPath(DeleteMySubscriptionRequestParamsSchema),
+	ApiEndpoint.setResponseBody(DeleteMySubscriptionResponseBodySchema),
+	ApiEndpoint.setSecurity(BearerAuth)
 );

@@ -1,5 +1,5 @@
 import * as Schema from "@effect/schema/Schema";
-import { Api } from "effect-http";
+import { ApiEndpoint } from "effect-http";
 
 import { BaseResponseFor } from "../BaseResponseFor.js";
 import { BearerAuth } from "../BearerAuth.security-scheme.js";
@@ -24,10 +24,9 @@ export const GetMyIdentityEndpoint = ApiEndpoint.get(
 	"getMyIdentity",
 	"/my/identity",
 	{
-		response: GetMyIdentityResponseSchema,
-	},
-	{
-		security: BearerAuth,
 		summary: "Get user",
 	}
+).pipe(
+	ApiEndpoint.setResponseBody(GetMyIdentityResponseSchema),
+	ApiEndpoint.setSecurity(BearerAuth)
 );

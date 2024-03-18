@@ -9,7 +9,8 @@ import { satisfies } from "../../../libs/SchemaSatisfy.js";
 
 import type { TicketBase } from "../../../domain/ticket/entity/Ticket.js";
 
-export const TicketApiSchema = Schema.struct({
+// #region TicketApi
+const _TicketApiSchema = Schema.struct({
 	dateRegistered: Schema.Date,
 	id: IdTicketSchema,
 	idEvent: IdEventSchema,
@@ -27,3 +28,13 @@ export const TicketApiSchema = Schema.struct({
 	satisfies.to<TicketBase>(),
 	Schema.identifier("TicketApiSchema")
 );
+
+export type TicketApiContext = Schema.Schema.Context<typeof _TicketApiSchema>;
+export interface TicketApiEncoded
+	extends Schema.Schema.Encoded<typeof _TicketApiSchema> {}
+export interface TicketApi
+	extends Schema.Schema.Type<typeof _TicketApiSchema> {}
+
+export const TicketApiSchema: Schema.Schema<TicketApi, TicketApiEncoded> =
+	_TicketApiSchema;
+// #endregion TicketApiSchema

@@ -1,5 +1,5 @@
 import * as Schema from "@effect/schema/Schema";
-import { Api } from "effect-http";
+import { ApiEndpoint } from "effect-http";
 
 import { IdEventSchema } from "../../../../domain/event/entity/IdEvent.js";
 import { IdUserSchema } from "../../../../domain/user/entity/IdUser.js";

@@ -1,5 +1,5 @@
 import * as Schema from "@effect/schema/Schema";
-import { Api } from "effect-http";
+import { ApiEndpoint } from "effect-http";
 
 import { IdEventSchema } from "../../../../domain/event/entity/IdEvent.js";
 import { BaseResponseFor } from "../../BaseResponseFor.js";
@@ -11,11 +11,24 @@ export const BookMyTicketResponseSchema = TicketApiSchema.pipe(
 	BaseResponseFor
 );
 
-export const BookMyTicketRequest = {
-	body: Schema.struct({
-		idEvent: IdEventSchema,
-	}),
-};
+// #region BookMyTicketRequestBody
+const _BookMyTicketRequestBodySchema = Schema.struct({
+	idEvent: IdEventSchema,
+}).pipe(Schema.identifier("BookMyTicketRequestBodySchema"));
+
+export type BookMyTicketRequestBodyContext = Schema.Schema.Context<
+	typeof _BookMyTicketRequestBodySchema
+>;
+export interface BookMyTicketRequestBodyEncoded
+	extends Schema.Schema.Encoded<typeof _BookMyTicketRequestBodySchema> {}
+export interface BookMyTicketRequestBody
+	extends Schema.Schema.Type<typeof _BookMyTicketRequestBodySchema> {}
+
+export const BookMyTicketRequestBodySchema: Schema.Schema<
+	BookMyTicketRequestBody,
+	BookMyTicketRequestBodyEncoded
+> = _BookMyTicketRequestBodySchema;
+// #endregion BookMyTicketRequestBodySchema
 
 export const BookMyTicketResponse = [
 	{
@@ -32,11 +45,9 @@ export const BookMyTicketEndpoint = ApiEndpoint.post(
 	"bookMyTicket",
 	"/my/tickets",
 	{
-		request: BookMyTicketRequest,
-		response: BookMyTicketResponse,
-	},
-	{
-		security: BearerAuth,
 		summary: "Book ticket for user on particular event",
 	}
+).pipe(
+	ApiEndpoint.setRequestBody(BookMyTicketRequestBodySchema),
+	ApiEndpoint.setSecurity(BearerAuth)
 );

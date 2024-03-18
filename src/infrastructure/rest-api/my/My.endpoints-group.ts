@@ -1,5 +1,5 @@
 import { flow } from "effect";
-import { Api } from "effect-http";
+import { ApiGroup } from "effect-http";
 
 import { CreateMySubscriptionEndpoint } from "./_subscriptions/CreateMySubscription.endpoint.js";
 import { DeleteMySubscriptionEndpoint } from "./_subscriptions/DeleteMySubscription.endpoint.js";
@@ -11,20 +11,20 @@ import { ReturnMyTicketEndpoint } from "./_tickets/ReturnTicketOnEvent.endpoint.
 import { GetMyIdentityEndpoint } from "./Identity.endpoint.js";
 
 export const MyEndpointsGroup = ApiGroup.make("my").pipe(
-	GetMyIdentityEndpoint,
-	// region Subscriptions
+	ApiGroup.addEndpoint(GetMyIdentityEndpoint),
+	// #region Subscriptions
 	flow(
-		CreateMySubscriptionEndpoint,
-		GetMySubscriptionsEndpoint,
-		DeleteMySubscriptionEndpoint
+		ApiGroup.addEndpoint(CreateMySubscriptionEndpoint),
+		ApiGroup.addEndpoint(GetMySubscriptionsEndpoint),
+		ApiGroup.addEndpoint(DeleteMySubscriptionEndpoint)
 	),
-	// endregion
-	// region Tickets
+	// #endregion
+	// #region Tickets
 	flow(
-		BookMyTicketEndpoint,
-		GetMyTicketByIdEndpoint,
-		ReturnMyTicketEndpoint,
-		GetMyTicketsEndpoint
+		ApiGroup.addEndpoint(BookMyTicketEndpoint),
+		ApiGroup.addEndpoint(GetMyTicketByIdEndpoint),
+		ApiGroup.addEndpoint(ReturnMyTicketEndpoint),
+		ApiGroup.addEndpoint(GetMyTicketsEndpoint)
 	)
-	// endregion
+	// #endregion
 );

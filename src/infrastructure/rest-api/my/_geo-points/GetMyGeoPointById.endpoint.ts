@@ -1,5 +1,5 @@
 import * as Schema from "@effect/schema/Schema";
-import { Api } from "effect-http";
+import { ApiEndpoint } from "effect-http";
 
 import { IdGeoPointSchema } from "../../../../domain/geo-point/entity/IdGeoPoint.js";
 import { BaseResponseFor } from "../../BaseResponseFor.js";
