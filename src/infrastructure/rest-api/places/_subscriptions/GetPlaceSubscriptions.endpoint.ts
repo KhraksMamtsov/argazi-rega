@@ -31,34 +31,19 @@ export const GetPlaceSubscriptionsRequestPathSchema: Schema.Schema<
 > = _GetPlaceSubscriptionsRequestPathSchema;
 // #endregion GetPlaceSubscriptionsRequestPathSchema
 
-export const GetPlaceSubscriptionsResponse = [
-	{
-		content: GetPlaceSubscriptionsResponseSchema.pipe(
-			Schema.description("PlaceSubscriptions")
-		),
-		status: 200,
-	},
-	{
-		content: Schema.string.pipe(
-			Schema.description("PlaceSubscriptions not found")
-		),
-		status: 404,
-	},
-] as const;
-
 export const GetPlaceSubscriptionsEndpoint = ApiEndpoint.get(
 	"getPlaceSubscriptions",
 	"/places/:idPlace/subscriptions",
 	{}
 ).pipe(
 	ApiEndpoint.setRequestPath(GetPlaceSubscriptionsRequestPathSchema),
+	ApiEndpoint.setResponse(
+		ApiResponse.make(200, GetPlaceSubscriptionsResponseSchema)
+	),
 	ApiEndpoint.addResponse(
 		ApiResponse.make(
 			404,
 			Schema.string.pipe(Schema.description("PlaceSubscriptions not found"))
 		)
-	),
-	ApiEndpoint.addResponse(
-		ApiResponse.make(200, GetPlaceSubscriptionsResponseSchema)
 	)
 );

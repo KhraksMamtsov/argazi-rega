@@ -37,7 +37,7 @@ export const EventsCommandHandler = (args: {
 			userSubscriptions,
 			ReadonlyArray.map((x) =>
 				restApiUserClient.getPlaceActualEvents({
-					params: { idPlace: x.idPlace },
+					path: { idPlace: x.idPlace },
 				})
 			),
 			Effect.allWith({

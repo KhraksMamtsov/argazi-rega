@@ -54,7 +54,7 @@ export const GetSubscriptionByIdEndpoint = ApiEndpoint.get(
 	{}
 ).pipe(
 	ApiEndpoint.setRequestPath(GetSubscriptionByIdRequestParamsSchema),
-	ApiEndpoint.addResponse(
+	ApiEndpoint.setResponse(
 		ApiResponse.make(200, GetSubscriptionByIdResponseBodySchema)
 	),
 	ApiEndpoint.addResponse(

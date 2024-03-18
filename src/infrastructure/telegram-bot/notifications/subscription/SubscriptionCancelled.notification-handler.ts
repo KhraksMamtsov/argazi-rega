@@ -21,7 +21,7 @@ export const SubscriptionCancelledNotificationHandler = (args: {
 
 		const place = yield* _(
 			restApiClient.getPlaceById({
-				params: {
+				path: {
 					idPlace: args.cancelledSubscription.idPlace,
 				},
 			})

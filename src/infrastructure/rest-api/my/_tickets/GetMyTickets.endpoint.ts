@@ -32,6 +32,6 @@ export const GetMyTicketsEndpoint = ApiEndpoint.get(
 		summary: "Get user's tickets",
 	}
 ).pipe(
-	ApiEndpoint.setRequestBody(GetMyTicketsResponseBodySchema),
+	ApiEndpoint.setResponseBody(GetMyTicketsResponseBodySchema),
 	ApiEndpoint.setSecurity(BearerAuth)
 );

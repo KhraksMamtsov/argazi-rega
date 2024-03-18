@@ -21,7 +21,7 @@ export const TicketReturnedNotificationHandler = (args: {
 
 		const event = yield* _(
 			restApiClient.getEvent({
-				params: {
+				path: {
 					idEvent: args.createdTicket.idEvent,
 				},
 			})
@@ -29,7 +29,7 @@ export const TicketReturnedNotificationHandler = (args: {
 
 		const place = yield* _(
 			restApiClient.getPlaceById({
-				params: {
+				path: {
 					idPlace: event.idPlace,
 				},
 			})

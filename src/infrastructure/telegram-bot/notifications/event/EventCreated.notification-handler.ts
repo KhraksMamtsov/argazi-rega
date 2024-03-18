@@ -23,27 +23,25 @@ export const EventCreatedNotificationHandler = (args: {
 
 		const subscriptionsAnswer = yield* _(
 			restApiClient.getPlaceSubscriptions({
-				params: { idPlace: args.createdEvent.idPlace },
+				path: { idPlace: args.createdEvent.idPlace },
 			})
 		);
 
 		const place = yield* _(
 			restApiClient.getPlaceById({
-				params: { idPlace: args.createdEvent.idPlace },
+				path: { idPlace: args.createdEvent.idPlace },
 			})
 		);
 
-		if (subscriptionsAnswer.status === 200) {
-			const idSubscribers = subscriptionsAnswer.content.map((x) => x.idUser);
+		const idSubscribers = subscriptionsAnswer.map((x) => x.idUser);
 
-			subscribers = yield* _(
-				restApiClient.getManyUsers({
-					body: {
-						idsUser: [...idSubscribers, ...idSubscribers],
-					},
-				})
-			);
-		}
+		subscribers = yield* _(
+			restApiClient.getManyUsers({
+				body: {
+					idsUser: [...idSubscribers, ...idSubscribers],
+				},
+			})
+		);
 
 		const answer = Effect.zip(
 			BookTicketCbButton({ id: args.createdEvent.id }),

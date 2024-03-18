@@ -19,13 +19,13 @@ export const TicketCreatedNotificationHandler = (args: {
 		const telegraf = yield* _(TelegrafTag);
 		const event = yield* _(
 			RestApiServiceTag.getEvent({
-				params: { idEvent: args.createdTicket.idEvent },
+				path: { idEvent: args.createdTicket.idEvent },
 			})
 		);
 
 		const place = yield* _(
 			RestApiServiceTag.getPlaceById({
-				params: { idPlace: event.idPlace },
+				path: { idPlace: event.idPlace },
 			})
 		);
 

@@ -80,7 +80,7 @@ export const makeLive = () =>
 							({ refreshToken }) =>
 								Effect.gen(function* (_) {
 									const refreshAuthResult = yield* _(
-										restApiClient.refreshAuthentication({
+										restApiClient.refreshToken({
 											body: { refreshToken },
 										}),
 										// Effect.timeout(Duration.seconds(5)),
@@ -105,11 +105,11 @@ export const makeLive = () =>
 									yield* _(
 										SessionServiceTag.create(
 											args.idTelegramChat,
-											refreshAuthResult.right.content
+											refreshAuthResult.right
 										)
 									);
 
-									return refreshAuthResult.right.content;
+									return refreshAuthResult.right;
 								})
 						)
 					);

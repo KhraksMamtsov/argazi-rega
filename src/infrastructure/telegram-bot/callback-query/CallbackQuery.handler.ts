@@ -26,7 +26,7 @@ export const CallbackQueryHandler = (args: {
 				return yield* _(
 					RestApiServiceTag.returnMyTicket(
 						{
-							params: {
+							path: {
 								idTicket: callbackQuery.id,
 							},
 						},
@@ -54,7 +54,7 @@ export const CallbackQueryHandler = (args: {
 				return yield* _(
 					RestApiServiceTag.deleteMySubscription(
 						{
-							params: { idSubscription: callbackQuery.id },
+							path: { idSubscription: callbackQuery.id },
 						},
 						{
 							bearer: args.accessToken,
@@ -77,13 +77,13 @@ export const CallbackQueryHandler = (args: {
 			if (callbackQuery.action === "get") {
 				const place = yield* _(
 					RestApiServiceTag.getPlaceById({
-						params: { idPlace: callbackQuery.id },
+						path: { idPlace: callbackQuery.id },
 					})
 				);
 
 				const geoPoint = yield* _(
 					RestApiServiceTag.getPlaceGeoPoint({
-						params: { idPlace: place.id },
+						path: { idPlace: place.id },
 					})
 				);
 

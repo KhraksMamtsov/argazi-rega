@@ -21,14 +21,14 @@ export const NotificationsHandler = (args: {
 		yield* _(Effect.logDebug(args.notificationMessage));
 
 		const initiator = yield* _(
-			restApiClient.getUser({ params: { idUser: notification.idInitiator } })
+			restApiClient.getUser({ path: { idUser: notification.idInitiator } })
 		);
 
 		const { entity } = notification;
 
 		if (entity.type === "User") {
 			const affectedUser = yield* _(
-				restApiClient.getUser({ params: { idUser: entity.id } })
+				restApiClient.getUser({ path: { idUser: entity.id } })
 			);
 
 			if (notification.issue === "created") {
@@ -45,7 +45,7 @@ export const NotificationsHandler = (args: {
 
 		if (entity.type === "Event") {
 			const affectedEvent = yield* _(
-				restApiClient.getEvent({ params: { idEvent: entity.id } })
+				restApiClient.getEvent({ path: { idEvent: entity.id } })
 			);
 
 			if (notification.issue === "created") {
@@ -61,13 +61,13 @@ export const NotificationsHandler = (args: {
 		if (entity.type === "Ticket") {
 			const affectedTicket = yield* _(
 				restApiClient.getUserTicketById({
-					params: { idTicket: entity.id, idUser: IdAdmin },
+					path: { idTicket: entity.id, idUser: IdAdmin },
 				})
 			);
 
 			const user = yield* _(
 				restApiClient.getUser({
-					params: {
+					path: {
 						idUser: affectedTicket.idUser,
 					},
 				})
@@ -101,14 +101,14 @@ export const NotificationsHandler = (args: {
 		if (entity.type === "Subscription") {
 			const affectedSubscription = yield* _(
 				restApiClient.getSubscription({
-					params: { idSubscription: entity.id },
+					path: { idSubscription: entity.id },
 				})
 			);
 
 			const user = yield* _(
 				restApiClient.getUser({
-					params: {
-						idUser: affectedSubscription.content.idUser,
+					path: {
+						idUser: affectedSubscription.idUser,
 					},
 				})
 			);
@@ -116,7 +116,7 @@ export const NotificationsHandler = (args: {
 			if (notification.issue === "created") {
 				yield* _(
 					SubscriptionCreatedNotificationHandler({
-						createdSubscription: affectedSubscription.content,
+						createdSubscription: affectedSubscription,
 						initiator,
 						user,
 					})
@@ -126,7 +126,7 @@ export const NotificationsHandler = (args: {
 			if (notification.issue === "deleted") {
 				yield* _(
 					SubscriptionCancelledNotificationHandler({
-						cancelledSubscription: affectedSubscription.content,
+						cancelledSubscription: affectedSubscription,
 						initiator,
 						user,
 					})

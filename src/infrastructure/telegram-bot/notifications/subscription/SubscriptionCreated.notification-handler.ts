@@ -20,7 +20,7 @@ export const SubscriptionCreatedNotificationHandler = (args: {
 
 		const place = yield* _(
 			RestApiServiceTag.getPlaceById({
-				params: { idPlace: args.createdSubscription.idPlace },
+				path: { idPlace: args.createdSubscription.idPlace },
 			})
 		);
 

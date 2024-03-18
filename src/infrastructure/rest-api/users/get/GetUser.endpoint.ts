@@ -50,5 +50,5 @@ export const GetUserEndpoint = ApiEndpoint.get(
 	{}
 ).pipe(
 	ApiEndpoint.setRequestPath(GetUserRequestParamsSchema),
-	ApiEndpoint.setRequestBody(GetUserResponseBodySchema)
+	ApiEndpoint.setResponseBody(GetUserResponseBodySchema)
 );
