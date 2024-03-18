@@ -11,12 +11,11 @@ import { SubscriptionsApiGroup } from "./subscriptions/Subscriptions.api-group.j
 import { TransportsEndpointGroup } from "./transports/Transports.endpoint-group.js";
 import { UsersEndpointsGroup } from "./users/Users.endpoints-group.js";
 
-export const RestApi = pipe(
-	Api.make({
-		description: "**Этот раздел понимает Markdown**",
-		title: "Argazi Rega",
-		version: "1.0.0",
-	}),
+export const RestApi = Api.make({
+	description: "**Этот раздел понимает Markdown**",
+	title: "Argazi Rega",
+	version: "1.0.0",
+}).pipe(
 	Api.addGroup(AuthenticationEndpointGroup),
 	Api.addGroup(MyEndpointsGroup),
 	Api.addGroup(UsersEndpointsGroup),

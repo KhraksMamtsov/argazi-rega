@@ -1,36 +1,66 @@
 import * as Schema from "@effect/schema/Schema";
-import { Api } from "effect-http";
+import { ApiEndpoint } from "effect-http";
 
 import { IdSubscriptionSchema } from "../../../../domain/subscription/entity/IdSubscription.js";
 import { IdUserSchema } from "../../../../domain/user/entity/IdUser.js";
 import { BaseResponseFor } from "../../BaseResponseFor.js";
 import { SubscriptionApiSchema } from "../../subscriptions/Subscription.api.js";
 
-export const DeleteUserSubscriptionResponseSchema = SubscriptionApiSchema.pipe(
-	Schema.identifier("DeleteUserSubscriptionResponseSchema"),
+// #region DeleteUserSubscriptionResponseBody
+const _DeleteUserSubscriptionResponseBodySchema = SubscriptionApiSchema.pipe(
+	Schema.identifier("_DeleteUserSubscriptionResponseBodySchema"),
 	BaseResponseFor
 );
 
-export const DeleteUserSubscriptionRequest = {
-	params: Schema.struct({
-		idSubscription: IdSubscriptionSchema,
-		idUser: IdUserSchema,
-	}),
-};
+export type DeleteUserSubscriptionResponseBodyContext = Schema.Schema.Context<
+	typeof _DeleteUserSubscriptionResponseBodySchema
+>;
+export interface DeleteUserSubscriptionResponseBodyEncoded
+	extends Schema.Schema.Encoded<
+		typeof _DeleteUserSubscriptionResponseBodySchema
+	> {}
+export interface DeleteUserSubscriptionResponseBody
+	extends Schema.Schema.Type<
+		typeof _DeleteUserSubscriptionResponseBodySchema
+	> {}
 
-export const DeleteUserSubscriptionResponse =
-	DeleteUserSubscriptionResponseSchema.pipe(
-		Schema.description("UserSubscription")
-	);
+export const DeleteUserSubscriptionResponseBodySchema: Schema.Schema<
+	DeleteUserSubscriptionResponseBody,
+	DeleteUserSubscriptionResponseBodyEncoded
+> = _DeleteUserSubscriptionResponseBodySchema;
+// #endregion DeleteUserSubscriptionResponseBodySchema
+
+// #region DeleteUserSubscriptionRequestParams
+const _DeleteUserSubscriptionRequestParamsSchema = Schema.struct({
+	idSubscription: IdSubscriptionSchema,
+	idUser: IdUserSchema,
+}).pipe(Schema.identifier("DeleteUserSubscriptionRequestParamsSchema"));
+
+export type DeleteUserSubscriptionRequestParamsContext = Schema.Schema.Context<
+	typeof _DeleteUserSubscriptionRequestParamsSchema
+>;
+export interface DeleteUserSubscriptionRequestParamsEncoded
+	extends Schema.Schema.Encoded<
+		typeof _DeleteUserSubscriptionRequestParamsSchema
+	> {}
+export interface DeleteUserSubscriptionRequestParams
+	extends Schema.Schema.Type<
+		typeof _DeleteUserSubscriptionRequestParamsSchema
+	> {}
+
+export const DeleteUserSubscriptionRequestParamsSchema: Schema.Schema<
+	DeleteUserSubscriptionRequestParams,
+	DeleteUserSubscriptionRequestParamsEncoded
+> = _DeleteUserSubscriptionRequestParamsSchema;
+// #endregion DeleteUserSubscriptionRequestParamsSchema
 
 export const DeleteUserSubscriptionEndpoint = ApiEndpoint.delete(
 	"deleteUserSubscription",
 	"/users/:idUser/subscriptions/:idSubscription",
 	{
-		request: DeleteUserSubscriptionRequest,
-		response: DeleteUserSubscriptionResponse,
-	},
-	{
 		summary: "Unsubscribe user from events of some place",
 	}
+).pipe(
+	ApiEndpoint.setRequestPath(DeleteUserSubscriptionRequestParamsSchema),
+	ApiEndpoint.setResponseBody(DeleteUserSubscriptionResponseBodySchema)
 );
