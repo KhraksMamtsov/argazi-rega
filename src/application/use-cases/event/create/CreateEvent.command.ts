@@ -14,7 +14,7 @@ export type CreateEventCommandPayloadFrom = {
 	readonly priceEvent: number;
 };
 
-export const CreateEventCommandPayloadSchema = Schema.struct({
+const _CreateEventCommandPayloadSchema = Schema.struct({
 	dateAnnouncement: Schema.compose(
 		Schema.DateFromString,
 		Schema.ValidDateFromSelf
@@ -31,16 +31,24 @@ export const CreateEventCommandPayloadSchema = Schema.struct({
 	Schema.identifier("CreateEventCommandPayloadSchema")
 );
 
+export interface CreateEventCommandPayloadEncoded
+	extends Schema.Schema.Encoded<typeof _CreateEventCommandPayloadSchema> {}
+export interface CreateEventCommandPayload
+	extends Schema.Schema.Type<typeof _CreateEventCommandPayloadSchema> {}
+
+export const CreateEventCommandPayloadSchema: Schema.Schema<
+	CreateEventCommandPayload,
+	CreateEventCommandPayloadEncoded
+> = _CreateEventCommandPayloadSchema;
+
 export const _CreateEventCommandSchema = BaseCausedCommandFor(
 	CreateEventCommandPayloadSchema
 ).pipe(Schema.identifier("CreateEventCommandSchema"));
 
-export type CreateEventCommandFrom = Schema.Schema.Encoded<
-	typeof _CreateEventCommandSchema
->;
-export type CreateEventCommand = Schema.Schema.Type<
-	typeof _CreateEventCommandSchema
->;
+export interface CreateEventCommandFrom
+	extends Schema.Schema.Encoded<typeof _CreateEventCommandSchema> {}
+export interface CreateEventCommand
+	extends Schema.Schema.Type<typeof _CreateEventCommandSchema> {}
 
 export const CreateEventCommandSchema: Schema.Schema<
 	CreateEventCommand,

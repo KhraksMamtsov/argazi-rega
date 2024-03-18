@@ -7,7 +7,7 @@ import { satisfies } from "../../../libs/SchemaSatisfy.js";
 
 import type { EventBase } from "../../../domain/event/entity/Event.js";
 
-export const EventApi = Schema.struct({
+export const _EventApi = Schema.struct({
 	dateAnnouncement: Schema.compose(
 		Schema.DateFromString,
 		Schema.ValidDateFromSelf
@@ -25,3 +25,9 @@ export const EventApi = Schema.struct({
 	satisfies.to<EventBase>(),
 	Schema.identifier("EventApi")
 );
+
+export interface EventApiEncoded
+	extends Schema.Schema.Encoded<typeof _EventApi> {}
+export interface EventApi extends Schema.Schema.Type<typeof _EventApi> {}
+
+export const EventApi: Schema.Schema<EventApi, EventApiEncoded> = _EventApi;

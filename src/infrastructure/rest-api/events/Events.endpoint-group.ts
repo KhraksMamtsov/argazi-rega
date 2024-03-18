@@ -1,15 +1,9 @@
-import { Api } from "effect-http";
+import { ApiGroup } from "effect-http";
 
-import * as CreateEventEndpoint from "./create/Event.api.js";
-import * as GetEventsEndpoint from "./get/Events.api.js";
+import { CreateEventEndpoint } from "./create/CreateEvent.endpoint.js";
+import { GetEventEndpoint } from "./get/GetEvent.endpoint.js";
 
-export const EventsEndpointGroup = Api.apiGroup("event").pipe(
-	Api.post("createEvent", "/events", {
-		request: CreateEventEndpoint.CreateEventRequest,
-		response: CreateEventEndpoint.CreateEventResponseSchema,
-	}),
-	Api.get("getEvent", "/events/:idEvent", {
-		request: GetEventsEndpoint.GetEventRequest,
-		response: GetEventsEndpoint.GetEventResponse,
-	})
+export const EventsEndpointGroup = ApiGroup.make("event").pipe(
+	ApiGroup.addEndpoint(GetEventEndpoint),
+	ApiGroup.addEndpoint(CreateEventEndpoint)
 );
