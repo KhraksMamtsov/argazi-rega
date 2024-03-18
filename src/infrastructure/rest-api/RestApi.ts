@@ -12,7 +12,7 @@ import { TransportsEndpointGroup } from "./transports/Transports.endpoint-group.
 import { UsersEndpointsGroup } from "./users/Users.endpoints-group.js";
 
 export const RestApi = pipe(
-	Api.api({
+	Api.make({
 		description: "**Этот раздел понимает Markdown**",
 		title: "Argazi Rega",
 		version: "1.0.0",

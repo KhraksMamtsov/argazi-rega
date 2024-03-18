@@ -1,30 +1,45 @@
 import * as Schema from "@effect/schema/Schema";
-import { Api } from "effect-http";
+import { ApiEndpoint } from "effect-http";
 
 import { IdPlaceSchema } from "../../../../domain/place/entity/IdPlace.js";
 import { BaseResponseFor } from "../../BaseResponseFor.js";
 import { GeoPointApiSchema } from "../../geo-points/GeoPoint.api.js";
 
-export const GetPlaceGeoPointResponseSchema = GeoPointApiSchema.pipe(
-	Schema.identifier("GetPlaceGeoPointResponseSchema"),
+const _GetPlaceGeoPointResponseBodySchema = GeoPointApiSchema.pipe(
 	BaseResponseFor
-);
+).pipe(Schema.identifier("GetPlaceGeoPointResponseBodySchema"));
 
-export const GetPlaceGeoPointRequest = {
-	params: Schema.struct({
-		idPlace: IdPlaceSchema,
-	}),
-};
+interface GetPlaceGeoPointResponseBodyEncoded
+	extends Schema.Schema.Encoded<typeof _GetPlaceGeoPointResponseBodySchema> {}
+interface GetPlaceGeoPointResponseBody
+	extends Schema.Schema.Type<typeof _GetPlaceGeoPointResponseBodySchema> {}
 
-export const GetPlaceGeoPointResponse = GetPlaceGeoPointResponseSchema.pipe(
-	Schema.description("PlaceGeoPoint")
-);
+export const GetPlaceGeoPointResponseBodySchema: Schema.Schema<
+	GetPlaceGeoPointResponseBody,
+	GetPlaceGeoPointResponseBodyEncoded
+> = _GetPlaceGeoPointResponseBodySchema;
+
+// #region GetPlaceGeoPointRequestParamsSchema
+const _GetPlaceGeoPointRequestParamsSchema = Schema.struct({
+	idPlace: IdPlaceSchema,
+}).pipe(Schema.identifier("GetPlaceGeoPointRequestParamsSchema"));
+
+interface GetPlaceGeoPointRequestParamsEncoded
+	extends Schema.Schema.Encoded<typeof _GetPlaceGeoPointRequestParamsSchema> {}
+interface GetPlaceGeoPointRequestParams
+	extends Schema.Schema.Type<typeof _GetPlaceGeoPointRequestParamsSchema> {}
+
+export const GetPlaceGeoPointRequestParamsSchema: Schema.Schema<
+	GetPlaceGeoPointRequestParams,
+	GetPlaceGeoPointRequestParamsEncoded
+> = _GetPlaceGeoPointRequestParamsSchema;
+// #endregion GetPlaceGeoPointRequestParamsSchema
 
 export const GetPlaceGeoPoint = ApiEndpoint.get(
 	"getPlaceGeoPoint",
 	"/places/:idPlace/geo-point",
-	{
-		request: GetPlaceGeoPointRequest,
-		response: GetPlaceGeoPointResponse,
-	}
+	{}
+).pipe(
+	ApiEndpoint.setRequestPath(GetPlaceGeoPointRequestParamsSchema),
+	ApiEndpoint.setResponseBody(GetPlaceGeoPointResponseBodySchema)
 );
