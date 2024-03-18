@@ -18,11 +18,13 @@
 		"plugin:functional/no-exceptions",
 		"plugin:typescript-sort-keys/recommended",
 		// RangeError: Maximum call stack size exceeded "functional/type-declaration-immutability"
-		//"plugin:functional/no-mutations",
+		//"plugin:functional/no-mutations", 
+    "plugin:vue/vue3-recommended",
 		"plugin:prettier/recommended" // must be last
 	],
 	"parser": "@typescript-eslint/parser",
 	"parserOptions": {
+		"extraFileExtensions": [".vue"],
 		"ecmaVersion": "latest",
 		"sourceType": "module",
 		"project": true
