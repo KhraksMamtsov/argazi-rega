@@ -7,12 +7,27 @@ import { satisfies } from "../../../libs/SchemaSatisfy.js";
 
 import type { SubscriptionBase } from "../../../domain/subscription/entity/Subscription.js";
 
-export const SubscriptionApiSchema = Schema.struct({
+// #region SubscriptionApi
+const _SubscriptionApiSchema = Schema.struct({
 	id: IdSubscriptionSchema,
 	idPlace: IdPlaceSchema,
 	idUser: IdUserSchema,
 }).pipe(
 	satisfies.from.json(),
 	satisfies.to<SubscriptionBase>(),
-	Schema.identifier("SubscriptionApi")
+	Schema.identifier("SubscriptionApiSchema")
 );
+
+export type SubscriptionApiContext = Schema.Schema.Context<
+	typeof _SubscriptionApiSchema
+>;
+export interface SubscriptionApiEncoded
+	extends Schema.Schema.Encoded<typeof _SubscriptionApiSchema> {}
+export interface SubscriptionApi
+	extends Schema.Schema.Type<typeof _SubscriptionApiSchema> {}
+
+export const SubscriptionApiSchema: Schema.Schema<
+	SubscriptionApi,
+	SubscriptionApiEncoded
+> = _SubscriptionApiSchema;
+// #endregion SubscriptionApiSchema

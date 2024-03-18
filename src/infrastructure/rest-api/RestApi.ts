@@ -1,6 +1,6 @@
 import { Schema } from "@effect/schema";
 import { pipe } from "effect";
-import { Api } from "effect-http";
+import { Api, ApiGroup, ApiEndpoint } from "effect-http";
 
 import { AuthenticationEndpointGroup } from "./authentication/Authentication.endpoint-group.js";
 import { EventsEndpointGroup } from "./events/Events.endpoint-group.js";
@@ -27,9 +27,12 @@ export const RestApi = pipe(
 	Api.addGroup(SubscriptionsApiGroup),
 	Api.addGroup(
 		ApiGroup.make("healthcheck").pipe(
-			ApiEndpoint.get("healthcheckPing", "/healthcheck/ping", {
-				response: Schema.literal("pong"),
-			})
+			ApiGroup.addEndpoint(
+				ApiEndpoint.get("healthcheckPing", "/healthcheck/ping", {}).pipe(
+					ApiEndpoint.setRequestBody(Schema.string),
+					ApiEndpoint.setResponseBody(Schema.string)
+				)
+			)
 		)
 	)
 );

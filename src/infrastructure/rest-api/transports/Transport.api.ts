@@ -6,7 +6,8 @@ import { satisfies } from "../../../libs/SchemaSatisfy.js";
 
 import type { TransportBase } from "../../../domain/transport/entity/Transport.js";
 
-export const TransportApi = Schema.struct({
+// #region TransportApi
+const _TransportApiSchema = Schema.struct({
 	color: Schema.NonEmpty.pipe(Schema.trimmed()),
 	id: IdTransportSchema,
 	idUser: IdUserSchema,
@@ -16,5 +17,19 @@ export const TransportApi = Schema.struct({
 }).pipe(
 	satisfies.to<TransportBase>(),
 	satisfies.from.json(),
-	Schema.identifier("TransportApi")
+	Schema.identifier("_TransportApiSchema")
 );
+
+export type TransportApiContext = Schema.Schema.Context<
+	typeof _TransportApiSchema
+>;
+export interface TransportApiEncoded
+	extends Schema.Schema.Encoded<typeof _TransportApiSchema> {}
+export interface TransportApi
+	extends Schema.Schema.Type<typeof _TransportApiSchema> {}
+
+export const TransportApiSchema: Schema.Schema<
+	TransportApi,
+	TransportApiEncoded
+> = _TransportApiSchema;
+// #endregion TransportApiSchema

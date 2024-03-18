@@ -1,8 +1,7 @@
-import { Api } from "effect-http";
+import { ApiGroup } from "effect-http";
 
 import { GetSubscriptionByIdEndpoint } from "./get/GetSubscriptionById.endpoint.js";
 
 export const SubscriptionsApiGroup = ApiGroup.make("subscriptions").pipe(
-	//
-	GetSubscriptionByIdEndpoint
+	ApiGroup.addEndpoint(GetSubscriptionByIdEndpoint)
 );
