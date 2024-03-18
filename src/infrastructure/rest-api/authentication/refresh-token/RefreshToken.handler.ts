@@ -3,7 +3,7 @@ import { Effect, Option } from "effect";
 import { GetUserUseCase } from "../../../../application/use-cases/user/get/GetUser.use-case.js";
 import { JwtServiceTag } from "../Jwt.service.js";
 
-import type { RefreshTokenRequestBody } from "./RefreshToken.api.js";
+import type { RefreshTokenRequestBody } from "./RefreshToken.endpoint.js";
 
 export const RefreshTokenHandler = (body: RefreshTokenRequestBody) =>
 	Effect.gen(function* (_) {

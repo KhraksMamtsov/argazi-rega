@@ -30,11 +30,11 @@ importers:
         specifier: ^2.4.7
         version: 2.4.7
       effect-http:
-        specifier: ^0.58.2
-        version: 0.58.2(@effect/platform@0.48.8)(@effect/schema@0.64.5)(effect@2.4.7)
+        specifier: ^0.59.0
+        version: 0.59.0(@effect/platform@0.48.8)(@effect/schema@0.64.5)(effect@2.4.7)
       effect-http-node:
-        specifier: ^0.6.2
-        version: 0.6.2(@effect/platform-node@0.45.10)(@effect/platform@0.48.8)(@effect/schema@0.64.5)(effect-http@0.58.2)(effect@2.4.7)
+        specifier: ^0.7.0
+        version: 0.7.0(@effect/platform-node@0.45.10)(@effect/platform@0.48.8)(@effect/schema@0.64.5)(effect-http@0.59.0)(effect@2.4.7)
       effect-log:
         specifier: ^0.30.9
         version: 0.30.9(effect@2.4.7)
@@ -1708,25 +1708,25 @@ packages:
       safe-buffer: 5.2.1
     dev: false
 
-  /effect-http-node@0.6.2(@effect/platform-node@0.45.10)(@effect/platform@0.48.8)(@effect/schema@0.64.5)(effect-http@0.58.2)(effect@2.4.7):
-    resolution: {integrity: sha512-knJv9SkwKuQPFvvlLAGA4x9EegpzZValaBuBzoNqzgkttz3pnrNGRB5GCbCbvtqvxBiAvAFhrg5p0S4S5A0O+A==}
+  /effect-http-node@0.7.0(@effect/platform-node@0.45.10)(@effect/platform@0.48.8)(@effect/schema@0.64.5)(effect-http@0.59.0)(effect@2.4.7):
+    resolution: {integrity: sha512-cDdC6TqoS5kA+WuTVzpYgBYKpL0eQgilnH2kayqZ+9RI9V+xAmFjwUJkxojxtG+dqKmsKTZjrfTXTALsr7RhTw==}
     peerDependencies:
       '@effect/platform': ^0.48.8
       '@effect/platform-node': ^0.45.10
       '@effect/schema': ^0.64.5
       effect: ^2.4.7
-      effect-http: ^0.58.2
+      effect-http: ^0.59.0
     dependencies:
       '@effect/platform': 0.48.8(@effect/schema@0.64.5)(effect@2.4.7)(ws@8.16.0)
       '@effect/platform-node': 0.45.10(@effect/platform@0.48.8)(effect@2.4.7)
       '@effect/schema': 0.64.5(effect@2.4.7)(fast-check@3.16.0)
       effect: 2.4.7
-      effect-http: 0.58.2(@effect/platform@0.48.8)(@effect/schema@0.64.5)(effect@2.4.7)
+      effect-http: 0.59.0(@effect/platform@0.48.8)(@effect/schema@0.64.5)(effect@2.4.7)
       swagger-ui-dist: 5.12.0
     dev: false
 
-  /effect-http@0.58.2(@effect/platform@0.48.8)(@effect/schema@0.64.5)(effect@2.4.7):
-    resolution: {integrity: sha512-RvVXkMTluB6NGj9oMhFKLTwkYSJodv8cTdg//pmoHpMwi507W0zQQ64GBvHbiplroDYXOXqbs0RtQ4wKHHWswg==}
+  /effect-http@0.59.0(@effect/platform@0.48.8)(@effect/schema@0.64.5)(effect@2.4.7):
+    resolution: {integrity: sha512-+weGlXgB49DiezKmKn8hDWpY//6WtC//08q/LZz8628a76yYxmWX96hpk6fepRtM8Hh088nIlS0gMP10YtJ4Hw==}
     peerDependencies:
       '@effect/platform': ^0.48.8
       '@effect/schema': ^0.64.5

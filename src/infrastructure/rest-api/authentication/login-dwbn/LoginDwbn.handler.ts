@@ -12,7 +12,7 @@ import { IdUserSchema } from "../../../../domain/user/entity/IdUser.js";
 import { IdAdmin } from "../constants.js";
 import { JwtServiceTag } from "../Jwt.service.js";
 
-import type { LoginDwbnRequestBody } from "./LoginDwbn.api.js";
+import type { LoginDwbnRequestBody } from "./LoginDwbn.endpoint.js";
 
 export const LoginDwbnHandler = (body: LoginDwbnRequestBody) =>
 	Effect.gen(function* (_) {
