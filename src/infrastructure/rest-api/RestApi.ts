@@ -27,7 +27,9 @@ export const RestApi = Api.make({
 		ApiGroup.make("healthcheck").pipe(
 			ApiGroup.addEndpoint(
 				ApiEndpoint.get("healthcheckPing", "/healthcheck/ping", {}).pipe(
-					ApiEndpoint.setRequestBody(Schema.string),
+					ApiEndpoint.setRequestQuery(
+						Schema.struct({ echo: Schema.optional(Schema.string) })
+					),
 					ApiEndpoint.setResponseBody(Schema.string)
 				)
 			)
