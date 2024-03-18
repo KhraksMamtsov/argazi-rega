@@ -26,8 +26,8 @@ export const RestApi = pipe(
 	Api.addGroup(PlacesEndpointGroup),
 	Api.addGroup(SubscriptionsApiGroup),
 	Api.addGroup(
-		Api.apiGroup("healthcheck").pipe(
-			Api.get("healthcheckPing", "/healthcheck/ping", {
+		ApiGroup.make("healthcheck").pipe(
+			ApiEndpoint.get("healthcheckPing", "/healthcheck/ping", {
 				response: Schema.literal("pong"),
 			})
 		)

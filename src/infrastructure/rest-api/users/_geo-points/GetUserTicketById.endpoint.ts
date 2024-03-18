@@ -23,7 +23,7 @@ export const GetUserGeoPointByIdResponse =
 		Schema.description("UserGeoPointById")
 	);
 
-export const GetUserGeoPointByIdEndpoint = Api.get(
+export const GetUserGeoPointByIdEndpoint = ApiEndpoint.get(
 	"getUserGeoPointById",
 	"/users/:idUser/geo-points/:idGeoPoint",
 	{

@@ -23,7 +23,7 @@ export const GetPlacesResponse = GetPlacesResponseSchema.pipe(
 	Schema.description("Place")
 );
 
-export const GetPlacesEndpoint = Api.get(
+export const GetPlacesEndpoint = ApiEndpoint.get(
 	"getPlaces",
 	"/places",
 	{

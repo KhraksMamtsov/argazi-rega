@@ -22,7 +22,7 @@ export const CreateMySubscriptionResponse =
 		Schema.description("UserSubscriptions")
 	);
 
-export const CreateMySubscriptionEndpoint = Api.post(
+export const CreateMySubscriptionEndpoint = ApiEndpoint.post(
 	"createMySubscription",
 	"/my/subscriptions",
 	{

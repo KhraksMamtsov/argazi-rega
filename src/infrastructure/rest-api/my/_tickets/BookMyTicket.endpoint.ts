@@ -28,7 +28,7 @@ export const BookMyTicketResponse = [
 	},
 ] as const;
 
-export const BookMyTicketEndpoint = Api.post(
+export const BookMyTicketEndpoint = ApiEndpoint.post(
 	"bookMyTicket",
 	"/my/tickets",
 	{

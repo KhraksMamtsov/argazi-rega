@@ -14,8 +14,8 @@ import * as UpdateUsersEndpoint from "./update/UpdateUser.endpoint.js";
 
 import { BearerAuth } from "../BearerAuth.security-scheme.js";
 
-export const UsersEndpointsGroup = Api.apiGroup("user").pipe(
-	Api.post(
+export const UsersEndpointsGroup = ApiGroup.make("user").pipe(
+	ApiEndpoint.post(
 		"createUser",
 		"/users",
 		{
@@ -29,7 +29,7 @@ export const UsersEndpointsGroup = Api.apiGroup("user").pipe(
 			security: BearerAuth,
 		}
 	),
-	Api.patch(
+	ApiEndpoint.patch(
 		"updateUser",
 		"/users/:id",
 		{
@@ -45,7 +45,7 @@ export const UsersEndpointsGroup = Api.apiGroup("user").pipe(
 			security: BearerAuth,
 		}
 	),
-	Api.get(
+	ApiEndpoint.get(
 		"getUser",
 		"/users/:idUser",
 		{
@@ -56,7 +56,7 @@ export const UsersEndpointsGroup = Api.apiGroup("user").pipe(
 		//   security: BearerAuth,
 		// },
 	),
-	Api.post(
+	ApiEndpoint.post(
 		"getManyUsers",
 		"/users/many",
 		{

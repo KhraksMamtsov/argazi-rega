@@ -26,7 +26,7 @@ export const GetMySubscriptionsResponse = GetMySubscriptionsResponseSchema.pipe(
 	Schema.description("UserSubscriptions")
 );
 
-export const GetMySubscriptionsEndpoint = Api.get(
+export const GetMySubscriptionsEndpoint = ApiEndpoint.get(
 	"getMySubscriptions",
 	"/my/subscriptions",
 	{

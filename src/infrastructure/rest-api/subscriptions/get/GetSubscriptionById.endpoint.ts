@@ -29,7 +29,7 @@ export const GetSubscriptionByIdResponse = [
 	},
 ] as const;
 
-export const GetSubscriptionByIdEndpoint = Api.get(
+export const GetSubscriptionByIdEndpoint = ApiEndpoint.get(
 	"getSubscription",
 	"/subscriptions/:idSubscription",
 	{

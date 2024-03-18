@@ -35,7 +35,7 @@ export const BookTicketResponse = [
 	},
 ] as const;
 
-export const BookTicketEndpoint = Api.post(
+export const BookTicketEndpoint = ApiEndpoint.post(
 	"bookTicket",
 	"/users/:idUser/tickets",
 	{

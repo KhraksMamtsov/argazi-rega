@@ -20,7 +20,7 @@ export const DeleteMySubscriptionRequest = {
 export const DeleteMySubscriptionResponse =
 	DeleteMySubscriptionResponseSchema.pipe(Schema.description("MySubscription"));
 
-export const DeleteMySubscriptionEndpoint = Api.delete(
+export const DeleteMySubscriptionEndpoint = ApiEndpoint.delete(
 	"deleteMySubscription",
 	"/my/subscriptions/:idSubscription",
 	{

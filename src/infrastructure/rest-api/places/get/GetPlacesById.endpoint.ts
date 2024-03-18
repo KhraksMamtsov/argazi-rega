@@ -20,7 +20,7 @@ export const GetPlaceByIdResponse = GetPlaceByIdResponseSchema.pipe(
 	Schema.description("Place")
 );
 
-export const GetPlaceByIdEndpoint = Api.get(
+export const GetPlaceByIdEndpoint = ApiEndpoint.get(
 	"getPlaceById",
 	"/places/:idPlace",
 	{

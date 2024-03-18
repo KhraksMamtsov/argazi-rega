@@ -20,7 +20,7 @@ export const ReturnTicketRequest = {
 
 export const ReturnTicketResponse = ReturnTicketResponseSchema;
 
-export const ReturnTicketEndpoint = Api.delete(
+export const ReturnTicketEndpoint = ApiEndpoint.delete(
 	"returnTicket",
 	"/users/:idUser/tickets/:idTicket",
 	{

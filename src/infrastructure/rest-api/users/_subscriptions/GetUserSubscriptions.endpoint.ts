@@ -21,7 +21,7 @@ export const GetUserSubscriptionsResponse =
 		Schema.description("UserSubscriptions")
 	);
 
-export const GetUserSubscriptionsEndpoint = Api.get(
+export const GetUserSubscriptionsEndpoint = ApiEndpoint.get(
 	"getUserSubscriptions",
 	"/users/:idUser/subscriptions",
 	{

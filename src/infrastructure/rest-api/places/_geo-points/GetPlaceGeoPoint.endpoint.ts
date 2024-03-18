@@ -20,7 +20,7 @@ export const GetPlaceGeoPointResponse = GetPlaceGeoPointResponseSchema.pipe(
 	Schema.description("PlaceGeoPoint")
 );
 
-export const GetPlaceGeoPoint = Api.get(
+export const GetPlaceGeoPoint = ApiEndpoint.get(
 	"getPlaceGeoPoint",
 	"/places/:idPlace/geo-point",
 	{

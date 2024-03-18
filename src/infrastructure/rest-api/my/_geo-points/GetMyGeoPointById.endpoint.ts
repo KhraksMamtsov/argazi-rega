@@ -21,7 +21,7 @@ export const GetMyGeoPointByIdResponse = GetMyGeoPointByIdResponseSchema.pipe(
 	Schema.description("MyGeoPointById")
 );
 
-export const GetMyGeoPointByIdEndpoint = Api.get(
+export const GetMyGeoPointByIdEndpoint = ApiEndpoint.get(
 	"getMyGeoPointById",
 	"/my/geo-points/:idGeoPoint",
 	{

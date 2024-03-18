@@ -23,7 +23,7 @@ export const DeleteUserSubscriptionResponse =
 		Schema.description("UserSubscription")
 	);
 
-export const DeleteUserSubscriptionEndpoint = Api.delete(
+export const DeleteUserSubscriptionEndpoint = ApiEndpoint.delete(
 	"deleteUserSubscription",
 	"/users/:idUser/subscriptions/:idSubscription",
 	{

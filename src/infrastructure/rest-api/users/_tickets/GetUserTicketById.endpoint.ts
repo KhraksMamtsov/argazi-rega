@@ -22,7 +22,7 @@ export const GetUserTicketByIdResponse = GetUserTicketByIdResponseSchema.pipe(
 	Schema.description("UserTicketById")
 );
 
-export const GetUserTicketByIdEndpoint = Api.get(
+export const GetUserTicketByIdEndpoint = ApiEndpoint.get(
 	"getUserTicketById",
 	"/users/:idUser/tickets/:idTicket",
 	{

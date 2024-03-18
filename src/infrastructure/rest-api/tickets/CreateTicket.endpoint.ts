@@ -32,7 +32,7 @@ export const CreateTicketResponse = [
 	},
 ] as const;
 
-export const CreateTicketEndpoint = Api.post(
+export const CreateTicketEndpoint = ApiEndpoint.post(
 	"createTicket",
 	"/tickets",
 	{

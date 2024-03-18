@@ -20,7 +20,7 @@ export const GetMyIdentityResponseSchema: Schema.Schema<
 	GetMyIdentityResponseFrom
 > = _GetMyIdentityResponseSchema;
 
-export const GetMyIdentityEndpoint = Api.get(
+export const GetMyIdentityEndpoint = ApiEndpoint.get(
 	"getMyIdentity",
 	"/my/identity",
 	{
