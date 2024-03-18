@@ -7,7 +7,7 @@ import { LatitudeSchema } from "../../../domain/value-objects/Latitude.js";
 import { LongitudeSchema } from "../../../domain/value-objects/Longitude.js";
 import { satisfies } from "../../../libs/SchemaSatisfy.js";
 
-export const GeoPointApiSchema = Schema.struct({
+export const _GeoPointApiSchema = Schema.struct({
 	id: IdGeoPointSchema,
 	idUser: IdUserSchema,
 	latitude: Schema.compose(Schema.Secret, LatitudeSchema),
@@ -18,4 +18,10 @@ export const GeoPointApiSchema = Schema.struct({
 	),
 }).pipe(satisfies.to<GeoPointBase>(), Schema.identifier("GeoPointApiSchema"));
 
-export type GeoPointApi = Schema.Schema.Type<typeof GeoPointApiSchema>;
+export interface GeoPointApiEncoded
+	extends Schema.Schema.Encoded<typeof _GeoPointApiSchema> {}
+export interface GeoPointApi
+	extends Schema.Schema.Type<typeof _GeoPointApiSchema> {}
+
+export const GeoPointApiSchema: Schema.Schema<GeoPointApi, GeoPointApiEncoded> =
+	_GeoPointApiSchema;

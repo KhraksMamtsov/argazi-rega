@@ -1,36 +1,50 @@
 import * as Schema from "@effect/schema/Schema";
+import { ApiEndpoint, ApiResponse } from "effect-http";
 
 import { GeoPointApiSchema } from "./GeoPoint.api.js";
 
 import { CreateGeoPointCommandPayloadSchema } from "../../../application/use-cases/geo-point/create/CreateGeoPoint.command.js";
 import { BaseResponseFor } from "../BaseResponseFor.js";
+import { BearerAuth } from "../BearerAuth.security-scheme.js";
 
-import type { InputEndpointSchemas } from "effect-http/Api";
-
-export const CreateGeoPointRequest = {
-	body: CreateGeoPointCommandPayloadSchema.pipe(
+export const _CreateGeoPointRequestBodySchema =
+	CreateGeoPointCommandPayloadSchema.pipe(
 		Schema.identifier("CreateGeoPointRequestBodySchema")
-	),
-} satisfies InputEndpointSchemas["request"];
+	);
 
-const _CreateGeoPointResponseSchema = GeoPointApiSchema.pipe(
-	Schema.identifier("CreateGeoPointResponseSchema"),
+export interface CreateGeoPointRequestBodyEncoded
+	extends Schema.Schema.Encoded<typeof _CreateGeoPointRequestBodySchema> {}
+
+export interface CreateGeoPointRequestBody
+	extends Schema.Schema.Type<typeof _CreateGeoPointRequestBodySchema> {}
+
+export const CreateGeoPointRequestBodySchema: Schema.Schema<
+	CreateGeoPointRequestBody,
+	CreateGeoPointRequestBodyEncoded
+> = _CreateGeoPointRequestBodySchema;
+
+const _CreateGeoPointResponseBodySchema = GeoPointApiSchema.pipe(
+	Schema.identifier("CreateGeoPointResponseBodySchema"),
 	BaseResponseFor
 );
 
-export type CreateGeoPointResponseFrom = Schema.Schema.Encoded<
-	typeof _CreateGeoPointResponseSchema
->;
-export type CreateGeoPointResponse = Schema.Schema.Type<
-	typeof _CreateGeoPointResponseSchema
->;
+export interface CreateGeoPointResponseBodyEncoded
+	extends Schema.Schema.Encoded<typeof _CreateGeoPointResponseBodySchema> {}
+
+export interface CreateGeoPointResponseBody
+	extends Schema.Schema.Type<typeof _CreateGeoPointResponseBodySchema> {}
 
 export const CreateGeoPointResponseSchema: Schema.Schema<
-	CreateGeoPointResponse,
-	CreateGeoPointResponseFrom
-> = _CreateGeoPointResponseSchema;
+	CreateGeoPointResponseBody,
+	CreateGeoPointResponseBodyEncoded
+> = _CreateGeoPointResponseBodySchema;
 
-export const CreateGeoPointResponse = [
-	{ content: CreateGeoPointResponseSchema, status: 200 as const },
-	{ content: Schema.struct({}), status: 401 as const },
-];
+export const CreateGeoPointEndpoint = ApiEndpoint.post(
+	"createGeoPoint",
+	"/geo-points"
+).pipe(
+	ApiEndpoint.setRequestBody(CreateGeoPointRequestBodySchema),
+	ApiEndpoint.setResponse(ApiResponse.make(200, CreateGeoPointResponseSchema)),
+	ApiEndpoint.addResponse(ApiResponse.make(401)),
+	ApiEndpoint.setSecurity(BearerAuth)
+);
