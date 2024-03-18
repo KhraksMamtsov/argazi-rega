@@ -5,7 +5,7 @@ import { useNewReplies } from "telegraf/future";
 
 import { TelegrafOptionsTag } from "./TelegrafOptions.js";
 
-// import { TelegramCommands } from "../command/TelegramCommands.js";
+import { TelegramCommands } from "../command/TelegramCommands.js";
 
 export enum TelegrafErrorType {
 	SEND_MESSAGE = "SEND_MESSAGE::TelegrafErrorType",
@@ -23,9 +23,15 @@ const make = Effect.gen(function* (_) {
 
 	const client = new Tg.Telegraf(Secret.value(config.token)); //, config.client);
 
-	// yield* _(
-	// 	Effect.promise(() => client.telegram.setMyCommands(TelegramCommands))
-	// );
+	yield* _(
+		Effect.promise(() =>
+			client.telegram.setMyCommands(TelegramCommands).catch((e) => {
+				console.dir(e, { depth: 10 });
+				// eslint-disable-next-line functional/no-throw-statements
+				throw e;
+			})
+		)
+	);
 
 	const sendMessage = (
 		...args: Parameters<Tg.Telegraf["telegram"]["sendMessage"]>

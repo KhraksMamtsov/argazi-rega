@@ -28,7 +28,7 @@ export const Places = telegramCommand({
 
 export const Me = telegramCommand({ command: "me", description: "Обо мне" });
 export const MyEvents = telegramCommand({
-	command: "myEvents",
+	command: "myevents",
 	description: "Мои события",
 });
 
