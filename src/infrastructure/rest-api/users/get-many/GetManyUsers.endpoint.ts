@@ -50,6 +50,6 @@ export const GetManyUsersEndpoint = ApiEndpoint.post(
 	{}
 ).pipe(
 	//
-	ApiEndpoint.setRequestPath(GetManyUsersRequestParamsSchema),
+	ApiEndpoint.setRequestBody(GetManyUsersRequestParamsSchema),
 	ApiEndpoint.setResponseBody(GetManyUsersResponseBodySchema)
 );

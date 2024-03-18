@@ -1,5 +1,4 @@
 import { Schema } from "@effect/schema";
-import { pipe } from "effect";
 import { Api, ApiGroup, ApiEndpoint } from "effect-http";
 
 import { AuthenticationEndpointGroup } from "./authentication/Authentication.endpoint-group.js";

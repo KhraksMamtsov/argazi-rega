@@ -15,11 +15,12 @@ export const GeoPointBaseSchema = Schema.struct({
 	name: Schema.optionFromSelf(Schema.SecretFromSelf),
 }).pipe(Schema.typeSchema, Schema.identifier("GeoPointBaseSchema"));
 
-export type GeoPointBase = Schema.Schema.Type<typeof GeoPointBaseSchema>;
+export interface GeoPointBase
+	extends Schema.Schema.Type<typeof GeoPointBaseSchema> {}
 
 export const GeoPointSchema = GeoPointBaseSchema.pipe(
 	Schema.extend(BaseSchema),
 	Schema.identifier("GeoPointSchema")
 );
 
-export type GeoPoint = Schema.Schema.Type<typeof GeoPointSchema>;
+export interface GeoPoint extends Schema.Schema.Type<typeof GeoPointSchema> {}

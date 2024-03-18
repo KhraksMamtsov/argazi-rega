@@ -9,12 +9,12 @@ export const _GetPlaceByIdRequest = Schema.struct({
 	idPlace: IdPlaceSchema,
 });
 
-interface GetPlaceByIdRequestEncoded
+export interface GetPlaceByIdRequestEncoded
 	extends Schema.Schema.Encoded<typeof _GetPlaceByIdRequest> {}
-interface GetPlaceByIdRequest
+export interface GetPlaceByIdRequest
 	extends Schema.Schema.Type<typeof _GetPlaceByIdRequest> {}
 
-const GetPlaceByIdRequest: Schema.Schema<
+export const GetPlaceByIdRequest: Schema.Schema<
 	GetPlaceByIdRequest,
 	GetPlaceByIdRequestEncoded
 > = _GetPlaceByIdRequest;
@@ -24,12 +24,12 @@ export const _GetPlaceByIdResponseBodySchema = PlaceApi.pipe(
 	BaseResponseFor
 ).pipe(Schema.description("Place"));
 
-interface GetPlaceByIdResponseBodyEncoded
+export interface GetPlaceByIdResponseBodyEncoded
 	extends Schema.Schema.Encoded<typeof _GetPlaceByIdResponseBodySchema> {}
-interface GetPlaceByIdResponseBody
+export interface GetPlaceByIdResponseBody
 	extends Schema.Schema.Type<typeof _GetPlaceByIdResponseBodySchema> {}
 
-const GetPlaceByIdResponseBodySchema: Schema.Schema<
+export const GetPlaceByIdResponseBodySchema: Schema.Schema<
 	GetPlaceByIdResponseBody,
 	GetPlaceByIdResponseBodyEncoded
 > = _GetPlaceByIdResponseBodySchema;

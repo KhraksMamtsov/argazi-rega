@@ -1,5 +1,4 @@
 import * as Schema from "@effect/schema/Schema";
-import { Api } from "effect-http";
 
 import { TicketApiSchema } from "./Ticket.api.js";
 
@@ -32,14 +31,14 @@ export const CreateTicketResponse = [
 	},
 ] as const;
 
-export const CreateTicketEndpoint = ApiEndpoint.post(
-	"createTicket",
-	"/tickets",
-	{
-		request: CreateTicketRequest,
-		response: CreateTicketResponse,
-	},
-	{
-		summary: "Create ticket for user on particular event",
-	}
-);
+// export const CreateTicketEndpoint = ApiEndpoint.post(
+// 	"createTicket",
+// 	"/tickets",
+// 	{
+// 		request: CreateTicketRequest,
+// 		response: CreateTicketResponse,
+// 	},
+// 	{
+// 		summary: "Create ticket for user on particular event",
+// 	}
+// );

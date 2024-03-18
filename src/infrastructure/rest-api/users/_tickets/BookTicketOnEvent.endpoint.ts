@@ -74,7 +74,7 @@ export const BookTicketEndpoint = ApiEndpoint.post(
 	ApiEndpoint.setRequestPath(BookTicketRequestParamsSchema),
 	ApiEndpoint.setRequestBody(BookTicketRequestBodySchema),
 	ApiEndpoint.setResponse(ApiResponse.make(200, BookTicketResponseBodySchema)),
-	ApiEndpoint.setResponse(
+	ApiEndpoint.addResponse(
 		ApiResponse.make(
 			400,
 			Schema.string.pipe(Schema.description("UserSubscriptions not found"))

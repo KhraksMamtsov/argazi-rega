@@ -1,5 +1,5 @@
 import * as Schema from "@effect/schema/Schema";
-import { Api } from "effect-http";
+import { ApiEndpoint } from "effect-http";
 
 import { BaseResponseManyFor } from "../../BaseResponseFor.js";
 import { BearerAuth } from "../../BearerAuth.security-scheme.js";
@@ -26,10 +26,8 @@ export const GetPlacesResponse = GetPlacesResponseSchema.pipe(
 export const GetPlacesEndpoint = ApiEndpoint.get(
 	"getPlaces",
 	"/places",
-	{
-		response: GetPlacesResponse,
-	},
-	{
-		security: BearerAuth,
-	}
+	{}
+).pipe(
+	ApiEndpoint.setResponseBody(GetPlacesResponse),
+	ApiEndpoint.setSecurity(BearerAuth)
 );

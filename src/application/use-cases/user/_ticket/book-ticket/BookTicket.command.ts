@@ -10,6 +10,21 @@ export const BookTicketCommandPayloadSchema = TicketBaseSchema.pipe(
 	Schema.identifier("BookTicketCommandPayloadSchema")
 );
 
-export const BookTicketCommandSchema = BaseCausedCommandFor(
+// #region BookTicketCommand
+const _BookTicketCommandSchema = BaseCausedCommandFor(
 	BookTicketCommandPayloadSchema
 ).pipe(Schema.identifier("BookTicketCommandSchema"));
+
+export type BookTicketCommandContext = Schema.Schema.Context<
+	typeof _BookTicketCommandSchema
+>;
+export interface BookTicketCommandEncoded
+	extends Schema.Schema.Encoded<typeof _BookTicketCommandSchema> {}
+export interface BookTicketCommand
+	extends Schema.Schema.Type<typeof _BookTicketCommandSchema> {}
+
+export const BookTicketCommandSchema: Schema.Schema<
+	BookTicketCommand,
+	BookTicketCommandEncoded
+> = _BookTicketCommandSchema;
+// #endregion BookTicketCommandSchema

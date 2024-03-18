@@ -9,9 +9,9 @@ const _GetPlaceGeoPointResponseBodySchema = GeoPointApiSchema.pipe(
 	BaseResponseFor
 ).pipe(Schema.identifier("GetPlaceGeoPointResponseBodySchema"));
 
-interface GetPlaceGeoPointResponseBodyEncoded
+export interface GetPlaceGeoPointResponseBodyEncoded
 	extends Schema.Schema.Encoded<typeof _GetPlaceGeoPointResponseBodySchema> {}
-interface GetPlaceGeoPointResponseBody
+export interface GetPlaceGeoPointResponseBody
 	extends Schema.Schema.Type<typeof _GetPlaceGeoPointResponseBodySchema> {}
 
 export const GetPlaceGeoPointResponseBodySchema: Schema.Schema<
@@ -24,9 +24,9 @@ const _GetPlaceGeoPointRequestParamsSchema = Schema.struct({
 	idPlace: IdPlaceSchema,
 }).pipe(Schema.identifier("GetPlaceGeoPointRequestParamsSchema"));
 
-interface GetPlaceGeoPointRequestParamsEncoded
+export interface GetPlaceGeoPointRequestParamsEncoded
 	extends Schema.Schema.Encoded<typeof _GetPlaceGeoPointRequestParamsSchema> {}
-interface GetPlaceGeoPointRequestParams
+export interface GetPlaceGeoPointRequestParams
 	extends Schema.Schema.Type<typeof _GetPlaceGeoPointRequestParamsSchema> {}
 
 export const GetPlaceGeoPointRequestParamsSchema: Schema.Schema<
