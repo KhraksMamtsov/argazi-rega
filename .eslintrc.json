@@ -11,8 +11,13 @@
 		"sort-keys",
 		"prettier"
 	],
+	"ignorePatterns": [
+		"**/dist/**"
+	],
 	"extends": [
+    "plugin:vue/vue3-recommended",
 		"eslint:recommended",
+    // "@vue/typescript/recommended",
 		"plugin:@typescript-eslint/strict-type-checked",
 		"plugin:@typescript-eslint/stylistic",
 		"plugin:functional/no-exceptions",

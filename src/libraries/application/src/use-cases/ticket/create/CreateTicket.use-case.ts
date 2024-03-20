@@ -1,0 +1,55 @@
+import { Effect, Option } from "effect";
+
+import { CreateTicketCommandSchema } from "./CreateTicket.command.js";
+
+import { CreateEntityAuthorizationError } from "../../common/AuthorizationError.js";
+import { BaseCausedUseCaseFor } from "../../common/Base.use-case.js";
+import { PrismaServiceTag, TicketDbToDomainSchema } from "@argazi/database";
+import { NotificationServiceTag, notification } from "@argazi/domain";
+
+export const CreateTicketUseCase = BaseCausedUseCaseFor(
+	CreateTicketCommandSchema
+)(({ payload, initiator }) =>
+	Effect.gen(function* (_) {
+		const prismaClient = yield* _(PrismaServiceTag);
+		const notificationService = yield* _(NotificationServiceTag);
+
+		if (!initiator.isAdmin && initiator.id !== payload.idUser) {
+			yield* _(
+				new CreateEntityAuthorizationError({
+					entity: "Ticket",
+					idInitiator: initiator.id,
+					payload: {
+						...payload,
+						dateRegistered: payload.dateRegistered.toISOString(),
+						idTransport: Option.getOrNull(payload.idTransport),
+					},
+				})
+			);
+		}
+
+		const newSubscription = yield* _(
+			prismaClient.queryDecode(TicketDbToDomainSchema, (p) =>
+				p.ticket.create({
+					data: {
+						...payload,
+						idTransport: Option.getOrNull(payload.idTransport),
+						idUserCreator: initiator.id,
+						idUserUpdater: initiator.id,
+					},
+				})
+			)
+		);
+
+		Effect.runFork(
+			notificationService.queue(
+				notification.ticket("created")({
+					idEntity: newSubscription.id,
+					idInitiator: initiator.id,
+				})
+			)
+		);
+
+		return newSubscription;
+	})
+);

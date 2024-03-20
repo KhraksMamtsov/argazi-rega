@@ -1,0 +1,22 @@
+{
+	"name": "@argazi/application",
+	"version": "0.0.0",
+	"type": "module",
+	"main": "dist/application.js",
+	"types": "dist/src/index.d.ts",
+	"scripts": {
+		"dev": "vite",
+		"build": "tsc && vite build",
+		"build:watch": "tsc && vite build --watch",
+		"preview": "vite preview"
+	},
+	"dependencies": {
+		"vite": "^5.1.6",
+		"@argazi/domain": "workspace:*",
+		"@argazi/database": "workspace:*",
+		"@argazi/shared": "workspace:*"
+	},
+	"devDependencies": {
+		"vite-plugin-dts": "^3.7.3"
+	}
+}

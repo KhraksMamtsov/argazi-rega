@@ -1,0 +1,30 @@
+{
+	"name": "@argazi/database",
+	"version": "0.0.0",
+	"type": "module",
+	"exports": {
+		".": {
+			"import": "./dist/database.js",
+			"types": "./dist/src/index.d.ts"
+		}
+	},
+	"scripts": {
+		"dev": "vite",
+		"build": "tsc && vite build",
+		"build:watch": "tsc && vite build --watch",
+		"preview": "vite preview",
+		"db:seed": "prisma db seed",
+		"db:client:generate": "prisma generate",
+		"db:migration:generate": "prisma migrate dev",
+		"db:migrations:apply": "npx prisma migrate deploy",
+		"db:migrations:apply:dev": "npx prisma migrate dev"
+	},
+	"dependencies": {
+		"vite": "^5.1.6",
+		"@argazi/domain": "workspace:*",
+		"@argazi/shared": "workspace:*"
+	},
+	"devDependencies": {
+		"vite-plugin-dts": "^3.7.3"
+	}
+}
