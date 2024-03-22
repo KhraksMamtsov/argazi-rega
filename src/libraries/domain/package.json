@@ -10,16 +10,10 @@
 		}
 	},
 	"scripts": {
-		"dev": "vite",
-		"build": "tsc && vite build",
-		"build:watch": "tsc && vite build --watch",
-		"preview": "vite preview"
+		"build": "tsc",
+		"build:watch": "tsc --watch"
 	},
 	"dependencies": {
-		"vite": "^5.1.6",
 		"@argazi/shared": "workspace:*"
-	},
-	"devDependencies": {
-		"vite-plugin-dts": "^3.7.3"
 	}
 }

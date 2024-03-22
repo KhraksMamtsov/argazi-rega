@@ -1,10 +1,10 @@
 import * as Schema from "@effect/schema/Schema";
 import { ApiResponse } from "effect-http";
 
+import { _SS } from "@argazi/shared";
+
 import { AccessTokenSchema } from "./AccessToken.js";
 import { RefreshTokenSchema } from "./RefreshToken.js";
-
-import { _SS } from "@argazi/shared";
 
 export const _TokensResponseSchema = Schema.struct({
 	accessToken: AccessTokenSchema,

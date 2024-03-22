@@ -1,3 +1,6 @@
+import { Schema } from "@effect/schema";
+import { Effect } from "effect";
+
 import {
 	type GeoPoint,
 	GeoPointSchema,
@@ -7,8 +10,6 @@ import {
 	LongitudeSchema,
 } from "@argazi/domain";
 import { _TS, _SS, _S } from "@argazi/shared";
-import { Schema } from "@effect/schema";
-import { Effect } from "effect";
 
 import { BaseDbSchema, transform } from "../Base.db.js";
 
@@ -41,11 +42,8 @@ export interface GeoPointDbEncoded
 export interface GeoPointDb
 	extends Schema.Schema.Type<typeof _GeoPointDbSchema> {}
 
-export const GeoPointDbSchema: Schema.Schema<
-	GeoPointDb,
-	GeoPointDbEncoded,
-	GeoPointDbContext
-> = _GeoPointDbSchema;
+export const GeoPointDbSchema: Schema.Schema<GeoPointDb, GeoPointDbEncoded> =
+	_GeoPointDbSchema;
 // #endregion GeoPointDbSchema
 
 const _GeoPointDbToDomainSchema = transform(

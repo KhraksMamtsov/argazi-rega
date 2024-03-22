@@ -1,6 +1,6 @@
 import { Schema } from "@effect/schema";
 
-import { type Json } from "./Schema";
+import { type Json } from "./Schema.js";
 
 const from =
 	<From>() =>

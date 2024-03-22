@@ -1,8 +1,8 @@
+import { IdSubscriptionSchema } from "@argazi/domain";
+import { _SS } from "@argazi/shared";
 import { Schema } from "@effect/schema";
 
 import { BaseCausedCommandFor } from "../../common/Base.command.js";
-import { _SS } from "@argazi/shared";
-import { IdSubscriptionSchema } from "@argazi/domain";
 
 export const GetSubscriptionByIdCommandPayloadSchema = Schema.struct({
 	idSubscription: IdSubscriptionSchema,

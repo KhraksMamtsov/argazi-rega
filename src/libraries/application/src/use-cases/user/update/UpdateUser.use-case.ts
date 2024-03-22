@@ -1,3 +1,4 @@
+import { UserDbToDomainSchema, PrismaServiceTag } from "@argazi/database";
 import { Schema } from "@effect/schema";
 import { Effect } from "effect";
 
@@ -5,8 +6,6 @@ import {
 	type UpdateUserCommand,
 	UpdateUserCommandPayloadSchema,
 } from "./UpdateUser.command.js";
-
-import { UserDbToDomainSchema, PrismaServiceTag } from "@argazi/database";
 
 const encodePayload = Schema.encode(UpdateUserCommandPayloadSchema);
 

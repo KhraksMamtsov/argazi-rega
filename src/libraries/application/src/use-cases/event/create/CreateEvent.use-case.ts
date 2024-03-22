@@ -1,10 +1,11 @@
 import { Effect } from "effect";
 
-import { CreateEventCommandSchema } from "./CreateEvent.command.js";
-
 import { EventDbToDomainSchema, PrismaServiceTag } from "@argazi/database";
 import { notification } from "@argazi/domain";
 import { NotificationServiceTag } from "@argazi/domain";
+
+import { CreateEventCommandSchema } from "./CreateEvent.command.js";
+
 import { BaseCausedUseCaseFor } from "../../common/Base.use-case.js";
 
 export const CreateEventUseCase = BaseCausedUseCaseFor(

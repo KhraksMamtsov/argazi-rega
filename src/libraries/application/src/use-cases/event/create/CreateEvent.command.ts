@@ -1,6 +1,7 @@
 import { Schema } from "@effect/schema";
 
 import { _SS } from "@argazi/shared";
+
 import { BaseCausedCommandFor } from "../../common/Base.command.js";
 
 export type CreateEventCommandPayloadFrom = {

@@ -8,6 +8,7 @@ import { IdUserSchema } from "@argazi/domain";
 import { type User, UserSchema } from "@argazi/domain";
 import { UserType } from "@argazi/domain";
 import { _SS } from "@argazi/shared";
+
 import { BaseDbSchema, transform } from "../Base.db.js";
 
 export interface UserDbFrom extends Readonly<_User> {}
@@ -38,8 +39,7 @@ export interface UserDbEncoded
 	extends Schema.Schema.Encoded<typeof _UserDbSchema> {}
 export interface UserDb extends Schema.Schema.Type<typeof _UserDbSchema> {}
 
-export const UserDbSchema: Schema.Schema<UserDb, UserDbEncoded, UserDbContext> =
-	_UserDbSchema;
+export const UserDbSchema: Schema.Schema<UserDb, UserDbEncoded> = _UserDbSchema;
 // #endregion UserDbSchema
 
 export const UserDbToDomainSchema: Schema.Schema<User, UserDbFrom> = transform(

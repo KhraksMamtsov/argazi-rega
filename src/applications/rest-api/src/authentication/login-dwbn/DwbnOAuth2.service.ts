@@ -3,8 +3,8 @@ import * as UrlParams from "@effect/platform/Http/UrlParams";
 import { Schema } from "@effect/schema";
 import { Config, Effect, ReadonlyRecord, Secret } from "effect";
 
-import { IdDwbnSchema } from "../../../../libraries/domain/src/user/entity/IdDwbn.js";
-import { JWTStructSchema } from "../../../../libraries/shared/src/JWTSchema.js";
+import { IdDwbnSchema } from "@argazi/domain";
+import { _JWTSchema } from "@argazi/shared";
 
 export const DwbnOAuth2Service = Effect.gen(function* (_) {
 	const config = yield* _(
@@ -40,7 +40,7 @@ export const DwbnOAuth2Service = Effect.gen(function* (_) {
 					HttpClient.response.schemaBodyJson(
 						Schema.struct({
 							id_token: Schema.compose(
-								JWTStructSchema,
+								_JWTSchema.JWTStructSchema,
 								Schema.tuple(
 									Schema.string,
 									Schema.parseJson(

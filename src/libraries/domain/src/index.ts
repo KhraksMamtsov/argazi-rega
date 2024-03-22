@@ -8,10 +8,10 @@ export * from "./visitor/Visitor.js";
 export * from "./visitor/IdVisitor.js";
 export * from "./visitor/VisitorType.js";
 
-export * from "./notification/Notification";
-export * from "./services/NotificationService";
+export * from "./notification/Notification.js";
+export * from "./services/NotificationService.js";
 
-export * from "./value-objects/DateCreated";
+export * from "./value-objects/DateCreated.js";
 export * from "./value-objects/DateDeleted.js";
 export * from "./value-objects/DateUpdated.js";
 

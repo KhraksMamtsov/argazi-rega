@@ -9,10 +9,8 @@
 		}
 	},
 	"scripts": {
-		"dev": "vite",
-		"build": "tsc && vite build",
-		"build:watch": "tsc && vite build --watch",
-		"preview": "vite preview",
+		"build": "tsc",
+		"build:watch": "tsc --watch",
 		"db:seed": "prisma db seed",
 		"db:client:generate": "prisma generate",
 		"db:migration:generate": "prisma migrate dev",
@@ -20,11 +18,9 @@
 		"db:migrations:apply:dev": "npx prisma migrate dev"
 	},
 	"dependencies": {
-		"vite": "^5.1.6",
 		"@argazi/domain": "workspace:*",
-		"@argazi/shared": "workspace:*"
-	},
-	"devDependencies": {
-		"vite-plugin-dts": "^3.7.3"
+		"@argazi/shared": "workspace:*",
+		"@prisma/client": "^5.11.0",
+		"prisma": "^5.11.0"
 	}
 }

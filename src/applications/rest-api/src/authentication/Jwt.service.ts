@@ -1,16 +1,29 @@
-import { Schema } from "@effect/schema";
+import { Schema, ParseResult } from "@effect/schema";
 import { Config, Effect, Layer, ReadonlyRecord, Secret } from "effect";
 
-import { AccessTokenSchema } from "./AccessToken.js";
-import { RefreshTokenSchema } from "./RefreshToken.js";
-
-import { _SS, _JWT } from "@argazi/shared";
 import { IdUserSchema } from "@argazi/domain";
+import { _SS, _JWT, _JWTError } from "@argazi/shared";
 
-const JWTPayloadSchema = Schema.struct({
+import { AccessTokenSchema, type AccessToken } from "./AccessToken.js";
+import { RefreshTokenSchema, type RefreshToken } from "./RefreshToken.js";
+
+// #region JWTPayload
+export const _JWTPayloadSchema = Schema.struct({
 	isAdmin: Schema.boolean,
 	sub: IdUserSchema,
-}).pipe(_SS.satisfies.from.json());
+})
+	.pipe(_SS.satisfies.from.json())
+	.pipe(Schema.identifier("JWTPayloadSchema"));
+
+export type JWTPayloadContext = Schema.Schema.Context<typeof _JWTPayloadSchema>;
+export interface JWTPayloadEncoded
+	extends Schema.Schema.Encoded<typeof _JWTPayloadSchema> {}
+export interface JWTPayload
+	extends Schema.Schema.Type<typeof _JWTPayloadSchema> {}
+
+export const JWTPayloadSchema: Schema.Schema<JWTPayload, JWTPayloadEncoded> =
+	_JWTPayloadSchema;
+// #endregion JWTPayloadSchema
 
 const encodeJWT = Schema.encode(JWTPayloadSchema);
 const decodeJWT = Schema.decodeUnknown(JWTPayloadSchema);
@@ -18,7 +31,7 @@ const decodeJWT = Schema.decodeUnknown(JWTPayloadSchema);
 type JWTPayloadSchema = Schema.Schema.Type<typeof JWTPayloadSchema>;
 
 const makeLive = () =>
-	Effect.gen(function* (_) { 
+	Effect.gen(function* (_) {
 		const jwtConfig = yield* _(
 			Effect.all({
 				accessTokenSecret: Config.secret("JWT_ACCESS_TOKEN_SECRET"),
@@ -30,7 +43,15 @@ const makeLive = () =>
 		);
 
 		return {
-			sign: (payload: JWTPayloadSchema) =>
+			sign: (
+				payload: JWTPayloadSchema
+			): Effect.Effect<
+				{
+					accessToken: AccessToken;
+					refreshToken: RefreshToken;
+				},
+				ParseResult.ParseError | _JWTError.JwtSignError
+			> =>
 				encodeJWT(payload).pipe(
 					Effect.flatMap((encodedPayload) =>
 						Effect.all({
@@ -60,7 +81,10 @@ const makeLive = () =>
 			verifyAndDecode: (args: {
 				readonly token: Secret.Secret;
 				readonly type: "accessToken" | "refreshToken";
-			}) =>
+			}): Effect.Effect<
+				JWTPayload,
+				ParseResult.ParseError | _JWTError.JwtVerifyError
+			> =>
 				_JWT
 					.verifyAndDecode({
 						key: jwtConfig[`${args.type}Secret`],
@@ -76,7 +100,8 @@ const makeLive = () =>
 		};
 	});
 
-export type JwtService = Effect.Effect.Success<ReturnType<typeof makeLive>>;
+export interface JwtService
+	extends Effect.Effect.Success<ReturnType<typeof makeLive>> {}
 
 export class JwtServiceTag extends Effect.Tag("@argazi/infrastructure/rest")<
 	JwtServiceTag,

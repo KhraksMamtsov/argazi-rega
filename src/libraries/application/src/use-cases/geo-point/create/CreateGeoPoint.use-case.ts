@@ -1,11 +1,10 @@
 import { Effect, Option, Secret } from "effect";
 
+import { GeoPointDbToDomainSchema, PrismaServiceTag } from "@argazi/database";
+import { notification, NotificationServiceTag } from "@argazi/domain";
+
 import { CreateGeoPointCommandSchema } from "./CreateGeoPoint.command.js";
 
-import { GeoPointDbToDomainSchema } from "@argazi/database";
-import { PrismaServiceTag } from "@argazi/database";
-import { notification } from "@argazi/domain";
-import { NotificationServiceTag } from "@argazi/domain";
 import { BaseCausedUseCaseFor } from "../../common/Base.use-case.js";
 
 export const CreateGeoPointUseCase = BaseCausedUseCaseFor(

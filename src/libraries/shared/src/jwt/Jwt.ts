@@ -1,9 +1,24 @@
 import { Effect } from "effect";
+import { Data } from "effect";
 import JWT from "jsonwebtoken";
 
-import { JwtSignError, JwtVerifyError } from "./Jwt.error.js";
-
 import { Json } from "../Schema.js";
+
+export enum JwtErrorType {
+	DECODE = "DECODE::JwtErrorType",
+	SIGN = "SIGN::JwtErrorType",
+	VERIFY = "VERIFY::JwtErrorType",
+}
+
+export class JwtSignError extends Data.TaggedError(JwtErrorType.SIGN)<{
+	readonly cause: Error;
+}> {}
+export class JwtVerifyError extends Data.TaggedError(JwtErrorType.VERIFY)<{
+	readonly cause: JWT.VerifyErrors;
+}> {}
+export class JwtDecodeError extends Data.TaggedError(JwtErrorType.DECODE)<{
+	readonly cause: Error;
+}> {}
 
 export const sign = (args: {
 	readonly expiresIn: string;

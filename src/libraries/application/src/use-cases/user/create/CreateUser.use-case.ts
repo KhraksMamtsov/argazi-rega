@@ -1,10 +1,10 @@
+import { PrismaServiceTag, UserDbToDomainSchema } from "@argazi/database";
+import { NotificationServiceTag, notification } from "@argazi/domain";
 import { Effect } from "effect";
 
 import { CreateUserCommandSchema } from "./CreateUser.command.js";
 
 import { BaseCausedUseCaseFor } from "../../common/Base.use-case.js";
-import { PrismaServiceTag, UserDbToDomainSchema } from "@argazi/database";
-import { NotificationServiceTag, notification } from "@argazi/domain";
 
 export const CreateUserUseCase = BaseCausedUseCaseFor(CreateUserCommandSchema)(
 	({ payload, initiator }) =>

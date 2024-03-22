@@ -1,10 +1,8 @@
+import { IdDwbnSchema, IdTelegramChatSchema } from "@argazi/domain";
+import { _SS } from "@argazi/shared";
 import { Schema } from "@effect/schema";
 
 import { BaseCausedCommandFor } from "../../common/Base.command.js";
-
-import type { UserType } from "@prisma/client";
-import { IdDwbnSchema, IdTelegramChatSchema } from "@argazi/domain";
-import { _SS } from "@argazi/shared";
 
 export type CreateUserCommandPayloadFrom = {
 	readonly email: string;
@@ -13,7 +11,7 @@ export type CreateUserCommandPayloadFrom = {
 	readonly idTelegramChat: number;
 	readonly lastName: string | null;
 	readonly phone: string | null;
-	readonly type: UserType;
+	readonly type: "ADULT" | "STUDENT" | "PENSIONER";
 };
 
 export const CreateUserCommandPayloadSchema = Schema.struct({

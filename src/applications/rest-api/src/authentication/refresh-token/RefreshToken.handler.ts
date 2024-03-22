@@ -1,6 +1,7 @@
 import { Effect, Option } from "effect";
 
-import { GetUserUseCase } from "../../../../application/use-cases/user/get/GetUser.use-case.js";
+import { GetUserUseCase } from "@argazi/application";
+
 import { JwtServiceTag } from "../Jwt.service.js";
 
 import type { RefreshTokenRequestBody } from "./RefreshToken.endpoint.js";

@@ -2,7 +2,6 @@ import { AST, Schema } from "@effect/schema";
 import { Option, pipe } from "effect";
 
 import { IdUserSchema } from "@argazi/domain";
-
 import { _S } from "@argazi/shared";
 
 export const BaseCommandFor = <R, I extends _S.Json.Json, A>(
