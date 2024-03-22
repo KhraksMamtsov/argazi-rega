@@ -13,23 +13,23 @@ import { GetManyUsersEndpoint } from "./get-many/GetManyUsers.endpoint.js";
 import { UpdateUserEndpoint } from "./update/UpdateUser.endpoint.js";
 
 export const UsersEndpointsGroup = ApiGroup.make("user").pipe(
-	ApiGroup.addEndpoint(CreateUserEndpoint),
-	ApiGroup.addEndpoint(GetUserEndpoint),
-	ApiGroup.addEndpoint(UpdateUserEndpoint),
-	ApiGroup.addEndpoint(GetManyUsersEndpoint),
-	// region Subscriptions
-	flow(
-		ApiGroup.addEndpoint(CreateUserSubscriptionEndpoint),
-		ApiGroup.addEndpoint(GetUserSubscriptionsEndpoint),
-		ApiGroup.addEndpoint(DeleteUserSubscriptionEndpoint)
-	),
-	// endregion
-	// region Tickets
-	flow(
-		//
-		ApiGroup.addEndpoint(BookTicketEndpoint),
-		ApiGroup.addEndpoint(GetUserTicketByIdEndpoint),
-		ApiGroup.addEndpoint(ReturnTicketEndpoint)
-	)
-	// endregion
+  ApiGroup.addEndpoint(CreateUserEndpoint),
+  ApiGroup.addEndpoint(GetUserEndpoint),
+  ApiGroup.addEndpoint(UpdateUserEndpoint),
+  ApiGroup.addEndpoint(GetManyUsersEndpoint),
+  // region Subscriptions
+  flow(
+    ApiGroup.addEndpoint(CreateUserSubscriptionEndpoint),
+    ApiGroup.addEndpoint(GetUserSubscriptionsEndpoint),
+    ApiGroup.addEndpoint(DeleteUserSubscriptionEndpoint)
+  ),
+  // endregion
+  // region Tickets
+  flow(
+    //
+    ApiGroup.addEndpoint(BookTicketEndpoint),
+    ApiGroup.addEndpoint(GetUserTicketByIdEndpoint),
+    ApiGroup.addEndpoint(ReturnTicketEndpoint)
+  )
+  // endregion
 );

@@ -9,43 +9,43 @@ import { BaseResponseFor } from "../BaseResponseFor.js";
 import { BearerAuth } from "../BearerAuth.security-scheme.js";
 
 export const _CreateGeoPointRequestBodySchema =
-	CreateGeoPointCommandPayloadSchema.pipe(
-		Schema.identifier("CreateGeoPointRequestBodySchema")
-	);
+  CreateGeoPointCommandPayloadSchema.pipe(
+    Schema.identifier("CreateGeoPointRequestBodySchema")
+  );
 
 export interface CreateGeoPointRequestBodyEncoded
-	extends Schema.Schema.Encoded<typeof _CreateGeoPointRequestBodySchema> {}
+  extends Schema.Schema.Encoded<typeof _CreateGeoPointRequestBodySchema> {}
 
 export interface CreateGeoPointRequestBody
-	extends Schema.Schema.Type<typeof _CreateGeoPointRequestBodySchema> {}
+  extends Schema.Schema.Type<typeof _CreateGeoPointRequestBodySchema> {}
 
 export const CreateGeoPointRequestBodySchema: Schema.Schema<
-	CreateGeoPointRequestBody,
-	CreateGeoPointRequestBodyEncoded
+  CreateGeoPointRequestBody,
+  CreateGeoPointRequestBodyEncoded
 > = _CreateGeoPointRequestBodySchema;
 
 const _CreateGeoPointResponseBodySchema = GeoPointApiSchema.pipe(
-	Schema.identifier("CreateGeoPointResponseBodySchema"),
-	BaseResponseFor
+  Schema.identifier("CreateGeoPointResponseBodySchema"),
+  BaseResponseFor
 );
 
 export interface CreateGeoPointResponseBodyEncoded
-	extends Schema.Schema.Encoded<typeof _CreateGeoPointResponseBodySchema> {}
+  extends Schema.Schema.Encoded<typeof _CreateGeoPointResponseBodySchema> {}
 
 export interface CreateGeoPointResponseBody
-	extends Schema.Schema.Type<typeof _CreateGeoPointResponseBodySchema> {}
+  extends Schema.Schema.Type<typeof _CreateGeoPointResponseBodySchema> {}
 
 export const CreateGeoPointResponseSchema: Schema.Schema<
-	CreateGeoPointResponseBody,
-	CreateGeoPointResponseBodyEncoded
+  CreateGeoPointResponseBody,
+  CreateGeoPointResponseBodyEncoded
 > = _CreateGeoPointResponseBodySchema;
 
 export const CreateGeoPointEndpoint = ApiEndpoint.post(
-	"createGeoPoint",
-	"/geo-points"
+  "createGeoPoint",
+  "/geo-points"
 ).pipe(
-	ApiEndpoint.setRequestBody(CreateGeoPointRequestBodySchema),
-	ApiEndpoint.setResponse(ApiResponse.make(200, CreateGeoPointResponseSchema)),
-	ApiEndpoint.addResponse(ApiResponse.make(401)),
-	ApiEndpoint.setSecurity(BearerAuth)
+  ApiEndpoint.setRequestBody(CreateGeoPointRequestBodySchema),
+  ApiEndpoint.setResponse(ApiResponse.make(200, CreateGeoPointResponseSchema)),
+  ApiEndpoint.addResponse(ApiResponse.make(401)),
+  ApiEndpoint.setSecurity(BearerAuth)
 );

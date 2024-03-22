@@ -8,73 +8,72 @@
       :schema="schema"
       :uischema="uischema"
       @change="onChange"
-    />  </div>  <div><pre>{{JSON.stringify(data, null, 2)}}</pre></div> 
-</template> 
+    />
+  </div>
+  <div>
+    <pre>{{ JSON.stringify(data, null, 2) }}</pre>
+  </div>
+</template>
 
 <script lang="ts">
- 
-import {Schema, JSONSchema} from "@effect/schema";
-import { defineComponent } from "vue";
+import { Schema, JSONSchema } from "@effect/schema";
 import { JsonForms, type JsonFormsChangeEvent } from "@jsonforms/vue";
 import {
   defaultStyles,
-  mergeStyles, 
+  mergeStyles,
   vanillaRenderers,
 } from "@jsonforms/vue-vanilla";
+import { defineComponent } from "vue";
 
 // mergeStyles combines all classes from both styles definitions into one
 const myStyles = mergeStyles(defaultStyles, { control: { label: "mylabel" } });
 
 enum ASD {
   qwea,
-  asd
+  asd,
 }
 
 const qwe = Schema.struct({
-  name: Schema.string
-    .pipe(
-      Schema.minLength(1), 
-      Schema.annotations({
-        description: "The task's name",
-        title: 'Name',
-        examples: ['asdasd']
-      })
-      ),
-      done: Schema.boolean.pipe(Schema.annotations({
-        title: 'Done'
-      })),
-      rating: Schema.number.pipe(
-      Schema.lessThanOrEqualTo(5),  
-      Schema.annotations({
-      title: "rating",
-      })),
-      dueDate: Schema.DateFromString.pipe(
-
-
-Schema.jsonSchema({
-
+  description: Schema.string.annotations({
+    description: "qwe",
+    title: "Long Description",
+  }),
+  done: Schema.boolean.pipe(
+    Schema.annotations({
+      title: "Done",
+    })
+  ),
+  dueDate: Schema.DateFromString.pipe(
+    Schema.jsonSchema({
+      format: "date",
       type: "string",
-      format: "date", 
-}),
-        Schema.annotations({
-          description: "The task's due date",
-          title:"dueDate"
-        })
-      ),
+    }),
+    Schema.annotations({
+      description: "The task's due date",
+      title: "dueDate",
+    })
+  ),
+  name: Schema.string.pipe(
+    Schema.minLength(1),
+    Schema.annotations({
+      description: "The task's name",
+      examples: ["asdasd"],
+      title: "Name",
+    })
+  ),
 
-      recurrence: Schema.enums(ASD),
-      description: Schema.string.annotations({
-        title:"Long Description",
-        description: 'qwe'
-      })
+  rating: Schema.number.pipe(
+    Schema.lessThanOrEqualTo(5),
+    Schema.annotations({
+      title: "rating",
+    })
+  ),
+  recurrence: Schema.enums(ASD),
+}).pipe(Schema.title("MY FORM"));
 
-
-}).pipe(Schema.title('MY FORM'))
-
-const asd = JSONSchema.make(qwe)
-console.log(qwe)
-console.log(asd)
-
+const asd = JSONSchema.make(qwe);
+console.log(qwe);
+console.log(asd);
 
 const renderers = [
   ...vanillaRenderers,
@@ -83,11 +82,6 @@ const renderers = [
 
 const schema = {
   properties: {
-    name: {
-      type: "string",
-      minLength: 1,
-      description: "The task's name"
-    },
     description: {
       title: "Long Description",
       type: "string",
@@ -96,76 +90,80 @@ const schema = {
       type: "boolean",
     },
     dueDate: {
-      type: "string",
+      description: "The task's due date",
       format: "time",
-      description: "The task's due date"
+      type: "string",
+    },
+    name: {
+      description: "The task's name",
+      minLength: 1,
+      type: "string",
     },
     rating: {
-      type: "integer",
       maximum: 5,
+      type: "integer",
     },
     recurrence: {
+      enum: ["Never", "Daily", "Weekly", "Monthly"],
       type: "string",
-      enum: ["Never", "Daily", "Weekly", "Monthly"]
     },
     recurrenceInterval: {
+      description: "Days until recurrence",
       type: "integer",
-      description: "Days until recurrence"
     },
   },
 };
 
+const schema1 = JSONSchema.make(qwe);
 
-const schema1 = JSONSchema.make(qwe)
-
-console.log(schema)
+console.log(schema);
 
 const uischema = {
-  type: "HorizontalLayout",
   elements: [
     {
-      type: "VerticalLayout",
       elements: [
         {
-          type: "Control",
+          placeholder: "qweqwe",
           scope: "#/properties/name",
-          placeholder: 'qweqwe'
+          type: "Control",
         },
         {
-          type: "Control",
-          scope: "#/properties/description",
           options: {
             multi: true,
-          }
+          },
+          scope: "#/properties/description",
+          type: "Control",
         },
         {
-          type: "Control",
           scope: "#/properties/done",
+          type: "Control",
         },
       ],
+      type: "VerticalLayout",
     },
     {
-      type: "VerticalLayout",
       elements: [
         {
-          type: "Control",
           scope: "#/properties/dueDate",
+          type: "Control",
         },
         {
-          type: "Control",
           scope: "#/properties/rating",
+          type: "Control",
         },
         {
-          type: "Control",
           scope: "#/properties/recurrence",
+          type: "Control",
         },
         {
-          type: "Control",
           scope: "#/properties/recurrenceInterval",
+          type: "Control",
         },
       ],
+      type: "VerticalLayout",
     },
   ],
+  type: "HorizontalLayout",
 };
 
 export default defineComponent({
@@ -173,10 +171,13 @@ export default defineComponent({
   components: {
     JsonForms,
   },
+  provide() {
+    return {
+      styles: myStyles,
+    };
+  },
   data() {
     return {
-      // freeze renderers for performance gains
-      renderers: Object.freeze(renderers),
       data: {
         name: "Send email to Adrian",
         description: "Confirm if you have passed the subject\nHereby ...",
@@ -184,19 +185,16 @@ export default defineComponent({
         recurrence: "Daily",
         rating: 3,
       },
+      // freeze renderers for performance gains
+      renderers: Object.freeze(renderers),
       schema,
-      uischema,
+      uischema, 
     };
   },
   methods: {
     onChange(event: JsonFormsChangeEvent) {
       this.data = event.data;
     },
-  },
-  provide() {
-    return {
-      styles: myStyles,
-    };
   },
 });
 </script>

@@ -7,31 +7,31 @@ import { TicketApiSchema } from "../../tickets/Ticket.api.js";
 
 // #region GetMyTicketsResponseBody
 const _GetMyTicketsResponseBodySchema = TicketApiSchema.pipe(
-	Schema.identifier("GetMyTicketsResponseSchema"),
-	BaseResponseManyFor
+  Schema.identifier("GetMyTicketsResponseSchema"),
+  BaseResponseManyFor
 );
 
 export type GetMyTicketsResponseBodyContext = Schema.Schema.Context<
-	typeof _GetMyTicketsResponseBodySchema
+  typeof _GetMyTicketsResponseBodySchema
 >;
 export interface GetMyTicketsResponseBodyEncoded
-	extends Schema.Schema.Encoded<typeof _GetMyTicketsResponseBodySchema> {}
+  extends Schema.Schema.Encoded<typeof _GetMyTicketsResponseBodySchema> {}
 export interface GetMyTicketsResponseBody
-	extends Schema.Schema.Type<typeof _GetMyTicketsResponseBodySchema> {}
+  extends Schema.Schema.Type<typeof _GetMyTicketsResponseBodySchema> {}
 
 export const GetMyTicketsResponseBodySchema: Schema.Schema<
-	GetMyTicketsResponseBody,
-	GetMyTicketsResponseBodyEncoded
+  GetMyTicketsResponseBody,
+  GetMyTicketsResponseBodyEncoded
 > = _GetMyTicketsResponseBodySchema;
 // #endregion GetMyTicketsResponseBodySchema
 
 export const GetMyTicketsEndpoint = ApiEndpoint.get(
-	"getMyTickets",
-	"/my/tickets",
-	{
-		summary: "Get user's tickets",
-	}
+  "getMyTickets",
+  "/my/tickets",
+  {
+    summary: "Get user's tickets",
+  }
 ).pipe(
-	ApiEndpoint.setResponseBody(GetMyTicketsResponseBodySchema),
-	ApiEndpoint.setSecurity(BearerAuth)
+  ApiEndpoint.setResponseBody(GetMyTicketsResponseBodySchema),
+  ApiEndpoint.setSecurity(BearerAuth)
 );

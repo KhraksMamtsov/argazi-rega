@@ -6,16 +6,16 @@ import { _SS } from "@argazi/shared";
 import { BaseCausedCommandFor } from "../../common/Base.command.js";
 
 export type GetEventByIdCommandPayloadFrom = {
-	readonly id: string;
+  readonly id: string;
 };
 
 export const GetEventByIdCommandPayloadSchema = Schema.struct({
-	id: IdEventSchema,
+  id: IdEventSchema,
 }).pipe(
-	_SS.satisfies.from.json<GetEventByIdCommandPayloadFrom>(),
-	Schema.identifier("GetEventByIdCommandPayloadSchema")
+  _SS.satisfies.from.json<GetEventByIdCommandPayloadFrom>(),
+  Schema.identifier("GetEventByIdCommandPayloadSchema")
 );
 
 export const GetEventByIdCommandSchema = BaseCausedCommandFor(
-	GetEventByIdCommandPayloadSchema
+  GetEventByIdCommandPayloadSchema
 ).pipe(Schema.identifier("GetEventByIdCommandSchema"));

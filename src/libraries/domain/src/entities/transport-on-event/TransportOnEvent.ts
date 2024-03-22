@@ -8,22 +8,22 @@ import { PriceSchema } from "../../value-objects/Price.js";
 import { BaseSchema } from "../common/Base.js";
 
 const _TransportOnEventSchema = Schema.struct({
-	id: IdTransportOnEventSchema,
-	idEvent: IdEventSchema,
-	idTransport: IdTransportSchema,
-	//
-	price: PriceSchema,
-	seatsNumber: Schema.Int.pipe(Schema.positive()),
+  id: IdTransportOnEventSchema,
+  idEvent: IdEventSchema,
+  idTransport: IdTransportSchema,
+  //
+  price: PriceSchema,
+  seatsNumber: Schema.Int.pipe(Schema.positive()),
 }).pipe(Schema.extend(BaseSchema), Schema.identifier("TransportOnEventSchema"));
 
 export type TransportOnEventFrom = Schema.Schema.Encoded<
-	typeof _TransportOnEventSchema
+  typeof _TransportOnEventSchema
 >;
 export type TransportOnEvent = Schema.Schema.Type<
-	typeof _TransportOnEventSchema
+  typeof _TransportOnEventSchema
 >;
 
 export const TransportOnEventSchema: Schema.Schema<
-	TransportOnEvent,
-	TransportOnEventFrom
+  TransportOnEvent,
+  TransportOnEventFrom
 > = _TransportOnEventSchema;

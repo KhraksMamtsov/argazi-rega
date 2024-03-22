@@ -1,8 +1,8 @@
 import { Effect } from "effect";
 
 import {
-	PrismaServiceTag,
-	SubscriptionDbToDomainSchema,
+  PrismaServiceTag,
+  SubscriptionDbToDomainSchema,
 } from "@argazi/database";
 import { NotificationServiceTag, notification } from "@argazi/domain";
 
@@ -12,47 +12,47 @@ import { DeleteEntityAuthorizationError } from "../../../common/AuthorizationErr
 import { BaseCausedUseCaseFor } from "../../../common/Base.use-case.js";
 
 export const DeleteUserSubscriptionUseCase = BaseCausedUseCaseFor(
-	DeleteUserSubscriptionCommandSchema
+  DeleteUserSubscriptionCommandSchema
 )(({ payload, initiator }) =>
-	Effect.gen(function* (_) {
-		if (!initiator.isAdmin && initiator.id !== payload.idUser) {
-			yield* _(
-				new DeleteEntityAuthorizationError({
-					entity: "Subscription",
-					idEntity: payload.idSubscription,
-					idInitiator: initiator.id,
-					payload,
-				})
-			);
-		}
+  Effect.gen(function* (_) {
+    if (!initiator.isAdmin && initiator.id !== payload.idUser) {
+      yield* _(
+        new DeleteEntityAuthorizationError({
+          entity: "Subscription",
+          idEntity: payload.idSubscription,
+          idInitiator: initiator.id,
+          payload,
+        })
+      );
+    }
 
-		const prismaClient = yield* _(PrismaServiceTag);
+    const prismaClient = yield* _(PrismaServiceTag);
 
-		const deletedSubscription = yield* _(
-			prismaClient.queryDecode(SubscriptionDbToDomainSchema, (p) =>
-				p.subscription.update({
-					data: {
-						dateDeleted: new Date(),
-						idUserDeleter: initiator.id,
-					},
-					where: {
-						id: payload.idSubscription,
-					},
-				})
-			)
-		);
+    const deletedSubscription = yield* _(
+      prismaClient.queryDecode(SubscriptionDbToDomainSchema, (p) =>
+        p.subscription.update({
+          data: {
+            dateDeleted: new Date(),
+            idUserDeleter: initiator.id,
+          },
+          where: {
+            id: payload.idSubscription,
+          },
+        })
+      )
+    );
 
-		const notificationService = yield* _(NotificationServiceTag);
+    const notificationService = yield* _(NotificationServiceTag);
 
-		Effect.runFork(
-			notificationService.queue(
-				notification.subscription("deleted")({
-					idEntity: deletedSubscription.id,
-					idInitiator: initiator.id,
-				})
-			)
-		);
+    Effect.runFork(
+      notificationService.queue(
+        notification.subscription("deleted")({
+          idEntity: deletedSubscription.id,
+          idInitiator: initiator.id,
+        })
+      )
+    );
 
-		return deletedSubscription;
-	})
+    return deletedSubscription;
+  })
 );

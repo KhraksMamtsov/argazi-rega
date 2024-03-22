@@ -6,20 +6,20 @@ import { PrismaServiceTag, UserDbToDomainSchema } from "@argazi/database";
 import { type GetUserCommand } from "./GetUser.command.js";
 
 export const GetUserUseCase = ({ payload }: GetUserCommand) =>
-	Effect.gen(function* (_) {
-		const prismaClient = yield* _(PrismaServiceTag);
+  Effect.gen(function* (_) {
+    const prismaClient = yield* _(PrismaServiceTag);
 
-		const where =
-			payload.type === "id"
-				? { id: payload.id }
-				: payload.type === "idDwbn"
-					? { idDwbn: payload.idDwbn }
-					: absurd<never>(payload);
+    const where =
+      payload.type === "id"
+        ? { id: payload.id }
+        : payload.type === "idDwbn"
+          ? { idDwbn: payload.idDwbn }
+          : absurd<never>(payload);
 
-		return yield* _(
-			prismaClient.queryDecode(
-				Schema.optionFromNullable(UserDbToDomainSchema),
-				(p) => p.user.findUnique({ where })
-			)
-		);
-	});
+    return yield* _(
+      prismaClient.queryDecode(
+        Schema.optionFromNullable(UserDbToDomainSchema),
+        (p) => p.user.findUnique({ where })
+      )
+    );
+  });

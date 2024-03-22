@@ -8,25 +8,25 @@ import { _SS } from "@argazi/shared";
 
 // #region SubscriptionApi
 const _SubscriptionApiSchema = Schema.struct({
-	id: IdSubscriptionSchema,
-	idPlace: IdPlaceSchema,
-	idUser: IdUserSchema,
+  id: IdSubscriptionSchema,
+  idPlace: IdPlaceSchema,
+  idUser: IdUserSchema,
 }).pipe(
-	_SS.satisfies.from.json(),
-	_SS.satisfies.to<SubscriptionBase>(),
-	Schema.identifier("SubscriptionApiSchema")
+  _SS.satisfies.from.json(),
+  _SS.satisfies.to<SubscriptionBase>(),
+  Schema.identifier("SubscriptionApiSchema")
 );
 
 export type SubscriptionApiContext = Schema.Schema.Context<
-	typeof _SubscriptionApiSchema
+  typeof _SubscriptionApiSchema
 >;
 export interface SubscriptionApiEncoded
-	extends Schema.Schema.Encoded<typeof _SubscriptionApiSchema> {}
+  extends Schema.Schema.Encoded<typeof _SubscriptionApiSchema> {}
 export interface SubscriptionApi
-	extends Schema.Schema.Type<typeof _SubscriptionApiSchema> {}
+  extends Schema.Schema.Type<typeof _SubscriptionApiSchema> {}
 
 export const SubscriptionApiSchema: Schema.Schema<
-	SubscriptionApi,
-	SubscriptionApiEncoded
+  SubscriptionApi,
+  SubscriptionApiEncoded
 > = _SubscriptionApiSchema;
 // #endregion SubscriptionApiSchema

@@ -8,48 +8,48 @@ import { UserApi } from "../User.api.js";
 
 // #region GetUserResponseBody
 const _GetUserResponseBodySchema = UserApi.pipe(
-	Schema.identifier("GetUserResponseSchema"),
-	BaseResponseFor
+  Schema.identifier("GetUserResponseSchema"),
+  BaseResponseFor
 ).pipe(Schema.identifier("GetUserResponseBodySchema"));
 
 export type GetUserResponseBodyContext = Schema.Schema.Context<
-	typeof _GetUserResponseBodySchema
+  typeof _GetUserResponseBodySchema
 >;
 export interface GetUserResponseBodyEncoded
-	extends Schema.Schema.Encoded<typeof _GetUserResponseBodySchema> {}
+  extends Schema.Schema.Encoded<typeof _GetUserResponseBodySchema> {}
 export interface GetUserResponseBody
-	extends Schema.Schema.Type<typeof _GetUserResponseBodySchema> {}
+  extends Schema.Schema.Type<typeof _GetUserResponseBodySchema> {}
 
 export const GetUserResponseBodySchema: Schema.Schema<
-	GetUserResponseBody,
-	GetUserResponseBodyEncoded
+  GetUserResponseBody,
+  GetUserResponseBodyEncoded
 > = _GetUserResponseBodySchema;
 // #endregion GetUserResponseBodySchema
 
 // #region GetUserRequestParams
 const _GetUserRequestParamsSchema = Schema.struct({
-	idUser: IdUserSchema,
+  idUser: IdUserSchema,
 }).pipe(Schema.identifier("GetUserRequestParamsSchema"));
 
 export type GetUserRequestParamsContext = Schema.Schema.Context<
-	typeof _GetUserRequestParamsSchema
+  typeof _GetUserRequestParamsSchema
 >;
 export interface GetUserRequestParamsEncoded
-	extends Schema.Schema.Encoded<typeof _GetUserRequestParamsSchema> {}
+  extends Schema.Schema.Encoded<typeof _GetUserRequestParamsSchema> {}
 export interface GetUserRequestParams
-	extends Schema.Schema.Type<typeof _GetUserRequestParamsSchema> {}
+  extends Schema.Schema.Type<typeof _GetUserRequestParamsSchema> {}
 
 export const GetUserRequestParamsSchema: Schema.Schema<
-	GetUserRequestParams,
-	GetUserRequestParamsEncoded
+  GetUserRequestParams,
+  GetUserRequestParamsEncoded
 > = _GetUserRequestParamsSchema;
 // #endregion GetUserRequestParamsSchema
 
 export const GetUserEndpoint = ApiEndpoint.get(
-	"getUser",
-	"/users/:idUser",
-	{}
+  "getUser",
+  "/users/:idUser",
+  {}
 ).pipe(
-	ApiEndpoint.setRequestPath(GetUserRequestParamsSchema),
-	ApiEndpoint.setResponseBody(GetUserResponseBodySchema)
+  ApiEndpoint.setRequestPath(GetUserRequestParamsSchema),
+  ApiEndpoint.setResponseBody(GetUserResponseBodySchema)
 );

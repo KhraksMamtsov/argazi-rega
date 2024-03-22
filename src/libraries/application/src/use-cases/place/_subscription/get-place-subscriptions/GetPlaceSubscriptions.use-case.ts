@@ -2,8 +2,8 @@ import { Schema } from "@effect/schema";
 import { Effect } from "effect";
 
 import {
-	PrismaServiceTag,
-	SubscriptionDbToDomainSchema,
+  PrismaServiceTag,
+  SubscriptionDbToDomainSchema,
 } from "@argazi/database";
 import { _SS } from "@argazi/shared";
 
@@ -12,19 +12,19 @@ import { GetPlaceSubscriptionsCommandSchema } from "./GetPlaceSubscriptions.comm
 import { BaseCausedUseCaseFor } from "../../../common/Base.use-case.js";
 
 export const GetPlaceSubscriptionsUseCase = BaseCausedUseCaseFor(
-	GetPlaceSubscriptionsCommandSchema
+  GetPlaceSubscriptionsCommandSchema
 )(({ payload }) =>
-	Effect.gen(function* (_) {
-		const prismaClient = yield* _(PrismaServiceTag);
+  Effect.gen(function* (_) {
+    const prismaClient = yield* _(PrismaServiceTag);
 
-		return yield* _(
-			prismaClient.queryDecode(
-				Schema.array(SubscriptionDbToDomainSchema),
-				(p) =>
-					p.subscription.findMany({
-						where: { idPlace: payload.idPlace },
-					})
-			)
-		);
-	})
+    return yield* _(
+      prismaClient.queryDecode(
+        Schema.array(SubscriptionDbToDomainSchema),
+        (p) =>
+          p.subscription.findMany({
+            where: { idPlace: payload.idPlace },
+          })
+      )
+    );
+  })
 );

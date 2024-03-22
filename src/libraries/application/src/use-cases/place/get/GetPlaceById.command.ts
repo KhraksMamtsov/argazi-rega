@@ -6,16 +6,16 @@ import { _SS } from "@argazi/shared";
 import { BaseCausedCommandFor } from "../../common/Base.command.js";
 
 export type GetPlaceByIdCommandPayloadFrom = {
-	readonly id: string;
+  readonly id: string;
 };
 
 export const GetPlaceByIdCommandPayloadSchema = Schema.struct({
-	id: IdPlaceSchema,
+  id: IdPlaceSchema,
 }).pipe(
-	_SS.satisfies.from.json<GetPlaceByIdCommandPayloadFrom>(),
-	Schema.identifier("GetPlaceByIdCommandPayloadSchema")
+  _SS.satisfies.from.json<GetPlaceByIdCommandPayloadFrom>(),
+  Schema.identifier("GetPlaceByIdCommandPayloadSchema")
 );
 
 export const GetPlaceByIdCommandSchema = BaseCausedCommandFor(
-	GetPlaceByIdCommandPayloadSchema
+  GetPlaceByIdCommandPayloadSchema
 ).pipe(Schema.identifier("GetPlaceByIdCommandSchema"));

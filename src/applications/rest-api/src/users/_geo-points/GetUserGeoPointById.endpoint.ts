@@ -9,55 +9,55 @@ import { GeoPointApiSchema } from "../../geo-points/GeoPoint.api.js";
 
 // #region GetUserGeoPointByIdResponseBody
 const _GetUserGeoPointByIdResponseBodySchema = GeoPointApiSchema.pipe(
-	Schema.identifier("GetUserGeoPointByIdResponseBodySchema"),
-	BaseResponseFor
+  Schema.identifier("GetUserGeoPointByIdResponseBodySchema"),
+  BaseResponseFor
 );
 
 export type GetUserGeoPointByIdResponseBodyContext = Schema.Schema.Context<
-	typeof _GetUserGeoPointByIdResponseBodySchema
+  typeof _GetUserGeoPointByIdResponseBodySchema
 >;
 export interface GetUserGeoPointByIdResponseBodyEncoded
-	extends Schema.Schema.Encoded<
-		typeof _GetUserGeoPointByIdResponseBodySchema
-	> {}
+  extends Schema.Schema.Encoded<
+    typeof _GetUserGeoPointByIdResponseBodySchema
+  > {}
 export interface GetUserGeoPointByIdResponseBody
-	extends Schema.Schema.Type<typeof _GetUserGeoPointByIdResponseBodySchema> {}
+  extends Schema.Schema.Type<typeof _GetUserGeoPointByIdResponseBodySchema> {}
 
 export const GetUserGeoPointByIdResponseBodySchema: Schema.Schema<
-	GetUserGeoPointByIdResponseBody,
-	GetUserGeoPointByIdResponseBodyEncoded
+  GetUserGeoPointByIdResponseBody,
+  GetUserGeoPointByIdResponseBodyEncoded
 > = _GetUserGeoPointByIdResponseBodySchema;
 // #endregion GetUserGeoPointByIdResponseBodySchema
 
 // #region GetUserGeoPointByIdRequestParams
 const _GetUserGeoPointByIdRequestParamsSchema = Schema.struct({
-	idGeoPoint: IdGeoPointSchema,
-	idUser: IdUserSchema,
+  idGeoPoint: IdGeoPointSchema,
+  idUser: IdUserSchema,
 }).pipe(Schema.identifier("GetUserGeoPointByIdRequestParamsSchema"));
 
 export type GetUserGeoPointByIdRequestParamsContext = Schema.Schema.Context<
-	typeof _GetUserGeoPointByIdRequestParamsSchema
+  typeof _GetUserGeoPointByIdRequestParamsSchema
 >;
 export interface GetUserGeoPointByIdRequestParamsEncoded
-	extends Schema.Schema.Encoded<
-		typeof _GetUserGeoPointByIdRequestParamsSchema
-	> {}
+  extends Schema.Schema.Encoded<
+    typeof _GetUserGeoPointByIdRequestParamsSchema
+  > {}
 export interface GetUserGeoPointByIdRequestParams
-	extends Schema.Schema.Type<typeof _GetUserGeoPointByIdRequestParamsSchema> {}
+  extends Schema.Schema.Type<typeof _GetUserGeoPointByIdRequestParamsSchema> {}
 
 export const GetUserGeoPointByIdRequestParamsSchema: Schema.Schema<
-	GetUserGeoPointByIdRequestParams,
-	GetUserGeoPointByIdRequestParamsEncoded
+  GetUserGeoPointByIdRequestParams,
+  GetUserGeoPointByIdRequestParamsEncoded
 > = _GetUserGeoPointByIdRequestParamsSchema;
 // #endregion GetUserGeoPointByIdRequestParamsSchema
 
 export const GetUserGeoPointByIdEndpoint = ApiEndpoint.get(
-	"getUserGeoPointById",
-	"/users/:idUser/geo-points/:idGeoPoint",
-	{
-		summary: "Get user's geo-point",
-	}
+  "getUserGeoPointById",
+  "/users/:idUser/geo-points/:idGeoPoint",
+  {
+    summary: "Get user's geo-point",
+  }
 ).pipe(
-	ApiEndpoint.setRequestPath(GetUserGeoPointByIdRequestParamsSchema),
-	ApiEndpoint.setResponseBody(GetUserGeoPointByIdResponseBodySchema)
+  ApiEndpoint.setRequestPath(GetUserGeoPointByIdRequestParamsSchema),
+  ApiEndpoint.setResponseBody(GetUserGeoPointByIdResponseBodySchema)
 );

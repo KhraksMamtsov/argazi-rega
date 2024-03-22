@@ -8,18 +8,18 @@ import { BaseResponseFor } from "../../BaseResponseFor.js";
 import { GeoPointApiSchema } from "../../geo-points/GeoPoint.api.js";
 
 export const GetMyGeoPointByIdResponseSchema = GeoPointApiSchema.pipe(
-	Schema.identifier("GetMyGeoPointByIdResponseSchema"),
-	BaseResponseFor
+  Schema.identifier("GetMyGeoPointByIdResponseSchema"),
+  BaseResponseFor
 );
 
 export const GetMyGeoPointByIdRequest = {
-	params: Schema.struct({
-		idGeoPoint: IdGeoPointSchema,
-	}),
+  params: Schema.struct({
+    idGeoPoint: IdGeoPointSchema,
+  }),
 };
 
 export const GetMyGeoPointByIdResponse = GetMyGeoPointByIdResponseSchema.pipe(
-	Schema.description("MyGeoPointById")
+  Schema.description("MyGeoPointById")
 );
 
 // export const GetMyGeoPointByIdEndpoint = ApiEndpoint.get(

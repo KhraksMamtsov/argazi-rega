@@ -8,19 +8,19 @@ import { LatitudeSchema } from "../../value-objects/Latitude.js";
 import { LongitudeSchema } from "../../value-objects/Longitude.js";
 
 export const GeoPointBaseSchema = Schema.struct({
-	id: IdGeoPointSchema,
-	idUser: IdUserSchema,
-	latitude: LatitudeSchema,
-	longitude: LongitudeSchema,
-	name: Schema.optionFromSelf(Schema.SecretFromSelf),
+  id: IdGeoPointSchema,
+  idUser: IdUserSchema,
+  latitude: LatitudeSchema,
+  longitude: LongitudeSchema,
+  name: Schema.optionFromSelf(Schema.SecretFromSelf),
 }).pipe(Schema.typeSchema, Schema.identifier("GeoPointBaseSchema"));
 
 export interface GeoPointBase
-	extends Schema.Schema.Type<typeof GeoPointBaseSchema> {}
+  extends Schema.Schema.Type<typeof GeoPointBaseSchema> {}
 
 export const GeoPointSchema = GeoPointBaseSchema.pipe(
-	Schema.extend(BaseSchema),
-	Schema.identifier("GeoPointSchema")
+  Schema.extend(BaseSchema),
+  Schema.identifier("GeoPointSchema")
 );
 
 export interface GeoPoint extends Schema.Schema.Type<typeof GeoPointSchema> {}

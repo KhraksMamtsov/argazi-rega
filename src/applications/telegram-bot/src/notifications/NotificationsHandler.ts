@@ -13,127 +13,127 @@ import { UserCreatedNotificationHandler } from "./user/UserCreated.notification-
 import { RestApiServiceTag } from "../RestApiService.js";
 
 export const NotificationsHandler = (args: {
-	readonly notificationMessage: NotificationMessage;
+  readonly notificationMessage: NotificationMessage;
 }) =>
-	Effect.gen(function* (_) {
-		const restApiClient = yield* _(RestApiServiceTag);
-		const { notification } = args.notificationMessage;
+  Effect.gen(function* (_) {
+    const restApiClient = yield* _(RestApiServiceTag);
+    const { notification } = args.notificationMessage;
 
-		yield* _(Effect.logDebug(args.notificationMessage));
+    yield* _(Effect.logDebug(args.notificationMessage));
 
-		const initiator = yield* _(
-			restApiClient.getUser({ path: { idUser: notification.idInitiator } })
-		);
+    const initiator = yield* _(
+      restApiClient.getUser({ path: { idUser: notification.idInitiator } })
+    );
 
-		const { entity } = notification;
+    const { entity } = notification;
 
-		if (entity.type === "User") {
-			const affectedUser = yield* _(
-				restApiClient.getUser({ path: { idUser: entity.id } })
-			);
+    if (entity.type === "User") {
+      const affectedUser = yield* _(
+        restApiClient.getUser({ path: { idUser: entity.id } })
+      );
 
-			if (notification.issue === "created") {
-				yield* _(
-					UserCreatedNotificationHandler({
-						createdUser: affectedUser,
-						initiator,
-					})
-				);
+      if (notification.issue === "created") {
+        yield* _(
+          UserCreatedNotificationHandler({
+            createdUser: affectedUser,
+            initiator,
+          })
+        );
 
-				yield* _(args.notificationMessage.ack());
-			}
-		}
+        yield* _(args.notificationMessage.ack());
+      }
+    }
 
-		if (entity.type === "Event") {
-			const affectedEvent = yield* _(
-				restApiClient.getEvent({ path: { idEvent: entity.id } })
-			);
+    if (entity.type === "Event") {
+      const affectedEvent = yield* _(
+        restApiClient.getEvent({ path: { idEvent: entity.id } })
+      );
 
-			if (notification.issue === "created") {
-				return yield* _(
-					EventCreatedNotificationHandler({
-						createdEvent: affectedEvent,
-						initiator: initiator,
-					})
-				);
-			}
-		}
+      if (notification.issue === "created") {
+        return yield* _(
+          EventCreatedNotificationHandler({
+            createdEvent: affectedEvent,
+            initiator: initiator,
+          })
+        );
+      }
+    }
 
-		if (entity.type === "Ticket") {
-			const affectedTicket = yield* _(
-				restApiClient.getUserTicketById({
-					path: { idTicket: entity.id, idUser: IdAdmin },
-				})
-			);
+    if (entity.type === "Ticket") {
+      const affectedTicket = yield* _(
+        restApiClient.getUserTicketById({
+          path: { idTicket: entity.id, idUser: IdAdmin },
+        })
+      );
 
-			const user = yield* _(
-				restApiClient.getUser({
-					path: {
-						idUser: affectedTicket.idUser,
-					},
-				})
-			);
+      const user = yield* _(
+        restApiClient.getUser({
+          path: {
+            idUser: affectedTicket.idUser,
+          },
+        })
+      );
 
-			if (notification.issue === "created") {
-				yield* _(
-					TicketCreatedNotificationHandler({
-						createdTicket: affectedTicket,
-						initiator,
-						user,
-					})
-				);
+      if (notification.issue === "created") {
+        yield* _(
+          TicketCreatedNotificationHandler({
+            createdTicket: affectedTicket,
+            initiator,
+            user,
+          })
+        );
 
-				return Effect.unit;
-			}
+        return Effect.unit;
+      }
 
-			if (notification.issue === "deleted") {
-				yield* _(
-					TicketReturnedNotificationHandler({
-						createdTicket: affectedTicket,
-						initiator,
-						user,
-					})
-				);
+      if (notification.issue === "deleted") {
+        yield* _(
+          TicketReturnedNotificationHandler({
+            createdTicket: affectedTicket,
+            initiator,
+            user,
+          })
+        );
 
-				return Effect.unit;
-			}
-		}
+        return Effect.unit;
+      }
+    }
 
-		if (entity.type === "Subscription") {
-			const affectedSubscription = yield* _(
-				restApiClient.getSubscription({
-					path: { idSubscription: entity.id },
-				})
-			);
+    if (entity.type === "Subscription") {
+      const affectedSubscription = yield* _(
+        restApiClient.getSubscription({
+          path: { idSubscription: entity.id },
+        })
+      );
 
-			const user = yield* _(
-				restApiClient.getUser({
-					path: {
-						idUser: affectedSubscription.idUser,
-					},
-				})
-			);
+      const user = yield* _(
+        restApiClient.getUser({
+          path: {
+            idUser: affectedSubscription.idUser,
+          },
+        })
+      );
 
-			if (notification.issue === "created") {
-				yield* _(
-					SubscriptionCreatedNotificationHandler({
-						createdSubscription: affectedSubscription,
-						initiator,
-						user,
-					})
-				);
-			}
+      if (notification.issue === "created") {
+        yield* _(
+          SubscriptionCreatedNotificationHandler({
+            createdSubscription: affectedSubscription,
+            initiator,
+            user,
+          })
+        );
+      }
 
-			if (notification.issue === "deleted") {
-				yield* _(
-					SubscriptionCancelledNotificationHandler({
-						cancelledSubscription: affectedSubscription,
-						initiator,
-						user,
-					})
-				);
-			}
-		}
+      if (notification.issue === "deleted") {
+        yield* _(
+          SubscriptionCancelledNotificationHandler({
+            cancelledSubscription: affectedSubscription,
+            initiator,
+            user,
+          })
+        );
+      }
+    }
 
-		return yield* _(args.notificationMessage.ack());
-	});
+    return yield* _(args.notificationMessage.ack());
+  });

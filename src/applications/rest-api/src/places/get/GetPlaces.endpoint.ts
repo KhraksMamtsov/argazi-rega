@@ -6,28 +6,28 @@ import { BearerAuth } from "../../BearerAuth.security-scheme.js";
 import { PlaceApi } from "../Place.api.js";
 
 export const _GetPlacesResponseSchema = PlaceApi.pipe(
-	Schema.identifier("GetPlacesResponseSchema"),
-	BaseResponseManyFor
+  Schema.identifier("GetPlacesResponseSchema"),
+  BaseResponseManyFor
 );
 export interface GetPlacesResponseFrom
-	extends Schema.Schema.Encoded<typeof _GetPlacesResponseSchema> {}
+  extends Schema.Schema.Encoded<typeof _GetPlacesResponseSchema> {}
 export interface GetPlacesResponse
-	extends Schema.Schema.Type<typeof _GetPlacesResponseSchema> {}
+  extends Schema.Schema.Type<typeof _GetPlacesResponseSchema> {}
 
 export const GetPlacesResponseSchema: Schema.Schema<
-	GetPlacesResponse,
-	GetPlacesResponseFrom
+  GetPlacesResponse,
+  GetPlacesResponseFrom
 > = _GetPlacesResponseSchema;
 
 export const GetPlacesResponse = GetPlacesResponseSchema.pipe(
-	Schema.description("Place")
+  Schema.description("Place")
 );
 
 export const GetPlacesEndpoint = ApiEndpoint.get(
-	"getPlaces",
-	"/places",
-	{}
+  "getPlaces",
+  "/places",
+  {}
 ).pipe(
-	ApiEndpoint.setResponseBody(GetPlacesResponse),
-	ApiEndpoint.setSecurity(BearerAuth)
+  ApiEndpoint.setResponseBody(GetPlacesResponse),
+  ApiEndpoint.setSecurity(BearerAuth)
 );

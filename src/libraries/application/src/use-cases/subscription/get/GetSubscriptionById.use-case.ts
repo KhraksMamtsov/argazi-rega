@@ -2,8 +2,8 @@ import { Schema } from "@effect/schema";
 import { Effect } from "effect";
 
 import {
-	PrismaServiceTag,
-	SubscriptionDbToDomainSchema,
+  PrismaServiceTag,
+  SubscriptionDbToDomainSchema,
 } from "@argazi/database";
 
 import { GetSubscriptionByIdCommandSchema } from "./GetSubscriptionById.command.js";
@@ -11,17 +11,17 @@ import { GetSubscriptionByIdCommandSchema } from "./GetSubscriptionById.command.
 import { BaseCausedUseCaseFor } from "../../common/Base.use-case.js";
 
 export const GetSubscriptionByIdUseCase = BaseCausedUseCaseFor(
-	GetSubscriptionByIdCommandSchema
+  GetSubscriptionByIdCommandSchema
 )(({ payload }) =>
-	Effect.gen(function* (_) {
-		const prismaClient = yield* _(PrismaServiceTag);
+  Effect.gen(function* (_) {
+    const prismaClient = yield* _(PrismaServiceTag);
 
-		return yield* _(
-			prismaClient.queryDecode(
-				Schema.optionFromNullable(SubscriptionDbToDomainSchema),
-				(p) =>
-					p.subscription.findUnique({ where: { id: payload.idSubscription } })
-			)
-		);
-	})
+    return yield* _(
+      prismaClient.queryDecode(
+        Schema.optionFromNullable(SubscriptionDbToDomainSchema),
+        (p) =>
+          p.subscription.findUnique({ where: { id: payload.idSubscription } })
+      )
+    );
+  })
 );

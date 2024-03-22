@@ -6,13 +6,13 @@ import { _SS } from "@argazi/shared";
 import { BaseCausedCommandFor } from "../../common/Base.command.js";
 
 export const CreateSubscriptionCommandPayloadSchema = Schema.struct({
-	idPlace: IdPlaceSchema,
-	idUser: IdUserSchema,
+  idPlace: IdPlaceSchema,
+  idUser: IdUserSchema,
 }).pipe(
-	_SS.satisfies.from.json(),
-	Schema.identifier("CreateSubscriptionCommandPayloadSchema")
+  _SS.satisfies.from.json(),
+  Schema.identifier("CreateSubscriptionCommandPayloadSchema")
 );
 
 export const CreateSubscriptionCommandSchema = BaseCausedCommandFor(
-	CreateSubscriptionCommandPayloadSchema
+  CreateSubscriptionCommandPayloadSchema
 ).pipe(Schema.identifier("CreateSubscriptionCommandSchema"));

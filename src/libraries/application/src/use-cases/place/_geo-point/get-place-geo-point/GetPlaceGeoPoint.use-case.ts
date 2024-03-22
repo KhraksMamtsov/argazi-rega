@@ -9,22 +9,22 @@ import { GetPlaceGeoPointCommandSchema } from "./GetPlaceGeoPoint.command.js";
 import { BaseCausedUseCaseFor } from "../../../common/Base.use-case.js";
 
 export const GetPlaceGeoPointUseCase = BaseCausedUseCaseFor(
-	GetPlaceGeoPointCommandSchema
+  GetPlaceGeoPointCommandSchema
 )(({ payload }) =>
-	Effect.gen(function* (_) {
-		const prismaClient = yield* _(PrismaServiceTag);
+  Effect.gen(function* (_) {
+    const prismaClient = yield* _(PrismaServiceTag);
 
-		return yield* _(
-			prismaClient.queryDecode(
-				Schema.optionFromNullable(GeoPointDbToDomainSchema),
-				(p) =>
-					p.place
-						.findUnique({
-							include: { geoPoint: true },
-							where: { id: payload.idPlace },
-						})
-						.then((x) => x?.geoPoint ?? null)
-			)
-		);
-	})
+    return yield* _(
+      prismaClient.queryDecode(
+        Schema.optionFromNullable(GeoPointDbToDomainSchema),
+        (p) =>
+          p.place
+            .findUnique({
+              include: { geoPoint: true },
+              where: { id: payload.idPlace },
+            })
+            .then((x) => x?.geoPoint ?? null)
+      )
+    );
+  })
 );

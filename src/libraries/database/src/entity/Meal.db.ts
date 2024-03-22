@@ -14,34 +14,34 @@ import { BigDecimalFromPrismaDecimal } from "../PrismaDecimalSchema.js";
 
 // #region MealDb
 export const _MealDbSchema = Schema.struct({
-	dateFinish: Schema.optionFromNullable(Schema.ValidDateFromSelf),
-	dateStart: Schema.ValidDateFromSelf,
-	id: IdMealSchema,
-	idEvent: IdEventSchema,
-	name: Schema.Trim.pipe(Schema.nonEmpty()),
-	price: Schema.compose(BigDecimalFromPrismaDecimal, PriceSchema),
-	type: Schema.transformLiterals(
-		["REGULAR", MealType.REGULAR],
-		["VEGETARIAN", MealType.VEGETARIAN]
-	),
+  dateFinish: Schema.optionFromNullable(Schema.ValidDateFromSelf),
+  dateStart: Schema.ValidDateFromSelf,
+  id: IdMealSchema,
+  idEvent: IdEventSchema,
+  name: Schema.Trim.pipe(Schema.nonEmpty()),
+  price: Schema.compose(BigDecimalFromPrismaDecimal, PriceSchema),
+  type: Schema.transformLiterals(
+    ["REGULAR", MealType.REGULAR],
+    ["VEGETARIAN", MealType.VEGETARIAN]
+  ),
 }).pipe(
-	_SS.satisfies.to<MealBase>(),
-	Schema.extend(BaseDbSchema),
-	Schema.identifier("MealDbSchema"),
-	_SS.satisfies.from<_Meal>()
+  _SS.satisfies.to<MealBase>(),
+  Schema.extend(BaseDbSchema),
+  Schema.identifier("MealDbSchema"),
+  _SS.satisfies.from<_Meal>()
 );
 
 export type MealDbContext = Schema.Schema.Context<typeof _MealDbSchema>;
 export interface MealDbEncoded
-	extends Schema.Schema.Encoded<typeof _MealDbSchema> {}
+  extends Schema.Schema.Encoded<typeof _MealDbSchema> {}
 export interface MealDb extends Schema.Schema.Type<typeof _MealDbSchema> {}
 
 export const MealDbSchema: Schema.Schema<MealDb, MealDbEncoded> = _MealDbSchema;
 // #endregion MealDbSchema
 
 export const MealDbToDomainSchema: Schema.Schema<Meal, _Meal> = transform(
-	MealDbSchema,
-	MealSchema,
-	Effect.succeed,
-	Effect.succeed
+  MealDbSchema,
+  MealSchema,
+  Effect.succeed,
+  Effect.succeed
 );

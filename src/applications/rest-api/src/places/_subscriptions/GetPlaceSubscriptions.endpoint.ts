@@ -7,44 +7,44 @@ import { BaseResponseManyFor } from "../../BaseResponseFor.js";
 import { SubscriptionApiSchema } from "../../subscriptions/Subscription.api.js";
 
 export const GetPlaceSubscriptionsResponseSchema = SubscriptionApiSchema.pipe(
-	Schema.identifier("GetPlaceSubscriptionsResponseSchema"),
-	BaseResponseManyFor
+  Schema.identifier("GetPlaceSubscriptionsResponseSchema"),
+  BaseResponseManyFor
 );
 
 // #region GetPlaceSubscriptionsRequestPath
 const _GetPlaceSubscriptionsRequestPathSchema = Schema.struct({
-	idPlace: IdPlaceSchema,
+  idPlace: IdPlaceSchema,
 }).pipe(Schema.identifier("GetPlaceSubscriptionsRequestPathSchema"));
 
 export type GetPlaceSubscriptionsRequestPathContext = Schema.Schema.Context<
-	typeof _GetPlaceSubscriptionsRequestPathSchema
+  typeof _GetPlaceSubscriptionsRequestPathSchema
 >;
 export interface GetPlaceSubscriptionsRequestPathEncoded
-	extends Schema.Schema.Encoded<
-		typeof _GetPlaceSubscriptionsRequestPathSchema
-	> {}
+  extends Schema.Schema.Encoded<
+    typeof _GetPlaceSubscriptionsRequestPathSchema
+  > {}
 export interface GetPlaceSubscriptionsRequestPath
-	extends Schema.Schema.Type<typeof _GetPlaceSubscriptionsRequestPathSchema> {}
+  extends Schema.Schema.Type<typeof _GetPlaceSubscriptionsRequestPathSchema> {}
 
 export const GetPlaceSubscriptionsRequestPathSchema: Schema.Schema<
-	GetPlaceSubscriptionsRequestPath,
-	GetPlaceSubscriptionsRequestPathEncoded
+  GetPlaceSubscriptionsRequestPath,
+  GetPlaceSubscriptionsRequestPathEncoded
 > = _GetPlaceSubscriptionsRequestPathSchema;
 // #endregion GetPlaceSubscriptionsRequestPathSchema
 
 export const GetPlaceSubscriptionsEndpoint = ApiEndpoint.get(
-	"getPlaceSubscriptions",
-	"/places/:idPlace/subscriptions",
-	{}
+  "getPlaceSubscriptions",
+  "/places/:idPlace/subscriptions",
+  {}
 ).pipe(
-	ApiEndpoint.setRequestPath(GetPlaceSubscriptionsRequestPathSchema),
-	ApiEndpoint.setResponse(
-		ApiResponse.make(200, GetPlaceSubscriptionsResponseSchema)
-	),
-	ApiEndpoint.addResponse(
-		ApiResponse.make(
-			404,
-			Schema.string.pipe(Schema.description("PlaceSubscriptions not found"))
-		)
-	)
+  ApiEndpoint.setRequestPath(GetPlaceSubscriptionsRequestPathSchema),
+  ApiEndpoint.setResponse(
+    ApiResponse.make(200, GetPlaceSubscriptionsResponseSchema)
+  ),
+  ApiEndpoint.addResponse(
+    ApiResponse.make(
+      404,
+      Schema.string.pipe(Schema.description("PlaceSubscriptions not found"))
+    )
+  )
 );

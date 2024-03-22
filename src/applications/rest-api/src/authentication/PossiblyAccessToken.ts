@@ -1,13 +1,13 @@
 import { Schema } from "@effect/schema";
 
 export const PossiblyAccessTokenSymbol: unique symbol = Symbol.for(
-	"PossiblyAccessTokenSymbol"
+  "PossiblyAccessTokenSymbol"
 );
 export const PossiblyAccessTokenSchema = Schema.string.pipe(
-	Schema.identifier("PossiblyAccessTokenSchema"),
-	Schema.brand(PossiblyAccessTokenSymbol)
+  Schema.identifier("PossiblyAccessTokenSchema"),
+  Schema.brand(PossiblyAccessTokenSymbol)
 );
 
 export type PossiblyAccessToken = Schema.Schema.Type<
-	typeof PossiblyAccessTokenSchema
+  typeof PossiblyAccessTokenSchema
 >;

@@ -8,22 +8,22 @@ import { IdEventSchema } from "../../event/entity/IdEvent.js";
 import { PriceSchema } from "../../value-objects/Price.js";
 
 export const MealBaseSchema = Schema.struct({
-	dateFinish: Schema.optionFromSelf(Schema.ValidDateFromSelf),
-	dateStart: Schema.ValidDateFromSelf,
-	id: IdMealSchema,
-	idEvent: IdEventSchema,
-	name: Schema.Trim.pipe(Schema.nonEmpty()),
-	price: PriceSchema,
-	type: MealTypeSchema,
+  dateFinish: Schema.optionFromSelf(Schema.ValidDateFromSelf),
+  dateStart: Schema.ValidDateFromSelf,
+  id: IdMealSchema,
+  idEvent: IdEventSchema,
+  name: Schema.Trim.pipe(Schema.nonEmpty()),
+  price: PriceSchema,
+  type: MealTypeSchema,
 }).pipe(Schema.identifier("MealBaseSchema"));
 
 export type MealBase = Schema.Schema.Type<typeof MealBaseSchema>;
 
 export const MealSchema = MealBaseSchema.pipe(
-	//
-	Schema.extend(BaseSchema),
-	Schema.typeSchema,
-	Schema.identifier("MealSchema")
+  //
+  Schema.extend(BaseSchema),
+  Schema.typeSchema,
+  Schema.identifier("MealSchema")
 );
 
 export interface MealFrom extends Schema.Schema.Encoded<typeof MealSchema> {}

@@ -11,22 +11,22 @@ import { PlaceMdComponent } from "../../ui/Place.md-component.js";
 import { TicketMdComponent } from "../../ui/Ticket.md-component.js";
 
 export const TicketCreatedMdComponent = (props: {
-	event: Event;
-	place: Place;
-	ticket: Ticket;
+  event: Event;
+  place: Place;
+  ticket: Ticket;
 }) =>
-	Effect.gen(function* (_) {
-		const { place, event, ticket } = props;
+  Effect.gen(function* (_) {
+    const { place, event, ticket } = props;
 
-		return yield* _(
-			MD.document(
-				ArgazipaSayMdComponent({ emotion: "ℹ️", phrase: "Забронирован билет" }),
-				MD.br,
-				TicketMdComponent({ ticket }),
-				MD.br,
-				PlaceMdComponent({ place }),
-				MD.br,
-				EventMdComponent({ event })
-			)
-		);
-	});
+    return yield* _(
+      MD.document(
+        ArgazipaSayMdComponent({ emotion: "ℹ️", phrase: "Забронирован билет" }),
+        MD.br,
+        TicketMdComponent({ ticket }),
+        MD.br,
+        PlaceMdComponent({ place }),
+        MD.br,
+        EventMdComponent({ event })
+      )
+    );
+  });

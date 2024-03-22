@@ -11,29 +11,29 @@ import { TelegrafTag } from "../../telegraf/Telegraf.js";
 import { SubscribePlaceCbButton } from "../../ui/button/SubscribePlace.cb-button.js";
 
 export const SubscriptionCancelledNotificationHandler = (args: {
-	readonly cancelledSubscription: Subscription;
-	readonly initiator: User;
-	readonly user: User;
+  readonly cancelledSubscription: Subscription;
+  readonly initiator: User;
+  readonly user: User;
 }) =>
-	Effect.gen(function* (_) {
-		const telegraf = yield* _(TelegrafTag);
-		const restApiClient = yield* _(RestApiServiceTag);
+  Effect.gen(function* (_) {
+    const telegraf = yield* _(TelegrafTag);
+    const restApiClient = yield* _(RestApiServiceTag);
 
-		const place = yield* _(
-			restApiClient.getPlaceById({
-				path: {
-					idPlace: args.cancelledSubscription.idPlace,
-				},
-			})
-		);
+    const place = yield* _(
+      restApiClient.getPlaceById({
+        path: {
+          idPlace: args.cancelledSubscription.idPlace,
+        },
+      })
+    );
 
-		yield* _(
-			telegraf.sendMessage(
-				args.user.idTelegramChat,
-				yield* _(SubscriptionCancelledMdComponent({ place })),
-				Markup.inlineKeyboard([
-					yield* _(SubscribePlaceCbButton({ id: place.id })),
-				])
-			)
-		);
-	});
+    yield* _(
+      telegraf.sendMessage(
+        args.user.idTelegramChat,
+        yield* _(SubscriptionCancelledMdComponent({ place })),
+        Markup.inlineKeyboard([
+          yield* _(SubscribePlaceCbButton({ id: place.id })),
+        ])
+      )
+    );
+  });

@@ -18,6 +18,6 @@ export * from "./authentication/RefreshToken.js";
 // export * from "./BearerAuth.security-scheme.js";
 
 export const RestApiClient = (baseUrl: string) =>
-	Client.make(RestApi, {
-		baseUrl,
-	});
+  Client.make(RestApi, {
+    baseUrl,
+  });

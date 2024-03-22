@@ -6,17 +6,17 @@ import { _SS } from "@argazi/shared";
 import { BaseCausedCommandFor } from "../../../common/Base.command.js";
 
 export const GetUserTicketByIdCommandPayloadSchema = Schema.struct({
-	idTicket: IdTicketSchema,
-	idUser: IdUserSchema,
+  idTicket: IdTicketSchema,
+  idUser: IdUserSchema,
 }).pipe(
-	_SS.satisfies.from.json(),
-	Schema.identifier("GetUserTicketByIdCommandPayloadSchema")
+  _SS.satisfies.from.json(),
+  Schema.identifier("GetUserTicketByIdCommandPayloadSchema")
 );
 
 export type GetUserTicketByIdCommandPayloadFrom = Schema.Schema.Encoded<
-	typeof GetUserTicketByIdCommandPayloadSchema
+  typeof GetUserTicketByIdCommandPayloadSchema
 >;
 
 export const GetUserTicketByIdCommandSchema = BaseCausedCommandFor(
-	GetUserTicketByIdCommandPayloadSchema
+  GetUserTicketByIdCommandPayloadSchema
 ).pipe(Schema.identifier("GetUserTicketByIdCommandSchema"));

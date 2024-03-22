@@ -1,8 +1,8 @@
 import { Effect } from "effect";
 
 import {
-	PrismaServiceTag,
-	SubscriptionDbToDomainSchema,
+  PrismaServiceTag,
+  SubscriptionDbToDomainSchema,
 } from "@argazi/database";
 import { NotificationServiceTag, notification } from "@argazi/domain";
 
@@ -12,44 +12,44 @@ import { CreateEntityAuthorizationError } from "../../common/AuthorizationError.
 import { BaseCausedUseCaseFor } from "../../common/Base.use-case.js";
 
 export const CreateSubscriptionUseCase = BaseCausedUseCaseFor(
-	CreateSubscriptionCommandSchema
+  CreateSubscriptionCommandSchema
 )(({ payload, initiator }) =>
-	Effect.gen(function* (_) {
-		const prismaClient = yield* _(PrismaServiceTag);
-		const notificationService = yield* _(NotificationServiceTag);
+  Effect.gen(function* (_) {
+    const prismaClient = yield* _(PrismaServiceTag);
+    const notificationService = yield* _(NotificationServiceTag);
 
-		if (!initiator.isAdmin && initiator.id !== payload.idUser) {
-			yield* _(
-				new CreateEntityAuthorizationError({
-					entity: "Subscription",
-					idInitiator: initiator.id,
-					payload,
-				})
-			);
-		}
+    if (!initiator.isAdmin && initiator.id !== payload.idUser) {
+      yield* _(
+        new CreateEntityAuthorizationError({
+          entity: "Subscription",
+          idInitiator: initiator.id,
+          payload,
+        })
+      );
+    }
 
-		const newSubscription = yield* _(
-			prismaClient.queryDecode(SubscriptionDbToDomainSchema, (p) =>
-				p.subscription.create({
-					data: {
-						idPlace: payload.idPlace,
-						idUser: payload.idUser,
-						idUserCreator: initiator.id,
-						idUserUpdater: initiator.id,
-					},
-				})
-			)
-		);
+    const newSubscription = yield* _(
+      prismaClient.queryDecode(SubscriptionDbToDomainSchema, (p) =>
+        p.subscription.create({
+          data: {
+            idPlace: payload.idPlace,
+            idUser: payload.idUser,
+            idUserCreator: initiator.id,
+            idUserUpdater: initiator.id,
+          },
+        })
+      )
+    );
 
-		Effect.runFork(
-			notificationService.queue(
-				notification.subscription("created")({
-					idEntity: newSubscription.id,
-					idInitiator: initiator.id,
-				})
-			)
-		);
+    Effect.runFork(
+      notificationService.queue(
+        notification.subscription("created")({
+          idEntity: newSubscription.id,
+          idInitiator: initiator.id,
+        })
+      )
+    );
 
-		return newSubscription;
-	})
+    return newSubscription;
+  })
 );

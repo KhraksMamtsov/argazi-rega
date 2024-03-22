@@ -9,26 +9,26 @@ import { IdEventSchema } from "../../event/entity/IdEvent.js";
 import { IdUserSchema } from "../../user/entity/IdUser.js";
 
 export const TicketBaseSchema = Schema.struct({
-	dateRegistered: Schema.ValidDateFromSelf,
-	id: IdTicketSchema,
-	idEvent: IdEventSchema,
-	idTransport: Schema.optionFromSelf(IdTransportOnEventSchema),
-	idUser: IdUserSchema,
-	//
-	role: TicketRoleSchema,
+  dateRegistered: Schema.ValidDateFromSelf,
+  id: IdTicketSchema,
+  idEvent: IdEventSchema,
+  idTransport: Schema.optionFromSelf(IdTransportOnEventSchema),
+  idUser: IdUserSchema,
+  //
+  role: TicketRoleSchema,
 }).pipe(Schema.identifier("TicketBaseSchema"));
 
 export interface TicketBase
-	extends Schema.Schema.Type<typeof TicketBaseSchema> {}
+  extends Schema.Schema.Type<typeof TicketBaseSchema> {}
 
 export const _TicketSchema = TicketBaseSchema.pipe(
-	Schema.typeSchema,
-	Schema.extend(BaseSchema),
-	Schema.identifier("TicketSchema")
+  Schema.typeSchema,
+  Schema.extend(BaseSchema),
+  Schema.identifier("TicketSchema")
 );
 
 export interface TicketFrom
-	extends Schema.Schema.Encoded<typeof _TicketSchema> {}
+  extends Schema.Schema.Encoded<typeof _TicketSchema> {}
 export interface Ticket extends Schema.Schema.Type<typeof _TicketSchema> {}
 
 export const TicketSchema: Schema.Schema<Ticket, TicketFrom> = _TicketSchema;

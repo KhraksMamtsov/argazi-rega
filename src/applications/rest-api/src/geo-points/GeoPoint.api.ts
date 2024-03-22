@@ -8,23 +8,23 @@ import { LongitudeSchema } from "@argazi/domain";
 import { _SS } from "@argazi/shared";
 
 export const _GeoPointApiSchema = Schema.struct({
-	id: IdGeoPointSchema,
-	idUser: IdUserSchema,
-	latitude: Schema.compose(Schema.Secret, LatitudeSchema),
-	longitude: Schema.compose(Schema.Secret, LongitudeSchema),
-	//
-	name: Schema.optionFromNullable(
-		Schema.compose(Schema.compose(Schema.Trim, Schema.NonEmpty), Schema.Secret)
-	),
+  id: IdGeoPointSchema,
+  idUser: IdUserSchema,
+  latitude: Schema.compose(Schema.Secret, LatitudeSchema),
+  longitude: Schema.compose(Schema.Secret, LongitudeSchema),
+  //
+  name: Schema.optionFromNullable(
+    Schema.compose(Schema.compose(Schema.Trim, Schema.NonEmpty), Schema.Secret)
+  ),
 }).pipe(
-	_SS.satisfies.to<GeoPointBase>(),
-	Schema.identifier("GeoPointApiSchema")
+  _SS.satisfies.to<GeoPointBase>(),
+  Schema.identifier("GeoPointApiSchema")
 );
 
 export interface GeoPointApiEncoded
-	extends Schema.Schema.Encoded<typeof _GeoPointApiSchema> {}
+  extends Schema.Schema.Encoded<typeof _GeoPointApiSchema> {}
 export interface GeoPointApi
-	extends Schema.Schema.Type<typeof _GeoPointApiSchema> {}
+  extends Schema.Schema.Type<typeof _GeoPointApiSchema> {}
 
 export const GeoPointApiSchema: Schema.Schema<GeoPointApi, GeoPointApiEncoded> =
-	_GeoPointApiSchema;
+  _GeoPointApiSchema;

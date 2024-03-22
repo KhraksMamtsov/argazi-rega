@@ -15,7 +15,6 @@
 		"**/dist/**"
 	],
 	"extends": [
-    "plugin:vue/vue3-recommended",
 		"eslint:recommended",
     // "@vue/typescript/recommended",
 		"plugin:@typescript-eslint/strict-type-checked",
@@ -27,19 +26,16 @@
     "plugin:vue/vue3-recommended",
 		"plugin:prettier/recommended" // must be last
 	],
-	"parser": "@typescript-eslint/parser",
+
+  "parser": "vue-eslint-parser",
 	"parserOptions": {
+		"parser": "@typescript-eslint/parser",
 		"extraFileExtensions": [".vue"],
 		"ecmaVersion": "latest",
 		"sourceType": "module",
 		"project": true
 	},
 	"rules": {
-		// "@typescript-eslint/no-unsafe-argument": ["off"],
-		// "@typescript-eslint/no-unsafe-return": ["off"],
-		// "@typescript-eslint/no-unsafe-call": ["off"],
-		// "@typescript-eslint/no-unsafe-member-access": ["off"],
-		// "@typescript-eslint/no-unsafe-assignment": ["off"],
 		"sort-keys": ["off"],
 		"@typescript-eslint/no-empty-interface": ["off"],
 		"sort-keys/sort-keys-fix": [

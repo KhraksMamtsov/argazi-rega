@@ -9,51 +9,51 @@ import { TicketApiSchema } from "../../tickets/Ticket.api.js";
 
 // #region ReturnMyTicketResponseBody
 const _ReturnMyTicketResponseBodySchema = TicketApiSchema.pipe(
-	Schema.identifier("_ReturnMyTicketResponseBodySchema"),
-	BaseResponseFor
+  Schema.identifier("_ReturnMyTicketResponseBodySchema"),
+  BaseResponseFor
 );
 
 export type ReturnMyTicketResponseBodyContext = Schema.Schema.Context<
-	typeof _ReturnMyTicketResponseBodySchema
+  typeof _ReturnMyTicketResponseBodySchema
 >;
 export interface ReturnMyTicketResponseBodyEncoded
-	extends Schema.Schema.Encoded<typeof _ReturnMyTicketResponseBodySchema> {}
+  extends Schema.Schema.Encoded<typeof _ReturnMyTicketResponseBodySchema> {}
 export interface ReturnMyTicketResponseBody
-	extends Schema.Schema.Type<typeof _ReturnMyTicketResponseBodySchema> {}
+  extends Schema.Schema.Type<typeof _ReturnMyTicketResponseBodySchema> {}
 
 export const ReturnMyTicketResponseBodySchema: Schema.Schema<
-	ReturnMyTicketResponseBody,
-	ReturnMyTicketResponseBodyEncoded
+  ReturnMyTicketResponseBody,
+  ReturnMyTicketResponseBodyEncoded
 > = _ReturnMyTicketResponseBodySchema;
 // #endregion ReturnMyTicketResponseBodySchema
 
 // #region ReturnMyTicketRequestParams
 const _ReturnMyTicketRequestParamsSchema = Schema.struct({
-	idTicket: IdTicketSchema,
+  idTicket: IdTicketSchema,
 }).pipe(Schema.identifier("ReturnMyTicketRequestParamsSchema"));
 
 export type ReturnMyTicketRequestParamsContext = Schema.Schema.Context<
-	typeof _ReturnMyTicketRequestParamsSchema
+  typeof _ReturnMyTicketRequestParamsSchema
 >;
 export interface ReturnMyTicketRequestParamsEncoded
-	extends Schema.Schema.Encoded<typeof _ReturnMyTicketRequestParamsSchema> {}
+  extends Schema.Schema.Encoded<typeof _ReturnMyTicketRequestParamsSchema> {}
 export interface ReturnMyTicketRequestParams
-	extends Schema.Schema.Type<typeof _ReturnMyTicketRequestParamsSchema> {}
+  extends Schema.Schema.Type<typeof _ReturnMyTicketRequestParamsSchema> {}
 
 export const ReturnMyTicketRequestParamsSchema: Schema.Schema<
-	ReturnMyTicketRequestParams,
-	ReturnMyTicketRequestParamsEncoded
+  ReturnMyTicketRequestParams,
+  ReturnMyTicketRequestParamsEncoded
 > = _ReturnMyTicketRequestParamsSchema;
 // #endregion ReturnMyTicketRequestParamsSchema
 
 export const ReturnMyTicketEndpoint = ApiEndpoint.delete(
-	"returnMyTicket",
-	"/my/tickets/:idTicket",
-	{
-		summary: "Return ticket for user on particular event",
-	}
+  "returnMyTicket",
+  "/my/tickets/:idTicket",
+  {
+    summary: "Return ticket for user on particular event",
+  }
 ).pipe(
-	ApiEndpoint.setSecurity(BearerAuth),
-	ApiEndpoint.setRequestPath(ReturnMyTicketRequestParamsSchema),
-	ApiEndpoint.setResponseBody(ReturnMyTicketResponseBodySchema)
+  ApiEndpoint.setSecurity(BearerAuth),
+  ApiEndpoint.setRequestPath(ReturnMyTicketRequestParamsSchema),
+  ApiEndpoint.setResponseBody(ReturnMyTicketResponseBodySchema)
 );

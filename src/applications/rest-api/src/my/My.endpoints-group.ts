@@ -11,20 +11,20 @@ import { ReturnMyTicketEndpoint } from "./_tickets/ReturnTicketOnEvent.endpoint.
 import { GetMyIdentityEndpoint } from "./Identity.endpoint.js";
 
 export const MyEndpointsGroup = ApiGroup.make("my").pipe(
-	ApiGroup.addEndpoint(GetMyIdentityEndpoint),
-	// #region Subscriptions
-	flow(
-		ApiGroup.addEndpoint(CreateMySubscriptionEndpoint),
-		ApiGroup.addEndpoint(GetMySubscriptionsEndpoint),
-		ApiGroup.addEndpoint(DeleteMySubscriptionEndpoint)
-	),
-	// #endregion
-	// #region Tickets
-	flow(
-		ApiGroup.addEndpoint(BookMyTicketEndpoint),
-		ApiGroup.addEndpoint(GetMyTicketByIdEndpoint),
-		ApiGroup.addEndpoint(ReturnMyTicketEndpoint),
-		ApiGroup.addEndpoint(GetMyTicketsEndpoint)
-	)
-	// #endregion
+  ApiGroup.addEndpoint(GetMyIdentityEndpoint),
+  // #region Subscriptions
+  flow(
+    ApiGroup.addEndpoint(CreateMySubscriptionEndpoint),
+    ApiGroup.addEndpoint(GetMySubscriptionsEndpoint),
+    ApiGroup.addEndpoint(DeleteMySubscriptionEndpoint)
+  ),
+  // #endregion
+  // #region Tickets
+  flow(
+    ApiGroup.addEndpoint(BookMyTicketEndpoint),
+    ApiGroup.addEndpoint(GetMyTicketByIdEndpoint),
+    ApiGroup.addEndpoint(ReturnMyTicketEndpoint),
+    ApiGroup.addEndpoint(GetMyTicketsEndpoint)
+  )
+  // #endregion
 );

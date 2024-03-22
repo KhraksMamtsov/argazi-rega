@@ -7,40 +7,40 @@ import { IdUserSchema } from "@argazi/domain";
 import { TokensResponseSchema } from "../Tokens.response.js";
 
 export const _LoginDwbnRequestBodySchema = Schema.struct({
-	code: Schema.compose(Schema.Trim, Schema.NonEmpty),
-	idTelegramChat: IdTelegramChatSchema,
+  code: Schema.compose(Schema.Trim, Schema.NonEmpty),
+  idTelegramChat: IdTelegramChatSchema,
 }).pipe(Schema.identifier("LoginDwbnRequestBodySchema"));
 
 export interface LoginDwbnRequestBodyEncoded
-	extends Schema.Schema.Encoded<typeof _LoginDwbnRequestBodySchema> {}
+  extends Schema.Schema.Encoded<typeof _LoginDwbnRequestBodySchema> {}
 export interface LoginDwbnRequestBody
-	extends Schema.Schema.Type<typeof _LoginDwbnRequestBodySchema> {}
+  extends Schema.Schema.Type<typeof _LoginDwbnRequestBodySchema> {}
 
 export const LoginDwbnRequestBodySchema: Schema.Schema<
-	LoginDwbnRequestBody,
-	LoginDwbnRequestBodyEncoded
+  LoginDwbnRequestBody,
+  LoginDwbnRequestBodyEncoded
 > = _LoginDwbnRequestBodySchema;
 
 export const _LoginDwbnResponseBodySchema = Schema.struct({
-	credentials: TokensResponseSchema,
-	idUser: IdUserSchema,
+  credentials: TokensResponseSchema,
+  idUser: IdUserSchema,
 }).pipe(Schema.identifier("LoginDwbnResponseBodySchema"));
 
 export interface LoginDwbnResponseBodyEncoded
-	extends Schema.Schema.Encoded<typeof _LoginDwbnResponseBodySchema> {}
+  extends Schema.Schema.Encoded<typeof _LoginDwbnResponseBodySchema> {}
 export interface LoginDwbnResponseBody
-	extends Schema.Schema.Type<typeof _LoginDwbnResponseBodySchema> {}
+  extends Schema.Schema.Type<typeof _LoginDwbnResponseBodySchema> {}
 
 export const LoginDwbnResponseBodySchema: Schema.Schema<
-	LoginDwbnResponseBody,
-	LoginDwbnResponseBodyEncoded
+  LoginDwbnResponseBody,
+  LoginDwbnResponseBodyEncoded
 > = _LoginDwbnResponseBodySchema;
 
 export const LoginDwbnEndpoint = ApiEndpoint.post(
-	"loginDwbn",
-	"/authentication/login-dwbn",
-	{}
+  "loginDwbn",
+  "/authentication/login-dwbn",
+  {}
 ).pipe(
-	ApiEndpoint.setRequestBody(LoginDwbnRequestBodySchema),
-	ApiEndpoint.setResponseBody(LoginDwbnResponseBodySchema)
+  ApiEndpoint.setRequestBody(LoginDwbnRequestBodySchema),
+  ApiEndpoint.setResponseBody(LoginDwbnResponseBodySchema)
 );

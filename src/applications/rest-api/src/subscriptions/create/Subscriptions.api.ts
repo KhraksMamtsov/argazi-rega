@@ -6,12 +6,12 @@ import { BaseResponseFor } from "../../BaseResponseFor.js";
 import { SubscriptionApiSchema } from "../Subscription.api.js";
 
 export const CreateSubscriptionRequest = {
-	body: CreateSubscriptionCommandPayloadSchema.pipe(
-		Schema.identifier("CreateSubscriptionRequestBodySchema")
-	),
+  body: CreateSubscriptionCommandPayloadSchema.pipe(
+    Schema.identifier("CreateSubscriptionRequestBodySchema")
+  ),
 };
 
 export const CreateSubscriptionResponseSchema = SubscriptionApiSchema.pipe(
-	Schema.identifier("CreateSubscriptionResponseSchema"),
-	BaseResponseFor
+  Schema.identifier("CreateSubscriptionResponseSchema"),
+  BaseResponseFor
 );

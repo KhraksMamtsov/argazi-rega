@@ -8,33 +8,33 @@ import { CreateUserCommandSchema } from "./CreateUser.command.js";
 import { BaseCausedUseCaseFor } from "../../common/Base.use-case.js";
 
 export const CreateUserUseCase = BaseCausedUseCaseFor(CreateUserCommandSchema)(
-	({ payload, initiator }) =>
-		Effect.gen(function* (_) {
-			const prismaClient = yield* _(PrismaServiceTag);
-			const notificationService = yield* _(NotificationServiceTag);
+  ({ payload, initiator }) =>
+    Effect.gen(function* (_) {
+      const prismaClient = yield* _(PrismaServiceTag);
+      const notificationService = yield* _(NotificationServiceTag);
 
-			const newUser = yield* _(
-				prismaClient.queryDecode(UserDbToDomainSchema, (p) =>
-					p.user.create({
-						data: {
-							...payload,
-							idUserCreator: initiator.id,
-							idUserUpdater: initiator.id,
-							isAdmin: false,
-						},
-					})
-				)
-			);
+      const newUser = yield* _(
+        prismaClient.queryDecode(UserDbToDomainSchema, (p) =>
+          p.user.create({
+            data: {
+              ...payload,
+              idUserCreator: initiator.id,
+              idUserUpdater: initiator.id,
+              isAdmin: false,
+            },
+          })
+        )
+      );
 
-			Effect.runFork(
-				notificationService.queue(
-					notification.user("created")({
-						idEntity: newUser.id,
-						idInitiator: initiator.id,
-					})
-				)
-			);
+      Effect.runFork(
+        notificationService.queue(
+          notification.user("created")({
+            idEntity: newUser.id,
+            idInitiator: initiator.id,
+          })
+        )
+      );
 
-			return newUser;
-		})
+      return newUser;
+    })
 );

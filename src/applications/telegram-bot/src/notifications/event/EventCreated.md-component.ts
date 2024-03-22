@@ -9,19 +9,19 @@ import { MD } from "../../ui/Markdown.js";
 import { PlaceMdComponent } from "../../ui/Place.md-component.js";
 
 export const EventCreatedMdComponent = (props: {
-	event: Event;
-	place: Place;
+  event: Event;
+  place: Place;
 }) =>
-	Effect.gen(function* (_) {
-		const { place, event } = props;
+  Effect.gen(function* (_) {
+    const { place, event } = props;
 
-		return yield* _(
-			MD.document(
-				ArgazipaSayMdComponent({ emotion: "ℹ️", phrase: "Создано событие" }),
-				MD.br,
-				PlaceMdComponent({ place }),
-				MD.br,
-				EventMdComponent({ event })
-			)
-		);
-	});
+    return yield* _(
+      MD.document(
+        ArgazipaSayMdComponent({ emotion: "ℹ️", phrase: "Создано событие" }),
+        MD.br,
+        PlaceMdComponent({ place }),
+        MD.br,
+        EventMdComponent({ event })
+      )
+    );
+  });

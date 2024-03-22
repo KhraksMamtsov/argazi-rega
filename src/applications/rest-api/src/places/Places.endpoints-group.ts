@@ -8,10 +8,10 @@ import { GetPlacesEndpoint } from "./get/GetPlaces.endpoint.js";
 import { GetPlaceByIdEndpoint } from "./get/GetPlacesById.endpoint.js";
 
 export const PlacesEndpointGroup = ApiGroup.make("place").pipe(
-	ApiGroup.addEndpoint(CreatePlaceEndpoint),
-	ApiGroup.addEndpoint(GetPlaceByIdEndpoint),
-	ApiGroup.addEndpoint(GetPlacesEndpoint),
-	ApiGroup.addEndpoint(GetPlaceSubscriptionsEndpoint),
-	ApiGroup.addEndpoint(GetPlaceActualEventsEndpoint),
-	ApiGroup.addEndpoint(GetPlaceGeoPoint)
+  ApiGroup.addEndpoint(CreatePlaceEndpoint),
+  ApiGroup.addEndpoint(GetPlaceByIdEndpoint),
+  ApiGroup.addEndpoint(GetPlacesEndpoint),
+  ApiGroup.addEndpoint(GetPlaceSubscriptionsEndpoint),
+  ApiGroup.addEndpoint(GetPlaceActualEventsEndpoint),
+  ApiGroup.addEndpoint(GetPlaceGeoPoint)
 );

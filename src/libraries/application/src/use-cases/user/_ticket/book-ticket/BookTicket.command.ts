@@ -6,26 +6,26 @@ import { _SS } from "@argazi/shared";
 import { BaseCausedCommandFor } from "../../../common/Base.command.js";
 
 export const BookTicketCommandPayloadSchema = TicketBaseSchema.pipe(
-	Schema.pick("idUser", "idEvent"),
-	_SS.satisfies.from.json(),
-	Schema.identifier("BookTicketCommandPayloadSchema")
+  Schema.pick("idUser", "idEvent"),
+  _SS.satisfies.from.json(),
+  Schema.identifier("BookTicketCommandPayloadSchema")
 );
 
 // #region BookTicketCommand
 const _BookTicketCommandSchema = BaseCausedCommandFor(
-	BookTicketCommandPayloadSchema
+  BookTicketCommandPayloadSchema
 ).pipe(Schema.identifier("BookTicketCommandSchema"));
 
 export type BookTicketCommandContext = Schema.Schema.Context<
-	typeof _BookTicketCommandSchema
+  typeof _BookTicketCommandSchema
 >;
 export interface BookTicketCommandEncoded
-	extends Schema.Schema.Encoded<typeof _BookTicketCommandSchema> {}
+  extends Schema.Schema.Encoded<typeof _BookTicketCommandSchema> {}
 export interface BookTicketCommand
-	extends Schema.Schema.Type<typeof _BookTicketCommandSchema> {}
+  extends Schema.Schema.Type<typeof _BookTicketCommandSchema> {}
 
 export const BookTicketCommandSchema: Schema.Schema<
-	BookTicketCommand,
-	BookTicketCommandEncoded
+  BookTicketCommand,
+  BookTicketCommandEncoded
 > = _BookTicketCommandSchema;
 // #endregion BookTicketCommandSchema

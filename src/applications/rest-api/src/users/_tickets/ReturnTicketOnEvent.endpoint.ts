@@ -9,51 +9,51 @@ import { TicketApiSchema } from "../../tickets/Ticket.api.js";
 
 // #region ReturnTicketResponseBody
 const _ReturnTicketResponseBodySchema = TicketApiSchema.pipe(
-	Schema.identifier("ReturnTicketResponseSchema"),
-	BaseResponseFor
+  Schema.identifier("ReturnTicketResponseSchema"),
+  BaseResponseFor
 );
 
 export type ReturnTicketResponseBodyContext = Schema.Schema.Context<
-	typeof _ReturnTicketResponseBodySchema
+  typeof _ReturnTicketResponseBodySchema
 >;
 export interface ReturnTicketResponseBodyEncoded
-	extends Schema.Schema.Encoded<typeof _ReturnTicketResponseBodySchema> {}
+  extends Schema.Schema.Encoded<typeof _ReturnTicketResponseBodySchema> {}
 export interface ReturnTicketResponseBody
-	extends Schema.Schema.Type<typeof _ReturnTicketResponseBodySchema> {}
+  extends Schema.Schema.Type<typeof _ReturnTicketResponseBodySchema> {}
 
 export const ReturnTicketResponseBodySchema: Schema.Schema<
-	ReturnTicketResponseBody,
-	ReturnTicketResponseBodyEncoded
+  ReturnTicketResponseBody,
+  ReturnTicketResponseBodyEncoded
 > = _ReturnTicketResponseBodySchema;
 // #endregion ReturnTicketResponseBodySchema
 
 // #region ReturnTicketRequestParams
 const _ReturnTicketRequestParamsSchema = Schema.struct({
-	idTicket: IdTicketSchema,
-	idUser: IdUserSchema,
+  idTicket: IdTicketSchema,
+  idUser: IdUserSchema,
 }).pipe(Schema.identifier("ReturnTicketRequestParamsSchema"));
 
 export type ReturnTicketRequestParamsContext = Schema.Schema.Context<
-	typeof _ReturnTicketRequestParamsSchema
+  typeof _ReturnTicketRequestParamsSchema
 >;
 export interface ReturnTicketRequestParamsEncoded
-	extends Schema.Schema.Encoded<typeof _ReturnTicketRequestParamsSchema> {}
+  extends Schema.Schema.Encoded<typeof _ReturnTicketRequestParamsSchema> {}
 export interface ReturnTicketRequestParams
-	extends Schema.Schema.Type<typeof _ReturnTicketRequestParamsSchema> {}
+  extends Schema.Schema.Type<typeof _ReturnTicketRequestParamsSchema> {}
 
 export const ReturnTicketRequestParamsSchema: Schema.Schema<
-	ReturnTicketRequestParams,
-	ReturnTicketRequestParamsEncoded
+  ReturnTicketRequestParams,
+  ReturnTicketRequestParamsEncoded
 > = _ReturnTicketRequestParamsSchema;
 // #endregion ReturnTicketRequestParamsSchema
 
 export const ReturnTicketEndpoint = ApiEndpoint.delete(
-	"returnTicket",
-	"/users/:idUser/tickets/:idTicket",
-	{
-		summary: "Return ticket for user on particular event",
-	}
+  "returnTicket",
+  "/users/:idUser/tickets/:idTicket",
+  {
+    summary: "Return ticket for user on particular event",
+  }
 ).pipe(
-	ApiEndpoint.setResponseBody(ReturnTicketResponseBodySchema),
-	ApiEndpoint.setRequestPath(ReturnTicketRequestParamsSchema)
+  ApiEndpoint.setResponseBody(ReturnTicketResponseBodySchema),
+  ApiEndpoint.setRequestPath(ReturnTicketRequestParamsSchema)
 );

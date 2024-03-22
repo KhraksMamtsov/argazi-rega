@@ -6,13 +6,13 @@ import type { PlaceBase } from "@argazi/domain";
 import { _SS } from "@argazi/shared";
 
 export const _PlaceApi = Schema.struct({
-	id: IdPlaceSchema,
-	idGeoPoint: IdGeoPointSchema,
-	name: Schema.compose(Schema.Trimmed, Schema.NonEmpty),
+  id: IdPlaceSchema,
+  idGeoPoint: IdGeoPointSchema,
+  name: Schema.compose(Schema.Trimmed, Schema.NonEmpty),
 }).pipe(
-	_SS.satisfies.from.json(),
-	_SS.satisfies.to<PlaceBase>(),
-	Schema.identifier("PlaceApi")
+  _SS.satisfies.from.json(),
+  _SS.satisfies.to<PlaceBase>(),
+  Schema.identifier("PlaceApi")
 );
 
 export interface PlaceApiFrom extends Schema.Schema.Encoded<typeof _PlaceApi> {}

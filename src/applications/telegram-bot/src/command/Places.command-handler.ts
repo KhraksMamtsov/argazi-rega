@@ -12,42 +12,42 @@ import { PlaceMdComponent } from "../ui/Place.md-component.js";
 import type { CommandPayload } from "../telegraf/bot/TelegramPayload.js";
 
 export const PlacesCommandHandler = (args: {
-	readonly command: CommandPayload<typeof Places.command>;
+  readonly command: CommandPayload<typeof Places.command>;
 }) =>
-	Effect.gen(function* (_) {
-		const restApiService = yield* _(RestApiServiceTag);
-		const restApiUserClient = yield* _(
-			restApiService.__new.getUserApiClientFor(args.command.idTelegramChat)
-		);
+  Effect.gen(function* (_) {
+    const restApiService = yield* _(RestApiServiceTag);
+    const restApiUserClient = yield* _(
+      restApiService.__new.getUserApiClientFor(args.command.idTelegramChat)
+    );
 
-		const places = yield* _(restApiUserClient.getPlaces({}));
-		const userSubscriptions = yield* _(
-			restApiUserClient.getMySubscriptions({})
-		);
+    const places = yield* _(restApiUserClient.getPlaces({}));
+    const userSubscriptions = yield* _(
+      restApiUserClient.getMySubscriptions({})
+    );
 
-		const replies = places.map((place) => {
-			const placeSubscription = userSubscriptions.find(
-				(x) => x.idPlace === place.id
-			);
+    const replies = places.map((place) => {
+      const placeSubscription = userSubscriptions.find(
+        (x) => x.idPlace === place.id
+      );
 
-			const buttons = [AboutPlaceCbButton({ id: place.id })];
+      const buttons = [AboutPlaceCbButton({ id: place.id })];
 
-			if (placeSubscription) {
-				buttons.push(UnsubscribePlaceCbButton({ id: placeSubscription.id }));
-			} else {
-				buttons.push(SubscribePlaceCbButton({ id: place.id }));
-			}
+      if (placeSubscription) {
+        buttons.push(UnsubscribePlaceCbButton({ id: placeSubscription.id }));
+      } else {
+        buttons.push(SubscribePlaceCbButton({ id: place.id }));
+      }
 
-			return Effect.zip(PlaceMdComponent({ place }), Effect.all(buttons)).pipe(
-				Effect.flatMap((data) =>
-					args.command.replyWithMarkdown(data[0], {
-						...Markup.inlineKeyboard(data[1]),
-					})
-				)
-			);
-		});
+      return Effect.zip(PlaceMdComponent({ place }), Effect.all(buttons)).pipe(
+        Effect.flatMap((data) =>
+          args.command.replyWithMarkdown(data[0], {
+            ...Markup.inlineKeyboard(data[1]),
+          })
+        )
+      );
+    });
 
-		return yield* _(
-			Effect.all(replies, { concurrency: "unbounded", mode: "either" })
-		);
-	});
+    return yield* _(
+      Effect.all(replies, { concurrency: "unbounded", mode: "either" })
+    );
+  });

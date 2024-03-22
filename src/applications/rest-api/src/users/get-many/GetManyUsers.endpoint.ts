@@ -8,49 +8,49 @@ import { UserApi } from "../User.api.js";
 
 // #region GetManyUsersResponseBody
 const _GetManyUsersResponseBodySchema = UserApi.pipe(
-	Schema.identifier("GetManyUsersResponseBodySchema"),
-	BaseResponseOptionManyFor
+  Schema.identifier("GetManyUsersResponseBodySchema"),
+  BaseResponseOptionManyFor
 );
 
 export type GetManyUsersResponseBodyContext = Schema.Schema.Context<
-	typeof _GetManyUsersResponseBodySchema
+  typeof _GetManyUsersResponseBodySchema
 >;
 export interface GetManyUsersResponseBodyEncoded
-	extends Schema.Schema.Encoded<typeof _GetManyUsersResponseBodySchema> {}
+  extends Schema.Schema.Encoded<typeof _GetManyUsersResponseBodySchema> {}
 export interface GetManyUsersResponseBody
-	extends Schema.Schema.Type<typeof _GetManyUsersResponseBodySchema> {}
+  extends Schema.Schema.Type<typeof _GetManyUsersResponseBodySchema> {}
 
 export const GetManyUsersResponseBodySchema: Schema.Schema<
-	GetManyUsersResponseBody,
-	GetManyUsersResponseBodyEncoded
+  GetManyUsersResponseBody,
+  GetManyUsersResponseBodyEncoded
 > = _GetManyUsersResponseBodySchema;
 // #endregion GetManyUsersResponseBodySchema
 
 // #region GetManyUsersRequestParams
 const _GetManyUsersRequestParamsSchema = Schema.struct({
-	idsUser: Schema.array(IdUserSchema),
+  idsUser: Schema.array(IdUserSchema),
 }).pipe(Schema.identifier("GetManyUsersRequestParamsSchema"));
 
 export type GetManyUsersRequestParamsContext = Schema.Schema.Context<
-	typeof _GetManyUsersRequestParamsSchema
+  typeof _GetManyUsersRequestParamsSchema
 >;
 export interface GetManyUsersRequestParamsEncoded
-	extends Schema.Schema.Encoded<typeof _GetManyUsersRequestParamsSchema> {}
+  extends Schema.Schema.Encoded<typeof _GetManyUsersRequestParamsSchema> {}
 export interface GetManyUsersRequestParams
-	extends Schema.Schema.Type<typeof _GetManyUsersRequestParamsSchema> {}
+  extends Schema.Schema.Type<typeof _GetManyUsersRequestParamsSchema> {}
 
 export const GetManyUsersRequestParamsSchema: Schema.Schema<
-	GetManyUsersRequestParams,
-	GetManyUsersRequestParamsEncoded
+  GetManyUsersRequestParams,
+  GetManyUsersRequestParamsEncoded
 > = _GetManyUsersRequestParamsSchema;
 // #endregion GetManyUsersRequestParamsSchema
 
 export const GetManyUsersEndpoint = ApiEndpoint.post(
-	"getManyUsers",
-	"/users/many",
-	{}
+  "getManyUsers",
+  "/users/many",
+  {}
 ).pipe(
-	//
-	ApiEndpoint.setRequestBody(GetManyUsersRequestParamsSchema),
-	ApiEndpoint.setResponseBody(GetManyUsersResponseBodySchema)
+  //
+  ApiEndpoint.setRequestBody(GetManyUsersRequestParamsSchema),
+  ApiEndpoint.setResponseBody(GetManyUsersResponseBodySchema)
 );

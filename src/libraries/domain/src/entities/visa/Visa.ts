@@ -9,12 +9,12 @@ import { BaseSchema } from "../common/Base.js";
 import { TransportOnEventSchema } from "../transport-on-event/TransportOnEvent.js";
 
 const _VisaSchema = Schema.struct({
-	id: VisaIdSchema,
-	idEvent: IdEventSchema,
-	idTransportOnEvent: Schema.option(TransportOnEventSchema),
-	idVisitor: IdVisitorSchema,
-	//
-	totalPrice: PriceSchema,
+  id: VisaIdSchema,
+  idEvent: IdEventSchema,
+  idTransportOnEvent: Schema.option(TransportOnEventSchema),
+  idVisitor: IdVisitorSchema,
+  //
+  totalPrice: PriceSchema,
 }).pipe(Schema.extend(BaseSchema), Schema.identifier("VisaSchema"));
 
 export type VisaFrom = Schema.Schema.Encoded<typeof _VisaSchema>;

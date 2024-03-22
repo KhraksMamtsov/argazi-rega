@@ -6,31 +6,31 @@ import { BearerAuth } from "../../BearerAuth.security-scheme.js";
 import { SubscriptionApiSchema } from "../../subscriptions/Subscription.api.js";
 
 export const _GetMySubscriptionsResponseSchema = SubscriptionApiSchema.pipe(
-	Schema.identifier("GetMySubscriptionsResponseSchema"),
-	BaseResponseManyFor
+  Schema.identifier("GetMySubscriptionsResponseSchema"),
+  BaseResponseManyFor
 );
 
 export interface GetMySubscriptionsResponseFrom
-	extends Schema.Schema.Encoded<typeof _GetMySubscriptionsResponseSchema> {}
+  extends Schema.Schema.Encoded<typeof _GetMySubscriptionsResponseSchema> {}
 export interface GetMySubscriptionsResponse
-	extends Schema.Schema.Type<typeof _GetMySubscriptionsResponseSchema> {}
+  extends Schema.Schema.Type<typeof _GetMySubscriptionsResponseSchema> {}
 
 export const GetMySubscriptionsResponseSchema: Schema.Schema<
-	GetMySubscriptionsResponse,
-	GetMySubscriptionsResponseFrom
+  GetMySubscriptionsResponse,
+  GetMySubscriptionsResponseFrom
 > = _GetMySubscriptionsResponseSchema;
 
 export const GetMySubscriptionsResponse = GetMySubscriptionsResponseSchema.pipe(
-	Schema.description("UserSubscriptions")
+  Schema.description("UserSubscriptions")
 );
 
 export const GetMySubscriptionsEndpoint = ApiEndpoint.get(
-	"getMySubscriptions",
-	"/my/subscriptions",
-	{
-		summary: "Get all user's subscriptions",
-	}
+  "getMySubscriptions",
+  "/my/subscriptions",
+  {
+    summary: "Get all user's subscriptions",
+  }
 ).pipe(
-	ApiEndpoint.setResponseBody(GetMySubscriptionsResponseSchema),
-	ApiEndpoint.setSecurity(BearerAuth)
+  ApiEndpoint.setResponseBody(GetMySubscriptionsResponseSchema),
+  ApiEndpoint.setSecurity(BearerAuth)
 );

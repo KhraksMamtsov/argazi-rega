@@ -13,30 +13,30 @@ const schema = Schema.array(TicketDbToDomainSchema);
 PrismaServiceTag;
 
 export const GetUserTicketsUseCase = BaseGetCausedUseCaseFor(
-	GetUserTicketsCommandSchema
+  GetUserTicketsCommandSchema
 )(({ payload, initiator }, { includeDeleted }) =>
-	Effect.gen(function* (_) {
-		if (!initiator.isAdmin && initiator.id !== payload.idUser) {
-			yield* _(
-				new GetEntityAuthorizationError({
-					entity: ["User", "Ticket"],
-					idInitiator: initiator.id,
-					payload,
-				})
-			);
-		}
+  Effect.gen(function* (_) {
+    if (!initiator.isAdmin && initiator.id !== payload.idUser) {
+      yield* _(
+        new GetEntityAuthorizationError({
+          entity: ["User", "Ticket"],
+          idInitiator: initiator.id,
+          payload,
+        })
+      );
+    }
 
-		const prismaClient = yield* _(PrismaServiceTag);
+    const prismaClient = yield* _(PrismaServiceTag);
 
-		return yield* _(
-			prismaClient.queryDecode(schema, (p) =>
-				p.ticket.findMany({
-					where: {
-						idUser: payload.idUser,
-						...(includeDeleted ? {} : { idUserDeleter: null }),
-					},
-				})
-			)
-		);
-	})
+    return yield* _(
+      prismaClient.queryDecode(schema, (p) =>
+        p.ticket.findMany({
+          where: {
+            idUser: payload.idUser,
+            ...(includeDeleted ? {} : { idUserDeleter: null }),
+          },
+        })
+      )
+    );
+  })
 );

@@ -21,22 +21,22 @@ import { MD } from "./Markdown.js";
 // }
 
 export interface DateMdComponentProps {
-	readonly date: Date;
-	readonly options?: ConstructorParameters<typeof Intl.DateTimeFormat>[1];
+  readonly date: Date;
+  readonly options?: ConstructorParameters<typeof Intl.DateTimeFormat>[1];
 }
 
 export const DateMdComponent = (props: DateMdComponentProps) =>
-	Effect.gen(function* (_) {
-		const { date, options } = props;
-		// const clockFace = dateToClockFace(date);
+  Effect.gen(function* (_) {
+    const { date, options } = props;
+    // const clockFace = dateToClockFace(date);
 
-		return MD.escape(
-			new Intl.DateTimeFormat(
-				"ru-RU",
-				options ?? {
-					dateStyle: "short",
-					timeStyle: "short",
-				}
-			).format(date) // + (clockFace ? ` ${clockFace}` : "")
-		);
-	});
+    return MD.escape(
+      new Intl.DateTimeFormat(
+        "ru-RU",
+        options ?? {
+          dateStyle: "short",
+          timeStyle: "short",
+        }
+      ).format(date) // + (clockFace ? ` ${clockFace}` : "")
+    );
+  });

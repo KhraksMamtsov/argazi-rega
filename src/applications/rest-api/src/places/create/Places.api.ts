@@ -11,54 +11,54 @@ import { BaseResponseFor } from "../../BaseResponseFor.js";
 
 // #region CreatePlaceRequestBody
 const _CreatePlaceRequestBodySchema = CreatePlaceCommandPayloadSchema.pipe(
-	Schema.identifier("CreatePlaceRequestBodySchema")
+  Schema.identifier("CreatePlaceRequestBodySchema")
 );
 
 export type CreatePlaceRequestBodyContext = Schema.Schema.Context<
-	typeof _CreatePlaceRequestBodySchema
+  typeof _CreatePlaceRequestBodySchema
 >;
 export interface CreatePlaceRequestBodyEncoded
-	extends Schema.Schema.Encoded<typeof _CreatePlaceRequestBodySchema> {}
+  extends Schema.Schema.Encoded<typeof _CreatePlaceRequestBodySchema> {}
 export interface CreatePlaceRequestBody
-	extends Schema.Schema.Type<typeof _CreatePlaceRequestBodySchema> {}
+  extends Schema.Schema.Type<typeof _CreatePlaceRequestBodySchema> {}
 
 export const CreatePlaceRequestBodySchema: Schema.Schema<
-	CreatePlaceRequestBody,
-	CreatePlaceRequestBodyEncoded
+  CreatePlaceRequestBody,
+  CreatePlaceRequestBodyEncoded
 > = _CreatePlaceRequestBodySchema;
 // #endregion CreatePlaceRequestBodySchema
 
 // #region Schema for CreatePlaceResponse
 const _CreatePlaceResponseSchema = Schema.struct({
-	id: IdPlaceSchema,
-	idGeoPoint: IdGeoPointSchema,
-	name: Schema.compose(Schema.Trim, Schema.NonEmpty),
+  id: IdPlaceSchema,
+  idGeoPoint: IdGeoPointSchema,
+  name: Schema.compose(Schema.Trim, Schema.NonEmpty),
 }).pipe(
-	_SS.satisfies.to<PlaceBase>(),
-	_SS.satisfies.from.json(),
-	Schema.identifier("CreatePlaceResponseSchema"),
-	BaseResponseFor
+  _SS.satisfies.to<PlaceBase>(),
+  _SS.satisfies.from.json(),
+  Schema.identifier("CreatePlaceResponseSchema"),
+  BaseResponseFor
 );
 
 export type CreatePlaceResponseContext = Schema.Schema.Context<
-	typeof _CreatePlaceResponseSchema
+  typeof _CreatePlaceResponseSchema
 >;
 export interface CreatePlaceResponseEncoded
-	extends Schema.Schema.Encoded<typeof _CreatePlaceResponseSchema> {}
+  extends Schema.Schema.Encoded<typeof _CreatePlaceResponseSchema> {}
 export interface CreatePlaceResponse
-	extends Schema.Schema.Type<typeof _CreatePlaceResponseSchema> {}
+  extends Schema.Schema.Type<typeof _CreatePlaceResponseSchema> {}
 
 export const CreatePlaceResponseSchema: Schema.Schema<
-	CreatePlaceResponse,
-	CreatePlaceResponseEncoded
+  CreatePlaceResponse,
+  CreatePlaceResponseEncoded
 > = _CreatePlaceResponseSchema;
 // #endregion Schema for  CreatePlaceResponseSchema
 
 export const CreatePlaceEndpoint = ApiEndpoint.post(
-	"createPlace",
-	"/places",
-	{}
+  "createPlace",
+  "/places",
+  {}
 ).pipe(
-	ApiEndpoint.setRequestBody(CreatePlaceRequestBodySchema),
-	ApiEndpoint.setResponseBody(CreatePlaceResponseSchema)
+  ApiEndpoint.setRequestBody(CreatePlaceRequestBodySchema),
+  ApiEndpoint.setResponseBody(CreatePlaceResponseSchema)
 );

@@ -1,19 +1,19 @@
 {
-	"name": "@argazi/domain",
-	"version": "0.0.0",
-	"type": "module",
-	"private": true,
-	"exports": {
-		".": {
-			"import": "./dist/domain.js",
-			"types": "./dist/src/index.d.ts"
-		}
-	},
-	"scripts": {
-		"build": "tsc",
-		"build:watch": "tsc --watch"
-	},
-	"dependencies": {
-		"@argazi/shared": "workspace:*"
-	}
+  "name": "@argazi/domain",
+  "version": "0.0.0",
+  "type": "module",
+  "private": true,
+  "exports": {
+    ".": {
+      "import": "./dist/domain.js",
+      "types": "./dist/src/index.d.ts"
+    }
+  },
+  "scripts": {
+    "build": "tsc",
+    "build:watch": "tsc --watch"
+  },
+  "dependencies": {
+    "@argazi/shared": "workspace:*"
+  }
 }

@@ -8,16 +8,16 @@ import { GetPlaceByIdCommandSchema } from "./GetPlaceById.command.js";
 import { BaseCausedUseCaseFor } from "../../common/Base.use-case.js";
 
 export const GetPlaceByIdUseCase = BaseCausedUseCaseFor(
-	GetPlaceByIdCommandSchema
+  GetPlaceByIdCommandSchema
 )(({ payload }) =>
-	Effect.gen(function* (_) {
-		const prismaClient = yield* _(PrismaServiceTag);
+  Effect.gen(function* (_) {
+    const prismaClient = yield* _(PrismaServiceTag);
 
-		return yield* _(
-			prismaClient.queryDecode(
-				Schema.optionFromNullable(PlaceDbToDomainSchema),
-				(p) => p.place.findUnique({ where: { id: payload.id } })
-			)
-		);
-	})
+    return yield* _(
+      prismaClient.queryDecode(
+        Schema.optionFromNullable(PlaceDbToDomainSchema),
+        (p) => p.place.findUnique({ where: { id: payload.id } })
+      )
+    );
+  })
 );

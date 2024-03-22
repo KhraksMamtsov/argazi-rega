@@ -5,10 +5,10 @@ import { _SS } from "@argazi/shared";
 import { BaseCausedCommandFor } from "../../common/Base.command.js";
 
 export const GetPlacesCommandPayloadSchema = Schema.struct({}).pipe(
-	_SS.satisfies.from.json(),
-	Schema.identifier("GetPlacesCommandPayloadSchema")
+  _SS.satisfies.from.json(),
+  Schema.identifier("GetPlacesCommandPayloadSchema")
 );
 
 export const GetPlacesCommandSchema = BaseCausedCommandFor(
-	GetPlacesCommandPayloadSchema
+  GetPlacesCommandPayloadSchema
 ).pipe(Schema.identifier("GetPlacesCommandSchema"));

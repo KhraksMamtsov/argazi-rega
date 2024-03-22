@@ -9,43 +9,43 @@ import { CreateEntityAuthorizationError } from "../../../common/AuthorizationErr
 import { BaseCausedUseCaseFor } from "../../../common/Base.use-case.js";
 
 export const BookTicketUseCase = BaseCausedUseCaseFor(BookTicketCommandSchema)(
-	({ payload, initiator }) =>
-		Effect.gen(function* (_) {
-			const prismaClient = yield* _(PrismaServiceTag);
-			const notificationService = yield* _(NotificationServiceTag);
+  ({ payload, initiator }) =>
+    Effect.gen(function* (_) {
+      const prismaClient = yield* _(PrismaServiceTag);
+      const notificationService = yield* _(NotificationServiceTag);
 
-			if (!initiator.isAdmin && initiator.id !== payload.idUser) {
-				yield* _(
-					new CreateEntityAuthorizationError({
-						entity: "Ticket",
-						idInitiator: initiator.id,
-						payload: payload,
-					})
-				);
-			}
+      if (!initiator.isAdmin && initiator.id !== payload.idUser) {
+        yield* _(
+          new CreateEntityAuthorizationError({
+            entity: "Ticket",
+            idInitiator: initiator.id,
+            payload: payload,
+          })
+        );
+      }
 
-			const newTicket = yield* _(
-				prismaClient.queryDecode(TicketDbToDomainSchema, (p) =>
-					p.ticket.create({
-						data: {
-							...payload,
-							idUserCreator: initiator.id,
-							idUserUpdater: initiator.id,
-							role: "NONE",
-						},
-					})
-				)
-			);
+      const newTicket = yield* _(
+        prismaClient.queryDecode(TicketDbToDomainSchema, (p) =>
+          p.ticket.create({
+            data: {
+              ...payload,
+              idUserCreator: initiator.id,
+              idUserUpdater: initiator.id,
+              role: "NONE",
+            },
+          })
+        )
+      );
 
-			Effect.runFork(
-				notificationService.queue(
-					notification.ticket("created")({
-						idEntity: newTicket.id,
-						idInitiator: initiator.id,
-					})
-				)
-			);
+      Effect.runFork(
+        notificationService.queue(
+          notification.ticket("created")({
+            idEntity: newTicket.id,
+            idInitiator: initiator.id,
+          })
+        )
+      );
 
-			return newTicket;
-		})
+      return newTicket;
+    })
 );

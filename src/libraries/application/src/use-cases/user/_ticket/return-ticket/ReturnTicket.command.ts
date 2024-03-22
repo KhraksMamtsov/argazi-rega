@@ -6,11 +6,11 @@ import { _SS } from "@argazi/shared";
 import { BaseCausedCommandFor } from "../../../common/Base.command.js";
 
 export const ReturnTicketCommandPayloadSchema = TicketBaseSchema.pipe(
-	Schema.pick("id", "idUser"),
-	_SS.satisfies.from.json(),
-	Schema.identifier("ReturnTicketCommandPayloadSchema")
+  Schema.pick("id", "idUser"),
+  _SS.satisfies.from.json(),
+  Schema.identifier("ReturnTicketCommandPayloadSchema")
 );
 
 export const ReturnTicketCommandSchema = BaseCausedCommandFor(
-	ReturnTicketCommandPayloadSchema
+  ReturnTicketCommandPayloadSchema
 ).pipe(Schema.identifier("ReturnTicketCommandSchema"));

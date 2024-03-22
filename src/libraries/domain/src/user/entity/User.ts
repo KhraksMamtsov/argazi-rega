@@ -8,23 +8,23 @@ import { UserTypeSchema } from "./UserType.js";
 import { BaseSchema } from "../../entities/common/Base.js";
 
 export const UserBaseSchema = Schema.struct({
-	//
-	email: Schema.SecretFromSelf,
-	firstName: Schema.SecretFromSelf,
-	id: IdUserSchema,
-	idDwbn: IdDwbnSchema,
-	idTelegramChat: IdTelegramChatSchema,
-	isAdmin: Schema.boolean,
-	lastName: Schema.optionFromSelf(Schema.SecretFromSelf),
-	phone: Schema.optionFromSelf(Schema.SecretFromSelf),
-	type: UserTypeSchema,
+  //
+  email: Schema.SecretFromSelf,
+  firstName: Schema.SecretFromSelf,
+  id: IdUserSchema,
+  idDwbn: IdDwbnSchema,
+  idTelegramChat: IdTelegramChatSchema,
+  isAdmin: Schema.boolean,
+  lastName: Schema.optionFromSelf(Schema.SecretFromSelf),
+  phone: Schema.optionFromSelf(Schema.SecretFromSelf),
+  type: UserTypeSchema,
 }).pipe(Schema.identifier("UserBaseSchema"));
 
 export interface UserBase extends Schema.Schema.Type<typeof UserBaseSchema> {}
 
 const _UserSchema = UserBaseSchema.pipe(
-	Schema.extend(BaseSchema),
-	Schema.identifier("UserSchema")
+  Schema.extend(BaseSchema),
+  Schema.identifier("UserSchema")
 );
 
 export interface User extends Schema.Schema.Type<typeof _UserSchema> {}
