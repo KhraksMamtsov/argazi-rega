@@ -1,9 +1,9 @@
 import { Effect } from "effect";
 import { Markup } from "telegraf";
 
-import { encode } from "../../callback-query/CallbackQuery.js";
+import type { IdSubscription } from "@argazi/domain";
 
-import type { IdSubscription } from "../../../../libraries/domain/src/subscription/entity/IdSubscription.js";
+import { encode } from "../../callback-query/CallbackQuery.js";
 
 export const UnsubscribePlaceCbButton = (props: { id: IdSubscription }) =>
 	Effect.succeed(

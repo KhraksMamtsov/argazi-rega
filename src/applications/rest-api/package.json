@@ -1,17 +1,17 @@
 {
-	"name": "@argazi/telegram-form",
+	"name": "@argazi/rest-api",
 	"version": "0.0.0",
 	"type": "module",
 	"scripts": {
-		"dev": "vite",
-		"build": "vue-tsc && vite build",
-		"preview": "vite preview",
+		"build": "tsc",
+		"build:watch": "tsc --watch",
 		"typecheck": "tsc --noEmit",
 		"typecheck:watch": "tsc --noEmit --watch"
 	},
 	"dependencies": {
 		"@argazi/domain": "workspace:*",
 		"@argazi/shared": "workspace:*",
+		"@argazi/database": "workspace:*",
 		"@argazi/application": "workspace:*",
 		"@argazi/message-broker": "workspace:*"
 	}

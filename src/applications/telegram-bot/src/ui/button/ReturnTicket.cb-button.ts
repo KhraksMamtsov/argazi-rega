@@ -1,9 +1,9 @@
 import { Effect } from "effect";
 import { Markup } from "telegraf";
 
-import { encode } from "../../callback-query/CallbackQuery.js";
+import type { Ticket } from "@argazi/domain";
 
-import type { Ticket } from "../../../../libraries/domain/src/ticket/entity/Ticket.js";
+import { encode } from "../../callback-query/CallbackQuery.js";
 
 export const ReturnTicketCbButton = (props: { ticket: Ticket }) =>
 	Effect.succeed(

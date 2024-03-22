@@ -1,11 +1,10 @@
 import * as Schema from "@effect/schema/Schema";
 
-import { IdEventSchema } from "../../../libraries/domain/src/event/entity/IdEvent.js";
-import { IdPlaceSchema } from "../../../libraries/domain/src/place/entity/IdPlace.js";
-import { PriceSchema } from "../../../libraries/domain/src/value-objects/Price.js";
+import { IdEventSchema } from "@argazi/domain";
+import { IdPlaceSchema } from "@argazi/domain";
+import { PriceSchema } from "@argazi/domain";
+import type { EventBase } from "@argazi/domain";
 import { _SS } from "@argazi/shared";
-
-import type { EventBase } from "../../../libraries/domain/src/event/entity/Event.js";
 
 export const _EventApi = Schema.struct({
 	dateAnnouncement: Schema.compose(
@@ -21,8 +20,8 @@ export const _EventApi = Schema.struct({
 	priceDay: Schema.compose(Schema.BigDecimalFromNumber, PriceSchema),
 	priceEvent: Schema.compose(Schema.BigDecimalFromNumber, PriceSchema),
 }).pipe(
-	satisfies.from.json(),
-	satisfies.to<EventBase>(),
+	_SS.satisfies.from.json(),
+	_SS.satisfies.to<EventBase>(),
 	Schema.identifier("EventApi")
 );
 

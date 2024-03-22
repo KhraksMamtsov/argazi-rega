@@ -1,10 +1,10 @@
 import { Secret, Effect } from "effect";
 
+import type { Event } from "@argazi/domain";
+
 import { DateMdComponent } from "./Date.md-component.js";
 import { MD } from "./Markdown.js";
 import { MoneyMdComponent } from "./Money.md-component.js";
-
-import type { Event } from "../../../libraries/domain/src/event/entity/Event.js";
 
 export const EventMdComponent = (props: { event: Event }) =>
 	Effect.gen(function* (_) {

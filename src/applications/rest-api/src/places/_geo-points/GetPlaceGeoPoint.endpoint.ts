@@ -1,7 +1,8 @@
 import * as Schema from "@effect/schema/Schema";
-import { ApiEndpoint } from "effect-http";
+import { ApiEndpoint, ApiResponse } from "effect-http";
 
-import { IdPlaceSchema } from "../../../../libraries/domain/src/place/entity/IdPlace.js";
+import { IdPlaceSchema } from "@argazi/domain";
+
 import { BaseResponseFor } from "../../BaseResponseFor.js";
 import { GeoPointApiSchema } from "../../geo-points/GeoPoint.api.js";
 
@@ -41,5 +42,8 @@ export const GetPlaceGeoPoint = ApiEndpoint.get(
 	{}
 ).pipe(
 	ApiEndpoint.setRequestPath(GetPlaceGeoPointRequestParamsSchema),
-	ApiEndpoint.setResponseBody(GetPlaceGeoPointResponseBodySchema)
+	ApiEndpoint.setResponse(
+		ApiResponse.make(200, GetPlaceGeoPointResponseBodySchema)
+	),
+	ApiEndpoint.addResponse(ApiResponse.make(404))
 );

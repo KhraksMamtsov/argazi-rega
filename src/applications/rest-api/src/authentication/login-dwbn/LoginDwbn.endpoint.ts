@@ -1,8 +1,9 @@
 import * as Schema from "@effect/schema/Schema";
 import { ApiEndpoint } from "effect-http";
 
-import { IdTelegramChatSchema } from "../../../../libraries/domain/src/user/entity/IdTelegramChat.js";
-import { IdUserSchema } from "../../../../libraries/domain/src/user/entity/IdUser.js";
+import { IdTelegramChatSchema } from "@argazi/domain";
+import { IdUserSchema } from "@argazi/domain";
+
 import { TokensResponseSchema } from "../Tokens.response.js";
 
 export const _LoginDwbnRequestBodySchema = Schema.struct({

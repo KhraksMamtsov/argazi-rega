@@ -1,8 +1,8 @@
 import { Effect, Secret, Option, pipe } from "effect";
 
-import { MD } from "./Markdown.js";
+import type { GeoPoint } from "@argazi/domain";
 
-import type { GeoPoint } from "../../../libraries/domain/src/geo-point/entity/GeoPoint.js";
+import { MD } from "./Markdown.js";
 
 export const GeoPointMdComponent = (props: { geoPoint: GeoPoint }) =>
 	Effect.gen(function* (_) {

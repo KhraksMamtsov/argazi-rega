@@ -1,12 +1,11 @@
 import * as Schema from "@effect/schema/Schema";
 
-import { IdDwbnSchema } from "../../../libraries/domain/src/user/entity/IdDwbn.js";
-import { IdTelegramChatSchema } from "../../../libraries/domain/src/user/entity/IdTelegramChat.js";
-import { IdUserSchema } from "../../../libraries/domain/src/user/entity/IdUser.js";
-import { UserTypeSchema } from "../../../libraries/domain/src/user/entity/UserType.js";
+import { IdDwbnSchema } from "@argazi/domain";
+import { IdTelegramChatSchema } from "@argazi/domain";
+import { IdUserSchema } from "@argazi/domain";
+import { UserTypeSchema } from "@argazi/domain";
+import type { UserBase } from "@argazi/domain";
 import { _SS } from "@argazi/shared";
-
-import type { UserBase } from "../../../libraries/domain/src/user/entity/User.js";
 
 export const _UserApi = Schema.struct({
 	email: Schema.Secret,
@@ -19,8 +18,8 @@ export const _UserApi = Schema.struct({
 	phone: Schema.optionFromNullable(Schema.Secret),
 	type: UserTypeSchema,
 }).pipe(
-	satisfies.from.json(),
-	satisfies.to<UserBase>(),
+	_SS.satisfies.from.json(),
+	_SS.satisfies.to<UserBase>(),
 	Schema.identifier("UserApi")
 );
 

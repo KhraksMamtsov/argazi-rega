@@ -1,18 +1,17 @@
 import * as Schema from "@effect/schema/Schema";
 
-import { IdGeoPointSchema } from "../../../libraries/domain/src/geo-point/entity/IdGeoPoint.js";
-import { IdPlaceSchema } from "../../../libraries/domain/src/place/entity/IdPlace.js";
+import { IdGeoPointSchema } from "@argazi/domain";
+import { IdPlaceSchema } from "@argazi/domain";
+import type { PlaceBase } from "@argazi/domain";
 import { _SS } from "@argazi/shared";
-
-import type { PlaceBase } from "../../../libraries/domain/src/place/entity/Place.js";
 
 export const _PlaceApi = Schema.struct({
 	id: IdPlaceSchema,
 	idGeoPoint: IdGeoPointSchema,
 	name: Schema.compose(Schema.Trimmed, Schema.NonEmpty),
 }).pipe(
-	satisfies.from.json(),
-	satisfies.to<PlaceBase>(),
+	_SS.satisfies.from.json(),
+	_SS.satisfies.to<PlaceBase>(),
 	Schema.identifier("PlaceApi")
 );
 

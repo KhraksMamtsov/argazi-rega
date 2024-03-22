@@ -1,5 +1,7 @@
 import { Effect } from "effect";
 
+import { type NotificationMessage } from "@argazi/domain";
+
 import { EventCreatedNotificationHandler } from "./event/EventCreated.notification-handler.js";
 import { SubscriptionCancelledNotificationHandler } from "./subscription/SubscriptionCancelled.notification-handler.js";
 import { SubscriptionCreatedNotificationHandler } from "./subscription/SubscriptionCreated.notification-handler.js";
@@ -7,7 +9,6 @@ import { TicketCreatedNotificationHandler } from "./ticket/TicketCreated.notific
 import { TicketReturnedNotificationHandler } from "./ticket/TicketReturned.notification-handler.js";
 import { UserCreatedNotificationHandler } from "./user/UserCreated.notification-handler.js";
 
-import { type NotificationMessage } from "../../../libraries/domain/src/services/NotificationService.js";
 import { IdAdmin } from "../../rest-api/authentication/constants.js";
 import { RestApiServiceTag } from "../RestApiService.js";
 

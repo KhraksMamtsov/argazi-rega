@@ -3,6 +3,8 @@
   "compilerOptions": {
     "outDir": "dist",
     "declarationDir": "dist",
+    "declaration": true,
+    "declarationMap": true,
     "stripInternal": true,
     
     "target": "ESNext",

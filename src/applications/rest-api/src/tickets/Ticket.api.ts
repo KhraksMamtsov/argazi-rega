@@ -1,13 +1,12 @@
 import * as Schema from "@effect/schema/Schema";
 
-import { IdTransportOnEventSchema } from "../../../libraries/domain/src/entities/transport-on-event/IdTransportOnEvent.js";
-import { IdEventSchema } from "../../../libraries/domain/src/event/entity/IdEvent.js";
-import { IdTicketSchema } from "../../../libraries/domain/src/ticket/entity/IdTicket.js";
-import { TicketRole } from "../../../libraries/domain/src/ticket/entity/TicketRole.js";
-import { IdUserSchema } from "../../../libraries/domain/src/user/entity/IdUser.js";
+import { IdTransportOnEventSchema } from "@argazi/domain";
+import { IdEventSchema } from "@argazi/domain";
+import { IdTicketSchema } from "@argazi/domain";
+import { TicketRole } from "@argazi/domain";
+import { IdUserSchema } from "@argazi/domain";
+import type { TicketBase } from "@argazi/domain";
 import { _SS } from "@argazi/shared";
-
-import type { TicketBase } from "../../../libraries/domain/src/ticket/entity/Ticket.js";
 
 // #region TicketApi
 const _TicketApiSchema = Schema.struct({
@@ -24,8 +23,8 @@ const _TicketApiSchema = Schema.struct({
 		["NONE", TicketRole.NONE]
 	),
 }).pipe(
-	satisfies.from.json(),
-	satisfies.to<TicketBase>(),
+	_SS.satisfies.from.json(),
+	_SS.satisfies.to<TicketBase>(),
 	Schema.identifier("TicketApiSchema")
 );
 

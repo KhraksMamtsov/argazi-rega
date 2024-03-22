@@ -1,8 +1,9 @@
 import { Effect, Sink, Stream, Layer } from "effect";
 
+import { NotificationServiceTag } from "@argazi/domain";
+
 import { NotificationsHandler } from "./NotificationsHandler.js";
 
-import { NotificationServiceTag } from "../../../libraries/domain/src/services/NotificationService.js";
 import { TelegrafTag } from "../telegraf/Telegraf.js";
 
 export const NotificationsHandlerLive = Layer.scopedDiscard(

@@ -1,11 +1,12 @@
 import * as Schema from "@effect/schema/Schema";
 import { ApiEndpoint } from "effect-http";
 
-import { CreatePlaceCommandPayloadSchema } from "../../../../application/use-cases/place/create/CreatePlace.command.js";
-import { IdGeoPointSchema } from "../../../../libraries/domain/src/geo-point/entity/IdGeoPoint.js";
-import { IdPlaceSchema } from "../../../../libraries/domain/src/place/entity/IdPlace.js";
-import { type PlaceBase } from "../../../../libraries/domain/src/place/entity/Place.js";
+import { CreatePlaceCommandPayloadSchema } from "@argazi/application";
+import { IdGeoPointSchema } from "@argazi/domain";
+import { IdPlaceSchema } from "@argazi/domain";
+import { type PlaceBase } from "@argazi/domain";
 import { _SS } from "@argazi/shared";
+
 import { BaseResponseFor } from "../../BaseResponseFor.js";
 
 // #region CreatePlaceRequestBody
@@ -33,8 +34,8 @@ const _CreatePlaceResponseSchema = Schema.struct({
 	idGeoPoint: IdGeoPointSchema,
 	name: Schema.compose(Schema.Trim, Schema.NonEmpty),
 }).pipe(
-	satisfies.to<PlaceBase>(),
-	satisfies.from.json(),
+	_SS.satisfies.to<PlaceBase>(),
+	_SS.satisfies.from.json(),
 	Schema.identifier("CreatePlaceResponseSchema"),
 	BaseResponseFor
 );

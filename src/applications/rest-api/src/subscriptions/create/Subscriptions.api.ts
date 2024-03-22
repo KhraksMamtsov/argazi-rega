@@ -1,6 +1,7 @@
 import * as Schema from "@effect/schema/Schema";
 
-import { CreateSubscriptionCommandPayloadSchema } from "../../../../application/use-cases/subscription/create/CreateSubscription.command.js";
+import { CreateSubscriptionCommandPayloadSchema } from "@argazi/application";
+
 import { BaseResponseFor } from "../../BaseResponseFor.js";
 import { SubscriptionApiSchema } from "../Subscription.api.js";
 

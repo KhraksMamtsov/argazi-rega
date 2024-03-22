@@ -1,11 +1,11 @@
 import { Effect, ReadonlyArray } from "effect";
 
+import type { User } from "@argazi/domain";
+
 import { TelegrafTag } from "../../telegraf/Telegraf.js";
 import { ArgazipaSayMdComponent } from "../../ui/ArgazipaSay.md-component.js";
 import { MD } from "../../ui/Markdown.js";
 import { UserMdComponent } from "../../ui/User.md-component.js";
-
-import type { User } from "../../../../libraries/domain/src/user/entity/User.js";
 
 export const UserCreatedNotificationHandler = (args: {
 	readonly createdUser: User;

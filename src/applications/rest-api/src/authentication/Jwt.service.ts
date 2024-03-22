@@ -1,11 +1,11 @@
-import { Schema, ParseResult } from "@effect/schema";
-import { Config, Effect, Layer, ReadonlyRecord, Secret } from "effect";
+import { Schema } from "@effect/schema";
+import { Config, Effect, Layer, ReadonlyRecord, Secret, Data } from "effect";
 
 import { IdUserSchema } from "@argazi/domain";
-import { _SS, _JWT, _JWTError } from "@argazi/shared";
+import { _SS, _JWT } from "@argazi/shared";
 
-import { AccessTokenSchema, type AccessToken } from "./AccessToken.js";
-import { RefreshTokenSchema, type RefreshToken } from "./RefreshToken.js";
+import { AccessTokenSchema } from "./AccessToken.js";
+import { RefreshTokenSchema } from "./RefreshToken.js";
 
 // #region JWTPayload
 export const _JWTPayloadSchema = Schema.struct({
@@ -30,6 +30,22 @@ const decodeJWT = Schema.decodeUnknown(JWTPayloadSchema);
 
 type JWTPayloadSchema = Schema.Schema.Type<typeof JWTPayloadSchema>;
 
+export enum JWTServiceErrorType {
+	SIGN = "SIGN::JWTServiceErrorType",
+	VERIFY = "VERIFY::JWTServiceErrorType",
+}
+
+export class JWRServiceSignError extends Data.TaggedError(
+	JWTServiceErrorType.SIGN
+)<{
+	readonly cause: Error;
+}> {}
+export class JWRServiceVerifyError extends Data.TaggedError(
+	JWTServiceErrorType.VERIFY
+)<{
+	readonly cause: unknown; //JWT.VerifyErrors;
+}> {}
+
 const makeLive = () =>
 	Effect.gen(function* (_) {
 		const jwtConfig = yield* _(
@@ -43,15 +59,7 @@ const makeLive = () =>
 		);
 
 		return {
-			sign: (
-				payload: JWTPayloadSchema
-			): Effect.Effect<
-				{
-					accessToken: AccessToken;
-					refreshToken: RefreshToken;
-				},
-				ParseResult.ParseError | _JWTError.JwtSignError
-			> =>
+			sign: (payload: JWTPayloadSchema) =>
 				encodeJWT(payload).pipe(
 					Effect.flatMap((encodedPayload) =>
 						Effect.all({
@@ -76,15 +84,13 @@ const makeLive = () =>
 									Effect.map(RefreshTokenSchema)
 								),
 						})
-					)
+					),
+					Effect.mapError((cause) => new JWRServiceSignError({ cause }))
 				),
 			verifyAndDecode: (args: {
 				readonly token: Secret.Secret;
 				readonly type: "accessToken" | "refreshToken";
-			}): Effect.Effect<
-				JWTPayload,
-				ParseResult.ParseError | _JWTError.JwtVerifyError
-			> =>
+			}) =>
 				_JWT
 					.verifyAndDecode({
 						key: jwtConfig[`${args.type}Secret`],
@@ -95,7 +101,8 @@ const makeLive = () =>
 						Effect.tapBoth({
 							onFailure: Effect.logError,
 							onSuccess: Effect.logDebug,
-						})
+						}),
+						Effect.mapError((cause) => new JWRServiceVerifyError({ cause }))
 					),
 		};
 	});

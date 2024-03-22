@@ -1,11 +1,10 @@
 import * as Schema from "@effect/schema/Schema";
 
-import { IdPlaceSchema } from "../../../libraries/domain/src/place/entity/IdPlace.js";
-import { IdSubscriptionSchema } from "../../../libraries/domain/src/subscription/entity/IdSubscription.js";
-import { IdUserSchema } from "../../../libraries/domain/src/user/entity/IdUser.js";
+import { IdPlaceSchema } from "@argazi/domain";
+import { IdSubscriptionSchema } from "@argazi/domain";
+import { IdUserSchema } from "@argazi/domain";
+import type { SubscriptionBase } from "@argazi/domain";
 import { _SS } from "@argazi/shared";
-
-import type { SubscriptionBase } from "../../../libraries/domain/src/subscription/entity/Subscription.js";
 
 // #region SubscriptionApi
 const _SubscriptionApiSchema = Schema.struct({
@@ -13,8 +12,8 @@ const _SubscriptionApiSchema = Schema.struct({
 	idPlace: IdPlaceSchema,
 	idUser: IdUserSchema,
 }).pipe(
-	satisfies.from.json(),
-	satisfies.to<SubscriptionBase>(),
+	_SS.satisfies.from.json(),
+	_SS.satisfies.to<SubscriptionBase>(),
 	Schema.identifier("SubscriptionApiSchema")
 );
 

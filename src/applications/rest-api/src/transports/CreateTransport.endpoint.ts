@@ -1,9 +1,10 @@
 import * as Schema from "@effect/schema/Schema";
 import { ApiEndpoint } from "effect-http";
 
+import { CreateTransportCommandPayloadSchema } from "@argazi/application";
+
 import { TransportApiSchema } from "./Transport.api.js";
 
-import { CreateTransportCommandPayloadSchema } from "../../../application/use-cases/transport/create/CreateTransport.command.js";
 import { BaseResponseFor } from "../BaseResponseFor.js";
 
 // #region CreateTransportRequestBody

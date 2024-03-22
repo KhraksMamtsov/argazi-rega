@@ -1,7 +1,8 @@
 import * as Schema from "@effect/schema/Schema";
 import { ApiEndpoint } from "effect-http";
 
-import { IdUserSchema } from "../../../../libraries/domain/src/user/entity/IdUser.js";
+import { IdUserSchema } from "@argazi/domain";
+
 import { BaseResponseManyFor } from "../../BaseResponseFor.js";
 import { SubscriptionApiSchema } from "../../subscriptions/Subscription.api.js";
 

@@ -1,8 +1,8 @@
 import { Effect } from "effect";
 
-import { MD } from "./Markdown.js";
+import type { Place } from "@argazi/domain";
 
-import type { Place } from "../../../libraries/domain/src/place/entity/Place.js";
+import { MD } from "./Markdown.js";
 
 export const PlaceMdComponent = (props: { place: Place }) =>
 	Effect.gen(function* (_) {

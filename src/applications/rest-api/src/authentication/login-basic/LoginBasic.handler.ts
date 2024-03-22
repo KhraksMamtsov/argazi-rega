@@ -1,6 +1,9 @@
 import { Config, Effect, Option, Secret } from "effect";
 import { ServerError } from "effect-http";
 
+import { GetUserUseCase, RegisterUserUseCase } from "@argazi/application";
+import { IdDwbnSchema, IdTelegramChatSchema } from "@argazi/domain";
+
 import { IdAdmin, IdArgazipaBot } from "../constants.js";
 import { JwtServiceTag } from "../Jwt.service.js";
 

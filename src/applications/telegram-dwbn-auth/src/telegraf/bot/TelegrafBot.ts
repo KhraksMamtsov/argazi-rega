@@ -10,9 +10,10 @@ import {
 import * as Tg from "telegraf";
 import * as TF from "telegraf/filters";
 
+import { IdTelegramChatSchema } from "@argazi/domain";
+
 import * as TgP from "./TelegramPayload.js";
 
-import { IdTelegramChatSchema } from "../../../../libraries/domain/src/user/entity/IdTelegramChat.js";
 import { TelegrafTag } from "../Telegraf.js";
 
 import type * as Types from "telegraf/types";

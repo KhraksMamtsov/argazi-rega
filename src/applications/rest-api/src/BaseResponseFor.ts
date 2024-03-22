@@ -1,6 +1,6 @@
 import { AST, Schema } from "@effect/schema";
 import { Option, pipe } from "effect";
-import { _SS, _S } from "@argazi/shared";
+
 import {
 	DateCreatedSchema,
 	DateDeletedSchema,
@@ -8,6 +8,7 @@ import {
 	IdUserSchema,
 	type Base,
 } from "@argazi/domain";
+import { _SS, _S } from "@argazi/shared";
 
 export const ApiBaseSchema = Schema.struct({
 	meta: Schema.struct({

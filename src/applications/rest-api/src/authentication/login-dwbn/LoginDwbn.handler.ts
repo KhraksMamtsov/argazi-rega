@@ -2,13 +2,14 @@ import { Config, Effect, Option, Secret } from "effect";
 
 import { webcrypto } from "node:crypto";
 
+import { GetUserUseCase } from "@argazi/application";
+import { RegisterUserUseCase } from "@argazi/application";
+import { notification } from "@argazi/domain";
+import { NotificationServiceTag } from "@argazi/domain";
+import { IdUserSchema } from "@argazi/domain";
+
 import { DwbnOAuth2Service } from "./DwbnOAuth2.service.js";
 
-import { GetUserUseCase } from "../../../../application/use-cases/user/get/GetUser.use-case.js";
-import { RegisterUserUseCase } from "../../../../application/use-cases/user/register/RegisterUser.use-case.js";
-import { notification } from "../../../../libraries/domain/src/notification/Notification.js";
-import { NotificationServiceTag } from "../../../../libraries/domain/src/services/NotificationService.js";
-import { IdUserSchema } from "../../../../libraries/domain/src/user/entity/IdUser.js";
 import { IdAdmin } from "../constants.js";
 import { JwtServiceTag } from "../Jwt.service.js";
 

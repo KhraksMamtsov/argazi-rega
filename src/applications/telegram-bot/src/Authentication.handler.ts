@@ -2,14 +2,14 @@ import { Schema } from "@effect/schema";
 import { Effect, Either } from "effect";
 import { constVoid } from "effect/Function";
 
+import { IdTelegramChatSchema } from "@argazi/domain";
+
 import { RestApiServiceTag } from "./RestApiService.js";
 import { SessionServiceTag } from "./Session.service.js";
 import { TelegramAuthMiniAppDataSchema } from "./TelegramAuthMiniAppData.js";
 import { ArgazipaSayMdComponent } from "./ui/ArgazipaSay.md-component.js";
 import { MD } from "./ui/Markdown.js";
 import { UserMdComponent } from "./ui/User.md-component.js";
-
-import { IdTelegramChatSchema } from "../../libraries/domain/src/user/entity/IdTelegramChat.js";
 
 import type { WebAppDataPayload } from "./telegraf/bot/TelegramPayload.js";
 

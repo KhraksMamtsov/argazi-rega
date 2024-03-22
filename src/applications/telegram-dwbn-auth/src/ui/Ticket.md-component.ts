@@ -1,10 +1,10 @@
 import { Effect, pipe } from "effect";
 
+import type { Ticket } from "@argazi/domain";
+
 import { DateMdComponent } from "./Date.md-component.js";
 import { MD } from "./Markdown.js";
 import { TicketRoleMdComponent } from "./TicketRole.md-component.js";
-
-import type { Ticket } from "../../../libraries/domain/src/ticket/entity/Ticket.js";
 
 export const TicketMdComponent = (props: { ticket: Ticket }) =>
 	Effect.gen(function* (_) {

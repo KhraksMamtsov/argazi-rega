@@ -1,4 +1,3 @@
-import { NotificationServiceLive } from "@argazi/message-broker";
 import { HttpClient } from "@effect/platform";
 import { runMain } from "@effect/platform-node/NodeRuntime";
 import { Effect, flow, Layer, Logger, LogLevel, Option, pipe } from "effect";
@@ -7,36 +6,38 @@ import { isServerError } from "effect-http/ServerError";
 import { NodeServer } from "effect-http-node";
 import { PrettyLogger } from "effect-log";
 
-import { CreateEventUseCase } from "./application/use-cases/event/create/CreateEvent.use-case.js";
-import { GetEventByIdUseCase } from "./application/use-cases/event/get/GetEventById.use-case.js";
-import { CreateGeoPointUseCase } from "./application/use-cases/geo-point/create/CreateGeoPoint.use-case.js";
-import { GetPlaceGeoPointUseCase } from "./application/use-cases/place/_geo-point/get-place-geo-point/GetPlaceGeoPoint.use-case.js";
-import { GetPlaceActualEventsUseCase } from "./application/use-cases/place/_subscription/get-place-actual-events/GetPlaceActualEvents.use-case.js";
-import { GetPlaceSubscriptionsUseCase } from "./application/use-cases/place/_subscription/get-place-subscriptions/GetPlaceSubscriptions.use-case.js";
-import { CreatePlaceUseCase } from "./application/use-cases/place/create/CreatePlace.use-case.js";
-import { GetPlaceByIdUseCase } from "./application/use-cases/place/get/GetPlaceById.use-case.js";
-import { GetPlacesUseCase } from "./application/use-cases/place/get/GetPlaces.use-case.js";
-import { CreateSubscriptionUseCase } from "./application/use-cases/subscription/create/CreateSubscription.use-case.js";
-import { GetSubscriptionByIdUseCase } from "./application/use-cases/subscription/get/GetSubscriptionById.use-case.js";
-import { CreateTransportUseCase } from "./application/use-cases/transport/create/CreateTransport.use-case.js";
-import { DeleteUserSubscriptionUseCase } from "./application/use-cases/user/_subscription/delete/DeleteUserSubscription.use-case.js";
-import { GetUserSubscriptionsUseCase } from "./application/use-cases/user/_subscription/get-many/GetUserSubscriptions.use-case.js";
-import { BookTicketUseCase } from "./application/use-cases/user/_ticket/book-ticket/BookTicket.use-case.js";
-import { GetUserTicketByIdUseCase } from "./application/use-cases/user/_ticket/get-by-id/GetUserTicketById.use-case.js";
-import { GetUserTicketsUseCase } from "./application/use-cases/user/_ticket/get-tickets/GetUserTickets.use-case.js";
-import { ReturnTicketUseCase } from "./application/use-cases/user/_ticket/return-ticket/ReturnTicket.use-case.js";
-import { CreateUserUseCase } from "./application/use-cases/user/create/CreateUser.use-case.js";
-import { GetUserUseCase } from "./application/use-cases/user/get/GetUser.use-case.js";
-import { GetManyUsersUseCase } from "./application/use-cases/user/get-many/GetManyUsers.use-case.js";
-import { UpdateUserUseCase } from "./application/use-cases/user/update/UpdateUser.use-case.js";
-import { PrismaServiceTag } from "./infrastructure/database/Prisma.service.js";
-import { IdAdmin } from "./infrastructure/rest-api/authentication/constants.js";
-import { JwtServiceTag } from "./infrastructure/rest-api/authentication/Jwt.service.js";
-import { LoginBasicHandler } from "./infrastructure/rest-api/authentication/login-basic/LoginBasic.handler.js";
-import { LoginDwbnHandler } from "./infrastructure/rest-api/authentication/login-dwbn/LoginDwbn.handler.js";
-import { RefreshTokenHandler } from "./infrastructure/rest-api/authentication/refresh-token/RefreshToken.handler.js";
-import { BearerAuthGuard } from "./infrastructure/rest-api/BearerAuth.guard.js";
-import { RestApi } from "./infrastructure/rest-api/RestApi.js";
+import { CreateEventUseCase } from "@argazi/application";
+import { GetEventByIdUseCase } from "@argazi/application";
+import { CreateGeoPointUseCase } from "@argazi/application";
+import { GetPlaceGeoPointUseCase } from "@argazi/application";
+import { GetPlaceActualEventsUseCase } from "@argazi/application";
+import { GetPlaceSubscriptionsUseCase } from "@argazi/application";
+import { CreatePlaceUseCase } from "@argazi/application";
+import { GetPlaceByIdUseCase } from "@argazi/application";
+import { GetPlacesUseCase } from "@argazi/application";
+import { CreateSubscriptionUseCase } from "@argazi/application";
+import { GetSubscriptionByIdUseCase } from "@argazi/application";
+import { CreateTransportUseCase } from "@argazi/application";
+import { DeleteUserSubscriptionUseCase } from "@argazi/application";
+import { GetUserSubscriptionsUseCase } from "@argazi/application";
+import { BookTicketUseCase } from "@argazi/application";
+import { GetUserTicketByIdUseCase } from "@argazi/application";
+import { GetUserTicketsUseCase } from "@argazi/application";
+import { ReturnTicketUseCase } from "@argazi/application";
+import { CreateUserUseCase } from "@argazi/application";
+import { GetUserUseCase } from "@argazi/application";
+import { GetManyUsersUseCase } from "@argazi/application";
+import { UpdateUserUseCase } from "@argazi/application";
+import { PrismaServiceTag } from "@argazi/database";
+import { NotificationServiceLive } from "@argazi/message-broker";
+
+import { IdAdmin } from "./authentication/constants.js";
+import { JwtServiceTag } from "./authentication/Jwt.service.js";
+import { LoginBasicHandler } from "./authentication/login-basic/LoginBasic.handler.js";
+import { LoginDwbnHandler } from "./authentication/login-dwbn/LoginDwbn.handler.js";
+import { RefreshTokenHandler } from "./authentication/refresh-token/RefreshToken.handler.js";
+import { BearerAuthGuard } from "./BearerAuth.guard.js";
+import { RestApi } from "./RestApi.js";
 
 export const debugLogger = pipe(
 	PrettyLogger.layer(),
@@ -402,7 +403,7 @@ const app = pipe(
 					Effect.mapError(() => ServerError.notFoundError("NotFound4"))
 				);
 
-				return geoPoint;
+				return { body: geoPoint, status: 200 as const };
 			}).pipe(
 				Effect.tapBoth({
 					onFailure: Effect.logError,

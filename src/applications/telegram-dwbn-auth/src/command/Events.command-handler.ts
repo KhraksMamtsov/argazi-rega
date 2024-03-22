@@ -3,7 +3,7 @@ import { Markup } from "telegraf";
 
 import { MyEvents } from "./TelegramCommands.js";
 
-import { fromArray } from "../../../libraries/shared/src/ReadonlyArray.js";
+import { fromArray } from "@argazi/shared";
 import { RestApiServiceTag } from "../RestApiService.js";
 import { ArgazipaSayMdComponent } from "../ui/ArgazipaSay.md-component.js";
 import { BookTicketCbButton } from "../ui/button/BookTicket.cb-button.js";

@@ -1,7 +1,8 @@
 import * as Schema from "@effect/schema/Schema";
 import { ApiEndpoint } from "effect-http";
 
-import { IdEventSchema } from "../../../../libraries/domain/src/event/entity/IdEvent.js";
+import { IdEventSchema } from "@argazi/domain";
+
 import { BaseResponseFor } from "../../BaseResponseFor.js";
 import { EventApi } from "../Event.api.js";
 

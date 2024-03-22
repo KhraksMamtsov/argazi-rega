@@ -12,11 +12,11 @@ import {
 } from "effect";
 import { Client, ClientError } from "effect-http";
 
+import type { IdTelegramChat } from "@argazi/domain";
+
 import { SessionServiceTag, type UserCredentials } from "./Session.service.js";
 
 import { RestApi } from "../rest-api/RestApi.js";
-
-import type { IdTelegramChat } from "../../libraries/domain/src/user/entity/IdTelegramChat.js";
 
 export interface RestApiService
 	extends Effect.Effect.Success<ReturnType<typeof makeLive>> {}

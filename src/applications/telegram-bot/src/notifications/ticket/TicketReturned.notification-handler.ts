@@ -1,14 +1,14 @@
 import { Effect } from "effect";
 import { Markup } from "telegraf";
 
+import type { Ticket } from "@argazi/domain";
+import type { User } from "@argazi/domain";
+
 import { TicketReturnedMdComponent } from "./TicketReturned.md-component.js";
 
 import { RestApiServiceTag } from "../../RestApiService.js";
 import { TelegrafTag } from "../../telegraf/Telegraf.js";
 import { BookTicketCbButton } from "../../ui/button/BookTicket.cb-button.js";
-
-import type { Ticket } from "../../../../libraries/domain/src/ticket/entity/Ticket.js";
-import type { User } from "../../../../libraries/domain/src/user/entity/User.js";
 
 export const TicketReturnedNotificationHandler = (args: {
 	readonly createdTicket: Ticket;

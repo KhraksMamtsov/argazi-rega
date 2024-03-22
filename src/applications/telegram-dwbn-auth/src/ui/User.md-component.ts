@@ -1,10 +1,10 @@
 import { Effect, Secret, Option, pipe } from "effect";
 
+import type { User } from "@argazi/domain";
+
 import { EmptyMdComponent } from "./Empty.md-component.js";
 import { MD } from "./Markdown.js";
 import { UserTypeMdComponent } from "./UserType.md-component.js";
-
-import type { User } from "../../../libraries/domain/src/user/entity/User.js";
 
 export const UserMdComponent = (props: { user: User }) =>
 	Effect.gen(function* (_) {

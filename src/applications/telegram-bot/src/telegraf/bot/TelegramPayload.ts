@@ -1,12 +1,13 @@
 import { Data, Effect } from "effect";
 import * as _Telegraf from "telegraf";
 
+import type { IdTelegramChat } from "@argazi/domain";
+
 import {
 	TelegrafCtxReplyWithMarkdownError,
 	TelegrafCtxEditMessageTextError,
 } from "./TelegrafContextError.js";
 
-import type { IdTelegramChat } from "../../../../libraries/domain/src/user/entity/IdTelegramChat.js";
 import type { UnknownException } from "effect/Cause";
 import type {
 	CallbackQuery,

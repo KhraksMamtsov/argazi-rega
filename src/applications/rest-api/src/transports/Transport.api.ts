@@ -1,10 +1,9 @@
 import * as Schema from "@effect/schema/Schema";
 
-import { IdTransportSchema } from "../../../libraries/domain/src/transport/entity/IdTransport.js";
-import { IdUserSchema } from "../../../libraries/domain/src/user/entity/IdUser.js";
+import { IdTransportSchema } from "@argazi/domain";
+import { IdUserSchema } from "@argazi/domain";
+import type { TransportBase } from "@argazi/domain";
 import { _SS } from "@argazi/shared";
-
-import type { TransportBase } from "../../../libraries/domain/src/transport/entity/Transport.js";
 
 // #region TransportApi
 const _TransportApiSchema = Schema.struct({
@@ -15,8 +14,8 @@ const _TransportApiSchema = Schema.struct({
 	number: Schema.Secret,
 	seatsNumber: Schema.Int.pipe(Schema.positive()),
 }).pipe(
-	satisfies.to<TransportBase>(),
-	satisfies.from.json(),
+	_SS.satisfies.to<TransportBase>(),
+	_SS.satisfies.from.json(),
 	Schema.identifier("_TransportApiSchema")
 );
 

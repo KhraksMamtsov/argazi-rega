@@ -1,9 +1,9 @@
 import { Effect } from "effect";
 import { Markup } from "telegraf";
 
-import { encode } from "../../callback-query/CallbackQuery.js";
+import type { IdEvent } from "@argazi/domain";
 
-import type { IdEvent } from "../../../../libraries/domain/src/event/entity/IdEvent.js";
+import { encode } from "../../callback-query/CallbackQuery.js";
 
 export const BookTicketCbButton = (props: { id: IdEvent }) =>
 	Effect.succeed(

@@ -1,10 +1,10 @@
 import * as Schema from "@effect/schema/Schema";
 
-import { type GeoPointBase } from "../../../libraries/domain/src/geo-point/entity/GeoPoint.js";
-import { IdGeoPointSchema } from "../../../libraries/domain/src/geo-point/entity/IdGeoPoint.js";
-import { IdUserSchema } from "../../../libraries/domain/src/user/entity/IdUser.js";
-import { LatitudeSchema } from "../../../libraries/domain/src/value-objects/Latitude.js";
-import { LongitudeSchema } from "../../../libraries/domain/src/value-objects/Longitude.js";
+import { type GeoPointBase } from "@argazi/domain";
+import { IdGeoPointSchema } from "@argazi/domain";
+import { IdUserSchema } from "@argazi/domain";
+import { LatitudeSchema } from "@argazi/domain";
+import { LongitudeSchema } from "@argazi/domain";
 import { _SS } from "@argazi/shared";
 
 export const _GeoPointApiSchema = Schema.struct({
@@ -16,7 +16,10 @@ export const _GeoPointApiSchema = Schema.struct({
 	name: Schema.optionFromNullable(
 		Schema.compose(Schema.compose(Schema.Trim, Schema.NonEmpty), Schema.Secret)
 	),
-}).pipe(satisfies.to<GeoPointBase>(), Schema.identifier("GeoPointApiSchema"));
+}).pipe(
+	_SS.satisfies.to<GeoPointBase>(),
+	Schema.identifier("GeoPointApiSchema")
+);
 
 export interface GeoPointApiEncoded
 	extends Schema.Schema.Encoded<typeof _GeoPointApiSchema> {}

@@ -1,9 +1,10 @@
 import * as Schema from "@effect/schema/Schema";
 
+import { IdEventSchema } from "@argazi/domain";
+import { IdUserSchema } from "@argazi/domain";
+
 import { TicketApiSchema } from "./Ticket.api.js";
 
-import { IdEventSchema } from "../../../libraries/domain/src/event/entity/IdEvent.js";
-import { IdUserSchema } from "../../../libraries/domain/src/user/entity/IdUser.js";
 import { BaseResponseFor } from "../BaseResponseFor.js";
 
 export const CreateTicketResponseSchema = TicketApiSchema.pipe(

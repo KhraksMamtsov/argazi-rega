@@ -1,7 +1,8 @@
 import * as Schema from "@effect/schema/Schema";
 import { ApiEndpoint, ApiResponse } from "effect-http";
 
-import { IdSubscriptionSchema } from "../../../../libraries/domain/src/subscription/entity/IdSubscription.js";
+import { IdSubscriptionSchema } from "@argazi/domain";
+
 import { BaseResponseFor } from "../../BaseResponseFor.js";
 import { SubscriptionApiSchema } from "../Subscription.api.js";
 

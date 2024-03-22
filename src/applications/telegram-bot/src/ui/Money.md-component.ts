@@ -1,8 +1,8 @@
 import { Effect, BigDecimal } from "effect";
 
-import { MD } from "./Markdown.js";
+import type { Money } from "@argazi/domain";
 
-import type { Money } from "../../../libraries/domain/src/value-objects/Money.js";
+import { MD } from "./Markdown.js";
 
 export const MoneyMdComponent = (props: { money: Money }) =>
 	Effect.gen(function* (_) {

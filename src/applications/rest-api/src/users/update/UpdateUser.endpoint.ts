@@ -1,8 +1,9 @@
 import * as Schema from "@effect/schema/Schema";
 import { ApiEndpoint } from "effect-http";
 
-import { UpdateUserCommandPayloadSchema } from "../../../../application/use-cases/user/update/UpdateUser.command.js";
-import { IdUserSchema } from "../../../../libraries/domain/src/user/entity/IdUser.js";
+import { UpdateUserCommandPayloadSchema } from "@argazi/application";
+import { IdUserSchema } from "@argazi/domain";
+
 import { BaseResponseFor } from "../../BaseResponseFor.js";
 import { BearerAuth } from "../../BearerAuth.security-scheme.js";
 import { UserApi } from "../User.api.js";

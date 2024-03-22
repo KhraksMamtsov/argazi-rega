@@ -1,8 +1,8 @@
 import { Effect, ReadonlyRecord } from "effect";
 
-import { MD } from "./Markdown.js";
+import { TicketRole } from "@argazi/domain";
 
-import { TicketRole } from "../../../libraries/domain/src/ticket/entity/TicketRole.js";
+import { MD } from "./Markdown.js";
 
 const tickerRoleToString: ReadonlyRecord.ReadonlyRecord<TicketRole, string> = {
 	[TicketRole.ADMIN]: "Админ",

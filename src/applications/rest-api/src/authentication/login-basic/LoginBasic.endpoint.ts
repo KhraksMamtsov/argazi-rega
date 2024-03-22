@@ -2,6 +2,7 @@ import * as Schema from "@effect/schema/Schema";
 import { ApiEndpoint, SecurityScheme } from "effect-http";
 
 import { _SS } from "@argazi/shared";
+
 import { TokensResponse, TokensResponseSchema } from "../Tokens.response.js";
 
 export const LoginBasicResponseBodySchema = TokensResponseSchema.pipe(

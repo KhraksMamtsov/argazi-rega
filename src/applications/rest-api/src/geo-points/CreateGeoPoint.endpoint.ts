@@ -1,9 +1,10 @@
 import * as Schema from "@effect/schema/Schema";
 import { ApiEndpoint, ApiResponse } from "effect-http";
 
+import { CreateGeoPointCommandPayloadSchema } from "@argazi/application";
+
 import { GeoPointApiSchema } from "./GeoPoint.api.js";
 
-import { CreateGeoPointCommandPayloadSchema } from "../../../application/use-cases/geo-point/create/CreateGeoPoint.command.js";
 import { BaseResponseFor } from "../BaseResponseFor.js";
 import { BearerAuth } from "../BearerAuth.security-scheme.js";
 

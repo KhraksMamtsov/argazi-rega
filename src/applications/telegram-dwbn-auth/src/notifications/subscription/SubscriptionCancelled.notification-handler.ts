@@ -1,14 +1,14 @@
 import { Effect } from "effect";
 import { Markup } from "telegraf";
 
+import type { Subscription } from "@argazi/domain";
+import type { User } from "@argazi/domain";
+
 import { SubscriptionCancelledMdComponent } from "./SubscriptionCancelled.md-component.js";
 
 import { RestApiServiceTag } from "../../RestApiService.js";
 import { TelegrafTag } from "../../telegraf/Telegraf.js";
 import { SubscribePlaceCbButton } from "../../ui/button/SubscribePlace.cb-button.js";
-
-import type { Subscription } from "../../../../libraries/domain/src/subscription/entity/Subscription.js";
-import type { User } from "../../../../libraries/domain/src/user/entity/User.js";
 
 export const SubscriptionCancelledNotificationHandler = (args: {
 	readonly cancelledSubscription: Subscription;

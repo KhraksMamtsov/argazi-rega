@@ -1,10 +1,10 @@
 import { Effect, flow, Layer, Option, Secret, Struct } from "effect";
 
+import type { IdTelegramChat } from "@argazi/domain";
+
 import { CacheServiceTag } from "../cache/Cache.service.js";
 import * as AT from "../rest-api/authentication/AccessToken.js";
 import * as RT from "../rest-api/authentication/RefreshToken.js";
-
-import type { IdTelegramChat } from "../../libraries/domain/src/user/entity/IdTelegramChat.js";
 
 export interface UserCredentials {
 	readonly accessToken: AT.AccessToken;

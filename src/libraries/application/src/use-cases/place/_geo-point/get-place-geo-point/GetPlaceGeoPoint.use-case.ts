@@ -1,10 +1,11 @@
 import { Schema } from "@effect/schema";
 import { Effect } from "effect";
 
+import { GeoPointDbToDomainSchema } from "@argazi/database";
+import { PrismaServiceTag } from "@argazi/database";
+
 import { GetPlaceGeoPointCommandSchema } from "./GetPlaceGeoPoint.command.js";
 
-import { PlaceDbToDomainSchema } from "@argazi/database";
-import { PrismaServiceTag } from "@argazi/database";
 import { BaseCausedUseCaseFor } from "../../../common/Base.use-case.js";
 
 export const GetPlaceGeoPointUseCase = BaseCausedUseCaseFor(
@@ -15,12 +16,14 @@ export const GetPlaceGeoPointUseCase = BaseCausedUseCaseFor(
 
 		return yield* _(
 			prismaClient.queryDecode(
-				Schema.optionFromNullable(PlaceDbToDomainSchema),
+				Schema.optionFromNullable(GeoPointDbToDomainSchema),
 				(p) =>
-					p.place.findUnique({
-						include: { geoPoint: true },
-						where: { id: payload.idPlace },
-					})
+					p.place
+						.findUnique({
+							include: { geoPoint: true },
+							where: { id: payload.idPlace },
+						})
+						.then((x) => x?.geoPoint ?? null)
 			)
 		);
 	})

@@ -1,7 +1,8 @@
 import * as Schema from "@effect/schema/Schema";
 import { ApiEndpoint } from "effect-http";
 
-import { CreateEventCommandPayloadSchema } from "../../../../application/use-cases/event/create/CreateEvent.command.js";
+import { CreateEventCommandPayloadSchema } from "@argazi/application";
+
 import { BaseResponseFor } from "../../BaseResponseFor.js";
 import { EventApi } from "../Event.api.js";
 

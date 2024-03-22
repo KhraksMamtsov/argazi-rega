@@ -1,16 +1,10 @@
 import { ParseResult, Schema } from "@effect/schema";
 import { Effect } from "effect";
 
-import {
-	type IdEvent,
-	IdEventSchema,
-} from "../../../../libraries/domain/src/event/entity/IdEvent.js";
-import { IdPlaceSchema } from "../../../../libraries/domain/src/place/entity/IdPlace.js";
-import { IdSubscriptionSchema } from "../../../../libraries/domain/src/subscription/entity/IdSubscription.js";
-import {
-	IdTicketSchema,
-	type IdTicket,
-} from "../../../../libraries/domain/src/ticket/entity/IdTicket.js";
+import { type IdEvent, IdEventSchema } from "@argazi/domain";
+import { IdPlaceSchema } from "@argazi/domain";
+import { IdSubscriptionSchema } from "@argazi/domain";
+import { IdTicketSchema, type IdTicket } from "@argazi/domain";
 
 const _CallbackQueryEntitySchema = Schema.union(
 	Schema.struct({

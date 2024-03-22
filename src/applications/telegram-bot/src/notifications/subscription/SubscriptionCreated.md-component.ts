@@ -1,10 +1,10 @@
 import { Effect } from "effect";
 
+import type { Place } from "@argazi/domain";
+
 import { ArgazipaSayMdComponent } from "../../ui/ArgazipaSay.md-component.js";
 import { MD } from "../../ui/Markdown.js";
 import { PlaceMdComponent } from "../../ui/Place.md-component.js";
-
-import type { Place } from "../../../../libraries/domain/src/place/entity/Place.js";
 
 export const SubscriptionCreatedMdComponent = (props: { place: Place }) =>
 	Effect.gen(function* (_) {

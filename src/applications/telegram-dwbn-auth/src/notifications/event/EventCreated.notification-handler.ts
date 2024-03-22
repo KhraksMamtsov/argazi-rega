@@ -1,14 +1,14 @@
 import { Effect, Option, ReadonlyArray } from "effect";
 import { Markup } from "telegraf";
 
+import type { Event } from "@argazi/domain";
+import type { User } from "@argazi/domain";
+
 import { EventCreatedMdComponent } from "./EventCreated.md-component.js";
 
 import { RestApiServiceTag } from "../../RestApiService.js";
 import { TelegrafTag } from "../../telegraf/Telegraf.js";
 import { BookTicketCbButton } from "../../ui/button/BookTicket.cb-button.js";
-
-import type { Event } from "../../../../libraries/domain/src/event/entity/Event.js";
-import type { User } from "../../../../libraries/domain/src/user/entity/User.js";
 
 export const EventCreatedNotificationHandler = (args: {
 	readonly createdEvent: Event;
