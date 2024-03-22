@@ -1,20 +1,19 @@
 {
-	"name": "@argazi/domain",
+	"name": "@argazi/cache",
 	"version": "0.0.0",
 	"type": "module",
-	"main": "dist/domain.js",
-	"types": "dist/src/index.d.ts",
+	"exports": {
+		".": {
+			"import": "./dist/src/index.js",
+			"types": "./dist/src/index.d.ts"
+		}
+	},
 	"scripts": {
-		"dev": "vite",
-		"build": "tsc && vite build",
-		"build:watch": "tsc && vite build --watch",
-		"preview": "vite preview"
+		"build": "tsc",
+		"build:watch": "tsc --watch"
 	},
 	"dependencies": {
-		"vite": "^5.1.6",
-		"@argazi/shared": "workspace:*"
-	},
-	"devDependencies": {
-		"vite-plugin-dts": "^3.7.3"
+		"@argazi/shared": "workspace:*",
+		"redis": "^4.6.13"
 	}
 }

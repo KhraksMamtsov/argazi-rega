@@ -13,10 +13,9 @@ import {
 import { Client, ClientError } from "effect-http";
 
 import type { IdTelegramChat } from "@argazi/domain";
+import { RestApiClient } from "@argazi/rest-api";
 
 import { SessionServiceTag, type UserCredentials } from "./Session.service.js";
-
-import { RestApi } from "../rest-api/RestApi.js";
 
 export interface RestApiService
 	extends Effect.Effect.Success<ReturnType<typeof makeLive>> {}
@@ -38,10 +37,9 @@ export const makeLive = () =>
 		const apiUrl = yield* _(Config.secret("API_URL"));
 		const apiPort = yield* _(Config.secret("API_PORT"));
 
-		const restApiClient = Client.make(RestApi, {
-			baseUrl: new URL(`${Secret.value(apiUrl)}:${Secret.value(apiPort)}`)
-				.origin,
-		});
+		const restApiClient = RestApiClient(
+			new URL(`${Secret.value(apiUrl)}:${Secret.value(apiPort)}`).origin
+		);
 
 		const autoRefreshSynchronized =
 			(args: {

@@ -1,4 +1,4 @@
-import { Schema } from "@effect/schema";
+import { Schema, ParseResult } from "@effect/schema";
 import { Config, Effect, Layer, ReadonlyRecord, Secret, Data } from "effect";
 
 import { IdUserSchema } from "@argazi/domain";
@@ -38,12 +38,12 @@ export enum JWTServiceErrorType {
 export class JWRServiceSignError extends Data.TaggedError(
 	JWTServiceErrorType.SIGN
 )<{
-	readonly cause: Error;
+	readonly cause: ParseResult.ParseError | _JWT.JwtSignError;
 }> {}
 export class JWRServiceVerifyError extends Data.TaggedError(
 	JWTServiceErrorType.VERIFY
 )<{
-	readonly cause: unknown; //JWT.VerifyErrors;
+	readonly cause: ParseResult.ParseError | _JWT.JwtVerifyError;
 }> {}
 
 const makeLive = () =>

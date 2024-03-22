@@ -1,9 +1,10 @@
 import { Effect, flow, Option, pipe, ReadonlyArray } from "effect";
 import { Markup } from "telegraf";
 
+import { _RA } from "@argazi/shared";
+
 import { MyEvents } from "./TelegramCommands.js";
 
-import { fromArray } from "@argazi/shared";
 import { RestApiServiceTag } from "../RestApiService.js";
 import { ArgazipaSayMdComponent } from "../ui/ArgazipaSay.md-component.js";
 import { BookTicketCbButton } from "../ui/button/BookTicket.cb-button.js";
@@ -43,7 +44,7 @@ export const EventsCommandHandler = (args: {
 			Effect.allWith({
 				concurrency: 4,
 			}),
-			Effect.map(flow(ReadonlyArray.flatten, fromArray)),
+			Effect.map(flow(ReadonlyArray.flatten, _RA.fromArray)),
 			Effect.tapBoth({
 				onFailure: Effect.logError,
 				onSuccess: Effect.logInfo,

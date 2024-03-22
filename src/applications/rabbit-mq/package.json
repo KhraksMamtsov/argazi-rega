@@ -1,25 +1,5 @@
 {
-	"name": "@argazi/telegram-form",
+	"name": "@argazi/rabbit-mq",
 	"version": "0.0.0",
-	"type": "module",
-	"scripts": {
-		"dev": "vite",
-		"build": "vue-tsc && vite build",
-		"preview": "vite preview",
-		"typecheck": "tsc --noEmit",
-		"typecheck:watch": "tsc --noEmit --watch"
-	},
-	"dependencies": {
-		"@argazi/domain": "workspace:*",
-		"@argazi/shared": "workspace:*",
-		"@jsonforms/core": "^3.2.1",
-		"@jsonforms/vue": "^3.2.1",
-		"@jsonforms/vue-vanilla": "^3.2.1",
-		"vue": "^3.4.21"
-	},
-	"devDependencies": {
-		"@vitejs/plugin-vue": "^5.0.4",
-		"vite": "^5.1.6",
-		"vue-tsc": "^2.0.6"
-	}
+	"type": "module"
 }

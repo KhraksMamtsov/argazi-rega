@@ -2,6 +2,12 @@
 	"name": "@argazi/rest-api",
 	"version": "0.0.0",
 	"type": "module",
+	"exports": {
+		".": {
+			"types": "./dist/src/index.d.ts",
+			"import": "./dist/src/index.js"
+		}
+	},
 	"scripts": {
 		"build": "tsc",
 		"build:watch": "tsc --watch",

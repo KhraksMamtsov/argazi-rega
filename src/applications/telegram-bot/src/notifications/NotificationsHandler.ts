@@ -9,7 +9,7 @@ import { TicketCreatedNotificationHandler } from "./ticket/TicketCreated.notific
 import { TicketReturnedNotificationHandler } from "./ticket/TicketReturned.notification-handler.js";
 import { UserCreatedNotificationHandler } from "./user/UserCreated.notification-handler.js";
 
-import { IdAdmin } from "../../rest-api/authentication/constants.js";
+import { IdAdmin } from "@argazi/rest-api";
 import { RestApiServiceTag } from "../RestApiService.js";
 
 export const NotificationsHandler = (args: {

@@ -1,14 +1,17 @@
 import { Effect, flow, Layer, Option, Secret, Struct } from "effect";
 
+import { CacheServiceTag } from "@argazi/cache";
 import type { IdTelegramChat } from "@argazi/domain";
-
-import { CacheServiceTag } from "../cache/Cache.service.js";
-import * as AT from "../rest-api/authentication/AccessToken.js";
-import * as RT from "../rest-api/authentication/RefreshToken.js";
+import {
+	type AccessToken,
+	type RefreshToken,
+	AccessTokenSchema,
+	RefreshTokenSchema,
+} from "@argazi/rest-api";
 
 export interface UserCredentials {
-	readonly accessToken: AT.AccessToken;
-	readonly refreshToken: RT.RefreshToken;
+	readonly accessToken: AccessToken;
+	readonly refreshToken: RefreshToken;
 }
 
 const ACCESS_TOKEN_FIELD = "accessToken" satisfies keyof UserCredentials;
@@ -76,8 +79,8 @@ export const makeLive = () =>
 								Option.all,
 								Option.map(
 									Struct.evolve({
-										accessToken: AT.AccessTokenSchema,
-										refreshToken: RT.RefreshTokenSchema,
+										accessToken: AccessTokenSchema,
+										refreshToken: RefreshTokenSchema,
 									})
 								)
 							)

@@ -1,5 +1,7 @@
 import { absurd, Effect, Secret } from "effect";
 
+import type { AccessToken } from "@argazi/rest-api";
+
 import { decode } from "./CallbackQuery.js";
 
 import { RestApiServiceTag } from "../RestApiService.js";
@@ -8,7 +10,6 @@ import { GeoPointMdComponent } from "../ui/GeoPoint.md-component.js";
 import { MD } from "../ui/Markdown.js";
 import { PlaceMdComponent } from "../ui/Place.md-component.js";
 
-import type { AccessToken } from "../../../../infrastructure/rest-api/authentication/AccessToken.js";
 import type { CallbackQueryPayload } from "../telegraf/bot/TelegramPayload.js";
 
 export const CallbackQueryHandler = (args: {

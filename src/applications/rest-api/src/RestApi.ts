@@ -10,6 +10,8 @@ import { SubscriptionsApiGroup } from "./subscriptions/Subscriptions.api-group.j
 import { TransportsEndpointGroup } from "./transports/Transports.endpoint-group.js";
 import { UsersEndpointsGroup } from "./users/Users.endpoints-group.js";
 
+export { Api, ApiGroup, ApiEndpoint };
+
 export const RestApi = Api.make({
 	description: "**Этот раздел понимает Markdown**",
 	title: "Argazi Rega",
@@ -36,3 +38,6 @@ export const RestApi = Api.make({
 		)
 	)
 );
+
+type asd = typeof RestApi;
+export interface RestApi extends asd {}
