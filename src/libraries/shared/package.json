@@ -4,17 +4,12 @@
 	"type": "module",
 	"exports": {
 		".": {
-			"import": "./dist/shared.js",
-			"types": "./dist/index.d.ts"
+			"import": "./dist/src/index.js",
+			"types": "./dist/src/index.d.ts"
 		}
 	},
 	"scripts": {
-		"dev": "vite",
-		"build": "tsc && vite build",
-		"build:watch": "tsc && vite build --watch",
-		"preview": "vite preview"
-	},
-	"devDependencies": {
-		"vite": "^5.2.0"
+		"build": "tsc",
+		"build:watch": "tsc --watch"
 	}
 }
