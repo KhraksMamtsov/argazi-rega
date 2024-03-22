@@ -5,6 +5,7 @@ import { IdGeoPointSchema } from "@argazi/domain";
 import { IdPlaceSchema } from "@argazi/domain";
 import { type Place, type PlaceBase, PlaceSchema } from "@argazi/domain";
 import { _SS } from "@argazi/shared";
+
 import { BaseDbSchema, transform } from "../Base.db.js";
 
 import type { Place as _Place } from "@prisma/client";
@@ -26,11 +27,8 @@ export interface PlaceDbEncoded
 	extends Schema.Schema.Encoded<typeof _PlaceDbSchema> {}
 export interface PlaceDb extends Schema.Schema.Type<typeof _PlaceDbSchema> {}
 
-export const PlaceDbSchema: Schema.Schema<
-	PlaceDb,
-	PlaceDbEncoded,
-	PlaceDbContext
-> = _PlaceDbSchema;
+export const PlaceDbSchema: Schema.Schema<PlaceDb, PlaceDbEncoded> =
+	_PlaceDbSchema;
 // #endregion PlaceDbSchema
 
 export const PlaceDbToDomainSchema: Schema.Schema<Place, _Place> = transform(

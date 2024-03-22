@@ -8,7 +8,7 @@
       :schema="schema"
       :uischema="uischema"
       @change="onChange"
-    />  </div><div><pre>{{JSON.stringify(data, null, 2)}}</pre></div> 
+    />  </div>  <div><pre>{{JSON.stringify(data, null, 2)}}</pre></div> 
 </template> 
 
 <script lang="ts">

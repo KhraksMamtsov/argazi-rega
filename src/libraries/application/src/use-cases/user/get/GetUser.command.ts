@@ -1,8 +1,9 @@
 import { Schema } from "@effect/schema";
 
-import { BaseCommandFor } from "../../common/Base.command.js";
-import { _SS } from "@argazi/shared";
 import { IdDwbnSchema, IdUserSchema } from "@argazi/domain";
+import { _SS } from "@argazi/shared";
+
+import { BaseCommandFor } from "../../common/Base.command.js";
 
 export type GetUserCommandPayloadFrom =
 	| {

@@ -1,10 +1,11 @@
 import { Schema } from "@effect/schema";
 import { Effect } from "effect";
 
-import { GetPlaceActualEventsCommandSchema } from "./GetPlaceActualEvents.command.js";
-
 import { EventDbToDomainSchema } from "@argazi/database";
 import { PrismaServiceTag } from "@argazi/database";
+
+import { GetPlaceActualEventsCommandSchema } from "./GetPlaceActualEvents.command.js";
+
 import { BaseGetCausedUseCaseFor } from "../../../common/Base.use-case.js";
 
 export const GetPlaceActualEventsUseCase = BaseGetCausedUseCaseFor(

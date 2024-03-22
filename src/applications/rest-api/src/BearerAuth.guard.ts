@@ -1,8 +1,9 @@
 import { Effect, Secret } from "effect";
 import { ServerError } from "effect-http";
 
-import { JwtServiceTag } from "./authentication/Jwt.service.js";
 import type { IdUser } from "@argazi/domain";
+
+import { JwtServiceTag } from "./authentication/Jwt.service.js";
 
 export const BearerAuthGuard =
 	<P, A, E, R>(

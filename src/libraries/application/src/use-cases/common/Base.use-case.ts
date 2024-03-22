@@ -1,10 +1,11 @@
-import { UserDbToDomainSchema } from "@argazi/database";
-import { PrismaServiceTag } from "@argazi/database";
 import { Schema } from "@effect/schema";
 import { Data, Effect, Either } from "effect";
 
-import type { BaseCausedCommand, BaseCommand } from "./Base.command.js";
+import { UserDbToDomainSchema } from "@argazi/database";
+import { PrismaServiceTag } from "@argazi/database";
 import type { User } from "@argazi/domain";
+
+import type { BaseCausedCommand, BaseCommand } from "./Base.command.js";
 
 export enum BaseUseCaseErrorTag {
 	UNKNOWN_INITIATOR = "UNKNOWN_INITIATOR::BaseUseCaseErrorTag",

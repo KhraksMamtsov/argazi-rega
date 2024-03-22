@@ -1,12 +1,13 @@
+import { Schema } from "@effect/schema";
+import { type Transport as _Transport } from "@prisma/client";
+import { Effect } from "effect";
+
 import {
 	IdTransportSchema,
 	TransportSchema,
 	IdUserSchema,
 } from "@argazi/domain";
 import { _SS } from "@argazi/shared";
-import { Schema } from "@effect/schema";
-import { type Transport as _Transport } from "@prisma/client";
-import { Effect } from "effect";
 
 import { BaseDbSchema, transform } from "../Base.db.js";
 
@@ -34,11 +35,8 @@ export interface TransportDbEncoded
 export interface TransportDb
 	extends Schema.Schema.Type<typeof _TransportDbSchema> {}
 
-export const TransportDbSchema: Schema.Schema<
-	TransportDb,
-	TransportDbEncoded,
-	TransportDbContext
-> = _TransportDbSchema;
+export const TransportDbSchema: Schema.Schema<TransportDb, TransportDbEncoded> =
+	_TransportDbSchema;
 // #endregion TransportDbSchema
 
 export const TransportDbToDomainSchema = transform(

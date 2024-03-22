@@ -1,9 +1,3 @@
-import {
-	decodeEitherNotification,
-	encodeNotification,
-	type Notification,
-	NotificationServiceTag,
-} from "@argazi/domain";
 import * as AMQP from "amqplib";
 import {
 	Layer,
@@ -23,14 +17,20 @@ import {
 import { Buffer } from "node:buffer";
 
 import {
+	decodeEitherNotification,
+	encodeNotification,
+	type Notification,
+	NotificationServiceTag,
+} from "@argazi/domain";
+import type { _TS } from "@argazi/shared";
+
+import {
 	AckError,
 	AssertQueueError,
 	ConnectError,
 	CreateChannelError,
 	SendToQueueError,
 } from "./MessageBroker.error";
-
-import type { _TS } from "@argazi/shared";
 
 const RabbitMQService = Effect.gen(function* (_) {
 	const config = yield* _(

@@ -1,8 +1,9 @@
 import { Schema } from "@effect/schema";
 
-import { BaseCausedCommandFor } from "../../../common/Base.command.js";
 import { TicketBaseSchema } from "@argazi/domain";
 import { _SS } from "@argazi/shared";
+
+import { BaseCausedCommandFor } from "../../../common/Base.command.js";
 
 export const ReturnTicketCommandPayloadSchema = TicketBaseSchema.pipe(
 	Schema.pick("id", "idUser"),

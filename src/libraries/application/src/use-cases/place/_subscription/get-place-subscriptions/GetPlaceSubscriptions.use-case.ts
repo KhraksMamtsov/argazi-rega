@@ -1,13 +1,14 @@
 import { Schema } from "@effect/schema";
 import { Effect } from "effect";
 
-import { GetPlaceSubscriptionsCommandSchema } from "./GetPlaceSubscriptions.command.js";
-
 import {
 	PrismaServiceTag,
 	SubscriptionDbToDomainSchema,
 } from "@argazi/database";
 import { _SS } from "@argazi/shared";
+
+import { GetPlaceSubscriptionsCommandSchema } from "./GetPlaceSubscriptions.command.js";
+
 import { BaseCausedUseCaseFor } from "../../../common/Base.use-case.js";
 
 export const GetPlaceSubscriptionsUseCase = BaseCausedUseCaseFor(

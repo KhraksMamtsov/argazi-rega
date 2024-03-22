@@ -2,6 +2,7 @@ import { Schema } from "@effect/schema";
 
 import { IdPlaceSchema } from "@argazi/domain";
 import { _SS } from "@argazi/shared";
+
 import { BaseCausedCommandFor } from "../../../common/Base.command.js";
 
 export const GetPlaceGeoPointCommandPayloadSchema = Schema.struct({

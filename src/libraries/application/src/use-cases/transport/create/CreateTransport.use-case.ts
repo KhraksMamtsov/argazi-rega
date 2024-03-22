@@ -1,9 +1,10 @@
 import { Effect, Option, Secret } from "effect";
 
+import { PrismaServiceTag, TransportDbToDomainSchema } from "@argazi/database";
+
 import { CreateTransportCommandSchema } from "./CreateTransport.command.js";
 
 import { BaseCausedUseCaseFor } from "../../common/Base.use-case.js";
-import { PrismaServiceTag, TransportDbToDomainSchema } from "@argazi/database";
 
 export const CreateTransportUseCase = BaseCausedUseCaseFor(
 	CreateTransportCommandSchema

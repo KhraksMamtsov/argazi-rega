@@ -1,5 +1,6 @@
-import { _TS, _SS } from "@argazi/shared";
 import { Schema } from "@effect/schema";
+
+import { _TS, _SS } from "@argazi/shared";
 
 import { IdEventSchema } from "../event/entity/IdEvent.js";
 import { IdGeoPointSchema } from "../geo-point/entity/IdGeoPoint.js";

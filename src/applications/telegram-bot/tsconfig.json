@@ -2,7 +2,8 @@
   "extends" : "../../../tsconfig.base.json",
   "compilerOptions": {
     "outDir": "dist",
-    "declarationDir": "dist",
+    "declaration": false,
+"declarationMap": false,
     "target": "ESNext",
     "useDefineForClassFields": true,
     "module": "ESNext",

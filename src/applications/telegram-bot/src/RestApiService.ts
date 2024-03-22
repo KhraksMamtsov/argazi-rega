@@ -10,7 +10,7 @@ import {
 	Secret,
 	SynchronizedRef,
 } from "effect";
-import { Client, ClientError } from "effect-http";
+import { ClientError } from "effect-http";
 
 import type { IdTelegramChat } from "@argazi/domain";
 import { RestApiClient } from "@argazi/rest-api";

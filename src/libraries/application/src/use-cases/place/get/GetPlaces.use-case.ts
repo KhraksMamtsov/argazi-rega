@@ -1,10 +1,11 @@
 import { Schema } from "@effect/schema";
 import { Effect } from "effect";
 
+import { PlaceDbToDomainSchema, PrismaServiceTag } from "@argazi/database";
+
 import { GetPlacesCommandSchema } from "./GetPlaces.command.js";
 
 import { BaseCausedUseCaseFor } from "../../common/Base.use-case.js";
-import { PlaceDbToDomainSchema, PrismaServiceTag } from "@argazi/database";
 
 export const GetPlacesUseCase = BaseCausedUseCaseFor(GetPlacesCommandSchema)(
 	() =>

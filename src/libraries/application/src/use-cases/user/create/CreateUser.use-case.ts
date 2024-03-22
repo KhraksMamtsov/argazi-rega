@@ -1,6 +1,7 @@
+import { Effect } from "effect";
+
 import { PrismaServiceTag, UserDbToDomainSchema } from "@argazi/database";
 import { NotificationServiceTag, notification } from "@argazi/domain";
-import { Effect } from "effect";
 
 import { CreateUserCommandSchema } from "./CreateUser.command.js";
 

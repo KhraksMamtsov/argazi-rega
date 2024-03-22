@@ -1,7 +1,8 @@
 import { Effect } from "effect";
 
-import type { CreatePlaceCommand } from "./CreatePlace.command.js";
 import { PlaceDbToDomainSchema, PrismaServiceTag } from "@argazi/database";
+
+import type { CreatePlaceCommand } from "./CreatePlace.command.js";
 
 export const CreatePlaceUseCase = (command: CreatePlaceCommand) =>
 	Effect.gen(function* (_) {

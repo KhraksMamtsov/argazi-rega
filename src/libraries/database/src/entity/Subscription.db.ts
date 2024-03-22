@@ -7,6 +7,7 @@ import { IdSubscriptionSchema } from "@argazi/domain";
 import { SubscriptionSchema } from "@argazi/domain";
 import { IdUserSchema } from "@argazi/domain";
 import { _SS } from "@argazi/shared";
+
 import { BaseDbSchema, transform } from "../Base.db.js";
 
 // #region SubscriptionDb
@@ -30,8 +31,7 @@ export interface SubscriptionDb
 
 export const SubscriptionDbSchema: Schema.Schema<
 	SubscriptionDb,
-	SubscriptionDbEncoded,
-	SubscriptionDbContext
+	SubscriptionDbEncoded
 > = _SubscriptionDbSchema;
 // #endregion SubscriptionDbSchema
 

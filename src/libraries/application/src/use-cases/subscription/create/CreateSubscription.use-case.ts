@@ -1,14 +1,15 @@
 import { Effect } from "effect";
 
-import { CreateSubscriptionCommandSchema } from "./CreateSubscription.command.js";
-
-import { CreateEntityAuthorizationError } from "../../common/AuthorizationError.js";
-import { BaseCausedUseCaseFor } from "../../common/Base.use-case.js";
 import {
 	PrismaServiceTag,
 	SubscriptionDbToDomainSchema,
 } from "@argazi/database";
 import { NotificationServiceTag, notification } from "@argazi/domain";
+
+import { CreateSubscriptionCommandSchema } from "./CreateSubscription.command.js";
+
+import { CreateEntityAuthorizationError } from "../../common/AuthorizationError.js";
+import { BaseCausedUseCaseFor } from "../../common/Base.use-case.js";
 
 export const CreateSubscriptionUseCase = BaseCausedUseCaseFor(
 	CreateSubscriptionCommandSchema

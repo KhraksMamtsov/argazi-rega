@@ -1,6 +1,7 @@
-import { UserDbToDomainSchema, PrismaServiceTag } from "@argazi/database";
 import { Schema } from "@effect/schema";
 import { Effect } from "effect";
+
+import { UserDbToDomainSchema, PrismaServiceTag } from "@argazi/database";
 
 import {
 	type UpdateUserCommand,

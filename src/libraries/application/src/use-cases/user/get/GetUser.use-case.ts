@@ -1,8 +1,9 @@
 import { Schema } from "@effect/schema";
 import { absurd, Effect } from "effect";
 
-import { type GetUserCommand } from "./GetUser.command.js";
 import { PrismaServiceTag, UserDbToDomainSchema } from "@argazi/database";
+
+import { type GetUserCommand } from "./GetUser.command.js";
 
 export const GetUserUseCase = ({ payload }: GetUserCommand) =>
 	Effect.gen(function* (_) {

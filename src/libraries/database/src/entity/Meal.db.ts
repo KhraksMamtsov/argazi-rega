@@ -1,12 +1,13 @@
+import { Schema } from "@effect/schema";
+import { type Meal as _Meal } from "@prisma/client";
+import { Effect } from "effect";
+
 import { IdEventSchema } from "@argazi/domain";
 import { IdMealSchema } from "@argazi/domain";
 import { type Meal, type MealBase, MealSchema } from "@argazi/domain";
 import { MealType } from "@argazi/domain";
 import { PriceSchema } from "@argazi/domain";
 import { _SS } from "@argazi/shared";
-import { Schema } from "@effect/schema";
-import { type Meal as _Meal } from "@prisma/client";
-import { Effect } from "effect";
 
 import { BaseDbSchema, transform } from "../Base.db.js";
 import { BigDecimalFromPrismaDecimal } from "../PrismaDecimalSchema.js";
@@ -35,8 +36,7 @@ export interface MealDbEncoded
 	extends Schema.Schema.Encoded<typeof _MealDbSchema> {}
 export interface MealDb extends Schema.Schema.Type<typeof _MealDbSchema> {}
 
-export const MealDbSchema: Schema.Schema<MealDb, MealDbEncoded, MealDbContext> =
-	_MealDbSchema;
+export const MealDbSchema: Schema.Schema<MealDb, MealDbEncoded> = _MealDbSchema;
 // #endregion MealDbSchema
 
 export const MealDbToDomainSchema: Schema.Schema<Meal, _Meal> = transform(

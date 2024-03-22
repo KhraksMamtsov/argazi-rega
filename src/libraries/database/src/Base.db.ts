@@ -1,3 +1,6 @@
+import { Schema, AST, ParseResult } from "@effect/schema";
+import { Effect, Option, pipe } from "effect";
+
 import {
 	type Base,
 	BaseSchema,
@@ -7,8 +10,6 @@ import {
 	DateUpdatedSchema,
 } from "@argazi/domain";
 import { _TS } from "@argazi/shared";
-import { Schema, AST, ParseResult } from "@effect/schema";
-import { Effect, Option, pipe } from "effect";
 
 const _BaseDbSchema = Schema.struct({
 	dateCreated: Schema.ValidDateFromSelf,

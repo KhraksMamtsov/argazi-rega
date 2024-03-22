@@ -1,8 +1,9 @@
 import { Schema } from "@effect/schema";
 
-import { BaseCausedCommandFor } from "../../common/Base.command.js";
-import { _SS } from "@argazi/shared";
 import { IdPlaceSchema } from "@argazi/domain";
+import { _SS } from "@argazi/shared";
+
+import { BaseCausedCommandFor } from "../../common/Base.command.js";
 
 export type GetPlaceByIdCommandPayloadFrom = {
 	readonly id: string;

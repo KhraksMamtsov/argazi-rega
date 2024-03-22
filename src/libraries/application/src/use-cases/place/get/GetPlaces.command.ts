@@ -1,7 +1,8 @@
 import { Schema } from "@effect/schema";
 
-import { BaseCausedCommandFor } from "../../common/Base.command.js";
 import { _SS } from "@argazi/shared";
+
+import { BaseCausedCommandFor } from "../../common/Base.command.js";
 
 export const GetPlacesCommandPayloadSchema = Schema.struct({}).pipe(
 	_SS.satisfies.from.json(),

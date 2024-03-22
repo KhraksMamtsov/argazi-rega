@@ -1,6 +1,7 @@
+import { Schema } from "@effect/schema";
+
 import { IdUserSchema } from "@argazi/domain";
 import { _S } from "@argazi/shared";
-import { Schema } from "@effect/schema";
 
 export const EntityType = Schema.literal("User", "Subscription", "Ticket");
 

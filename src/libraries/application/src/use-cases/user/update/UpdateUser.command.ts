@@ -1,6 +1,5 @@
 import { Schema } from "@effect/schema";
 
-import { BaseCausedCommandFor } from "../../common/Base.command.js";
 import {
 	IdDwbnSchema,
 	IdTelegramChatSchema,
@@ -11,6 +10,8 @@ import {
 	type UserType,
 } from "@argazi/domain";
 import { _SS, _EH } from "@argazi/shared";
+
+import { BaseCausedCommandFor } from "../../common/Base.command.js";
 
 export type UpdateUserCommandPayloadFrom = {
 	readonly email?: string;

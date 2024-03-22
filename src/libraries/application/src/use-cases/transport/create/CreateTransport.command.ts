@@ -1,8 +1,9 @@
 import { Schema } from "@effect/schema";
 
-import { BaseCausedCommandFor } from "../../common/Base.command.js";
 import { TransportDbSchema } from "@argazi/database";
 import { _SS } from "@argazi/shared";
+
+import { BaseCausedCommandFor } from "../../common/Base.command.js";
 
 // #region CreateTransportCommandPayload
 const _CreateTransportCommandPayloadSchema = TransportDbSchema.pipe(

@@ -1,6 +1,5 @@
 import { Schema } from "@effect/schema";
 
-import { BaseCommandFor } from "../../common/Base.command.js";
 import {
 	IdDwbnSchema,
 	IdTelegramChatSchema,
@@ -9,6 +8,8 @@ import {
 	type UserBase,
 } from "@argazi/domain";
 import { _SS } from "@argazi/shared";
+
+import { BaseCommandFor } from "../../common/Base.command.js";
 
 export const RegisterUserCommandPayloadSchema = Schema.struct({
 	email: Schema.Secret,

@@ -1,8 +1,9 @@
 import { Schema } from "@effect/schema";
 import { Effect, ReadonlyArray, HashMap, pipe } from "effect";
 
-import { type GetManyUsersCommand } from "./GetManyUsers.command.js";
 import { PrismaServiceTag, UserDbToDomainSchema } from "@argazi/database";
+
+import { type GetManyUsersCommand } from "./GetManyUsers.command.js";
 
 export const GetManyUsersUseCase = ({ payload }: GetManyUsersCommand) =>
 	Effect.gen(function* (_) {

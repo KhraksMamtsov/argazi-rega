@@ -1,3 +1,7 @@
+import { Schema } from "@effect/schema";
+import { type Event as _Event } from "@prisma/client";
+import { Effect } from "effect";
+
 import {
 	EventSchema,
 	IdEventSchema,
@@ -5,9 +9,6 @@ import {
 	PriceSchema,
 } from "@argazi/domain";
 import { _SS } from "@argazi/shared";
-import { Schema } from "@effect/schema";
-import { type Event as _Event } from "@prisma/client";
-import { Effect } from "effect";
 
 import { BaseDbSchema, transform } from "../Base.db.js";
 import { BigDecimalFromPrismaDecimal } from "../PrismaDecimalSchema.js";

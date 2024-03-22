@@ -9,6 +9,7 @@ import { type TicketBase, TicketSchema } from "@argazi/domain";
 import { TicketRole } from "@argazi/domain";
 import { IdUserSchema } from "@argazi/domain";
 import { _SS } from "@argazi/shared";
+
 import { BaseDbSchema, transform } from "../Base.db.js";
 
 export const TicketDbBaseSchema = Schema.struct({
@@ -39,11 +40,8 @@ export interface TicketDbEncoded
 	extends Schema.Schema.Encoded<typeof _TicketDbSchema> {}
 export interface TicketDb extends Schema.Schema.Type<typeof _TicketDbSchema> {}
 
-export const TicketDbSchema: Schema.Schema<
-	TicketDb,
-	TicketDbEncoded,
-	TicketDbContext
-> = _TicketDbSchema;
+export const TicketDbSchema: Schema.Schema<TicketDb, TicketDbEncoded> =
+	_TicketDbSchema;
 // #endregion TicketDbSchema
 
 export const TicketDbToDomainSchema = transform(

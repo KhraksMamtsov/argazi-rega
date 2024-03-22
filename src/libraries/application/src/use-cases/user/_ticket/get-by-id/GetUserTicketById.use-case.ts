@@ -1,11 +1,12 @@
 import { Schema } from "@effect/schema";
 import { Effect } from "effect";
 
+import { PrismaServiceTag, TicketDbToDomainSchema } from "@argazi/database";
+
 import { GetUserTicketByIdCommandSchema } from "./GetUserTicketById.command.js";
 
 import { GetEntityAuthorizationError } from "../../../common/AuthorizationError.js";
 import { BaseCausedUseCaseFor } from "../../../common/Base.use-case.js";
-import { PrismaServiceTag, TicketDbToDomainSchema } from "@argazi/database";
 
 export const GetUserTicketByIdUseCase = BaseCausedUseCaseFor(
 	GetUserTicketByIdCommandSchema
