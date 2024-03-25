@@ -1,20 +1,20 @@
 {
-	"name": "@argazi/application",
-	"version": "0.0.0",
-	"type": "module",
-	"exports": {
-		".": {
-			"import": "./dist/application.js",
-			"types": "./dist/src/index.d.ts"
-		}
-	},
-	"scripts": {
-		"build": "tsc",
-		"build:watch": "tsc --watch"
-	},
-	"dependencies": {
-		"@argazi/domain": "workspace:*",
-		"@argazi/database": "workspace:*",
-		"@argazi/shared": "workspace:*"
-	}
+  "name": "@argazi/application",
+  "version": "0.0.0",
+  "type": "module",
+  "exports": {
+    ".": {
+      "import": "./dist/application.js",
+      "types": "./dist/src/index.d.ts"
+    }
+  },
+  "scripts": {
+    "build": "tsc -b",
+    "build:watch": "tsc -b --watch"
+  },
+  "dependencies": {
+    "@argazi/domain": "workspace:*",
+    "@argazi/database": "workspace:*",
+    "@argazi/shared": "workspace:*"
+  }
 }
