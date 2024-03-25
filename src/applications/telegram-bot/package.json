@@ -1,18 +1,18 @@
 {
-	"name": "@argazi/telegram-bot",
-	"version": "0.0.0",
-	"type": "module",
-	"scripts": {
-		"build": "tsc",
-		"build:watch": "tsc --watch",
-		"typecheck": "tsc --noEmit",
-		"typecheck:watch": "tsc --noEmit --watch"
-	},
-	"dependencies": {
-		"@argazi/cache": "workspace:*",
-		"@argazi/domain": "workspace:*",
-		"@argazi/message-broker": "workspace:*",
-		"@argazi/rest-api": "workspace:*",
-		"@argazi/shared": "workspace:*"
-	}
+  "name": "@argazi/telegram-bot",
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "build": "tsc --build",
+    "build:watch": "tsc --build --watch",
+    "typecheck": "tsc --build --noEmit",
+    "typecheck:watch": "tsc --build --noEmit --watch"
+  },
+  "dependencies": {
+    "@argazi/cache": "workspace:*",
+    "@argazi/domain": "workspace:*",
+    "@argazi/message-broker": "workspace:*",
+    "@argazi/rest-api": "workspace:*",
+    "@argazi/shared": "workspace:*"
+  }
 }

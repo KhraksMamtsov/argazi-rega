@@ -12,7 +12,7 @@ export * from "./authentication/RefreshToken.js";
 // export * from "./my/_subscriptions/CreateMySubscription.endpoint.js";
 
 // export * from "./RestApi.js";
-// export * from "./authentication/constants.js";
+export * from "./authentication/constants.js";
 // export * from "./BaseResponseFor.js";
 // export * from "./BearerAuth.guard.js";
 // export * from "./BearerAuth.security-scheme.js";

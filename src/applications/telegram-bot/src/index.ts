@@ -4,32 +4,20 @@ import { PrettyLogger } from "effect-log";
 
 import * as http from "node:http";
 
-// import { CacheServiceTag } from "./infrastructure/cache/Cache.service.js";
 import { CacheServiceTag } from "@argazi/cache";
 import { NotificationServiceLive } from "@argazi/message-broker";
 
-// import { AuthenticationHandler } from "./infrastructure/telegram-bot/Authentication.handler.js";
-// import { CallbackQueryHandler } from "./infrastructure/telegram-bot/callback-query/CallbackQuery.handler.js";
-// import { CommandsHandlerLive } from "./infrastructure/telegram-bot/command/CommandsHandler.js";
-// // import { NotificationsHandlerLive } from "./infrastructure/telegram-bot/notifications/NotificationsHandlerLive.js";
-// import { NotificationsHandlerLive } from "./infrastructure/telegram-bot/notifications/NotificationsHandlerLive.js";
-// import { RestApiServiceTag } from "./infrastructure/telegram-bot/RestApiService.js";
-// import { SessionServiceTag } from "./infrastructure/telegram-bot/Session.service.js";
-import { AuthenticationHandler } from "./Authentication.handler";
-import { CallbackQueryHandler } from "./callback-query/CallbackQuery.handler";
-import { CommandsHandlerLive } from "./command/CommandsHandler";
-import { NotificationsHandlerLive } from "./notifications/NotificationsHandlerLive";
-import { RestApiServiceTag } from "./RestApiService";
-import { SessionServiceTag } from "./Session.service";
-import * as TgBot from "./telegraf/bot/TelegrafBot";
-import { TelegrafTag } from "./telegraf/Telegraf";
-import { TelegrafOptionsTag } from "./telegraf/TelegrafOptions";
-import { ArgazipaSayMdComponent } from "./ui/ArgazipaSay.md-component";
-import { MD } from "./ui/Markdown";
-// import { TelegrafTag } from "./infrastructure/telegram-bot/telegraf/Telegraf.js";
-// import { TelegrafOptionsTag } from "./infrastructure/telegram-bot/telegraf/TelegrafOptions.js";
-// import { ArgazipaSayMdComponent } from "./infrastructure/telegram-bot/ui/ArgazipaSay.md-component.js";
-// import { MD } from "./infrastructure/telegram-bot/ui/Markdown.js";
+import { AuthenticationHandler } from "./Authentication.handler.js";
+import { CallbackQueryHandler } from "./callback-query/CallbackQuery.handler.js";
+import { CommandsHandlerLive } from "./command/CommandsHandler.js";
+import { NotificationsHandlerLive } from "./notifications/NotificationsHandlerLive.js";
+import { RestApiServiceTag } from "./RestApiService.js";
+import { SessionServiceTag } from "./Session.service.js";
+import * as TgBot from "./telegraf/bot/TelegrafBot.js";
+import { TelegrafTag } from "./telegraf/Telegraf.js";
+import { TelegrafOptionsTag } from "./telegraf/TelegrafOptions.js";
+import { ArgazipaSayMdComponent } from "./ui/ArgazipaSay.md-component.js";
+import { MD } from "./ui/Markdown.js";
 
 export const debugLogger = pipe(
   PrettyLogger.layer({
@@ -117,15 +105,4 @@ if (port) {
     .listen(Number(port));
 }
 
-// void Effect.runPromiseExit(runnable).then(
-// 	Exit.match({
-// 		onFailure: (x) => {
-// 			console.log("runPromiseExit exit onFailure", x._tag);
-// 			console.dir(x, { depth: 1000 });
-// 		},
-// 		onSuccess: () => {
-// 			console.log("runPromiseExit exit onSuccess");
-// 		},
-// 	})
-// );
 runMain(runnable);

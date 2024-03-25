@@ -1,26 +1,22 @@
 {
   "extends" : "../../../tsconfig.base.json",
   "compilerOptions": {
+    // "composite": true,
     "outDir": "dist",
     // "declarationDir": "dist",
-    "target": "ESNext",
-    "useDefineForClassFields": true,
-    "module": "NodeNext",
-    "lib": ["ESNext"],
-    "skipLibCheck": true,
-    "declaration": false,
-"declarationMap": false,
-
-    /* Bundler mode */
-    "moduleResolution": "NodeNext",
-    "resolveJsonModule": true,
-    "isolatedModules": true,
-
-    /* Linting */
-    "strict": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
-    "noFallthroughCasesInSwitch": true
+    // "declaration": false,
+    // "declarationMap": true,
   },
-  "include": ["src"]
+  "include": ["src"],
+  "references": [{
+    "path": "../../libraries/shared" 
+  },{
+    "path": "../../libraries/domain"
+  },{
+    "path": "../../libraries/cache"
+  },{
+    "path": "../../libraries/message-broker"
+  },{
+    "path": "../../libraries/application"
+  }]
 }

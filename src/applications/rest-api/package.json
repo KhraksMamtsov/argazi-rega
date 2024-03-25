@@ -9,8 +9,8 @@
 		}
 	},
 	"scripts": {
-		"build": "tsc",
-		"build:watch": "tsc --watch",
+		"build": "tsc--build ",
+		"build:watch": "tsc --build --watch",
 		"typecheck": "tsc --noEmit",
 		"typecheck:watch": "tsc --noEmit --watch"
 	},

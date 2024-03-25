@@ -115,6 +115,7 @@ const schema = {
 };
 
 const schema1 = JSONSchema.make(qwe);
+console.log(schema1);
 
 console.log(schema);
 
@@ -171,11 +172,6 @@ export default defineComponent({
   components: {
     JsonForms,
   },
-  provide() {
-    return {
-      styles: myStyles,
-    };
-  },
   data() {
     return {
       data: {
@@ -195,6 +191,11 @@ export default defineComponent({
     onChange(event: JsonFormsChangeEvent) {
       this.data = event.data;
     },
+  },
+  provide() {
+    return {
+      styles: myStyles,
+    };
   },
 });
 </script>

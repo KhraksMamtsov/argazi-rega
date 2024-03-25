@@ -1,9 +1,11 @@
 import * as Schema from "@effect/schema/Schema";
 
-import { IdEventSchema } from "@argazi/domain";
-import { IdPlaceSchema } from "@argazi/domain";
-import { PriceSchema } from "@argazi/domain";
-import type { EventBase } from "@argazi/domain";
+import {
+  IdEventSchema,
+  IdPlaceSchema,
+  PriceSchema,
+  type EventBase,
+} from "@argazi/domain";
 import { _SS } from "@argazi/shared";
 
 export const _EventApi = Schema.struct({
