@@ -1,8 +1,8 @@
 version: "3.8"
 services:
   cache:
-    image: redis:7.2-alpine
     container_name: cache
+    image: redis:7.2-alpine
     restart: always
     healthcheck:
       test: [ "CMD", "redis-cli", "--raw", "incr", "ping" ]
@@ -25,14 +25,9 @@ services:
       REDIS_PASSWORD: "${REDIS_PASSWORD}"
 
   message_broker:
-    image: rabbitmq:3-management-alpine
     container_name: message_broker
+    build: ./src/applications/rabbit-mq
     restart: always
-    healthcheck:
-      test: ["CMD", "rabbitmq-diagnostics", "check_port_connectivity"]
-      interval: 30s
-      timeout: 10s
-      retries: 5
     ports:
       - "${RABBITMQ_PORT}:5672"
       - "${RABBITMQ_MANAGEMENT_PORT}:15672"
@@ -53,7 +48,7 @@ services:
     ]
     networks:
       - application_network
-    build: ./prisma/
+    build: ./src/applications/postgres
     ports:
       - "${POSTGRES_PORT}:5432"
     restart: always
@@ -73,7 +68,7 @@ services:
 
   telegram_web_app:
       container_name: telegram_web_app
-      build: ./src/infrastructure/telegram-bot/telegram-auth-mini-app/
+      build: ./src/applications/telegram-dwbn-auth
       healthcheck:
         test: ["CMD", "service", "nginx", "status"]
         interval: 5s

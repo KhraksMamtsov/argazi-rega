@@ -12,18 +12,11 @@ export const BearerAuthGuard =
       guardResult: { readonly idInitiator: IdUser }
     ) => Effect.Effect<A, E, R>
   ) =>
-  <
-    S extends {
-      readonly bearer: { readonly token: Secret.Secret };
-    },
-  >(
-    parameters: P,
-    security: S
-  ) =>
+  (parameters: P, security: string) =>
     Effect.gen(function* (_) {
       const { sub } = yield* _(
         JwtServiceTag.verifyAndDecode({
-          token: security.bearer.token,
+          token: Secret.fromString(security),
           type: "accessToken",
         }),
         Effect.mapError((verifyError) =>

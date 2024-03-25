@@ -7,17 +7,25 @@ import { IdDwbnSchema, IdTelegramChatSchema } from "@argazi/domain";
 import { IdAdmin, IdArgazipaBot } from "../constants.js";
 import { JwtServiceTag } from "../Jwt.service.js";
 
-export const LoginBasicHandler = (args: { readonly token: Secret.Secret }) =>
+export const LoginBasicHandler = (args: {
+  readonly login: Secret.Secret;
+  readonly password: Secret.Secret;
+}) =>
   Effect.gen(function* (_) {
     const basicAuthSecrets = yield* _(
       Effect.all({
-        admin: Config.secret("BASIC_AUTH_ADMIN_SECRET"),
-        argazipaBot: Config.secret("BASIC_AUTH_BOT_SECRET"),
+        adminLogin: Config.secret("BASIC_AUTH_ADMIN_LOGIN_SECRET"),
+        adminPassword: Config.secret("BASIC_AUTH_ADMIN_PASSWORD_SECRET"),
+        argazipaBotLogin: Config.secret("BASIC_AUTH_BOT_LOGIN_SECRET"),
+        argazipaBotPassword: Config.secret("BASIC_AUTH_BOT_PASSWORD_SECRET"),
       })
     );
 
     if (
-      Secret.value(basicAuthSecrets.argazipaBot) === Secret.value(args.token)
+      Secret.value(basicAuthSecrets.argazipaBotLogin) ===
+        Secret.value(args.login) &&
+      Secret.value(basicAuthSecrets.argazipaBotPassword) ===
+        Secret.value(args.password)
     ) {
       const registeredArgazipaBotOption = yield* _(
         GetUserUseCase({ payload: { id: IdArgazipaBot, type: "id" } })
@@ -55,7 +63,9 @@ export const LoginBasicHandler = (args: { readonly token: Secret.Secret }) =>
         })
       );
     } else if (
-      Secret.value(basicAuthSecrets.admin) === Secret.value(args.token)
+      Secret.value(basicAuthSecrets.adminLogin) === Secret.value(args.login) &&
+      Secret.value(basicAuthSecrets.adminPassword) ===
+        Secret.value(args.password)
     ) {
       const registeredAdminOption = yield* _(
         GetUserUseCase({ payload: { id: IdAdmin, type: "id" } })
@@ -71,7 +81,6 @@ export const LoginBasicHandler = (args: { readonly token: Secret.Secret }) =>
           sub: registeredAdminOption.value.id,
         })
       );
-    } else {
-      return ServerError.unauthorizedError("Wrong secret");
     }
+    return ServerError.unauthorizedError("Wrong secret");
   });

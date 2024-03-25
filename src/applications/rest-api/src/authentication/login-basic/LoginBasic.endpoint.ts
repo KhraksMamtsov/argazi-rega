@@ -1,5 +1,5 @@
 import * as Schema from "@effect/schema/Schema";
-import { ApiEndpoint, SecurityScheme } from "effect-http";
+import { Api, ApiEndpoint, Security } from "effect-http";
 
 import { _SS } from "@argazi/shared";
 
@@ -17,10 +17,9 @@ export const LoginBasicEndpoint = ApiEndpoint.post(
 ).pipe(
   ApiEndpoint.setRequestBody(LoginBasicResponseBodySchema),
   ApiEndpoint.setResponse(TokensResponse),
-  ApiEndpoint.addSecurity(
-    "basic",
-    SecurityScheme.basic({
-      tokenSchema: Schema.Secret,
+  Api.setSecurity(
+    Security.basic({
+      name: "basic",
     })
   )
 );

@@ -1,6 +1,15 @@
 import { HttpClient } from "@effect/platform";
 import { runMain } from "@effect/platform-node/NodeRuntime";
-import { Effect, flow, Layer, Logger, LogLevel, Option, pipe } from "effect";
+import {
+  Effect,
+  flow,
+  Layer,
+  Logger,
+  LogLevel,
+  Option,
+  pipe,
+  Secret,
+} from "effect";
 import { RouterBuilder, ServerError } from "effect-http";
 import { isServerError } from "effect-http/ServerError";
 import { NodeServer } from "effect-http-node";
@@ -62,9 +71,14 @@ const app = pipe(
         })
       )
     ),
-    RouterBuilder.handle("loginBasic", (_, { basic: { token } }) =>
+    RouterBuilder.handle("loginBasic", (_, { pass, user }) =>
       Effect.gen(function* (_) {
-        const loginResult = yield* _(LoginBasicHandler({ token }));
+        const loginResult = yield* _(
+          LoginBasicHandler({
+            login: Secret.fromString(user),
+            password: Secret.fromString(pass),
+          })
+        );
 
         if (isServerError(loginResult)) {
           return yield* _(loginResult);
@@ -246,7 +260,7 @@ const app = pipe(
           })
         );
 
-        return { body: result, status: 200 as const };
+        return result;
       }).pipe(
         Effect.tapBoth({
           onFailure: Effect.logError,
@@ -405,7 +419,7 @@ const app = pipe(
           Effect.mapError(() => ServerError.notFoundError("NotFound4"))
         );
 
-        return { body: geoPoint, status: 200 as const };
+        return geoPoint;
       }).pipe(
         Effect.tapBoth({
           onFailure: Effect.logError,
@@ -439,10 +453,7 @@ const app = pipe(
           })
         );
 
-        return {
-          body: placeSubscriptions,
-          status: 200 as const,
-        };
+        return placeSubscriptions;
       }).pipe(
         Effect.tapBoth({
           onFailure: Effect.logError,
@@ -488,11 +499,7 @@ const app = pipe(
         subscriptionOption.pipe(
           Option.match({
             onNone: () => ServerError.notFoundError("Not Found"),
-            onSome: (subscription) =>
-              Effect.succeed({
-                body: subscription,
-                status: 200 as const,
-              }),
+            onSome: (subscription) => Effect.succeed(subscription),
           })
         )
       );
@@ -510,17 +517,14 @@ const app = pipe(
     BearerAuthGuard(({ body }, { idInitiator }) =>
       Effect.gen(function* (_) {
         const qwe = yield* _(
-          // ^?
+          //  ^?
           CreateGeoPointUseCase({
             idInitiator,
             payload: body,
           })
         );
 
-        return {
-          body: qwe,
-          status: 200 as const,
-        };
+        return qwe;
       })
     )
   ),
@@ -627,12 +631,7 @@ const app = pipe(
             idEvent: input.body.idEvent,
             idUser: idInitiator,
           },
-        }).pipe(
-          Effect.map((content) => ({
-            content,
-            status: 200 as const,
-          }))
-        )
+        })
       )
     )
   ),
