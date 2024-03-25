@@ -30,7 +30,7 @@ import {
   ConnectError,
   CreateChannelError,
   SendToQueueError,
-} from "./MessageBroker.error";
+} from "./MessageBroker.error.js";
 
 const RabbitMQService = Effect.gen(function* (_) {
   const config = yield* _(

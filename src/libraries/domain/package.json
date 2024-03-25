@@ -10,8 +10,8 @@
     }
   },
   "scripts": {
-    "build": "tsc",
-    "build:watch": "tsc --watch"
+    "build": "tsc -b",
+    "build:watch": "tsc -b --watch"
   },
   "dependencies": {
     "@argazi/shared": "workspace:*"

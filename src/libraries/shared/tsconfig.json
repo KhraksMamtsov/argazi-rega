@@ -1,27 +1,11 @@
 {
   "extends":"../../../tsconfig.base.json",
   "compilerOptions": {
+    "composite": true,
     "outDir": "dist",
     "declarationDir": "dist",
     "declaration": true,
     "declarationMap": true,
-    "stripInternal": true,
-    
-    "target": "ESNext",
-    "useDefineForClassFields": true,
-    "module": "ESNext",
-    "lib": ["ESNext"],
-    "skipLibCheck": true,
-
-    /* Bundler mode */
-    "resolveJsonModule": true,
-    "isolatedModules": true,
-
-    /* Linting */
-    "strict": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
-    "noFallthroughCasesInSwitch": true
   },
   "include": ["src"]
 }

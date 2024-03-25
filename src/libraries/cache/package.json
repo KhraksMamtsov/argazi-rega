@@ -1,19 +1,19 @@
 {
-	"name": "@argazi/cache",
-	"version": "0.0.0",
-	"type": "module",
-	"exports": {
-		".": {
-			"import": "./dist/src/index.js",
-			"types": "./dist/src/index.d.ts"
-		}
-	},
-	"scripts": {
-		"build": "tsc",
-		"build:watch": "tsc --watch"
-	},
-	"dependencies": {
-		"@argazi/shared": "workspace:*",
-		"redis": "^4.6.13"
-	}
+  "name": "@argazi/cache",
+  "version": "0.0.0",
+  "type": "module",
+  "exports": {
+    ".": {
+      "import": "./dist/src/index.js",
+      "types": "./dist/src/index.d.ts"
+    }
+  },
+  "scripts": {
+    "build": "tsc -b",
+    "build:watch": "tsc -b --watch"
+  },
+  "dependencies": {
+    "@argazi/shared": "workspace:*",
+    "redis": "^4.6.13"
+  }
 }

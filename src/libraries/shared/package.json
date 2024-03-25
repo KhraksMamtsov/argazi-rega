@@ -1,15 +1,15 @@
 {
-	"name": "@argazi/shared",
-	"version": "0.0.0",
-	"type": "module",
-	"exports": {
-		".": {
-			"import": "./dist/src/index.js",
-			"types": "./dist/src/index.d.ts"
-		}
-	},
-	"scripts": {
-		"build": "tsc",
-		"build:watch": "tsc --watch"
-	}
+  "name": "@argazi/shared",
+  "version": "0.0.0",
+  "type": "module",
+  "exports": {
+    ".": {
+      "import": "./dist/src/index.js",
+      "types": "./dist/src/index.d.ts"
+    }
+  },
+  "scripts": {
+    "build": "tsc -b",
+    "build:watch": "tsc -b --watch"
+  }
 }

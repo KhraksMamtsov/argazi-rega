@@ -1,21 +1,16 @@
 {
   "extends":"../../../tsconfig.base.json",
   "compilerOptions": {
+    "composite": true,
     "outDir": "dist",
     "declarationDir": "dist",
     "declaration": true,
     "declarationMap": true,
-    
-    "target": "ESNext",
-    "module": "ESNext",
-    "lib": ["ESNext"],
-    "skipLibCheck": true,
-
-    /* Linting */
-    "strict": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
-    "noFallthroughCasesInSwitch": true
   },
-  "include": ["src"]
+  "include": ["src"],
+  "references": [{
+    "path": "../shared" 
+  },{
+    "path": "../domain"
+  }]
 }

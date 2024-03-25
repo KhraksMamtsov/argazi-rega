@@ -1,26 +1,26 @@
 {
-	"name": "@argazi/database",
-	"version": "0.0.0",
-	"type": "module",
-	"exports": {
-		".": {
-			"import": "./dist/database.js",
-			"types": "./dist/src/index.d.ts"
-		}
-	},
-	"scripts": {
-		"build": "tsc",
-		"build:watch": "tsc --watch",
-		"db:seed": "prisma db seed",
-		"db:client:generate": "prisma generate",
-		"db:migration:generate": "prisma migrate dev",
-		"db:migrations:apply": "npx prisma migrate deploy",
-		"db:migrations:apply:dev": "npx prisma migrate dev"
-	},
-	"dependencies": {
-		"@argazi/domain": "workspace:*",
-		"@argazi/shared": "workspace:*",
-		"@prisma/client": "^5.11.0",
-		"prisma": "^5.11.0"
-	}
+  "name": "@argazi/database",
+  "version": "0.0.0",
+  "type": "module",
+  "exports": {
+    ".": {
+      "import": "./dist/database.js",
+      "types": "./dist/src/index.d.ts"
+    }
+  },
+  "scripts": {
+    "build": "tsc -b",
+    "build:watch": "tsc -b --watch",
+    "db:seed": "prisma db seed",
+    "db:client:generate": "prisma generate",
+    "db:migration:generate": "prisma migrate dev",
+    "db:migrations:apply": "npx prisma migrate deploy",
+    "db:migrations:apply:dev": "npx prisma migrate dev"
+  },
+  "dependencies": {
+    "@argazi/domain": "workspace:*",
+    "@argazi/shared": "workspace:*",
+    "@prisma/client": "^5.11.0",
+    "prisma": "^5.11.0"
+  }
 }
