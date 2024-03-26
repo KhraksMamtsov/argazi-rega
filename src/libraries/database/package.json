@@ -10,17 +10,10 @@
   },
   "scripts": {
     "build": "tsc -b",
-    "build:watch": "tsc -b --watch",
-    "db:seed": "prisma db seed",
-    "db:client:generate": "prisma generate",
-    "db:migration:generate": "prisma migrate dev",
-    "db:migrations:apply": "npx prisma migrate deploy",
-    "db:migrations:apply:dev": "npx prisma migrate dev"
+    "build:watch": "tsc -b --watch"
   },
   "dependencies": {
     "@argazi/domain": "workspace:*",
-    "@argazi/shared": "workspace:*",
-    "@prisma/client": "^5.11.0",
-    "prisma": "^5.11.0"
+    "@argazi/shared": "workspace:*"
   }
 }

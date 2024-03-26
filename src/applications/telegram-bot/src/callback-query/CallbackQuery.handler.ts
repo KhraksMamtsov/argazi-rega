@@ -1,4 +1,5 @@
 import { absurd, Effect, Secret } from "effect";
+import { Client } from "effect-http";
 
 import type { AccessToken } from "@argazi/rest-api";
 
@@ -17,7 +18,7 @@ export const CallbackQueryHandler = (args: {
   readonly callbackQueryPayload: CallbackQueryPayload;
 }) =>
   Effect.gen(function* (_) {
-    // const _bot = yield* _(TelegrafTag);
+    const restApiService = yield* _(RestApiServiceTag);
     const callbackQuery = yield* _(
       decode(args.callbackQueryPayload.callback_query.data)
     );
@@ -25,51 +26,46 @@ export const CallbackQueryHandler = (args: {
     if (callbackQuery.type === "Ticket") {
       if (callbackQuery.action === "delete") {
         return yield* _(
-          RestApiServiceTag.returnMyTicket(
+          restApiService.returnMyTicket(
             {
               path: {
                 idTicket: callbackQuery.id,
               },
             },
-            {
-              bearer: args.accessToken,
-            }
+            Client.setBearer(Secret.value(args.accessToken))
           )
         );
       } else if (callbackQuery.action === "create") {
         return yield* _(
-          RestApiServiceTag.bookMyTicket(
+          restApiService.bookMyTicket(
             {
               body: {
                 idEvent: callbackQuery.id,
               },
             },
-            {
-              bearer: args.accessToken,
-            }
+
+            Client.setBearer(Secret.value(args.accessToken))
           )
         );
       }
     } else if (callbackQuery.type === "Subscription") {
       if (callbackQuery.action === "delete") {
         return yield* _(
-          RestApiServiceTag.deleteMySubscription(
+          restApiService.deleteMySubscription(
             {
               path: { idSubscription: callbackQuery.id },
             },
-            {
-              bearer: args.accessToken,
-            }
+            Client.setBearer(Secret.value(args.accessToken))
           )
         );
       }
       if (callbackQuery.action === "create") {
         return yield* _(
-          RestApiServiceTag.createMySubscription(
+          restApiService.createMySubscription(
             {
               body: { idPlace: callbackQuery.id },
             },
-            { bearer: args.accessToken }
+            Client.setBearer(Secret.value(args.accessToken))
           )
         );
       }
@@ -77,13 +73,13 @@ export const CallbackQueryHandler = (args: {
     if (callbackQuery.type === "Place") {
       if (callbackQuery.action === "get") {
         const place = yield* _(
-          RestApiServiceTag.getPlaceById({
+          restApiService.getPlaceById({
             path: { idPlace: callbackQuery.id },
           })
         );
 
         const geoPoint = yield* _(
-          RestApiServiceTag.getPlaceGeoPoint({
+          restApiService.getPlaceGeoPoint({
             path: { idPlace: place.id },
           })
         );

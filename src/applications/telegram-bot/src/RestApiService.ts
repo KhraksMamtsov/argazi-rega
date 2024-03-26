@@ -8,19 +8,22 @@ import {
   Layer,
   Schedule,
   Secret,
+  Context,
   SynchronizedRef,
 } from "effect";
-import { ClientError } from "effect-http";
+import { Client, ClientError } from "effect-http";
 
 import type { IdTelegramChat } from "@argazi/domain";
-import { RestApiClient } from "@argazi/rest-api";
+import { RestApiSpec } from "@argazi/rest-api";
 
 import { SessionServiceTag, type UserCredentials } from "./Session.service.js";
+
+import type { ClientRequest } from "@effect/platform/Http/ClientRequest";
 
 export interface RestApiService
   extends Effect.Effect.Success<ReturnType<typeof makeLive>> {}
 
-export class RestApiServiceTag extends Effect.Tag(
+export class RestApiServiceTag extends Context.Tag(
   "@argazi/infrastructure/telegram-bot/RestApiClientService"
 )<RestApiServiceTag, RestApiService>() {
   public static readonly Live = () => Layer.effect(this, makeLive());
@@ -37,9 +40,10 @@ export const makeLive = () =>
     const apiUrl = yield* _(Config.secret("API_URL"));
     const apiPort = yield* _(Config.secret("API_PORT"));
 
-    const restApiClient = RestApiClient(
-      new URL(`${Secret.value(apiUrl)}:${Secret.value(apiPort)}`).origin
-    );
+    const restApiClient = Client.make(RestApiSpec, {
+      baseUrl: new URL(`${Secret.value(apiUrl)}:${Secret.value(apiPort)}`)
+        .origin,
+    });
 
     const autoRefreshSynchronized =
       (args: {
@@ -49,7 +53,7 @@ export const makeLive = () =>
       <A, E, R, I>(
         apiMethod: (
           input: I,
-          security: { bearer: Secret.Secret }
+          map: (request: ClientRequest) => ClientRequest
         ) => Effect.Effect<A, E, R>
       ) =>
       (input: I) =>
@@ -59,9 +63,10 @@ export const makeLive = () =>
           );
 
           const requestResult = yield* _(
-            apiMethod(input, {
-              bearer: actualUserCredentials.accessToken,
-            }),
+            apiMethod(
+              input,
+              Client.setBearer(Secret.value(actualUserCredentials.accessToken))
+            ),
             Effect.either
           );
 
@@ -113,9 +118,10 @@ export const makeLive = () =>
           );
 
           return yield* _(
-            apiMethod(input, {
-              bearer: refreshedCredentials.accessToken,
-            })
+            apiMethod(
+              input,
+              Client.setBearer(Secret.value(refreshedCredentials.accessToken))
+            )
           );
         });
 

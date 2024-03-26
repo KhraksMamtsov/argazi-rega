@@ -1,11 +1,12 @@
-import { Config, Effect, Layer, Secret } from "effect";
+import { Config, Effect, Layer, Secret, Context } from "effect";
+import { Client } from "effect-http";
 
-import { RestApiClient } from "@argazi/rest-api";
+import { RestApiSpec } from "@argazi/rest-api";
 
 export interface _RestApiClient
   extends Effect.Effect.Success<ReturnType<typeof makeLive>> {}
 
-export class RestApiClientTag extends Effect.Tag(
+export class RestApiClientTag extends Context.Tag(
   "@argazi/infrastructure/telegram-bot/RestApiClientService"
 )<RestApiClientTag, _RestApiClient>() {
   public static readonly Live = () => Layer.effect(this, makeLive());
@@ -73,9 +74,10 @@ export const makeLive = () =>
     //   ) => cb({client: restApiClient, idUser}),
     // };
 
-    const userApiClient = RestApiClient(
-      new URL(`${Secret.value(apiUrl)}:${Secret.value(apiPort)}`).origin
-    );
+    const userApiClient = Client.make(RestApiSpec, {
+      baseUrl: new URL(`${Secret.value(apiUrl)}:${Secret.value(apiPort)}`)
+        .origin,
+    });
 
     return userApiClient;
   });

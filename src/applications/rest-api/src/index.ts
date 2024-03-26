@@ -1,6 +1,4 @@
-import { Client } from "effect-http";
-
-import { RestApi } from "./RestApi.js";
+export * from "./RestApiSpec.js";
 
 export * from "./authentication/AccessToken.js";
 export * from "./authentication/RefreshToken.js";
@@ -16,8 +14,3 @@ export * from "./authentication/constants.js";
 // export * from "./BaseResponseFor.js";
 // export * from "./BearerAuth.guard.js";
 // export * from "./BearerAuth.security-scheme.js";
-
-export const RestApiClient = (baseUrl: string) =>
-  Client.make(RestApi, {
-    baseUrl,
-  });

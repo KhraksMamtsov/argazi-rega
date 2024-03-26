@@ -20,6 +20,9 @@ importers:
       '@js-temporal/polyfill':
         specifier: ^0.4.4
         version: 0.4.4
+      '@prisma/client':
+        specifier: ^5.11.0
+        version: 5.11.0(prisma@5.11.0)
       amqplib:
         specifier: ^0.10.3
         version: 0.10.3
@@ -41,6 +44,12 @@ importers:
       lz-string:
         specifier: ^1.5.0
         version: 1.5.0
+      prisma:
+        specifier: ^5.11.0
+        version: 5.11.0
+      redis:
+        specifier: ^4.6.13
+        version: 4.6.13
       schema-openapi:
         specifier: ^0.34.1
         version: 0.34.1(@effect/schema@0.64.13)(effect@2.4.13)
@@ -195,9 +204,6 @@ importers:
       '@argazi/shared':
         specifier: workspace:*
         version: link:../shared
-      redis:
-        specifier: ^4.6.13
-        version: 4.6.13
 
   src/libraries/database:
     dependencies:
@@ -207,12 +213,6 @@ importers:
       '@argazi/shared':
         specifier: workspace:*
         version: link:../shared
-      '@prisma/client':
-        specifier: ^5.11.0
-        version: 5.11.0(prisma@5.11.0)
-      prisma:
-        specifier: ^5.11.0
-        version: 5.11.0
 
   src/libraries/domain:
     dependencies:

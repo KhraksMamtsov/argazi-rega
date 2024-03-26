@@ -12,7 +12,7 @@ import { UsersEndpointsGroup } from "./users/Users.endpoints-group.js";
 
 export { Api, ApiGroup, ApiEndpoint };
 
-export const RestApi = Api.make({
+export const RestApiSpec = Api.make({
   description: "**Этот раздел понимает Markdown**",
   title: "Argazi Rega",
   version: "1.0.0",
@@ -38,6 +38,3 @@ export const RestApi = Api.make({
     )
   )
 );
-
-type asd = typeof RestApi;
-export interface RestApi extends asd {}

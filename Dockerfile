@@ -2,10 +2,7 @@ FROM node:20-alpine as dependencies
 ARG NODE_ENV=production
 ENV NODE_ENV $NODE_ENV
 WORKDIR /usr/app
-COPY package*.json ./
-COPY pnpm-lock.yaml ./
-COPY prisma ./prisma
-COPY tsconfig*.json ./
+COPY . .
 RUN corepack enable && corepack use pnpm@8
 RUN pnpm install --frozen-lockfile
 

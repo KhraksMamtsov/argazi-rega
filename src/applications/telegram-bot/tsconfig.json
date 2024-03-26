@@ -1,14 +1,17 @@
 {
   "extends" : "../../../tsconfig.base.json",
   "compilerOptions": {
-    // "composite": true,
+    "composite": true,
     "outDir": "dist",
-    // "declarationDir": "dist",
+    "declarationDir": "dist",
     "declaration": true,
     "declarationMap": true,
+    "baseUrl": "."
   },
   "include": ["src"],
   "references": [{
+    "path": "../rest-api" 
+  },{
     "path": "../../libraries/shared" 
   },{
     "path": "../../libraries/domain"

@@ -1,11 +1,11 @@
 {
   "extends" : "../../../tsconfig.base.json",
   "compilerOptions": {
-    // "composite": true,
+    "composite": true,
     "outDir": "dist",
-    // "declarationDir": "dist",
-    // "declaration": false,
-    // "declarationMap": true,
+    "declarationDir": "dist",
+    "declaration": true,
+    "declarationMap": true,
   },
   "include": ["src"],
   "references": [{
@@ -13,7 +13,7 @@
   },{
     "path": "../../libraries/domain"
   },{
-    "path": "../../libraries/cache"
+    "path": "../../libraries/database"
   },{
     "path": "../../libraries/message-broker"
   },{

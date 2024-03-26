@@ -1,24 +1,24 @@
 {
-	"name": "@argazi/rest-api",
-	"version": "0.0.0",
-	"type": "module",
-	"exports": {
-		".": {
-			"types": "./dist/src/index.d.ts",
-			"import": "./dist/src/index.js"
-		}
-	},
-	"scripts": {
-		"build": "tsc--build ",
-		"build:watch": "tsc --build --watch",
-		"typecheck": "tsc --noEmit",
-		"typecheck:watch": "tsc --noEmit --watch"
-	},
-	"dependencies": {
-		"@argazi/domain": "workspace:*",
-		"@argazi/shared": "workspace:*",
-		"@argazi/database": "workspace:*",
-		"@argazi/application": "workspace:*",
-		"@argazi/message-broker": "workspace:*"
-	}
+  "name": "@argazi/rest-api",
+  "version": "0.0.0",
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/src/index.d.ts",
+      "import": "./dist/src/index.js"
+    }
+  },
+  "scripts": {
+    "build": "tsc --build ",
+    "build:watch": "tsc --build --watch",
+    "typecheck": "tsc --noEmit",
+    "typecheck:watch": "tsc --noEmit --watch"
+  },
+  "dependencies": {
+    "@argazi/domain": "workspace:*",
+    "@argazi/shared": "workspace:*",
+    "@argazi/database": "workspace:*",
+    "@argazi/application": "workspace:*",
+    "@argazi/message-broker": "workspace:*"
+  }
 }

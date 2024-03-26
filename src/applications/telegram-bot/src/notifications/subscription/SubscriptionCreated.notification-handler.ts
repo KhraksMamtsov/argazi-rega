@@ -17,9 +17,10 @@ export const SubscriptionCreatedNotificationHandler = (args: {
 }) =>
   Effect.gen(function* (_) {
     const telegraf = yield* _(TelegrafTag);
+    const restApiService = yield* _(RestApiServiceTag);
 
     const place = yield* _(
-      RestApiServiceTag.getPlaceById({
+      restApiService.getPlaceById({
         path: { idPlace: args.createdSubscription.idPlace },
       })
     );

@@ -48,7 +48,7 @@ import { LoginBasicHandler } from "./authentication/login-basic/LoginBasic.handl
 import { LoginDwbnHandler } from "./authentication/login-dwbn/LoginDwbn.handler.js";
 import { RefreshTokenHandler } from "./authentication/refresh-token/RefreshToken.handler.js";
 import { BearerAuthGuard } from "./BearerAuth.guard.js";
-import { RestApi } from "./RestApi.js";
+import { RestApiSpec } from "./RestApiSpec.js";
 
 export const debugLogger = pipe(
   PrettyLogger.layer(),
@@ -56,7 +56,7 @@ export const debugLogger = pipe(
 );
 
 const app = pipe(
-  RouterBuilder.make(RestApi, { parseOptions: { errors: "all" } }),
+  RouterBuilder.make(RestApiSpec, { parseOptions: { errors: "all" } }),
   // region Authentications handlers
   flow(
     RouterBuilder.handle("loginDwbn", ({ body }) =>

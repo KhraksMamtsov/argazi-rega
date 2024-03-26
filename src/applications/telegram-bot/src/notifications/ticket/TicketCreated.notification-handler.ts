@@ -17,14 +17,15 @@ export const TicketCreatedNotificationHandler = (args: {
 }) =>
   Effect.gen(function* (_) {
     const telegraf = yield* _(TelegrafTag);
+    const restApiService = yield* _(RestApiServiceTag);
     const event = yield* _(
-      RestApiServiceTag.getEvent({
+      restApiService.getEvent({
         path: { idEvent: args.createdTicket.idEvent },
       })
     );
 
     const place = yield* _(
-      RestApiServiceTag.getPlaceById({
+      restApiService.getPlaceById({
         path: { idPlace: event.idPlace },
       })
     );

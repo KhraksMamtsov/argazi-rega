@@ -13,7 +13,6 @@
     "build:watch": "tsc -b --watch"
   },
   "dependencies": {
-    "@argazi/shared": "workspace:*",
-    "redis": "^4.6.13"
+    "@argazi/shared": "workspace:*"
   }
 }

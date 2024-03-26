@@ -11,8 +11,6 @@ import { _SS } from "@argazi/shared";
 
 import { BaseDbSchema, transform } from "../Base.db.js";
 
-export interface UserDbFrom extends Readonly<_User> {}
-
 // #region UserDb
 const _UserDbSchema = Schema.struct({
   email: Schema.Secret,
@@ -31,7 +29,7 @@ const _UserDbSchema = Schema.struct({
 }).pipe(
   Schema.extend(BaseDbSchema),
   Schema.identifier("UserDbSchema"),
-  _SS.satisfies.from<UserDbFrom>()
+  _SS.satisfies.from<_User>()
 );
 
 export type UserDbContext = Schema.Schema.Context<typeof _UserDbSchema>;
@@ -42,7 +40,7 @@ export interface UserDb extends Schema.Schema.Type<typeof _UserDbSchema> {}
 export const UserDbSchema: Schema.Schema<UserDb, UserDbEncoded> = _UserDbSchema;
 // #endregion UserDbSchema
 
-export const UserDbToDomainSchema: Schema.Schema<User, UserDbFrom> = transform(
+export const UserDbToDomainSchema: Schema.Schema<User, _User> = transform(
   UserDbSchema,
   UserSchema,
   Effect.succeed,
