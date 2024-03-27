@@ -7,5 +7,6 @@ export * from "./entity/Subscription.db.js";
 export * from "./entity/Ticket.db.js";
 export * from "./entity/Transport.db.js";
 export * from "./entity/User.db.js";
+export * from "./entity/Visitor.db.js";
 export * from "./Prisma.service.js";
 export * from "./PrismaDecimalSchema.js";

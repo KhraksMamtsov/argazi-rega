@@ -38,6 +38,7 @@ import {
   GetUserUseCase,
   GetManyUsersUseCase,
   UpdateUserUseCase,
+  CreateUsersVisitorUseCase,
 } from "@argazi/application";
 import { PrismaServiceTag } from "@argazi/database";
 import { NotificationServiceLive } from "@argazi/message-broker";
@@ -114,6 +115,31 @@ const app = pipe(
     )
   ),
   // endregion
+  flow(
+    RouterBuilder.handle(
+      "createUsersVisitor",
+      BearerAuthGuard(({ body, path }, { idInitiator }) =>
+        Effect.gen(function* (_) {
+          const newVisitor = yield* _(
+            CreateUsersVisitorUseCase({
+              idInitiator,
+              payload: {
+                ...body,
+                idUser: path.idUser,
+              },
+            })
+          );
+
+          return newVisitor;
+        }).pipe(
+          Effect.tapBoth({
+            onFailure: Effect.logError,
+            onSuccess: Effect.logInfo,
+          })
+        )
+      )
+    )
+  ),
   // region Users handlers
   flow(
     RouterBuilder.handle("createUser", ({ body }) =>

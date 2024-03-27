@@ -4,9 +4,7 @@ export * from "./user/entity/IdUser.js";
 export * from "./user/entity/User.js";
 export * from "./user/entity/UserType.js";
 
-export * from "./visitor/Visitor.js";
-export * from "./visitor/IdVisitor.js";
-export * from "./visitor/VisitorType.js";
+export * from "./visitor/index.js";
 
 export * from "./notification/Notification.js";
 export * from "./services/NotificationService.js";

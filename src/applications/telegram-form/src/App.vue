@@ -25,6 +25,9 @@ import {
 } from "@jsonforms/vue-vanilla";
 import { defineComponent } from "vue";
 
+import { VisitorJsonSchema } from "./forms/Visitor.form.ts";
+
+console.log(111, VisitorJsonSchema);
 // mergeStyles combines all classes from both styles definitions into one
 const myStyles = mergeStyles(defaultStyles, { control: { label: "mylabel" } });
 
@@ -35,6 +38,7 @@ enum ASD {
 
 const qwe = Schema.struct({
   description: Schema.string.annotations({
+    default: "qweqweqweqw",
     description: "qwe",
     title: "Long Description",
   }),
@@ -45,7 +49,7 @@ const qwe = Schema.struct({
   ),
   dueDate: Schema.DateFromString.pipe(
     Schema.jsonSchema({
-      format: "date",
+      format: "date-time",
       type: "string",
     }),
     Schema.annotations({
@@ -56,6 +60,7 @@ const qwe = Schema.struct({
   name: Schema.string.pipe(
     Schema.minLength(1),
     Schema.annotations({
+      default: "qweqweqweqw",
       description: "The task's name",
       examples: ["asdasd"],
       title: "Name",
@@ -91,7 +96,7 @@ const schema = {
     },
     dueDate: {
       description: "The task's due date",
-      format: "time",
+      format: "date-time",
       type: "string",
     },
     name: {
@@ -153,6 +158,9 @@ const uischema = {
           type: "Control",
         },
         {
+          options: {
+            multi: true,
+          },
           scope: "#/properties/recurrence",
           type: "Control",
         },
@@ -175,7 +183,7 @@ export default defineComponent({
   data() {
     return {
       data: {
-        name: "Send email to Adrian",
+        name: "",
         description: "Confirm if you have passed the subject\nHereby ...",
         done: true,
         recurrence: "Daily",
@@ -183,7 +191,7 @@ export default defineComponent({
       },
       // freeze renderers for performance gains
       renderers: Object.freeze(renderers),
-      schema,
+      schema: schema1,
       uischema, 
     };
   },

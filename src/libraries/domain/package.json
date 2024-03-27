@@ -5,8 +5,12 @@
   "private": true,
   "exports": {
     ".": {
-      "import": "./dist/domain.js",
+      "import": "./dist/src/index.js",
       "types": "./dist/src/index.d.ts"
+    },
+    "./Visitor": {
+      "import": "./dist/src/visitor/index.js",
+      "types": "./dist/src/visitor/index.d.ts"
     }
   },
   "scripts": {

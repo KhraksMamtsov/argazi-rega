@@ -9,6 +9,7 @@ import { IdSubscriptionSchema } from "../subscription/entity/IdSubscription.js";
 import { IdTicketSchema } from "../ticket/entity/IdTicket.js";
 import { IdTransportSchema } from "../transport/entity/IdTransport.js";
 import { type IdUser, IdUserSchema } from "../user/entity/IdUser.js";
+import { IdVisitorSchema } from "../visitor/IdVisitor.js";
 
 export const NotificationIssueSchema = Schema.literal(
   "updated",
@@ -47,6 +48,10 @@ const NotificationEntitySchema = Schema.union(
   Schema.struct({
     id: IdSubscriptionSchema,
     type: Schema.literal("Subscription"),
+  }).pipe(_SS.satisfies.from.json()),
+  Schema.struct({
+    id: IdVisitorSchema,
+    type: Schema.literal("Visitor"),
   }).pipe(_SS.satisfies.from.json())
 );
 export type NotificationEntity = Schema.Schema.Type<
@@ -117,4 +122,5 @@ export const notification = {
   ticket: _notification("Ticket"),
   transport: _notification("Transport"),
   user: _notification("User"),
+  visitor: _notification("Visitor"),
 };

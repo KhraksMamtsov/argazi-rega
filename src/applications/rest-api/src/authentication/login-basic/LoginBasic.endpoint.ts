@@ -15,7 +15,7 @@ export const LoginBasicEndpoint = ApiEndpoint.post(
   "/authentication/login-basic",
   {}
 ).pipe(
-  ApiEndpoint.setRequestBody(LoginBasicResponseBodySchema),
+  ApiEndpoint.setResponseBody(LoginBasicResponseBodySchema),
   ApiEndpoint.setResponse(TokensResponse),
   Api.setSecurity(
     Security.basic({

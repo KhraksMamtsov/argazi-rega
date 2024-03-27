@@ -21,7 +21,7 @@
 		"prefix": "sg",
 		"body": [
 			"// #region $1",
-			"const _$1Schema = $1Schema.pipe(Schema.identifier(\"$1Schema\"));",
+			"export const _$1Schema = $1Schema.pipe(Schema.identifier(\"$1Schema\"));",
 			"",			
 			"export type $1Context = Schema.Schema.Context<typeof _$1Schema>;",
 			"export interface $1Encoded extends Schema.Schema.Encoded<typeof _$1Schema> {};",

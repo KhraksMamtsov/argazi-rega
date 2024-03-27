@@ -2,11 +2,14 @@ import { Schema } from "@effect/schema";
 import { type User as _User } from "@prisma/client";
 import { Effect } from "effect";
 
-import { IdDwbnSchema } from "@argazi/domain";
-import { IdTelegramChatSchema } from "@argazi/domain";
-import { IdUserSchema } from "@argazi/domain";
-import { type User, UserSchema } from "@argazi/domain";
-import { UserType } from "@argazi/domain";
+import {
+  IdDwbnSchema,
+  IdTelegramChatSchema,
+  IdUserSchema,
+  type User,
+  UserSchema,
+  UserType,
+} from "@argazi/domain";
 import { _SS } from "@argazi/shared";
 
 import { BaseDbSchema, transform } from "../Base.db.js";
@@ -44,5 +47,5 @@ export const UserDbToDomainSchema: Schema.Schema<User, _User> = transform(
   UserDbSchema,
   UserSchema,
   Effect.succeed,
-  Effect.succeed
+  (x) => Effect.succeed(x)
 );
