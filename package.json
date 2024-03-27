@@ -5,7 +5,7 @@
   "main": "index.js",
   "type": "module",
   "prisma": {
-    "seed": "node --loader ts-node/esm --experimental-specifier-resolution=node prisma/seed.ts"
+    "seed": "node --loader ts-node/esm --experimental-specifier-resolution=node ./prisma/seed.ts"
   },
   "scripts": {
     "db:seed": "prisma db seed",
@@ -15,12 +15,12 @@
     "db:migrations:apply:dev": "npx prisma migrate dev",
     "typecheck": "tsc -b --noEmit",
     "typecheck:watch": "tsc -b --noEmit --watch",
-    "all:build": "tsc -b tsconfig.build.json",
-    "all:build:watch": "tsc -b tsconfig.build.json --watch",
+    "all:build": "tsc -b tsconfig.json",
+    "all:build:watch": "tsc -b tsconfig.json --watch",
     "api:start": "node src/applications/rest-api/dist/src/main.js",
-    "bot:start": "node build/esm/src/telegram-bot.js",
+    "bot:start": "node src/applications/telegram-bot/dist/src/index.js",
     "api:start:watch": "node --watch src/applications/rest-api/dist/src/main.js",
-    "bot:start:watch": "node --watch build/esm/src/telegram-bot.js",
+    "bot:start:watch": "node --watch src/applications/telegram-bot/dist/src/index.js",
     "api:start:prod:docker": "npm run db:migrations:apply && npm run api:start:prod",
     "api:docker:start:dev": "npm run db:migrations:apply:dev && npm run db:seed && npm run api:start:watch",
     "lint:fix": "eslint --fix ./src/**/**"

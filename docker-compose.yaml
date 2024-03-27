@@ -85,7 +85,7 @@ services:
         NODE_ENV: 'development'
     command: ["pnpm", "run", "bot:start:watch"]
     volumes:
-      - ./build:/usr/app/build
+      - ./src:/usr/app/src
       - /usr/app/node_modules
       - ./prisma:/usr/app/prisma
     depends_on:
@@ -173,8 +173,10 @@ services:
       JWT_ACCESS_TOKEN_TTL: "${JWT_ACCESS_TOKEN_TTL}"
       JWT_REFRESH_TOKEN_SECRET: "${JWT_REFRESH_TOKEN_SECRET}"
       JWT_REFRESH_TOKEN_TTL: "${JWT_REFRESH_TOKEN_TTL}"
-      BASIC_AUTH_BOT_SECRET: "${BASIC_AUTH_BOT_SECRET}"
-      BASIC_AUTH_ADMIN_SECRET: "${BASIC_AUTH_ADMIN_SECRET}"
+      BASIC_AUTH_BOT_LOGIN_SECRET: "${BASIC_AUTH_BOT_LOGIN_SECRET}"
+      BASIC_AUTH_BOT_PASSWORD_SECRET: "${BASIC_AUTH_BOT_PASSWORD_SECRET}"
+      BASIC_AUTH_ADMIN_LOGIN_SECRET: "${BASIC_AUTH_ADMIN_LOGIN_SECRET}"
+      BASIC_AUTH_ADMIN_PASSWORD_SECRET: "${BASIC_AUTH_ADMIN_PASSWORD_SECRET}"
       PRISMA_DB_URL: "postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${POSTGRES_HOST}:${POSTGRES_PORT}/${POSTGRES_DB}?schema=public&connect_timeout=60"
 
   api_production:

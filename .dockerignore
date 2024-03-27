@@ -9,4 +9,3 @@ Dockerfile
 .git
 .gitignore
 .npmrc
-*.md

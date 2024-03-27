@@ -1,4 +1,24 @@
 { 
-  "extends":["./tsconfig.base.json"],
-  "include": ["prisma"]
+  "extends": "./tsconfig.base.json",
+  "compilerOptions": {
+    "noEmit": true
+  },
+  "include": ["prisma"],
+  "references": [{
+    "path": "./src/applications/rest-api",
+  },{
+    "path": "./src/applications/telegram-bot",
+  },{
+    "path": "./src/libraries/shared" 
+  },{
+    "path": "./src/libraries/domain"
+  },{
+    "path": "./src/libraries/database"
+  },{
+    "path": "./src/libraries/message-broker"
+  },{
+    "path": "./src/libraries/application"
+  },{
+    "path": "./src/libraries/cache"
+  }]
 }
