@@ -80,6 +80,7 @@ console.log(qwe);
 console.log(asd);
 
 const renderers = [
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
   ...vanillaRenderers,
   // here you can add custom renderers
 ];

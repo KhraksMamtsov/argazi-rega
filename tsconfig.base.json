@@ -2,6 +2,7 @@
   "compilerOptions": {
     // "preserveSymlinks": true,
     "target": "ESNext",
+    "lib": ["ESNext"],
     "module": "NodeNext",
     "moduleResolution": "NodeNext",
     "esModuleInterop": true,
@@ -44,6 +45,6 @@
     "synchronousWatchDirectory": true,
     // Finally, two additional settings for reducing the amount of possible
     // files to track  work from these directories
-    "excludeDirectories": ["**/node_modules", "build"]
+    "excludeDirectories": ["**/node_modules", "dist"]
   }
 }
