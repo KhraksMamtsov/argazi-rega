@@ -10,7 +10,6 @@
   },
   "dependencies": {
     "@argazi/domain": "workspace:*",
-    "@argazi/shared": "workspace:*",
-    "amqplib": "^0.10.3"
+    "@argazi/shared": "workspace:*"
   }
 }

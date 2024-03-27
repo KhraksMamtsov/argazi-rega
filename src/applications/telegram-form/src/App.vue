@@ -1,5 +1,4 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png" />
   <h1>JSON Forms Vue 3</h1>
   <div class="myform">
     <json-forms

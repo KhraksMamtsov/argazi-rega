@@ -32,7 +32,11 @@
     "@effect/platform-node": "^0.45.22",
     "@effect/schema": "^0.64.14",
     "@js-temporal/polyfill": "^0.4.4",
+    "@jsonforms/core": "^3.2.1",
+    "@jsonforms/vue": "^3.2.1",
+    "@jsonforms/vue-vanilla": "^3.2.1",
     "@prisma/client": "^5.11.0",
+    "@vitejs/plugin-vue": "^5.0.4",
     "amqplib": "^0.10.3",
     "effect": "^2.4.14",
     "effect-http": "^0.60.4",
@@ -44,7 +48,10 @@
     "redis": "^4.6.13",
     "schema-openapi": "^0.34.2",
     "telegraf": "^4.16.3",
-    "ts-node": "^10.9.2"
+    "ts-node": "^10.9.2",
+    "vite": "^5.2.6",
+    "vue": "^3.4.21",
+    "vue-tsc": "^2.0.7"
   },
   "devDependencies": {
     "@tsconfig/node20": "^20.1.4",
