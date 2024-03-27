@@ -26,9 +26,9 @@ export const RestApiSpec = Api.make({
   Api.addGroup(PlacesEndpointGroup),
   Api.addGroup(SubscriptionsApiGroup),
   Api.addGroup(
-    ApiGroup.make("healthcheck").pipe(
+    ApiGroup.make("Health check").pipe(
       ApiGroup.addEndpoint(
-        ApiEndpoint.get("healthcheckPing", "/healthcheck/ping", {}).pipe(
+        ApiEndpoint.get("healthCheckPing", "/health-check/ping", {}).pipe(
           ApiEndpoint.setRequestQuery(
             Schema.struct({ echo: Schema.optional(Schema.string) })
           ),

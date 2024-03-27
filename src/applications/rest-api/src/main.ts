@@ -663,8 +663,8 @@ const app = pipe(
   ),
   // endregion
   // region Healthcheck handlers
-  RouterBuilder.handle("healthcheckPing", (x) =>
-    Effect.succeed(x.query.echo ?? "pong").pipe(Effect.tap(Effect.logInfo))
+  RouterBuilder.handle("healthCheckPing", (x) =>
+    Effect.succeed(x.query.echo ?? "pong").pipe(Effect.tap(Effect.logDebug))
   )
   // endregion
 );

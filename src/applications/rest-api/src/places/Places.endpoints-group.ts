@@ -7,7 +7,7 @@ import { CreatePlaceEndpoint } from "./create/Places.api.js";
 import { GetPlacesEndpoint } from "./get/GetPlaces.endpoint.js";
 import { GetPlaceByIdEndpoint } from "./get/GetPlacesById.endpoint.js";
 
-export const PlacesEndpointGroup = ApiGroup.make("place").pipe(
+export const PlacesEndpointGroup = ApiGroup.make("Place").pipe(
   ApiGroup.addEndpoint(CreatePlaceEndpoint),
   ApiGroup.addEndpoint(GetPlaceByIdEndpoint),
   ApiGroup.addEndpoint(GetPlacesEndpoint),

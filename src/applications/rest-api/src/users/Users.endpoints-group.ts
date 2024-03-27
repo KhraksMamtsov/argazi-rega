@@ -13,7 +13,7 @@ import { GetUserEndpoint } from "./get/GetUser.endpoint.js";
 import { GetManyUsersEndpoint } from "./get-many/GetManyUsers.endpoint.js";
 import { UpdateUserEndpoint } from "./update/UpdateUser.endpoint.js";
 
-export const UsersEndpointsGroup = ApiGroup.make("user").pipe(
+export const UsersEndpointsGroup = ApiGroup.make("User").pipe(
   ApiGroup.addEndpoint(CreateUserEndpoint),
   ApiGroup.addEndpoint(GetUserEndpoint),
   ApiGroup.addEndpoint(UpdateUserEndpoint),

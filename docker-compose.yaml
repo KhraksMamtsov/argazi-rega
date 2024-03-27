@@ -139,14 +139,14 @@ services:
         - NODE_ENV=development
     command: ["pnpm", "run", "api:docker:start:dev"]
     volumes:
-      - ./build:/usr/app/build
+      - ./src:/usr/app/src
       - /usr/app/node_modules
       - ./prisma:/usr/app/prisma
     ports:
       - "${API_PORT}:80"
       - "5555:5555" # prisma studio
     healthcheck:
-      test: wget --quiet --tries=1 --spider http://localhost/healthcheck/ping || exit 1
+      test: wget --quiet --tries=1 --spider http://localhost/health-check/ping || exit 1
       interval: 5s
       timeout: 3s
       retries: 5

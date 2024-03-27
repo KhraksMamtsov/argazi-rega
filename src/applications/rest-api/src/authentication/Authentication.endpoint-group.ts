@@ -5,7 +5,7 @@ import { LoginDwbnEndpoint } from "./login-dwbn/LoginDwbn.endpoint.js";
 import { RefreshTokenEndpoint } from "./refresh-token/RefreshToken.endpoint.js";
 
 export const AuthenticationEndpointGroup = ApiGroup.make(
-  "authentication",
+  "Authentication",
   {}
 ).pipe(
   ApiGroup.addEndpoint(LoginBasicEndpoint),

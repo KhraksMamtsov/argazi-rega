@@ -10,7 +10,7 @@ import { GetMyTicketsEndpoint } from "./_tickets/GetMyTickets.endpoint.js";
 import { ReturnMyTicketEndpoint } from "./_tickets/ReturnTicketOnEvent.endpoint.js";
 import { GetMyIdentityEndpoint } from "./Identity.endpoint.js";
 
-export const MyEndpointsGroup = ApiGroup.make("my").pipe(
+export const MyEndpointsGroup = ApiGroup.make("My").pipe(
   ApiGroup.addEndpoint(GetMyIdentityEndpoint),
   // #region Subscriptions
   flow(
