@@ -9,6 +9,8 @@ import { GetMyTicketByIdEndpoint } from "./_tickets/GetMyTicketById.endpoint.js"
 import { GetMyTicketsEndpoint } from "./_tickets/GetMyTickets.endpoint.js";
 import { ReturnMyTicketEndpoint } from "./_tickets/ReturnTicketOnEvent.endpoint.js";
 import { GetMyIdentityEndpoint } from "./Identity.endpoint.js";
+import { CreateMyVisitorEndpoint } from "./_visitors/CreateMyVisitor.endpoint.js";
+import { GetMyVisitorsEndpoint } from "./_visitors/GetMyVisitors.endpoint.js";
 
 export const MyEndpointsGroup = ApiGroup.make("My").pipe(
   ApiGroup.addEndpoint(GetMyIdentityEndpoint),
@@ -25,6 +27,12 @@ export const MyEndpointsGroup = ApiGroup.make("My").pipe(
     ApiGroup.addEndpoint(GetMyTicketByIdEndpoint),
     ApiGroup.addEndpoint(ReturnMyTicketEndpoint),
     ApiGroup.addEndpoint(GetMyTicketsEndpoint)
+  ),
+  // #endregion
+  // #region Visitors
+  flow(
+    ApiGroup.addEndpoint(CreateMyVisitorEndpoint),
+    ApiGroup.addEndpoint(GetMyVisitorsEndpoint)
   )
   // #endregion
 );

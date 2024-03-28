@@ -29,6 +29,8 @@ export * from "./use-cases/user/_subscription/delete/DeleteUserSubscription.comm
 export * from "./use-cases/user/_subscription/delete/DeleteUserSubscription.use-case.js";
 export * from "./use-cases/user/_visitor/create/CreateUsersVisitor.command.js";
 export * from "./use-cases/user/_visitor/create/CreateUsersVisitor.use-case.js";
+export * from "./use-cases/user/_visitor/get/GetUsersVisitors.command.js";
+export * from "./use-cases/user/_visitor/get/GetUsersVisitors.use-case.js";
 
 export * from "./use-cases/transport/create/CreateTransport.command.js";
 export * from "./use-cases/transport/create/CreateTransport.use-case.js";

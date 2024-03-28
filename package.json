@@ -28,9 +28,9 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@effect/platform": "^0.48.20",
-    "@effect/platform-node": "^0.45.22",
-    "@effect/schema": "^0.64.14",
+    "@effect/platform": "^0.48.21",
+    "@effect/platform-node": "^0.45.23",
+    "@effect/schema": "^0.64.15",
     "@js-temporal/polyfill": "^0.4.4",
     "@jsonforms/core": "^3.2.1",
     "@jsonforms/vue": "^3.2.1",
@@ -38,15 +38,15 @@
     "@prisma/client": "^5.11.0",
     "@vitejs/plugin-vue": "^5.0.4",
     "amqplib": "^0.10.3",
-    "effect": "^2.4.14",
-    "effect-http": "^0.60.4",
-    "effect-http-node": "^0.8.4",
-    "effect-log": "^0.30.13",
+    "effect": "^2.4.15",
+    "effect-http": "^0.60.5",
+    "effect-http-node": "^0.8.5",
+    "effect-log": "^0.30.14",
     "jsonwebtoken": "^9.0.2",
     "lz-string": "^1.5.0",
     "prisma": "^5.11.0",
     "redis": "^4.6.13",
-    "schema-openapi": "^0.34.2",
+    "schema-openapi": "^0.34.3",
     "telegraf": "^4.16.3",
     "ts-node": "^10.9.2",
     "vite": "^5.2.6",
@@ -70,6 +70,6 @@
     "eslint-plugin-vue": "^9.24.0",
     "prettier": "^3.2.5",
     "typescript": "^5.4.3",
-    "vite-plugin-dts": "^3.7.3"
+    "vite-plugin-dts": "^3.8.1"
   }
 }

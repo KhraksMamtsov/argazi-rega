@@ -39,6 +39,7 @@ import {
   GetManyUsersUseCase,
   UpdateUserUseCase,
   CreateUsersVisitorUseCase,
+  GetUsersVisitorsUseCase,
 } from "@argazi/application";
 import { PrismaServiceTag } from "@argazi/database";
 import { NotificationServiceLive } from "@argazi/message-broker";
@@ -658,6 +659,36 @@ const app = pipe(
             idUser: idInitiator,
           },
         })
+      )
+    ),
+    flow(
+      RouterBuilder.handle(
+        "createMyVisitor",
+        BearerAuthGuard(({ body }, { idInitiator }) =>
+          CreateUsersVisitorUseCase({
+            idInitiator,
+            payload: {
+              email: body.email,
+              idUser: idInitiator,
+              name: body.name,
+              type: body.type,
+            },
+          })
+        )
+      ),
+      RouterBuilder.handle(
+        "getMyVisitors",
+        BearerAuthGuard((_, { idInitiator }) =>
+          GetUsersVisitorsUseCase(
+            {
+              idInitiator,
+              payload: {
+                idUser: idInitiator,
+              },
+            },
+            { includeDeleted: false }
+          )
+        )
       )
     )
   ),

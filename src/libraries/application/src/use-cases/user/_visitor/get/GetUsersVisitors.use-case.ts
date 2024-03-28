@@ -1,23 +1,21 @@
 import { Schema } from "@effect/schema";
 import { Effect } from "effect";
 
-import { PrismaServiceTag, TicketDbToDomainSchema } from "@argazi/database";
+import { PrismaServiceTag, VisitorDbToDomainSchema } from "@argazi/database";
 
-import { GetUserTicketsCommandSchema } from "./GetUserTickets.command.js";
+import { GetUsersVisitorsCommandSchema } from "./GetUsersVisitors.command.js";
 
 import { GetEntityAuthorizationError } from "../../../common/AuthorizationError.js";
 import { BaseGetCausedUseCaseFor } from "../../../common/Base.use-case.js";
 
-const schema = Schema.array(TicketDbToDomainSchema);
-
-export const GetUserTicketsUseCase = BaseGetCausedUseCaseFor(
-  GetUserTicketsCommandSchema
+export const GetUsersVisitorsUseCase = BaseGetCausedUseCaseFor(
+  GetUsersVisitorsCommandSchema
 )(({ payload, initiator }, { includeDeleted }) =>
   Effect.gen(function* (_) {
     if (!initiator.isAdmin && initiator.id !== payload.idUser) {
       yield* _(
         new GetEntityAuthorizationError({
-          entity: ["User", "Ticket"],
+          entity: ["User", "Visitor"],
           idInitiator: initiator.id,
           payload,
         })
@@ -26,9 +24,9 @@ export const GetUserTicketsUseCase = BaseGetCausedUseCaseFor(
 
     const prismaClient = yield* _(PrismaServiceTag);
 
-    return yield* _(
-      prismaClient.queryDecode(schema, (p) =>
-        p.ticket.findMany({
+    const visitors = yield* _(
+      prismaClient.queryDecode(Schema.array(VisitorDbToDomainSchema), (p) =>
+        p.visitor.findMany({
           where: {
             idUser: payload.idUser,
             ...(includeDeleted
@@ -38,5 +36,7 @@ export const GetUserTicketsUseCase = BaseGetCausedUseCaseFor(
         })
       )
     );
+
+    return visitors;
   })
 );

@@ -1,4 +1,4 @@
-import * as V from "@argazi/domain/Visitor";
+import {} from "@argazi/rest-api";
 import { Schema } from "@effect/schema";
 
 // type asd = Omit<V.VisitorDataEncoded, "id" | "idUser">;

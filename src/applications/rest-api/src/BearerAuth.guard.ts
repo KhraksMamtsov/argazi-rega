@@ -25,4 +25,9 @@ export const BearerAuthGuard =
       );
 
       return yield* _(handler(parameters, { idInitiator: sub }));
-    });
+    }).pipe(
+      Effect.tapBoth({
+        onFailure: Effect.logError,
+        onSuccess: Effect.logInfo,
+      })
+    );

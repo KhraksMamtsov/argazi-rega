@@ -1,6 +1,6 @@
 import { Schema, ParseResult } from "@effect/schema";
 import { PrismaClient } from "@prisma/client";
-import { Config, Context, Data, Effect, Layer, pipe, Secret } from "effect";
+import { Config, Data, Effect, Layer, pipe, Secret } from "effect";
 
 import type { NoInfer } from "effect/Types";
 
@@ -96,7 +96,7 @@ const makeLive = Effect.gen(function* (_) {
     const decodeUnknown = Schema.decodeUnknown(schema);
 
     // eslint-disable-next-line
-		return _query((x) => (x[entity] as any).update(query)).pipe(
+    return _query((x) => (x[entity] as any).update(query)).pipe(
       Effect.flatMap((x) =>
         pipe(
           x,
@@ -122,7 +122,7 @@ export interface PrismaServiceId {
 
 export interface PrismaService extends Effect.Effect.Success<typeof makeLive> {}
 
-export class PrismaServiceTag extends Context.Tag(
+export class PrismaServiceTag extends Effect.Tag(
   "@argazi/infrastructure/PrismaService"
 )<PrismaServiceTag, PrismaService>() {
   public static readonly Live = () => Layer.effect(this, makeLive);
