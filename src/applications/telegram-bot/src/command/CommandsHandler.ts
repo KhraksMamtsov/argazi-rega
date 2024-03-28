@@ -4,6 +4,7 @@ import * as Markup from "telegraf/markup";
 import { EventsCommandHandler } from "./Events.command-handler.js";
 import { LogoutCommandHandler } from "./Logout.command-handler.js";
 import { MeCommandHandler } from "./Me.command-handler.js";
+import { MyVisitorsCommandHandler } from "./MyVisitors.command-handler.js";
 import { PlacesCommandHandler } from "./Places.command-handler.js";
 import * as TgCommand from "./TelegramCommands.js";
 
@@ -87,6 +88,10 @@ export const CommandsHandlerLive = Layer.scopedDiscard(
 
         if (CommandPayload.isOfCommand(TgCommand.Logout.command)(context)) {
           return yield* _(LogoutCommandHandler({ command: context }));
+        }
+
+        if (CommandPayload.isOfCommand(TgCommand.MyVisitors.command)(context)) {
+          return yield* _(MyVisitorsCommandHandler({ command: context }));
         }
 
         return yield* _(

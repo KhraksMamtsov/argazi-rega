@@ -145,10 +145,12 @@ export const makeLive = () =>
         });
 
         return {
+          createMyVisitor: wrapMethod(restApiClient.createMyVisitor),
           getEvent: wrapMethod(restApiClient.getEvent),
           getMyIdentity: wrapMethod(restApiClient.getMyIdentity),
           getMySubscriptions: wrapMethod(restApiClient.getMySubscriptions),
           getMyTickets: wrapMethod(restApiClient.getMyTickets),
+          getMyVisitors: wrapMethod(restApiClient.getMyVisitors),
           getPlaceActualEvents: wrapMethod(restApiClient.getPlaceActualEvents),
           getPlaces: wrapMethod(restApiClient.getPlaces),
           loginDwbn: restApiClient.loginDwbn,

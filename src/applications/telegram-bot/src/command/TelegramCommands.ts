@@ -16,11 +16,14 @@ export const Login = telegramCommand({
   command: "login",
   description: "Войти",
 });
+export const MyVisitors = telegramCommand({
+  command: "myvisitors",
+  description: "Мои посетители",
+});
 export const Logout = telegramCommand({
   command: "logout",
   description: "Выйти",
 });
-
 export const Places = telegramCommand({
   command: "places",
   description: "Места",
@@ -39,4 +42,5 @@ export const TelegramCommands = [
   Places,
   Me,
   MyEvents,
+  MyVisitors,
 ] as const satisfies ReadonlyArray<TelegramCommand<string>>;
