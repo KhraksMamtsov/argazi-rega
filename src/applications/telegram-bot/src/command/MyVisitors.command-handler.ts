@@ -1,9 +1,11 @@
 import { Effect, pipe, ReadonlyArray } from "effect";
+import { Markup } from "telegraf";
 
 import { MyVisitors } from "./TelegramCommands.js";
 
 import { RestApiServiceTag } from "../RestApiService.js";
 import { ArgazipaSayMdComponent } from "../ui/ArgazipaSay.md-component.js";
+import { DeleteVisitorCbButton } from "../ui/button/DeleteVisitor.cb-button.js";
 import { VisitorMdComponent } from "../ui/Visitor.md-component.js";
 
 import type { CommandPayload } from "../telegraf/bot/TelegramPayload.js";
@@ -32,8 +34,16 @@ export const MyVisitorsCommandHandler = (args: {
             )
           ),
         onNonEmpty: ReadonlyArray.map((visitor) =>
-          VisitorMdComponent({ visitor }).pipe(
-            Effect.flatMap((x) => args.command.replyWithMarkdown(x, {}))
+          Effect.all({
+            button: DeleteVisitorCbButton({ idVisitor: visitor.id }),
+            markup: VisitorMdComponent({ visitor }),
+          }).pipe(
+            Effect.flatMap((x) =>
+              args.command.replyWithMarkdown(
+                x.markup,
+                Markup.inlineKeyboard([x.button])
+              )
+            )
           )
         ),
       })

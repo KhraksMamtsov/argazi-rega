@@ -37,6 +37,7 @@ model Place {
   geoPoint      GeoPoint       @relation(fields: [idGeoPoint], references: [id], onDelete: Restrict, onUpdate: Restrict)
   //
   name          String
+  description   String
   //
   admins        PlaceAdmin[]
   events        Event[]
@@ -77,6 +78,7 @@ model Event {
   place            Place              @relation(fields: [idPlace], references: [id], onDelete: Restrict, onUpdate: Restrict)
   //
   name             String
+  description      String
   dateStart        DateTime           @db.Timestamptz(3)
   dateFinish       DateTime           @db.Timestamptz(3)
   dateDeadline     DateTime           @db.Timestamptz(3)
@@ -106,6 +108,7 @@ model Lecture {
   event          Event           @relation(fields: [idEvent], references: [id], onDelete: Restrict, onUpdate: Restrict)
   //
   name           String
+  description    String
   dateStart      DateTime        @db.Timestamptz(3)
   dateFinish     DateTime?       @db.Timestamptz(3)
   price          Decimal         @db.Money
@@ -135,6 +138,7 @@ model Meal {
   event         Event        @relation(fields: [idEvent], references: [id], onDelete: Restrict, onUpdate: Restrict)
   //
   name          String
+  description   String
   type          MealType
   dateStart     DateTime     @db.Timestamptz(3)
   dateFinish    DateTime?    @db.Timestamptz(3)
@@ -371,6 +375,7 @@ model RouteTo {
   transportOnEvent   TransportOnEvent @relation(fields: [idTransportOnEvent], references: [id], onDelete: Restrict, onUpdate: Restrict)
   //
   name               String?
+  description        String?
   dateStart          DateTime?        @db.Timestamptz(3)
   dateFinish         DateTime?        @db.Timestamptz(3)
   //
@@ -393,6 +398,7 @@ model RouteFrom {
   transportOnEvent   TransportOnEvent @relation(fields: [idTransportOnEvent], references: [id], onDelete: Restrict, onUpdate: Restrict)
   //
   name               String?
+  description        String?
   dateStart          DateTime?        @db.Timestamptz(3)
   dateFinish         DateTime?        @db.Timestamptz(3)
   //
@@ -478,6 +484,7 @@ model TicketPaymentToPlaceAdmin {
   placeAdmin    PlaceAdmin @relation(fields: [idPlaceAdmin], references: [id], onDelete: Restrict, onUpdate: Restrict)
   //
   payed         Decimal    @db.Money
+  description   String?
   //
   dateCreated   DateTime   @default(now()) @db.Timestamptz(3)
   dateUpdated   DateTime   @updatedAt @db.Timestamptz(3)
@@ -580,6 +587,7 @@ model VisaPayment {
   guarantor     Ticket    @relation(fields: [idGuarantor], references: [id], onDelete: Restrict, onUpdate: Restrict)
   //
   payed         Decimal   @db.Money
+  description   String?
   //
   dateCreated   DateTime  @default(now()) @db.Timestamptz(3)
   dateUpdated   DateTime  @updatedAt @db.Timestamptz(3)

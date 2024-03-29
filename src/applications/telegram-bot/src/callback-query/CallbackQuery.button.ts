@@ -10,7 +10,8 @@ export const CallbackQueryEntity = Schema.literal(
   "Subscription",
   "GeoPoint",
   "Ticket",
-  "Place"
+  "Place",
+  "Visitor"
 );
 
 export class CallbackQuery extends Schema.TaggedClass<CallbackQuery>()(

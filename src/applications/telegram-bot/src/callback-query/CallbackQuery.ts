@@ -1,7 +1,7 @@
 import { ParseResult, Schema } from "@effect/schema";
 import { Effect } from "effect";
 
-import { type IdEvent, IdEventSchema } from "@argazi/domain";
+import { type IdEvent, IdEventSchema, IdVisitorSchema } from "@argazi/domain";
 import { IdPlaceSchema } from "@argazi/domain";
 import { IdSubscriptionSchema } from "@argazi/domain";
 import { IdTicketSchema, type IdTicket } from "@argazi/domain";
@@ -16,6 +16,11 @@ const _CallbackQueryEntitySchema = Schema.union(
     action: Schema.literal("delete"),
     id: IdTicketSchema,
     type: Schema.literal("Ticket"),
+  }),
+  Schema.struct({
+    action: Schema.literal("delete"),
+    id: IdVisitorSchema,
+    type: Schema.literal("Visitor"),
   }),
   Schema.struct({
     action: Schema.literal("create"),
@@ -68,7 +73,8 @@ const MinifiedTypeSchema = Schema.transformLiterals(
   //
   ["000", "Ticket"],
   ["001", "Subscription"],
-  ["002", "Place"]
+  ["002", "Place"],
+  ["003", "Visitor"]
 );
 const decodeMinifiedTypeSchema = Schema.decode(MinifiedTypeSchema);
 const encodeMinifiedTypeSchema = Schema.encode(MinifiedTypeSchema);

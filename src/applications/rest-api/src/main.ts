@@ -40,6 +40,8 @@ import {
   UpdateUserUseCase,
   CreateUsersVisitorUseCase,
   GetUsersVisitorsUseCase,
+  DeleteUsersVisitorUseCase,
+  GetVisitorByIdUseCase,
 } from "@argazi/application";
 import { PrismaServiceTag } from "@argazi/database";
 import { NotificationServiceLive } from "@argazi/message-broker";
@@ -689,6 +691,33 @@ const app = pipe(
             { includeDeleted: false }
           )
         )
+      ),
+      RouterBuilder.handle(
+        "deleteMyVisitor",
+        BearerAuthGuard(({ path }, { idInitiator }) =>
+          DeleteUsersVisitorUseCase({
+            idInitiator,
+            payload: {
+              id: path.idVisitor,
+              idUser: idInitiator,
+            },
+          })
+        )
+      )
+    )
+  ),
+  // endregion
+  // region Visitor
+  flow(
+    RouterBuilder.handle("getVisitor", ({ path }) =>
+      GetVisitorByIdUseCase({
+        idInitiator: IdAdmin,
+        payload: {
+          idVisitor: path.idVisitor,
+        },
+      }).pipe(
+        Effect.flatten,
+        Effect.mapError(() => ServerError.notFoundError("NotFound1"))
       )
     )
   ),

@@ -8,9 +8,10 @@ import { BookMyTicketEndpoint } from "./_tickets/BookMyTicket.endpoint.js";
 import { GetMyTicketByIdEndpoint } from "./_tickets/GetMyTicketById.endpoint.js";
 import { GetMyTicketsEndpoint } from "./_tickets/GetMyTickets.endpoint.js";
 import { ReturnMyTicketEndpoint } from "./_tickets/ReturnTicketOnEvent.endpoint.js";
-import { GetMyIdentityEndpoint } from "./Identity.endpoint.js";
 import { CreateMyVisitorEndpoint } from "./_visitors/CreateMyVisitor.endpoint.js";
+import { DeleteMyVisitorEndpoint } from "./_visitors/DeleteMyVisitor.endpoint.js";
 import { GetMyVisitorsEndpoint } from "./_visitors/GetMyVisitors.endpoint.js";
+import { GetMyIdentityEndpoint } from "./Identity.endpoint.js";
 
 export const MyEndpointsGroup = ApiGroup.make("My").pipe(
   ApiGroup.addEndpoint(GetMyIdentityEndpoint),
@@ -32,7 +33,8 @@ export const MyEndpointsGroup = ApiGroup.make("My").pipe(
   // #region Visitors
   flow(
     ApiGroup.addEndpoint(CreateMyVisitorEndpoint),
-    ApiGroup.addEndpoint(GetMyVisitorsEndpoint)
+    ApiGroup.addEndpoint(GetMyVisitorsEndpoint),
+    ApiGroup.addEndpoint(DeleteMyVisitorEndpoint)
   )
   // #endregion
 );

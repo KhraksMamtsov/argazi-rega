@@ -7,7 +7,7 @@ import { GetUserSubscriptionsEndpoint } from "./_subscriptions/GetUserSubscripti
 import { BookTicketEndpoint } from "./_tickets/BookTicketOnEvent.endpoint.js";
 import { GetUserTicketByIdEndpoint } from "./_tickets/GetUserTicketById.endpoint.js";
 import { ReturnTicketEndpoint } from "./_tickets/ReturnTicketOnEvent.endpoint.js";
-import { CreateUsersVisitorEndpoint } from "./_visitors/CreateUserSubscription.endpoint.js";
+import { CreateUsersVisitorEndpoint } from "./_visitors/CreateUsersVisitor.endpoint.js";
 import { CreateUserEndpoint } from "./create/CreateUser.endpoint.js";
 import { GetUserEndpoint } from "./get/GetUser.endpoint.js";
 import { GetManyUsersEndpoint } from "./get-many/GetManyUsers.endpoint.js";

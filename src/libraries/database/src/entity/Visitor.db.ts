@@ -15,7 +15,7 @@ import { BaseDbSchema, transform } from "../Base.db.js";
 
 // #region VisitorDbBase
 export const _VisitorDbBaseSchema = Schema.struct({
-  email: Schema.optionFromNullable(Schema.string),
+  email: Schema.optionFromNullable(Schema.Trim.pipe(Schema.nonEmpty())),
   id: IdVisitorSchema,
   idUser: IdUserSchema,
   name: Schema.string,

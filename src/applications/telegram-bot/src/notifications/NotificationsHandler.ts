@@ -9,6 +9,8 @@ import { SubscriptionCreatedNotificationHandler } from "./subscription/Subscript
 import { TicketCreatedNotificationHandler } from "./ticket/TicketCreated.notification-handler.js";
 import { TicketReturnedNotificationHandler } from "./ticket/TicketReturned.notification-handler.js";
 import { UserCreatedNotificationHandler } from "./user/UserCreated.notification-handler.js";
+import { VisitorCreatedNotificationHandler } from "./visitor/VisitorCreated.notification-handler.js";
+import { VisitorDeletedNotificationHandler } from "./visitor/VisitorDeleted.notification-handler.js";
 
 import { RestApiServiceTag } from "../RestApiService.js";
 
@@ -130,6 +132,40 @@ export const NotificationsHandler = (args: {
             cancelledSubscription: affectedSubscription,
             initiator,
             user,
+          })
+        );
+      }
+    }
+
+    if (entity.type === "Visitor") {
+      const affectedVisitor = yield* _(
+        restApiClient.getVisitor({
+          path: { idVisitor: entity.id },
+        })
+      );
+
+      const visitorsUser = yield* _(
+        restApiClient.getUser({
+          path: { idUser: affectedVisitor.idUser },
+        })
+      );
+
+      if (notification.issue === "created") {
+        yield* _(
+          VisitorCreatedNotificationHandler({
+            createdVisitor: affectedVisitor,
+            initiator,
+            visitorsUser,
+          })
+        );
+      }
+
+      if (notification.issue === "deleted") {
+        yield* _(
+          VisitorDeletedNotificationHandler({
+            deletedVisitor: affectedVisitor,
+            initiator,
+            visitorsUser,
           })
         );
       }

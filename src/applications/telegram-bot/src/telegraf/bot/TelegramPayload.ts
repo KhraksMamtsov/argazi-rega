@@ -81,7 +81,11 @@ export const replyWithMarkdown =
     Effect.tryPromise({
       catch: (error) =>
         new TelegrafCtxReplyWithMarkdownError({ error, extra, markdown }),
-      try: () => context.replyWithMarkdownV2(markdown, extra),
+      try: () =>
+        context.replyWithMarkdownV2(markdown, {
+          reply_markup: { remove_keyboard: true },
+          ...extra,
+        }),
     });
 
 export const editMessageText =

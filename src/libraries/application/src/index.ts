@@ -31,6 +31,8 @@ export * from "./use-cases/user/_visitor/create/CreateUsersVisitor.command.js";
 export * from "./use-cases/user/_visitor/create/CreateUsersVisitor.use-case.js";
 export * from "./use-cases/user/_visitor/get/GetUsersVisitors.command.js";
 export * from "./use-cases/user/_visitor/get/GetUsersVisitors.use-case.js";
+export * from "./use-cases/user/_visitor/delete/DeleteUsersVisitor.command.js";
+export * from "./use-cases/user/_visitor/delete/DeleteUsersVisitor.use-case.js";
 
 export * from "./use-cases/transport/create/CreateTransport.command.js";
 export * from "./use-cases/transport/create/CreateTransport.use-case.js";
@@ -60,3 +62,6 @@ export * from "./use-cases/event/get/GetEventById.command.js";
 export * from "./use-cases/event/get/GetEventById.use-case.js";
 export * from "./use-cases/event/create/CreateEvent.command.js";
 export * from "./use-cases/event/create/CreateEvent.use-case.js";
+
+export * from "./use-cases/visitor/get/GetVisitorById.command.js";
+export * from "./use-cases/visitor/get/GetVisitorById.use-case.js";

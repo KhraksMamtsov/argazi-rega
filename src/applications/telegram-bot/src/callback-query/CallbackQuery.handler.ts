@@ -119,6 +119,18 @@ export const CallbackQueryHandler = (args: {
         return [message, locationMessage];
       }
     }
+    if (callbackQuery.type === "Visitor") {
+      if (callbackQuery.action === "delete") {
+        return yield* _(
+          restApiService.deleteMyVisitor(
+            {
+              path: { idVisitor: callbackQuery.id },
+            },
+            Client.setBearer(Secret.value(args.accessToken))
+          )
+        );
+      }
+    }
 
     return absurd<typeof Effect.unit>(callbackQuery);
   });

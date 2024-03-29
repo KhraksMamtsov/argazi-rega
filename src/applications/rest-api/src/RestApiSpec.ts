@@ -9,6 +9,7 @@ import { PlacesEndpointGroup } from "./places/Places.endpoints-group.js";
 import { SubscriptionsApiGroup } from "./subscriptions/Subscriptions.api-group.js";
 import { TransportsEndpointGroup } from "./transports/Transports.endpoint-group.js";
 import { UsersEndpointsGroup } from "./users/Users.endpoints-group.js";
+import { VisitorsEndpointsGroup } from "./visitors/Visitors.endpoints-group.js";
 
 export { Api, ApiGroup, ApiEndpoint };
 
@@ -20,6 +21,7 @@ export const RestApiSpec = Api.make({
   Api.addGroup(AuthenticationEndpointGroup),
   Api.addGroup(MyEndpointsGroup),
   Api.addGroup(UsersEndpointsGroup),
+  Api.addGroup(VisitorsEndpointsGroup),
   Api.addGroup(GeoPointsEndpointGroup),
   Api.addGroup(EventsEndpointGroup),
   Api.addGroup(TransportsEndpointGroup),
