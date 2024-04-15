@@ -3,7 +3,7 @@ import { Schema } from "@effect/schema";
 import { IdUserSchema } from "@argazi/domain";
 import { _S } from "@argazi/shared";
 
-export const EntityType = Schema.literal(
+export const EntityType = Schema.Literal(
   "User",
   "Subscription",
   "Ticket",
@@ -13,7 +13,7 @@ export const EntityType = Schema.literal(
 export class ValidationError extends Schema.TaggedError<ValidationError>()(
   "ValidationError",
   {
-    entity: Schema.array(EntityType),
+    entity: Schema.Array(EntityType),
     idInitiator: IdUserSchema,
     payload: _S.Json.JsonRecord,
   }
@@ -31,7 +31,7 @@ export class CreateEntityAuthorizationError extends Schema.TaggedError<CreateEnt
 export class GetEntityAuthorizationError extends Schema.TaggedError<GetEntityAuthorizationError>()(
   "GetEntityAuthorizationError",
   {
-    entity: Schema.array(EntityType),
+    entity: Schema.Array(EntityType),
     idInitiator: IdUserSchema,
     payload: _S.Json.JsonRecord,
   }
@@ -40,7 +40,7 @@ export class GetEntityAuthorizationError extends Schema.TaggedError<GetEntityAut
 export class UpdateEntityAuthorizationError extends Schema.TaggedError<UpdateEntityAuthorizationError>()(
   "UpdateEntityAuthorizationError",
   {
-    entity: Schema.array(EntityType),
+    entity: Schema.Array(EntityType),
     idEntity: Schema.UUID,
     idInitiator: IdUserSchema,
     payload: _S.Json.JsonRecord,

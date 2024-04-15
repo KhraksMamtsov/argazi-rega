@@ -9,6 +9,7 @@
       @change="onChange"
     />
   </div>
+  <div><visitor-form /></div>
   <div>
     <pre>{{ JSON.stringify(data, null, 2) }}</pre>
   </div>
@@ -24,9 +25,8 @@ import {
 } from "@jsonforms/vue-vanilla";
 import { defineComponent } from "vue";
 
-import { VisitorJsonSchema } from "./forms/Visitor.form.ts";
+import VisitorForm from "./forms/Visitor.form.vue";
 
-console.log(111, VisitorJsonSchema);
 // mergeStyles combines all classes from both styles definitions into one
 const myStyles = mergeStyles(defaultStyles, { control: { label: "mylabel" } });
 
@@ -35,13 +35,13 @@ enum ASD {
   asd,
 }
 
-const qwe = Schema.struct({
-  description: Schema.string.annotations({
+const qwe = Schema.Struct({
+  description: Schema.String.annotations({
     default: "qweqweqweqw",
     description: "qwe",
     title: "Long Description",
   }),
-  done: Schema.boolean.pipe(
+  done: Schema.Boolean.pipe(
     Schema.annotations({
       title: "Done",
     })
@@ -56,7 +56,7 @@ const qwe = Schema.struct({
       title: "dueDate",
     })
   ),
-  name: Schema.string.pipe(
+  name: Schema.String.pipe(
     Schema.minLength(1),
     Schema.annotations({
       default: "qweqweqweqw",
@@ -72,12 +72,10 @@ const qwe = Schema.struct({
       title: "rating",
     })
   ),
-  recurrence: Schema.enums(ASD),
+  recurrence: Schema.Enums(ASD),
 }).pipe(Schema.title("MY FORM"));
 
-const asd = JSONSchema.make(qwe);
 console.log(qwe);
-console.log(asd);
 
 const renderers = [
   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
@@ -179,6 +177,7 @@ export default defineComponent({
   name: "App",
   components: {
     JsonForms,
+    VisitorForm,
   },
   data() {
     return {
@@ -208,18 +207,7 @@ export default defineComponent({
 });
 </script>
 
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-  margin-left: 120px;
-  margin-right: 120px;
-}
-
+<style scoped>
 .mylabel {
   color: darkslategrey;
 }

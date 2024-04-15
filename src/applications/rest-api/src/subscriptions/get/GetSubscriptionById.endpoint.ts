@@ -29,7 +29,7 @@ export const GetSubscriptionByIdResponseBodySchema: Schema.Schema<
 // #endregion GetSubscriptionByIdResponseBodySchema
 
 // #region GetSubscriptionByIdRequestParams
-const _GetSubscriptionByIdRequestParamsSchema = Schema.struct({
+const _GetSubscriptionByIdRequestParamsSchema = Schema.Struct({
   idSubscription: IdSubscriptionSchema,
 }).pipe(Schema.identifier("GetSubscriptionByIdRequestParamsSchema"));
 
@@ -61,7 +61,7 @@ export const GetSubscriptionByIdEndpoint = ApiEndpoint.get(
   ApiEndpoint.addResponse(
     ApiResponse.make(
       400,
-      Schema.string.pipe(Schema.description("Subscription not found"))
+      Schema.String.pipe(Schema.description("Subscription not found"))
     )
   )
 );

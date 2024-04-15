@@ -6,11 +6,11 @@ import type { TransportBase } from "@argazi/domain";
 import { _SS } from "@argazi/shared";
 
 // #region TransportApi
-const _TransportApiSchema = Schema.struct({
+const _TransportApiSchema = Schema.Struct({
   color: Schema.NonEmpty.pipe(Schema.trimmed()),
   id: IdTransportSchema,
   idUser: IdUserSchema,
-  model: Schema.optionFromNullable(Schema.Secret),
+  model: Schema.OptionFromNullOr(Schema.Secret),
   number: Schema.Secret,
   seatsNumber: Schema.Int.pipe(Schema.positive()),
 }).pipe(

@@ -8,11 +8,11 @@ import { IdTransportOnEventSchema } from "../../entities/transport-on-event/IdTr
 import { IdEventSchema } from "../../event/entity/IdEvent.js";
 import { IdUserSchema } from "../../user/entity/IdUser.js";
 
-export const TicketBaseSchema = Schema.struct({
+export const TicketBaseSchema = Schema.Struct({
   dateRegistered: Schema.ValidDateFromSelf,
   id: IdTicketSchema,
   idEvent: IdEventSchema,
-  idTransport: Schema.optionFromSelf(IdTransportOnEventSchema),
+  idTransport: Schema.OptionFromSelf(IdTransportOnEventSchema),
   idUser: IdUserSchema,
   //
   role: TicketRoleSchema,

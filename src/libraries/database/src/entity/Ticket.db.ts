@@ -12,11 +12,11 @@ import { _SS } from "@argazi/shared";
 
 import { BaseDbSchema, transform } from "../Base.db.js";
 
-export const TicketDbBaseSchema = Schema.struct({
+export const TicketDbBaseSchema = Schema.Struct({
   dateRegistered: Schema.ValidDateFromSelf,
   id: IdTicketSchema,
   idEvent: IdEventSchema,
-  idTransport: Schema.optionFromNullable(IdTransportOnEventSchema),
+  idTransport: Schema.OptionFromNullOr(IdTransportOnEventSchema),
   idUser: IdUserSchema,
   role: Schema.transformLiterals(
     ["ADMIN", TicketRole.ADMIN],

@@ -27,7 +27,7 @@ export const GetVisitorResponseBodySchema: Schema.Schema<
 // #endregion GetVisitorResponseBodySchema
 
 // #region GetVisitorRequestParams
-const _GetVisitorRequestParamsSchema = Schema.struct({
+const _GetVisitorRequestParamsSchema = Schema.Struct({
   idVisitor: IdVisitorSchema,
 }).pipe(Schema.identifier("GetVisitorRequestParamsSchema"));
 

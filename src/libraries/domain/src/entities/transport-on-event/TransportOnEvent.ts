@@ -7,7 +7,7 @@ import { IdTransportSchema } from "../../transport/entity/IdTransport.js";
 import { PriceSchema } from "../../value-objects/Price.js";
 import { BaseSchema } from "../common/Base.js";
 
-const _TransportOnEventSchema = Schema.struct({
+const _TransportOnEventSchema = Schema.Struct({
   id: IdTransportOnEventSchema,
   idEvent: IdEventSchema,
   idTransport: IdTransportSchema,

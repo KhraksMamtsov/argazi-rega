@@ -13,8 +13,8 @@ import { BaseDbSchema, transform } from "../Base.db.js";
 import { BigDecimalFromPrismaDecimal } from "../PrismaDecimalSchema.js";
 
 // #region MealDb
-export const _MealDbSchema = Schema.struct({
-  dateFinish: Schema.optionFromNullable(Schema.ValidDateFromSelf),
+export const _MealDbSchema = Schema.Struct({
+  dateFinish: Schema.OptionFromNullOr(Schema.ValidDateFromSelf),
   dateStart: Schema.ValidDateFromSelf,
   id: IdMealSchema,
   idEvent: IdEventSchema,
@@ -24,6 +24,7 @@ export const _MealDbSchema = Schema.struct({
     ["REGULAR", MealType.REGULAR],
     ["VEGETARIAN", MealType.VEGETARIAN]
   ),
+  description: Schema.String,
 }).pipe(
   _SS.satisfies.to<MealBase>(),
   Schema.extend(BaseDbSchema),

@@ -7,6 +7,6 @@ export enum VisitorType {
   STUDENT = "STUDENT",
 }
 
-export const VisitorTypeSchema = Schema.enums(VisitorType).pipe(
+export const VisitorTypeSchema = Schema.Enums(VisitorType).pipe(
   Schema.identifier("VisitorTypeSchema")
 );

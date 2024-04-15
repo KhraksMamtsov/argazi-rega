@@ -5,10 +5,11 @@ import { IdPlaceSchema } from "@argazi/domain";
 import type { PlaceBase } from "@argazi/domain";
 import { _SS } from "@argazi/shared";
 
-export const _PlaceApi = Schema.struct({
+export const _PlaceApi = Schema.Struct({
   id: IdPlaceSchema,
   idGeoPoint: IdGeoPointSchema,
   name: Schema.compose(Schema.Trimmed, Schema.NonEmpty),
+  description: Schema.compose(Schema.Trimmed, Schema.NonEmpty),
 }).pipe(
   _SS.satisfies.from.json(),
   _SS.satisfies.to<PlaceBase>(),

@@ -30,7 +30,7 @@ export const GetUserGeoPointByIdResponseBodySchema: Schema.Schema<
 // #endregion GetUserGeoPointByIdResponseBodySchema
 
 // #region GetUserGeoPointByIdRequestParams
-const _GetUserGeoPointByIdRequestParamsSchema = Schema.struct({
+const _GetUserGeoPointByIdRequestParamsSchema = Schema.Struct({
   idGeoPoint: IdGeoPointSchema,
   idUser: IdUserSchema,
 }).pipe(Schema.identifier("GetUserGeoPointByIdRequestParamsSchema"));

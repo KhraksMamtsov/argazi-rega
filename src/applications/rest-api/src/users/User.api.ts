@@ -7,15 +7,15 @@ import { UserTypeSchema } from "@argazi/domain";
 import type { UserBase } from "@argazi/domain";
 import { _SS } from "@argazi/shared";
 
-export const _UserApi = Schema.struct({
+export const _UserApi = Schema.Struct({
   email: Schema.Secret,
   firstName: Schema.Secret,
   id: IdUserSchema,
   idDwbn: IdDwbnSchema,
   idTelegramChat: IdTelegramChatSchema,
-  isAdmin: Schema.boolean,
-  lastName: Schema.optionFromNullable(Schema.Secret),
-  phone: Schema.optionFromNullable(Schema.Secret),
+  isAdmin: Schema.Boolean,
+  lastName: Schema.OptionFromNullOr(Schema.Secret),
+  phone: Schema.OptionFromNullOr(Schema.Secret),
   type: UserTypeSchema,
 }).pipe(
   _SS.satisfies.from.json(),

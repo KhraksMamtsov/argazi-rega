@@ -29,7 +29,7 @@ export const GetUserSubscriptionsResponseBodySchema: Schema.Schema<
 // #endregion GetUserSubscriptionsResponseBodySchema
 
 // #region GetUserSubscriptionsRequestParams
-const _GetUserSubscriptionsRequestParamsSchema = Schema.struct({
+const _GetUserSubscriptionsRequestParamsSchema = Schema.Struct({
   idUser: IdUserSchema,
 }).pipe(Schema.identifier("GetUserSubscriptionsRequestParamsSchema"));
 

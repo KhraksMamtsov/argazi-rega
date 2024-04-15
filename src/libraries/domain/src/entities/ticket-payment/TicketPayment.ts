@@ -6,7 +6,7 @@ import { IdTicketSchema } from "../../ticket/entity/IdTicket.js";
 import { PriceSchema } from "../../value-objects/Price.js";
 import { BaseSchema } from "../common/Base.js";
 
-const _TicketPaymentSchema = Schema.struct({
+const _TicketPaymentSchema = Schema.Struct({
   id: TicketPaymentIdSchema,
   idCashier: IdTicketSchema,
   idTicket: IdTicketSchema,

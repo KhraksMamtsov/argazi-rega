@@ -5,14 +5,14 @@ import { _SS } from "@argazi/shared";
 
 import { BaseCommandFor } from "../../common/Base.command.js";
 
-export const GetManyUsersCommandPayloadSchema = Schema.union(
-  Schema.struct({
-    idsUser: Schema.array(IdUserSchema),
-    type: Schema.literal("id"),
+export const GetManyUsersCommandPayloadSchema = Schema.Union(
+  Schema.Struct({
+    idsUser: Schema.Array(IdUserSchema),
+    type: Schema.Literal("id"),
   }).pipe(_SS.satisfies.from.json()),
-  Schema.struct({
-    idsDwbn: Schema.array(IdDwbnSchema),
-    type: Schema.literal("idDwbn"),
+  Schema.Struct({
+    idsDwbn: Schema.Array(IdDwbnSchema),
+    type: Schema.Literal("idDwbn"),
   }).pipe(_SS.satisfies.from.json())
 ).pipe(Schema.identifier("GetManyUsersCommandPayloadSchema"));
 

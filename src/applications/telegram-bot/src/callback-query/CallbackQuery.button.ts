@@ -1,12 +1,12 @@
 import { Schema } from "@effect/schema";
 
-export const CallbackQueryAction = Schema.literal(
+export const CallbackQueryAction = Schema.Literal(
   //
   "create",
   "delete",
   "get"
 );
-export const CallbackQueryEntity = Schema.literal(
+export const CallbackQueryEntity = Schema.Literal(
   "Subscription",
   "GeoPoint",
   "Ticket",

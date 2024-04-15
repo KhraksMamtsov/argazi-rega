@@ -3,7 +3,7 @@ import { Schema } from "@effect/schema";
 export const PossiblyAccessTokenSymbol: unique symbol = Symbol.for(
   "PossiblyAccessTokenSymbol"
 );
-export const PossiblyAccessTokenSchema = Schema.string.pipe(
+export const PossiblyAccessTokenSchema = Schema.String.pipe(
   Schema.identifier("PossiblyAccessTokenSchema"),
   Schema.brand(PossiblyAccessTokenSymbol)
 );

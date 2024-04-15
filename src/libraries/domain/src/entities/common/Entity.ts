@@ -9,7 +9,7 @@ export const EntitySchema = <
 >(
   idSchema: Schema.Schema<A, I, R>
 ) =>
-  Schema.struct({
+  Schema.Struct({
     id: idSchema,
   }).pipe(Schema.typeSchema, Schema.identifier("EntitySchema"));
 

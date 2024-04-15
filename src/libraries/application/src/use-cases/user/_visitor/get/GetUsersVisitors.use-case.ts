@@ -25,7 +25,7 @@ export const GetUsersVisitorsUseCase = BaseGetCausedUseCaseFor(
     const prismaClient = yield* _(PrismaServiceTag);
 
     const visitors = yield* _(
-      prismaClient.queryDecode(Schema.array(VisitorDbToDomainSchema), (p) =>
+      prismaClient.queryDecode(Schema.Array(VisitorDbToDomainSchema), (p) =>
         p.visitor.findMany({
           where: {
             idUser: payload.idUser,

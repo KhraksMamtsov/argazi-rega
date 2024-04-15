@@ -27,7 +27,7 @@ export const GetUserResponseBodySchema: Schema.Schema<
 // #endregion GetUserResponseBodySchema
 
 // #region GetUserRequestParams
-const _GetUserRequestParamsSchema = Schema.struct({
+const _GetUserRequestParamsSchema = Schema.Struct({
   idUser: IdUserSchema,
 }).pipe(Schema.identifier("GetUserRequestParamsSchema"));
 

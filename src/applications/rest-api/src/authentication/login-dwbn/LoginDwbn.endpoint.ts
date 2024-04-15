@@ -6,7 +6,7 @@ import { IdUserSchema } from "@argazi/domain";
 
 import { TokensResponseSchema } from "../Tokens.response.js";
 
-export const _LoginDwbnRequestBodySchema = Schema.struct({
+export const _LoginDwbnRequestBodySchema = Schema.Struct({
   code: Schema.compose(Schema.Trim, Schema.NonEmpty),
   idTelegramChat: IdTelegramChatSchema,
 }).pipe(Schema.identifier("LoginDwbnRequestBodySchema"));
@@ -21,7 +21,7 @@ export const LoginDwbnRequestBodySchema: Schema.Schema<
   LoginDwbnRequestBodyEncoded
 > = _LoginDwbnRequestBodySchema;
 
-export const _LoginDwbnResponseBodySchema = Schema.struct({
+export const _LoginDwbnResponseBodySchema = Schema.Struct({
   credentials: TokensResponseSchema,
   idUser: IdUserSchema,
 }).pipe(Schema.identifier("LoginDwbnResponseBodySchema"));

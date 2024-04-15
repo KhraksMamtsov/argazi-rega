@@ -7,7 +7,7 @@ import { PriceSchema } from "../../value-objects/Price.js";
 import { BaseSchema } from "../common/Base.js";
 import { VisaIdSchema } from "../visa/VisaId.js";
 
-const _VisaPaymentSchema = Schema.struct({
+const _VisaPaymentSchema = Schema.Struct({
   id: VisaPaymentIdSchema,
   idGuarantor: IdTicketSchema,
   idVisa: VisaIdSchema,

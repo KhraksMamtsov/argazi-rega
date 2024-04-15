@@ -28,7 +28,7 @@ export const DeleteMyVisitorResponseBodySchema: Schema.Schema<
 // #endregion DeleteMyVisitorResponseBodySchema
 
 // #region DeleteMyVisitorRequestParams
-const _DeleteMyVisitorRequestParamsSchema = Schema.struct({
+const _DeleteMyVisitorRequestParamsSchema = Schema.Struct({
   idVisitor: IdVisitorSchema,
 }).pipe(Schema.identifier("DeleteMyVisitorRequestParamsSchema"));
 

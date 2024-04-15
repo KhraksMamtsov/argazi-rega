@@ -32,7 +32,7 @@ export const CreateUserSubscriptionResponseBodySchema: Schema.Schema<
 // #endregion CreateUserSubscriptionResponseBodySchema
 
 // #region CreateUserSubscriptionRequestBody
-const _CreateUserSubscriptionRequestBodySchema = Schema.struct({
+const _CreateUserSubscriptionRequestBodySchema = Schema.Struct({
   idPlace: IdPlaceSchema,
 }).pipe(Schema.identifier("CreateUserSubscriptionRequestBodySchema"));
 
@@ -52,7 +52,7 @@ export const CreateUserSubscriptionRequestBodySchema: Schema.Schema<
 > = _CreateUserSubscriptionRequestBodySchema;
 // #endregion CreateUserSubscriptionRequestBodySchema
 // #region CreateUserSubscriptionRequestParams
-const _CreateUserSubscriptionRequestParamsSchema = Schema.struct({
+const _CreateUserSubscriptionRequestParamsSchema = Schema.Struct({
   idUser: IdUserSchema,
 }).pipe(Schema.identifier("CreateUserSubscriptionRequestParamsSchema"));
 

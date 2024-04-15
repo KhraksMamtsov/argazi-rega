@@ -11,7 +11,7 @@ import { _SS } from "@argazi/shared";
 import { BaseDbSchema, transform } from "../Base.db.js";
 
 // #region SubscriptionDb
-export const _SubscriptionDbSchema = Schema.struct({
+export const _SubscriptionDbSchema = Schema.Struct({
   id: IdSubscriptionSchema,
   idPlace: IdPlaceSchema,
   idUser: IdUserSchema,

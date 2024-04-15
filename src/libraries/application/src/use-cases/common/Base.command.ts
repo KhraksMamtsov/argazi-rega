@@ -13,7 +13,7 @@ export const BaseCommandFor = <R, I extends _S.Json.Json, A>(
     Option.getOrThrow
   );
 
-  return Schema.struct({
+  return Schema.Struct({
     payload,
   }).pipe(Schema.identifier(baseAnnotation));
 };
@@ -29,7 +29,7 @@ export const BaseCausedCommandFor = <R, I extends _S.Json.Json, A>(
     Option.getOrThrow
   );
 
-  return Schema.struct({
+  return Schema.Struct({
     idInitiator: IdUserSchema,
     payload,
   }).pipe(Schema.identifier(baseAnnotation));

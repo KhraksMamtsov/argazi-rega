@@ -18,7 +18,7 @@ export const GetSubscriptionByIdUseCase = BaseCausedUseCaseFor(
 
     return yield* _(
       prismaClient.queryDecode(
-        Schema.optionFromNullable(SubscriptionDbToDomainSchema),
+        Schema.OptionFromNullOr(SubscriptionDbToDomainSchema),
         (p) =>
           p.subscription.findUnique({ where: { id: payload.idSubscription } })
       )

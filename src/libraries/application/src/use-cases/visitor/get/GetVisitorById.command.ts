@@ -9,7 +9,7 @@ export type GetVisitorByIdCommandPayloadFrom = {
   readonly idVisitor: string;
 };
 
-export const GetVisitorByIdCommandPayloadSchema = Schema.struct({
+export const GetVisitorByIdCommandPayloadSchema = Schema.Struct({
   idVisitor: IdVisitorSchema,
 }).pipe(
   _SS.satisfies.from.json<GetVisitorByIdCommandPayloadFrom>(),

@@ -26,7 +26,7 @@ export const GetUserTicketByIdUseCase = BaseCausedUseCaseFor(
 
     return yield* _(
       prismaClient.queryDecode(
-        Schema.optionFromNullable(TicketDbToDomainSchema),
+        Schema.OptionFromNullOr(TicketDbToDomainSchema),
         (p) =>
           p.ticket.findUnique({
             where: { id: payload.idTicket, idUser: payload.idUser },

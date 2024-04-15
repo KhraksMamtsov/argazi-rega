@@ -5,11 +5,11 @@ import { IdTransportSchema } from "./IdTransport.js";
 import { BaseSchema } from "../../entities/common/Base.js";
 import { IdUserSchema } from "../../user/entity/IdUser.js";
 
-export const TransportBaseSchema = Schema.struct({
-  color: Schema.string.pipe(Schema.trimmed(), Schema.nonEmpty()),
+export const TransportBaseSchema = Schema.Struct({
+  color: Schema.String.pipe(Schema.trimmed(), Schema.nonEmpty()),
   id: IdTransportSchema,
   idUser: IdUserSchema,
-  model: Schema.SecretFromSelf.pipe(Schema.optionFromSelf),
+  model: Schema.SecretFromSelf.pipe(Schema.OptionFromSelf),
   //
   number: Schema.SecretFromSelf,
   seatsNumber: Schema.Int.pipe(Schema.positive()),

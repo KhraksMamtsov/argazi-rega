@@ -7,11 +7,13 @@ import { BaseCausedCommandFor } from "../../common/Base.command.js";
 export type CreatePlaceCommandPayloadFrom = {
   readonly idGeoPoint: string;
   readonly name: string;
+  readonly description: string;
 };
 
-export const CreatePlaceCommandPayloadSchema = Schema.struct({
+export const CreatePlaceCommandPayloadSchema = Schema.Struct({
   idGeoPoint: Schema.UUID,
   name: Schema.compose(Schema.Trim, Schema.NonEmpty),
+  description: Schema.compose(Schema.Trim, Schema.NonEmpty),
 }).pipe(
   _SS.satisfies.from.json<CreatePlaceCommandPayloadFrom>(),
   Schema.identifier("CreatePlaceCommandPayloadSchema")

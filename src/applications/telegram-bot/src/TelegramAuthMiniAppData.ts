@@ -1,12 +1,12 @@
 import { Schema } from "@effect/schema";
 
 export const _TelegramAuthMiniAppDataSchema = Schema.parseJson(
-  Schema.struct({
-    data: Schema.struct({
-      code: Schema.string,
-      session_state: Schema.string,
+  Schema.Struct({
+    data: Schema.Struct({
+      code: Schema.String,
+      session_state: Schema.String,
     }),
-    id: Schema.literal(
+    id: Schema.Literal(
       "@argazi/infrastructure/telegram-bot/telegram-auth-mini-app/auth"
     ),
   })

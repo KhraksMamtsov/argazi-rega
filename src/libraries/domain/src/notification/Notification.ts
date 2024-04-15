@@ -11,7 +11,7 @@ import { IdTransportSchema } from "../transport/entity/IdTransport.js";
 import { type IdUser, IdUserSchema } from "../user/entity/IdUser.js";
 import { IdVisitorSchema } from "../visitor/IdVisitor.js";
 
-export const NotificationIssueSchema = Schema.literal(
+export const NotificationIssueSchema = Schema.Literal(
   "updated",
   "created",
   "deleted"
@@ -20,38 +20,38 @@ export type NotificationIssue = Schema.Schema.Type<
   typeof NotificationIssueSchema
 >;
 
-const NotificationEntitySchema = Schema.union(
-  Schema.struct({
+const NotificationEntitySchema = Schema.Union(
+  Schema.Struct({
     id: IdUserSchema,
-    type: Schema.literal("User"),
+    type: Schema.Literal("User"),
   }).pipe(_SS.satisfies.from.json()),
-  Schema.struct({
+  Schema.Struct({
     id: IdGeoPointSchema,
-    type: Schema.literal("GeoPoint"),
+    type: Schema.Literal("GeoPoint"),
   }).pipe(_SS.satisfies.from.json()),
-  Schema.struct({
+  Schema.Struct({
     id: IdPlaceSchema,
-    type: Schema.literal("Place"),
+    type: Schema.Literal("Place"),
   }).pipe(_SS.satisfies.from.json()),
-  Schema.struct({
+  Schema.Struct({
     id: IdTicketSchema,
-    type: Schema.literal("Ticket"),
+    type: Schema.Literal("Ticket"),
   }).pipe(_SS.satisfies.from.json()),
-  Schema.struct({
+  Schema.Struct({
     id: IdTransportSchema,
-    type: Schema.literal("Transport"),
+    type: Schema.Literal("Transport"),
   }).pipe(_SS.satisfies.from.json()),
-  Schema.struct({
+  Schema.Struct({
     id: IdEventSchema,
-    type: Schema.literal("Event"),
+    type: Schema.Literal("Event"),
   }).pipe(_SS.satisfies.from.json()),
-  Schema.struct({
+  Schema.Struct({
     id: IdSubscriptionSchema,
-    type: Schema.literal("Subscription"),
+    type: Schema.Literal("Subscription"),
   }).pipe(_SS.satisfies.from.json()),
-  Schema.struct({
+  Schema.Struct({
     id: IdVisitorSchema,
-    type: Schema.literal("Visitor"),
+    type: Schema.Literal("Visitor"),
   }).pipe(_SS.satisfies.from.json())
 );
 export type NotificationEntity = Schema.Schema.Type<
@@ -59,8 +59,8 @@ export type NotificationEntity = Schema.Schema.Type<
 >;
 
 export const _NotificationSchema = Schema.parseJson(
-  Schema.struct({
-    _tag: Schema.literal("Notification"),
+  Schema.Struct({
+    _tag: Schema.Literal("Notification"),
     entity: NotificationEntitySchema,
     idInitiator: IdUserSchema,
     issue: NotificationIssueSchema,

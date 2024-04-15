@@ -8,8 +8,8 @@ import {
 } from "@argazi/domain";
 import { _SS } from "@argazi/shared";
 
-export const _VisitorApi = Schema.struct({
-  email: Schema.optionFromNullable(Schema.Trimmed.pipe(Schema.nonEmpty())),
+export const _VisitorApi = Schema.Struct({
+  email: Schema.OptionFromNullOr(Schema.Trimmed.pipe(Schema.nonEmpty())),
   id: IdVisitorSchema,
   idUser: IdUserSchema,
   name: Schema.Trimmed.pipe(Schema.nonEmpty()),

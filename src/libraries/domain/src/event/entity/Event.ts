@@ -6,7 +6,7 @@ import { BaseSchema } from "../../entities/common/Base.js";
 import { IdPlaceSchema } from "../../place/entity/IdPlace.js";
 import { PriceSchema } from "../../value-objects/Price.js";
 
-export const EventBaseSchema = Schema.struct({
+export const EventBaseSchema = Schema.Struct({
   dateAnnouncement: Schema.ValidDateFromSelf,
   dateDeadline: Schema.ValidDateFromSelf,
   dateFinish: Schema.ValidDateFromSelf,
@@ -16,6 +16,7 @@ export const EventBaseSchema = Schema.struct({
   name: Schema.SecretFromSelf,
   priceDay: PriceSchema,
   priceEvent: PriceSchema,
+  description: Schema.String,
 });
 
 export type EventBase = Schema.Schema.Type<typeof EventBaseSchema>;

@@ -24,7 +24,7 @@ export type UpdateUserCommandPayloadFrom = {
   readonly type?: UserType;
 };
 
-export const UpdateUserCommandPayloadSchema = Schema.struct({
+export const UpdateUserCommandPayloadSchema = Schema.Struct({
   email: Schema.optional(Schema.Secret, {
     as: "Option",
     exact: true,
@@ -41,7 +41,7 @@ export const UpdateUserCommandPayloadSchema = Schema.struct({
     as: "Option",
     exact: true,
   }),
-  isAdmin: Schema.optional(Schema.boolean, {
+  isAdmin: Schema.optional(Schema.Boolean, {
     as: "Option",
     exact: true,
   }),
@@ -61,7 +61,7 @@ export const UpdateUserCommandPayloadSchema = Schema.struct({
   }),
 }).pipe(
   Schema.extend(
-    Schema.struct({
+    Schema.Struct({
       id: IdUserSchema,
     })
   ),

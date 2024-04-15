@@ -7,14 +7,15 @@ import { BaseSchema } from "../../entities/common/Base.js";
 import { IdEventSchema } from "../../event/entity/IdEvent.js";
 import { PriceSchema } from "../../value-objects/Price.js";
 
-export const MealBaseSchema = Schema.struct({
-  dateFinish: Schema.optionFromSelf(Schema.ValidDateFromSelf),
+export const MealBaseSchema = Schema.Struct({
+  dateFinish: Schema.OptionFromSelf(Schema.ValidDateFromSelf),
   dateStart: Schema.ValidDateFromSelf,
   id: IdMealSchema,
   idEvent: IdEventSchema,
   name: Schema.Trim.pipe(Schema.nonEmpty()),
   price: PriceSchema,
   type: MealTypeSchema,
+  description: Schema.compose(Schema.Trimmed, Schema.NonEmpty),
 }).pipe(Schema.identifier("MealBaseSchema"));
 
 export type MealBase = Schema.Schema.Type<typeof MealBaseSchema>;

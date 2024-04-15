@@ -8,6 +8,6 @@ export enum TicketRole {
   NONE = "NONE",
 }
 
-export const TicketRoleSchema = Schema.enums(TicketRole).pipe(
+export const TicketRoleSchema = Schema.Enums(TicketRole).pipe(
   Schema.identifier("TicketRoleSchema")
 );

@@ -11,15 +11,15 @@ import { _SS } from "@argazi/shared";
 
 import { BaseCommandFor } from "../../common/Base.command.js";
 
-export const RegisterUserCommandPayloadSchema = Schema.struct({
+export const RegisterUserCommandPayloadSchema = Schema.Struct({
   email: Schema.Secret,
   firstName: Schema.Secret,
   id: IdUserSchema,
   idDwbn: IdDwbnSchema,
   idTelegramChat: IdTelegramChatSchema,
-  isAdmin: Schema.boolean,
-  lastName: Schema.optionFromNullable(Schema.Secret),
-  phone: Schema.optionFromNullable(Schema.Secret),
+  isAdmin: Schema.Boolean,
+  lastName: Schema.OptionFromNullOr(Schema.Secret),
+  phone: Schema.OptionFromNullOr(Schema.Secret),
   type: Schema.transformLiterals(
     ["ADULT", UserType.ADULT],
     ["STUDENT", UserType.STUDENT],

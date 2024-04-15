@@ -15,7 +15,7 @@ export const GetPlaceActualEventsUseCase = BaseGetCausedUseCaseFor(
     const prismaClient = yield* _(PrismaServiceTag);
 
     return yield* _(
-      prismaClient.queryDecode(Schema.array(EventDbToDomainSchema), (p) =>
+      prismaClient.queryDecode(Schema.Array(EventDbToDomainSchema), (p) =>
         p.event.findMany({
           orderBy: { dateStart: "desc" },
           where: {

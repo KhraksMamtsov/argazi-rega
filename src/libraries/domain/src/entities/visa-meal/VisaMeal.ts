@@ -6,7 +6,7 @@ import { IdMealSchema } from "../../meal/entity/IdMeal.js";
 import { BaseSchema } from "../common/Base.js";
 import { VisaIdSchema } from "../visa/VisaId.js";
 
-const _VisaMealSchema = Schema.struct({
+const _VisaMealSchema = Schema.Struct({
   id: VisaMealIdSchema,
   idMeal: IdMealSchema,
   idVisa: VisaIdSchema,

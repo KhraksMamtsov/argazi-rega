@@ -29,7 +29,7 @@ export const GetPlaceActualEventsResponseBodySchema: Schema.Schema<
 // #endregion Schema for  GetPlaceActualEventsResponseBodySchema
 
 // #region GetPlaceActualEventsRequestParams
-const _GetPlaceActualEventsRequestParamsSchema = Schema.struct({
+const _GetPlaceActualEventsRequestParamsSchema = Schema.Struct({
   idPlace: IdPlaceSchema,
 }).pipe(Schema.identifier("GetPlaceActualEventsRequestParamsSchema"));
 

@@ -8,7 +8,7 @@ import { BaseCausedCommandFor } from "../../common/Base.command.js";
 export const CreateTicketCommandPayloadSchema = TicketDbBaseSchema.pipe(
   Schema.omit("dateRegistered"),
   Schema.extend(
-    Schema.struct({
+    Schema.Struct({
       dateRegistered: Schema.Date,
     })
   ),

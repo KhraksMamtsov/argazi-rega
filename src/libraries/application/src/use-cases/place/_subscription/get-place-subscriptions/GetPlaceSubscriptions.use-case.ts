@@ -19,7 +19,7 @@ export const GetPlaceSubscriptionsUseCase = BaseCausedUseCaseFor(
 
     return yield* _(
       prismaClient.queryDecode(
-        Schema.array(SubscriptionDbToDomainSchema),
+        Schema.Array(SubscriptionDbToDomainSchema),
         (p) =>
           p.subscription.findMany({
             where: { idPlace: payload.idPlace },

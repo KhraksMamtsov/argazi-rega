@@ -15,7 +15,7 @@ export const GetManyUsersUseCase = ({ payload }: GetManyUsersCommand) =>
         : { idDwbn: { in: [...payload.idsDwbn] } };
 
     const users = yield* _(
-      prismaClient.queryDecode(Schema.array(UserDbToDomainSchema), (p) =>
+      prismaClient.queryDecode(Schema.Array(UserDbToDomainSchema), (p) =>
         p.user.findMany({ where })
       )
     );

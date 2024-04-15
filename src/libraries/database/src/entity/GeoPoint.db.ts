@@ -18,7 +18,7 @@ import type { GeoPoint as _GeoPoint } from "@prisma/client";
 export type GeoPointDbFrom = _TS.Simplify<Readonly<_GeoPoint>>;
 
 // #region GeoPointDb
-const _GeoPointDbSchema = Schema.struct({
+const _GeoPointDbSchema = Schema.Struct({
   id: IdGeoPointSchema,
   idUser: IdUserSchema,
   latitude: _S.StringFromNumber.pipe(
@@ -29,7 +29,7 @@ const _GeoPointDbSchema = Schema.struct({
     Schema.compose(Schema.Secret),
     Schema.compose(LongitudeSchema)
   ),
-  name: Schema.optionFromNullable(Schema.Secret),
+  name: Schema.OptionFromNullOr(Schema.Secret),
 }).pipe(
   Schema.extend(BaseDbSchema),
   Schema.identifier("GeoPointDbSchema"),

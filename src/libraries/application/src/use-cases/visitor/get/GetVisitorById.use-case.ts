@@ -16,7 +16,7 @@ export const GetVisitorByIdUseCase = BaseCausedUseCaseFor(
 
     return yield* _(
       prismaClient.queryDecode(
-        Schema.optionFromNullable(VisitorDbToDomainSchema),
+        Schema.OptionFromNullOr(VisitorDbToDomainSchema),
         (p) => p.visitor.findUnique({ where: { id: payload.idVisitor } })
       )
     );

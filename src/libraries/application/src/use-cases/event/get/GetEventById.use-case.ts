@@ -16,7 +16,7 @@ export const GetEventByIdUseCase = BaseCausedUseCaseFor(
 
     return yield* _(
       prismaClient.queryDecode(
-        Schema.optionFromNullable(EventDbToDomainSchema),
+        Schema.OptionFromNullOr(EventDbToDomainSchema),
         (p) => p.event.findUnique({ where: { id: payload.id } })
       )
     );

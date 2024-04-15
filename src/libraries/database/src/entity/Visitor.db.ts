@@ -14,11 +14,11 @@ import { _SS } from "@argazi/shared";
 import { BaseDbSchema, transform } from "../Base.db.js";
 
 // #region VisitorDbBase
-export const _VisitorDbBaseSchema = Schema.struct({
-  email: Schema.optionFromNullable(Schema.Trim.pipe(Schema.nonEmpty())),
+export const _VisitorDbBaseSchema = Schema.Struct({
+  email: Schema.OptionFromNullOr(Schema.Trim.pipe(Schema.nonEmpty())),
   id: IdVisitorSchema,
   idUser: IdUserSchema,
-  name: Schema.string,
+  name: Schema.String,
   type: Schema.transformLiterals(
     ["ADULT", VisitorType.ADULT],
     ["STUDENT", VisitorType.STUDENT],

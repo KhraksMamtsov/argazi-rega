@@ -15,7 +15,7 @@ export const GetPlaceByIdUseCase = BaseCausedUseCaseFor(
 
     return yield* _(
       prismaClient.queryDecode(
-        Schema.optionFromNullable(PlaceDbToDomainSchema),
+        Schema.OptionFromNullOr(PlaceDbToDomainSchema),
         (p) => p.place.findUnique({ where: { id: payload.id } })
       )
     );

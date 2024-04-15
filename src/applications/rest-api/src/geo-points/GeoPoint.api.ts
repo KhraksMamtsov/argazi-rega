@@ -7,13 +7,13 @@ import { LatitudeSchema } from "@argazi/domain";
 import { LongitudeSchema } from "@argazi/domain";
 import { _SS } from "@argazi/shared";
 
-export const _GeoPointApiSchema = Schema.struct({
+export const _GeoPointApiSchema = Schema.Struct({
   id: IdGeoPointSchema,
   idUser: IdUserSchema,
   latitude: Schema.compose(Schema.Secret, LatitudeSchema),
   longitude: Schema.compose(Schema.Secret, LongitudeSchema),
   //
-  name: Schema.optionFromNullable(
+  name: Schema.OptionFromNullOr(
     Schema.compose(Schema.compose(Schema.Trim, Schema.NonEmpty), Schema.Secret)
   ),
 }).pipe(

@@ -27,8 +27,8 @@ export const GetManyUsersResponseBodySchema: Schema.Schema<
 // #endregion GetManyUsersResponseBodySchema
 
 // #region GetManyUsersRequestParams
-const _GetManyUsersRequestParamsSchema = Schema.struct({
-  idsUser: Schema.array(IdUserSchema),
+const _GetManyUsersRequestParamsSchema = Schema.Struct({
+  idsUser: Schema.Array(IdUserSchema),
 }).pipe(Schema.identifier("GetManyUsersRequestParamsSchema"));
 
 export type GetManyUsersRequestParamsContext = Schema.Schema.Context<

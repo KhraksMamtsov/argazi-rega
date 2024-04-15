@@ -11,12 +11,12 @@ import {
 } from "@argazi/domain";
 import { _TS } from "@argazi/shared";
 
-const _BaseDbSchema = Schema.struct({
+const _BaseDbSchema = Schema.Struct({
   dateCreated: Schema.ValidDateFromSelf,
-  dateDeleted: Schema.nullable(Schema.ValidDateFromSelf),
+  dateDeleted: Schema.NullOr(Schema.ValidDateFromSelf),
   dateUpdated: Schema.ValidDateFromSelf,
   idUserCreator: Schema.UUID,
-  idUserDeleter: Schema.nullable(Schema.UUID),
+  idUserDeleter: Schema.NullOr(Schema.UUID),
   idUserUpdater: Schema.UUID,
 }).pipe(Schema.identifier("BaseDbSchema"));
 
@@ -25,10 +25,8 @@ export interface BaseDbFrom
 export interface BaseDb extends Schema.Schema.Type<typeof _BaseDbSchema> {}
 export const BaseDbSchema: Schema.Schema<BaseDb, BaseDbFrom> = _BaseDbSchema;
 
-export const ToDomainBase = Schema.transform(
-  BaseDbSchema,
-  BaseSchema,
-  (x) => ({
+export const ToDomainBase = Schema.transform(BaseDbSchema, BaseSchema, {
+  decode: (x) => ({
     meta: {
       dateCreated: DateCreatedSchema(x.dateCreated),
       dateDeleted: Option.fromNullable(x.dateDeleted).pipe(
@@ -42,15 +40,15 @@ export const ToDomainBase = Schema.transform(
       idUserUpdater: IdUserSchema(x.idUserUpdater),
     },
   }),
-  ({ meta }) => ({
+  encode: ({ meta }) => ({
     dateCreated: meta.dateCreated,
     dateDeleted: Option.getOrNull(meta.dateDeleted),
     dateUpdated: meta.dateUpdated,
     idUserCreator: meta.idUserCreator,
     idUserDeleter: Option.getOrNull(meta.idUserDeleter),
     idUserUpdater: meta.idUserUpdater,
-  })
-);
+  }),
+});
 
 export const fromDomain = Schema.encode(ToDomainBase);
 export const toDomain = Schema.decode(ToDomainBase);
@@ -86,10 +84,8 @@ export const transform = <
     R4
   >
 ) =>
-  Schema.transformOrFail(
-    from,
-    to,
-    (b, options, ast) =>
+  Schema.transformOrFail(from, to, {
+    decode: (b, options, ast) =>
       pipe(
         Effect.all([
           toDomain(b, options).pipe(Effect.mapError((x) => x.error)),
@@ -103,7 +99,7 @@ export const transform = <
             }) as C
         )
       ),
-    ({ meta, ...c }, options, ast) =>
+    encode: ({ meta, ...c }, options, ast) =>
       pipe(
         Effect.all([
           fromDomain({ meta }, options).pipe(Effect.mapError((x) => x.error)),
@@ -116,5 +112,5 @@ export const transform = <
               ...meta,
             }) as B
         )
-      )
-  );
+      ),
+  });

@@ -13,7 +13,7 @@ import { _SS } from "@argazi/shared";
 import { BaseDbSchema, transform } from "../Base.db.js";
 import { BigDecimalFromPrismaDecimal } from "../PrismaDecimalSchema.js";
 
-export const EventDbSchema = Schema.struct({
+export const EventDbSchema = Schema.Struct({
   dateAnnouncement: Schema.ValidDateFromSelf,
   dateDeadline: Schema.ValidDateFromSelf,
   dateFinish: Schema.ValidDateFromSelf,
@@ -23,6 +23,7 @@ export const EventDbSchema = Schema.struct({
   name: Schema.Secret,
   priceDay: Schema.compose(BigDecimalFromPrismaDecimal, PriceSchema),
   priceEvent: Schema.compose(BigDecimalFromPrismaDecimal, PriceSchema),
+  description: Schema.String,
 }).pipe(
   Schema.extend(BaseDbSchema),
   Schema.identifier("EventDbSchema"),

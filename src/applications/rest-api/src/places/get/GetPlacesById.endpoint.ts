@@ -6,7 +6,7 @@ import { IdPlaceSchema } from "@argazi/domain";
 import { BaseResponseFor } from "../../BaseResponseFor.js";
 import { PlaceApi } from "../Place.api.js";
 
-export const _GetPlaceByIdRequest = Schema.struct({
+export const _GetPlaceByIdRequest = Schema.Struct({
   idPlace: IdPlaceSchema,
 });
 

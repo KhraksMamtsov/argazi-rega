@@ -4,18 +4,7 @@ import { _SS } from "@argazi/shared";
 
 import { BaseCausedCommandFor } from "../../common/Base.command.js";
 
-export type CreateEventCommandPayloadFrom = {
-  readonly dateAnnouncement: string;
-  readonly dateDeadline: string;
-  readonly dateFinish: string;
-  readonly dateStart: string;
-  readonly idPlace: string;
-  readonly name: string;
-  readonly priceDay: number;
-  readonly priceEvent: number;
-};
-
-const _CreateEventCommandPayloadSchema = Schema.struct({
+const _CreateEventCommandPayloadSchema = Schema.Struct({
   dateAnnouncement: Schema.compose(
     Schema.DateFromString,
     Schema.ValidDateFromSelf
@@ -27,8 +16,9 @@ const _CreateEventCommandPayloadSchema = Schema.struct({
   name: Schema.compose(Schema.Trim, Schema.NonEmpty),
   priceDay: Schema.JsonNumber,
   priceEvent: Schema.JsonNumber,
+  description: Schema.String,
 }).pipe(
-  _SS.satisfies.from.json<CreateEventCommandPayloadFrom>(),
+  _SS.satisfies.from.json(),
   Schema.identifier("CreateEventCommandPayloadSchema")
 );
 

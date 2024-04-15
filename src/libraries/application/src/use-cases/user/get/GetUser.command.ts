@@ -15,14 +15,14 @@ export type GetUserCommandPayloadFrom =
       readonly type: "idDwbn";
     };
 
-export const GetUserCommandPayloadSchema = Schema.union(
-  Schema.struct({
+export const GetUserCommandPayloadSchema = Schema.Union(
+  Schema.Struct({
     id: IdUserSchema,
-    type: Schema.literal("id"),
+    type: Schema.Literal("id"),
   }).pipe(_SS.satisfies.from.json()),
-  Schema.struct({
+  Schema.Struct({
     idDwbn: IdDwbnSchema,
-    type: Schema.literal("idDwbn"),
+    type: Schema.Literal("idDwbn"),
   }).pipe(_SS.satisfies.from.json())
 ).pipe(Schema.identifier("GetUserCommandPayloadSchema"));
 

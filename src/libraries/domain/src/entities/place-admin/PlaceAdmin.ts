@@ -6,7 +6,7 @@ import { IdPlaceSchema } from "../../place/entity/IdPlace.js";
 import { IdUserSchema } from "../../user/entity/IdUser.js";
 import { BaseSchema } from "../common/Base.js";
 
-const _PlaceAdminSchema = Schema.struct({
+const _PlaceAdminSchema = Schema.Struct({
   id: PlaceAdminIdSchema,
   idPlace: IdPlaceSchema,
   idUser: IdUserSchema,

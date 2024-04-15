@@ -8,7 +8,7 @@ import {
 } from "@argazi/domain";
 import { _SS } from "@argazi/shared";
 
-export const _EventApi = Schema.struct({
+export const _EventApi = Schema.Struct({
   dateAnnouncement: Schema.compose(
     Schema.DateFromString,
     Schema.ValidDateFromSelf
@@ -21,6 +21,7 @@ export const _EventApi = Schema.struct({
   name: Schema.Secret,
   priceDay: Schema.compose(Schema.BigDecimalFromNumber, PriceSchema),
   priceEvent: Schema.compose(Schema.BigDecimalFromNumber, PriceSchema),
+  description: Schema.String,
 }).pipe(
   _SS.satisfies.from.json(),
   _SS.satisfies.to<EventBase>(),

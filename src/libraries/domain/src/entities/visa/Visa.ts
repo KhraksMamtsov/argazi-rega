@@ -8,10 +8,10 @@ import { IdVisitorSchema } from "../../visitor/IdVisitor.js";
 import { BaseSchema } from "../common/Base.js";
 import { TransportOnEventSchema } from "../transport-on-event/TransportOnEvent.js";
 
-const _VisaSchema = Schema.struct({
+const _VisaSchema = Schema.Struct({
   id: VisaIdSchema,
   idEvent: IdEventSchema,
-  idTransportOnEvent: Schema.option(TransportOnEventSchema),
+  idTransportOnEvent: Schema.Option(TransportOnEventSchema),
   idVisitor: IdVisitorSchema,
   //
   totalPrice: PriceSchema,

@@ -13,7 +13,7 @@ export const GetPlacesUseCase = BaseCausedUseCaseFor(GetPlacesCommandSchema)(
       const prismaClient = yield* _(PrismaServiceTag);
 
       return yield* _(
-        prismaClient.queryDecode(Schema.array(PlaceDbToDomainSchema), (p) =>
+        prismaClient.queryDecode(Schema.Array(PlaceDbToDomainSchema), (p) =>
           p.place.findMany({
             where: {
               dateDeleted: null,

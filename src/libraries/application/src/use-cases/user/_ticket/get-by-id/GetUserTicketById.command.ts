@@ -5,7 +5,7 @@ import { _SS } from "@argazi/shared";
 
 import { BaseCausedCommandFor } from "../../../common/Base.command.js";
 
-export const GetUserTicketByIdCommandPayloadSchema = Schema.struct({
+export const GetUserTicketByIdCommandPayloadSchema = Schema.Struct({
   idTicket: IdTicketSchema,
   idUser: IdUserSchema,
 }).pipe(

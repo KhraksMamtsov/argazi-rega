@@ -28,7 +28,7 @@ export const BookTicketResponseBodySchema: Schema.Schema<
 // #endregion BookTicketResponseBodySchema
 
 // #region BookTicketRequestBody
-const _BookTicketRequestBodySchema = Schema.struct({
+const _BookTicketRequestBodySchema = Schema.Struct({
   idEvent: IdEventSchema,
 }).pipe(Schema.identifier("BookTicketRequestBodySchema"));
 
@@ -47,7 +47,7 @@ export const BookTicketRequestBodySchema: Schema.Schema<
 // #endregion BookTicketRequestBodySchema
 
 // #region BookTicketRequestParams
-const _BookTicketRequestParamsSchema = Schema.struct({
+const _BookTicketRequestParamsSchema = Schema.Struct({
   idUser: IdUserSchema,
 }).pipe(Schema.identifier("BookTicketRequestParamsSchema"));
 
@@ -78,7 +78,7 @@ export const BookTicketEndpoint = ApiEndpoint.post(
   ApiEndpoint.addResponse(
     ApiResponse.make(
       400,
-      Schema.string.pipe(Schema.description("UserSubscriptions not found"))
+      Schema.String.pipe(Schema.description("UserSubscriptions not found"))
     )
   )
 );

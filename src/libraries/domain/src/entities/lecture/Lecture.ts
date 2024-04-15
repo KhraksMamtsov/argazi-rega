@@ -5,8 +5,8 @@ import { IdLectureSchema } from "./IdLecture.js";
 import { IdEventSchema } from "../../event/entity/IdEvent.js";
 import { PriceSchema } from "../../value-objects/Price.js";
 
-const _LectureSchema = Schema.struct({
-  dateFinish: Schema.option(Schema.Date),
+const _LectureSchema = Schema.Struct({
+  dateFinish: Schema.Option(Schema.Date),
   dateStart: Schema.Date,
   id: IdLectureSchema,
   idEvent: IdEventSchema,

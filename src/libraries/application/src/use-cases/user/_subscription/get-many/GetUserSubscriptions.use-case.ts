@@ -29,7 +29,7 @@ export const GetUserSubscriptionsUseCase = BaseCausedUseCaseFor(
 
     return yield* _(
       prismaClient.queryDecode(
-        Schema.array(SubscriptionDbToDomainSchema),
+        Schema.Array(SubscriptionDbToDomainSchema),
         (p) =>
           p.subscription.findMany({
             where: {

@@ -21,7 +21,7 @@ export const GetPlaceGeoPointResponseBodySchema: Schema.Schema<
 > = _GetPlaceGeoPointResponseBodySchema;
 
 // #region GetPlaceGeoPointRequestParamsSchema
-const _GetPlaceGeoPointRequestParamsSchema = Schema.struct({
+const _GetPlaceGeoPointRequestParamsSchema = Schema.Struct({
   idPlace: IdPlaceSchema,
 }).pipe(Schema.identifier("GetPlaceGeoPointRequestParamsSchema"));
 

@@ -6,7 +6,7 @@ import { _SS } from "@argazi/shared";
 import { AccessTokenSchema } from "./AccessToken.js";
 import { RefreshTokenSchema } from "./RefreshToken.js";
 
-export const _TokensResponseSchema = Schema.struct({
+export const _TokensResponseSchema = Schema.Struct({
   accessToken: AccessTokenSchema,
   refreshToken: RefreshTokenSchema,
 }).pipe(_SS.satisfies.from.json(), Schema.identifier("TokensResponseSchema"));

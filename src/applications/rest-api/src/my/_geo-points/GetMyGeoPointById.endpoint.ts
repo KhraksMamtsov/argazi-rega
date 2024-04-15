@@ -13,7 +13,7 @@ export const GetMyGeoPointByIdResponseSchema = GeoPointApiSchema.pipe(
 );
 
 export const GetMyGeoPointByIdRequest = {
-  params: Schema.struct({
+  params: Schema.Struct({
     idGeoPoint: IdGeoPointSchema,
   }),
 };

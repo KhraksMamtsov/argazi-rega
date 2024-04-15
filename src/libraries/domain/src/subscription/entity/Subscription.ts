@@ -6,7 +6,7 @@ import { BaseSchema } from "../../entities/common/Base.js";
 import { IdPlaceSchema } from "../../place/entity/IdPlace.js";
 import { IdUserSchema } from "../../user/entity/IdUser.js";
 
-export const SubscriptionBaseSchema = Schema.struct({
+export const SubscriptionBaseSchema = Schema.Struct({
   id: IdSubscriptionSchema,
   idPlace: IdPlaceSchema,
   idUser: IdUserSchema,

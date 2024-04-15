@@ -28,7 +28,7 @@ export const GetMyTicketByIdResponseBodySchema: Schema.Schema<
 // #endregion GetMyTicketByIdResponseBodySchema
 
 // #region GetMyTicketByIdRequestParams
-const _GetMyTicketByIdRequestParamsSchema = Schema.struct({
+const _GetMyTicketByIdRequestParamsSchema = Schema.Struct({
   idTicket: IdTicketSchema,
 }).pipe(Schema.identifier("GetMyTicketByIdRequestParamsSchema"));
 

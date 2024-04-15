@@ -15,14 +15,14 @@ export type CreateUserCommandPayloadFrom = {
   readonly type: "ADULT" | "STUDENT" | "PENSIONER";
 };
 
-export const CreateUserCommandPayloadSchema = Schema.struct({
+export const CreateUserCommandPayloadSchema = Schema.Struct({
   email: Schema.Trim,
   firstName: Schema.Trim,
   idDwbn: IdDwbnSchema,
   idTelegramChat: IdTelegramChatSchema,
-  lastName: Schema.nullable(Schema.string),
-  phone: Schema.nullable(Schema.string),
-  type: Schema.literal("ADULT", "STUDENT", "PENSIONER"),
+  lastName: Schema.NullOr(Schema.String),
+  phone: Schema.NullOr(Schema.String),
+  type: Schema.Literal("ADULT", "STUDENT", "PENSIONER"),
 }).pipe(
   _SS.satisfies.from.json<CreateUserCommandPayloadFrom>(),
   Schema.identifier("CreateUserCommandPayloadSchema")

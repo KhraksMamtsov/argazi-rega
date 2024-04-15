@@ -9,7 +9,7 @@ import { BearerAuth } from "../../BearerAuth.security-scheme.js";
 import { UserApi } from "../User.api.js";
 
 // #region UpdateUserRequestParams
-const _UpdateUserRequestParamsSchema = Schema.struct({
+const _UpdateUserRequestParamsSchema = Schema.Struct({
   id: IdUserSchema,
 }).pipe(Schema.identifier("UpdateUserRequestParamsSchema"));
 

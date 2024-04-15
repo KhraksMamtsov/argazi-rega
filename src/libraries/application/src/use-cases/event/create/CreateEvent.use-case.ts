@@ -19,6 +19,7 @@ export const CreateEventUseCase = BaseCausedUseCaseFor(
       prismaClient.queryDecode(EventDbToDomainSchema, (p) =>
         p.event.create({
           data: {
+            description: payload.description,
             dateAnnouncement: payload.dateAnnouncement,
             dateDeadline: payload.dateDeadline,
             dateFinish: payload.dateFinish,

@@ -7,12 +7,12 @@ import { IdUserSchema } from "../../user/entity/IdUser.js";
 import { LatitudeSchema } from "../../value-objects/Latitude.js";
 import { LongitudeSchema } from "../../value-objects/Longitude.js";
 
-export const GeoPointBaseSchema = Schema.struct({
+export const GeoPointBaseSchema = Schema.Struct({
   id: IdGeoPointSchema,
   idUser: IdUserSchema,
   latitude: LatitudeSchema,
   longitude: LongitudeSchema,
-  name: Schema.optionFromSelf(Schema.SecretFromSelf),
+  name: Schema.OptionFromSelf(Schema.SecretFromSelf),
 }).pipe(Schema.typeSchema, Schema.identifier("GeoPointBaseSchema"));
 
 export interface GeoPointBase

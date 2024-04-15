@@ -6,7 +6,7 @@ import { IdMealSchema } from "../../meal/entity/IdMeal.js";
 import { IdTicketSchema } from "../../ticket/entity/IdTicket.js";
 import { BaseSchema } from "../common/Base.js";
 
-const _TicketMealSchema = Schema.struct({
+const _TicketMealSchema = Schema.Struct({
   id: IdTicketMealSchema,
   idMeal: IdMealSchema,
   idTicket: IdTicketSchema,

@@ -3,8 +3,8 @@ import { Either, Encoding } from "effect";
 
 export type JWTStruct = Schema.Schema.Type<typeof JWTStructSchema>;
 
-const WithMessageSchema = Schema.struct({
-  message: Schema.string,
+const WithMessageSchema = Schema.Struct({
+  message: Schema.String,
 });
 const isWithMessage = Schema.is(WithMessageSchema);
 
@@ -15,32 +15,36 @@ export const JWTStructSchema = Schema.transformOrFail(
     ),
     Schema.identifier("JWTLikeSchema")
   ),
-  Schema.tuple(Schema.string, Schema.string, Schema.string),
-  ([head, payload, sign], _, ast) =>
-    Either.all([
-      Either.try({
-        catch: (e) =>
-          new ParseResult.Type(
-            ast,
-            head,
-            isWithMessage(e) ? e.message : undefined
-          ),
-        try: () => atob(head),
-      }),
-      Either.try({
-        catch: (e) =>
-          new ParseResult.Type(
-            ast,
-            head,
-            isWithMessage(e) ? e.message : undefined
-          ),
-        try: () => atob(payload),
-      }),
-    ]).pipe(Either.flatMap((x) => ParseResult.succeed([...x, sign] as const))),
-  ([header, payload, sign]) =>
-    ParseResult.succeed([
-      Encoding.encodeBase64(header),
-      Encoding.encodeBase64(payload),
-      sign,
-    ] as const)
+  Schema.Tuple(Schema.String, Schema.String, Schema.String),
+  {
+    decode: ([head, payload, sign], _, ast) =>
+      Either.all([
+        Either.try({
+          catch: (e) =>
+            new ParseResult.Type(
+              ast,
+              head,
+              isWithMessage(e) ? e.message : undefined
+            ),
+          try: () => atob(head),
+        }),
+        Either.try({
+          catch: (e) =>
+            new ParseResult.Type(
+              ast,
+              head,
+              isWithMessage(e) ? e.message : undefined
+            ),
+          try: () => atob(payload),
+        }),
+      ]).pipe(
+        Either.flatMap((x) => ParseResult.succeed([...x, sign] as const))
+      ),
+    encode: ([header, payload, sign]) =>
+      ParseResult.succeed([
+        Encoding.encodeBase64(header),
+        Encoding.encodeBase64(payload),
+        sign,
+      ] as const),
+  }
 ).pipe(Schema.identifier("JWTStructSchema"));

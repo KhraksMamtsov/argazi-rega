@@ -14,11 +14,11 @@ import { BaseDbSchema, transform } from "../Base.db.js";
 export type TransportDbFrom = Readonly<_Transport>;
 
 // #region TransportDb
-const _TransportDbSchema = Schema.struct({
+const _TransportDbSchema = Schema.Struct({
   color: Schema.Trim.pipe(Schema.nonEmpty()),
   id: IdTransportSchema,
   idUser: IdUserSchema,
-  model: Schema.optionFromNullable(Schema.Secret),
+  model: Schema.OptionFromNullOr(Schema.Secret),
   number: Schema.Secret,
   seatsNumber: Schema.Int.pipe(Schema.positive()),
 }).pipe(

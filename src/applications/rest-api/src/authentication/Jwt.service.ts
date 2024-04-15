@@ -8,8 +8,8 @@ import { AccessTokenSchema } from "./AccessToken.js";
 import { RefreshTokenSchema } from "./RefreshToken.js";
 
 // #region JWTPayload
-export const _JWTPayloadSchema = Schema.struct({
-  isAdmin: Schema.boolean,
+export const _JWTPayloadSchema = Schema.Struct({
+  isAdmin: Schema.Boolean,
   sub: IdUserSchema,
 })
   .pipe(_SS.satisfies.from.json())

@@ -16,7 +16,7 @@ export const GetPlaceGeoPointUseCase = BaseCausedUseCaseFor(
 
     return yield* _(
       prismaClient.queryDecode(
-        Schema.optionFromNullable(GeoPointDbToDomainSchema),
+        Schema.OptionFromNullOr(GeoPointDbToDomainSchema),
         (p) =>
           p.place
             .findUnique({

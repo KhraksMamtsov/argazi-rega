@@ -3,7 +3,7 @@ import { Schema } from "@effect/schema";
 import { MetaSchema } from "./Meta.js";
 
 // #region Base
-export const _BaseSchema = Schema.struct({
+export const _BaseSchema = Schema.Struct({
   meta: MetaSchema,
 }).pipe(Schema.typeSchema, Schema.identifier("BaseSchema"));
 

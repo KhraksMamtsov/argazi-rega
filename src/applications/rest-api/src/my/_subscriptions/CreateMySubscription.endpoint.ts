@@ -8,7 +8,7 @@ import { BearerAuth } from "../../BearerAuth.security-scheme.js";
 import { SubscriptionApiSchema } from "../../subscriptions/Subscription.api.js";
 
 // #region CreateMySubscriptionRequestBody
-const _CreateMySubscriptionRequestBodySchema = Schema.struct({
+const _CreateMySubscriptionRequestBodySchema = Schema.Struct({
   idPlace: IdPlaceSchema,
 }).pipe(Schema.identifier("CreateMySubscriptionRequestBodySchema"));
 

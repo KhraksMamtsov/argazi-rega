@@ -9,11 +9,11 @@ import type { TicketBase } from "@argazi/domain";
 import { _SS } from "@argazi/shared";
 
 // #region TicketApi
-const _TicketApiSchema = Schema.struct({
+const _TicketApiSchema = Schema.Struct({
   dateRegistered: Schema.Date,
   id: IdTicketSchema,
   idEvent: IdEventSchema,
-  idTransport: Schema.optionFromNullable(IdTransportOnEventSchema),
+  idTransport: Schema.OptionFromNullOr(IdTransportOnEventSchema),
   idUser: IdUserSchema,
   role: Schema.transformLiterals(
     ["ADMIN", TicketRole.ADMIN],

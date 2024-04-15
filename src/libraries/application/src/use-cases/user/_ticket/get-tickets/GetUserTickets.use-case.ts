@@ -8,7 +8,7 @@ import { GetUserTicketsCommandSchema } from "./GetUserTickets.command.js";
 import { GetEntityAuthorizationError } from "../../../common/AuthorizationError.js";
 import { BaseGetCausedUseCaseFor } from "../../../common/Base.use-case.js";
 
-const schema = Schema.array(TicketDbToDomainSchema);
+const schema = Schema.Array(TicketDbToDomainSchema);
 
 export const GetUserTicketsUseCase = BaseGetCausedUseCaseFor(
   GetUserTicketsCommandSchema

@@ -12,11 +12,11 @@ export type CreateGeoPointCommandPayloadFrom = {
   readonly name: string | null;
 };
 
-export const CreateGeoPointCommandPayloadSchema = Schema.struct({
+export const CreateGeoPointCommandPayloadSchema = Schema.Struct({
   idUser: IdUserSchema,
-  latitude: Schema.number,
-  longitude: Schema.number,
-  name: Schema.optionFromNullable(Schema.Secret),
+  latitude: Schema.Number,
+  longitude: Schema.Number,
+  name: Schema.OptionFromNullOr(Schema.Secret),
 }).pipe(
   _SS.satisfies.from.json<CreateGeoPointCommandPayloadFrom>(),
   Schema.identifier("CreateGeoPointCommandPayloadSchema")

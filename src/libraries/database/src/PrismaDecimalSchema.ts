@@ -8,14 +8,16 @@ export const PrismaDecimalFromSelf: Schema.Schema<Decimal> = Schema.declare(
 ).pipe(Schema.identifier("PrismaDecimalFromSelf"));
 
 export const PrismaDecimal = Schema.transformOrFail(
-  Schema.string,
+  Schema.String,
   PrismaDecimalFromSelf,
-  (num, _, ast) =>
-    ParseResult.try({
-      catch: () => new ParseResult.Type(ast, num),
-      try: () => new Decimal(num),
-    }),
-  (val) => ParseResult.succeed(val.valueOf())
+  {
+    decode: (num, _, ast) =>
+      ParseResult.try({
+        catch: () => new ParseResult.Type(ast, num),
+        try: () => new Decimal(num),
+      }),
+    encode: (val) => ParseResult.succeed(val.valueOf()),
+  }
 ).pipe(Schema.identifier("PrismaDecimal"));
 
 export const BigDecimalFromPrismaDecimal = Schema.compose(

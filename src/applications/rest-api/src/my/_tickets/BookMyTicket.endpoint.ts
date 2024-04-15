@@ -13,7 +13,7 @@ export const BookMyTicketResponseSchema = TicketApiSchema.pipe(
 );
 
 // #region BookMyTicketRequestBody
-const _BookMyTicketRequestBodySchema = Schema.struct({
+const _BookMyTicketRequestBodySchema = Schema.Struct({
   idEvent: IdEventSchema,
 }).pipe(Schema.identifier("BookMyTicketRequestBodySchema"));
 
@@ -37,7 +37,7 @@ export const BookMyTicketResponse = [
     status: 200 as const,
   },
   {
-    content: Schema.string.pipe(Schema.description("Event not found")),
+    content: Schema.String.pipe(Schema.description("Event not found")),
     status: 404 as const,
   },
 ] as const;

@@ -41,7 +41,7 @@ export const CreateMyVisitorResponse = [
     status: 200 as const,
   },
   {
-    content: Schema.string.pipe(Schema.description("User not found")),
+    content: Schema.String.pipe(Schema.description("User not found")),
     status: 404 as const,
   },
 ] as const;

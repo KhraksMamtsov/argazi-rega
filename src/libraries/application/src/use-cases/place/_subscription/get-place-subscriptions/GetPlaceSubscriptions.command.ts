@@ -9,7 +9,7 @@ export type GetPlaceSubscriptionsCommandPayloadFrom = {
   readonly idPlace: string;
 };
 
-export const GetPlaceSubscriptionsCommandPayloadSchema = Schema.struct({
+export const GetPlaceSubscriptionsCommandPayloadSchema = Schema.Struct({
   idPlace: IdPlaceSchema,
 }).pipe(
   _SS.satisfies.from.json<GetPlaceSubscriptionsCommandPayloadFrom>(),

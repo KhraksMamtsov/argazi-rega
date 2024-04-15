@@ -18,7 +18,7 @@ export const GetUserUseCase = ({ payload }: GetUserCommand) =>
 
     return yield* _(
       prismaClient.queryDecode(
-        Schema.optionFromNullable(UserDbToDomainSchema),
+        Schema.OptionFromNullOr(UserDbToDomainSchema),
         (p) => p.user.findUnique({ where })
       )
     );

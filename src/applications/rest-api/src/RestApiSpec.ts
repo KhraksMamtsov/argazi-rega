@@ -32,9 +32,9 @@ export const RestApiSpec = Api.make({
       ApiGroup.addEndpoint(
         ApiEndpoint.get("healthCheckPing", "/health-check/ping", {}).pipe(
           ApiEndpoint.setRequestQuery(
-            Schema.struct({ echo: Schema.optional(Schema.string) })
+            Schema.Struct({ echo: Schema.optional(Schema.String) })
           ),
-          ApiEndpoint.setResponseBody(Schema.string)
+          ApiEndpoint.setResponseBody(Schema.String)
         )
       )
     )

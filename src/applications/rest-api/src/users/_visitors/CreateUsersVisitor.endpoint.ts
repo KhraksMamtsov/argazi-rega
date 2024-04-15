@@ -49,7 +49,7 @@ export const CreateUsersVisitorRequestBodySchema: Schema.Schema<
 > = _CreateUsersVisitorRequestBodySchema;
 // #endregion CreateUsersVisitorRequestBodySchema
 // #region CreateUsersVisitorRequestParams
-const _CreateUsersVisitorRequestParamsSchema = Schema.struct({
+const _CreateUsersVisitorRequestParamsSchema = Schema.Struct({
   idUser: IdUserSchema,
 }).pipe(Schema.identifier("CreateUsersVisitorRequestParamsSchema"));
 

@@ -14,6 +14,7 @@ export const CreatePlaceUseCase = (command: CreatePlaceCommand) =>
       prismaClient.queryDecode(PlaceDbToDomainSchema, (p) =>
         p.place.create({
           data: {
+            description: command.payload.description,
             idGeoPoint: command.payload.idGeoPoint,
             idUserCreator: command.idInitiator,
             idUserUpdater: command.idInitiator,

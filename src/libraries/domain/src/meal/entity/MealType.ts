@@ -5,6 +5,6 @@ export enum MealType {
   VEGETARIAN = "VEGETARIAN",
 }
 
-export const MealTypeSchema = Schema.enums(MealType).pipe(
+export const MealTypeSchema = Schema.Enums(MealType).pipe(
   Schema.identifier("MealTypeSchema")
 );

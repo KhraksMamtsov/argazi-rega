@@ -1,17 +1,32 @@
-import {} from "@argazi/rest-api";
+import { VisitorType } from "@argazi/domain/Visitor";
 import { Schema } from "@effect/schema";
 
-// type asd = Omit<V.VisitorDataEncoded, "id" | "idUser">;
-
-export const VisitorJsonSchema = Schema.struct({
-  email: Schema.optional(Schema.Trim.pipe(Schema.nonEmpty())),
-  name: Schema.string,
-  type: Schema.transformLiterals(
-    ["ADULT", V.VisitorType.ADULT],
-    ["PENSIONER", V.VisitorType.PENSIONER],
-    ["STUDENT", V.VisitorType.STUDENT]
+export const VisitorJsonSchema = Schema.Struct({
+  email: Schema.optional(
+    Schema.Trim.pipe(
+      Schema.annotations({
+        jsonSchema: { type: "string" },
+        title: "Email",
+      }),
+      Schema.nonEmpty()
+    )
   ),
+  name: Schema.Trim.pipe(
+    Schema.annotations({
+      jsonSchema: { type: "string" },
+      title: "Имя",
+    }),
+    Schema.nonEmpty()
+  ),
+  type: Schema.transformLiterals(
+    ["ADULT", VisitorType.ADULT],
+    ["PENSIONER", VisitorType.PENSIONER],
+    ["STUDENT", VisitorType.STUDENT],
+    ["CHILD", VisitorType.CHILD]
+  ).annotations({
+    default: VisitorType.ADULT,
+    title: "Тип",
+  }),
+}).annotations({
+  title: "👤 Посетитель",
 }); // satisfies Schema.Schema<asd, any>;
-
-// const asd2 = Schema.asSchema(VisitorJsonSchema);
-//    ^?

@@ -32,7 +32,7 @@ export const DeleteUserSubscriptionResponseBodySchema: Schema.Schema<
 // #endregion DeleteUserSubscriptionResponseBodySchema
 
 // #region DeleteUserSubscriptionRequestParams
-const _DeleteUserSubscriptionRequestParamsSchema = Schema.struct({
+const _DeleteUserSubscriptionRequestParamsSchema = Schema.Struct({
   idSubscription: IdSubscriptionSchema,
   idUser: IdUserSchema,
 }).pipe(Schema.identifier("DeleteUserSubscriptionRequestParamsSchema"));

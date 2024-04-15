@@ -12,7 +12,7 @@ export const GetPlaceSubscriptionsResponseSchema = SubscriptionApiSchema.pipe(
 );
 
 // #region GetPlaceSubscriptionsRequestPath
-const _GetPlaceSubscriptionsRequestPathSchema = Schema.struct({
+const _GetPlaceSubscriptionsRequestPathSchema = Schema.Struct({
   idPlace: IdPlaceSchema,
 }).pipe(Schema.identifier("GetPlaceSubscriptionsRequestPathSchema"));
 
@@ -44,7 +44,7 @@ export const GetPlaceSubscriptionsEndpoint = ApiEndpoint.get(
   ApiEndpoint.addResponse(
     ApiResponse.make(
       404,
-      Schema.string.pipe(Schema.description("PlaceSubscriptions not found"))
+      Schema.String.pipe(Schema.description("PlaceSubscriptions not found"))
     )
   )
 );

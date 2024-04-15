@@ -28,7 +28,7 @@ export const ReturnTicketResponseBodySchema: Schema.Schema<
 // #endregion ReturnTicketResponseBodySchema
 
 // #region ReturnTicketRequestParams
-const _ReturnTicketRequestParamsSchema = Schema.struct({
+const _ReturnTicketRequestParamsSchema = Schema.Struct({
   idTicket: IdTicketSchema,
   idUser: IdUserSchema,
 }).pipe(Schema.identifier("ReturnTicketRequestParamsSchema"));

@@ -38,20 +38,20 @@ export const DwbnOAuth2Service = Effect.gen(function* (_) {
         clientWithBaseUrl,
         Effect.flatMap(
           HttpClient.response.schemaBodyJson(
-            Schema.struct({
+            Schema.Struct({
               id_token: Schema.compose(
                 _JWTSchema.JWTStructSchema,
-                Schema.tuple(
-                  Schema.string,
+                Schema.Tuple(
+                  Schema.String,
                   Schema.parseJson(
-                    Schema.struct({
-                      email: Schema.string,
-                      family_name: Schema.string,
-                      given_name: Schema.string,
+                    Schema.Struct({
+                      email: Schema.String,
+                      family_name: Schema.String,
+                      given_name: Schema.String,
                       sub: IdDwbnSchema,
                     })
                   ),
-                  Schema.string
+                  Schema.String
                 )
               ),
             })

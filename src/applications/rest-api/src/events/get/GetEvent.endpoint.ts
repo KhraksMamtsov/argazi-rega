@@ -21,7 +21,7 @@ export const GetEventResponseBodySchema: Schema.Schema<
   GetEventResponseBodyFrom
 > = _GetEventResponseBodySchema;
 
-export const _GetEventRequestPathSchema = Schema.struct({
+export const _GetEventRequestPathSchema = Schema.Struct({
   idEvent: IdEventSchema,
 });
 

@@ -6,13 +6,13 @@ import { DateDeletedSchema } from "../../value-objects/DateDeleted.js";
 import { DateUpdatedSchema } from "../../value-objects/DateUpdated.js";
 
 // #region Meta
-const _MetaSchema = Schema.struct({
+const _MetaSchema = Schema.Struct({
   dateCreated: DateCreatedSchema,
-  dateDeleted: Schema.optionFromSelf(DateDeletedSchema),
+  dateDeleted: Schema.OptionFromSelf(DateDeletedSchema),
   dateUpdated: DateUpdatedSchema,
   //
   idUserCreator: IdUserSchema,
-  idUserDeleter: Schema.optionFromSelf(IdUserSchema),
+  idUserDeleter: Schema.OptionFromSelf(IdUserSchema),
   idUserUpdater: IdUserSchema,
 }).pipe(Schema.typeSchema, Schema.identifier("MetaSchema"));
 

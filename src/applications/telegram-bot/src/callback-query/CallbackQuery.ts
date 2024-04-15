@@ -6,36 +6,36 @@ import { IdPlaceSchema } from "@argazi/domain";
 import { IdSubscriptionSchema } from "@argazi/domain";
 import { IdTicketSchema, type IdTicket } from "@argazi/domain";
 
-const _CallbackQueryEntitySchema = Schema.union(
-  Schema.struct({
-    action: Schema.literal("create"),
+const _CallbackQueryEntitySchema = Schema.Union(
+  Schema.Struct({
+    action: Schema.Literal("create"),
     id: IdEventSchema,
-    type: Schema.literal("Ticket"),
+    type: Schema.Literal("Ticket"),
   }),
-  Schema.struct({
-    action: Schema.literal("delete"),
+  Schema.Struct({
+    action: Schema.Literal("delete"),
     id: IdTicketSchema,
-    type: Schema.literal("Ticket"),
+    type: Schema.Literal("Ticket"),
   }),
-  Schema.struct({
-    action: Schema.literal("delete"),
+  Schema.Struct({
+    action: Schema.Literal("delete"),
     id: IdVisitorSchema,
-    type: Schema.literal("Visitor"),
+    type: Schema.Literal("Visitor"),
   }),
-  Schema.struct({
-    action: Schema.literal("create"),
+  Schema.Struct({
+    action: Schema.Literal("create"),
     id: IdPlaceSchema,
-    type: Schema.literal("Subscription"),
+    type: Schema.Literal("Subscription"),
   }),
-  Schema.struct({
-    action: Schema.literal("delete"),
+  Schema.Struct({
+    action: Schema.Literal("delete"),
     id: IdSubscriptionSchema,
-    type: Schema.literal("Subscription"),
+    type: Schema.Literal("Subscription"),
   }),
-  Schema.struct({
-    action: Schema.literal("get"),
+  Schema.Struct({
+    action: Schema.Literal("get"),
     id: IdPlaceSchema,
-    type: Schema.literal("Place"),
+    type: Schema.Literal("Place"),
   })
 ).pipe(
   Schema.typeSchema,
@@ -85,52 +85,56 @@ const isMinifiedTypeFrom = Schema.is(Schema.encodedSchema(MinifiedTypeSchema));
 const isUUID = Schema.is(Schema.UUID);
 
 export const CallbackQueryEntitySchema = Schema.transformOrFail(
-  Schema.string,
+  Schema.String,
   _CallbackQueryEntitySchema,
-  (x, _, ast) => {
-    const splitten = x.split("|");
-    if (splitten.length !== 3) {
-      return ParseResult.fail(new ParseResult.Type(ast, x));
-    }
+  {
+    decode: (x, _, ast) => {
+      const splitten = x.split("|");
+      if (splitten.length !== 3) {
+        return ParseResult.fail(new ParseResult.Type(ast, x));
+      }
 
-    const [_action, _type, id] = splitten as [string, string, string];
+      const [_action, _type, id] = splitten as [string, string, string];
 
-    if (!isMinifiedActionFrom(_action)) {
-      return ParseResult.fail(
-        new ParseResult.Type(ast, _action, "action is not c | d | g")
+      if (!isMinifiedActionFrom(_action)) {
+        return ParseResult.fail(
+          new ParseResult.Type(ast, _action, "action is not c | d | g")
+        );
+      }
+      if (!isMinifiedTypeFrom(_type)) {
+        return ParseResult.fail(
+          new ParseResult.Type(ast, _action, "type is not minified")
+        );
+      }
+      if (!isUUID(id)) {
+        return ParseResult.fail(
+          new ParseResult.Type(ast, id, "id is not UUID")
+        );
+      }
+
+      return Effect.all({
+        action: decodeMinifiedActionSchema(_action),
+        type: decodeMinifiedTypeSchema(_type),
+      }).pipe(
+        Effect.mapError((x) => x.error),
+        Effect.map(
+          (x) =>
+            ({
+              ...x,
+              id: id as IdEvent | IdTicket,
+            }) as const
+        )
       );
-    }
-    if (!isMinifiedTypeFrom(_type)) {
-      return ParseResult.fail(
-        new ParseResult.Type(ast, _action, "type is not minified")
-      );
-    }
-    if (!isUUID(id)) {
-      return ParseResult.fail(new ParseResult.Type(ast, id, "id is not UUID"));
-    }
-
-    return Effect.all({
-      action: decodeMinifiedActionSchema(_action),
-      type: decodeMinifiedTypeSchema(_type),
-    }).pipe(
-      Effect.mapError((x) => x.error),
-      Effect.map(
-        (x) =>
-          ({
-            ...x,
-            id: id as IdEvent | IdTicket,
-          }) as const
-      )
-    );
-  },
-  (data) =>
-    Effect.all({
-      action: encodeMinifiedActionSchema(data.action),
-      type: encodeMinifiedTypeSchema(data.type),
-    }).pipe(
-      Effect.mapError((x) => x.error),
-      Effect.map((x) => [x.action, x.type, data.id].join("|"))
-    )
+    },
+    encode: (data) =>
+      Effect.all({
+        action: encodeMinifiedActionSchema(data.action),
+        type: encodeMinifiedTypeSchema(data.type),
+      }).pipe(
+        Effect.mapError((x) => x.error),
+        Effect.map((x) => [x.action, x.type, data.id].join("|"))
+      ),
+  }
 );
 
 export const decode = Schema.decode(CallbackQueryEntitySchema);

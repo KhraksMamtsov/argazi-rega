@@ -11,10 +11,11 @@ import { BaseDbSchema, transform } from "../Base.db.js";
 import type { Place as _Place } from "@prisma/client";
 
 // #region PlaceDb
-const _PlaceDbSchema = Schema.struct({
+const _PlaceDbSchema = Schema.Struct({
   id: IdPlaceSchema,
   idGeoPoint: IdGeoPointSchema,
-  name: Schema.string,
+  name: Schema.String,
+  description: Schema.String,
 }).pipe(
   _SS.satisfies.to<PlaceBase>(),
   Schema.extend(BaseDbSchema),

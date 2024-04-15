@@ -7,7 +7,7 @@ import type { SubscriptionBase } from "@argazi/domain";
 import { _SS } from "@argazi/shared";
 
 // #region SubscriptionApi
-const _SubscriptionApiSchema = Schema.struct({
+const _SubscriptionApiSchema = Schema.Struct({
   id: IdSubscriptionSchema,
   idPlace: IdPlaceSchema,
   idUser: IdUserSchema,

@@ -29,10 +29,11 @@ export const CreatePlaceRequestBodySchema: Schema.Schema<
 // #endregion CreatePlaceRequestBodySchema
 
 // #region Schema for CreatePlaceResponse
-const _CreatePlaceResponseSchema = Schema.struct({
+const _CreatePlaceResponseSchema = Schema.Struct({
   id: IdPlaceSchema,
   idGeoPoint: IdGeoPointSchema,
   name: Schema.compose(Schema.Trim, Schema.NonEmpty),
+  description: Schema.compose(Schema.Trim, Schema.NonEmpty),
 }).pipe(
   _SS.satisfies.to<PlaceBase>(),
   _SS.satisfies.from.json(),

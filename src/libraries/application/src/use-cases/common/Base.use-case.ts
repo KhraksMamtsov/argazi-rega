@@ -33,7 +33,7 @@ export const BaseCausedUseCaseFor =
 
       const initiator = yield* _(
         prismaService.queryDecode(
-          Schema.optionFromNullable(UserDbToDomainSchema),
+          Schema.OptionFromNullOr(UserDbToDomainSchema),
           (p) => p.user.findUnique({ where: { id: command.idInitiator } })
         ),
         Effect.flatMap(
@@ -77,7 +77,7 @@ export const BaseGetCausedUseCaseFor =
 
       const initiator = yield* _(
         prismaService.queryDecode(
-          Schema.optionFromNullable(UserDbToDomainSchema),
+          Schema.OptionFromNullOr(UserDbToDomainSchema),
           (p) => p.user.findUnique({ where: { id: command.idInitiator } })
         ),
         Effect.flatMap(

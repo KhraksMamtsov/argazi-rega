@@ -10,15 +10,15 @@ import {
 } from "@argazi/domain";
 import { _SS, _S } from "@argazi/shared";
 
-export const ApiBaseSchema = Schema.struct({
-  meta: Schema.struct({
+export const ApiBaseSchema = Schema.Struct({
+  meta: Schema.Struct({
     dateCreated: Schema.compose(Schema.DateFromString, DateCreatedSchema),
-    dateDeleted: Schema.optionFromNullable(
+    dateDeleted: Schema.OptionFromNullOr(
       Schema.compose(Schema.DateFromString, DateDeletedSchema)
     ),
     dateUpdated: Schema.compose(Schema.DateFromString, DateUpdatedSchema),
     idUserCreator: IdUserSchema,
-    idUserDeleter: Schema.optionFromNullable(IdUserSchema),
+    idUserDeleter: Schema.OptionFromNullOr(IdUserSchema),
     idUserUpdater: IdUserSchema,
   }).pipe(_SS.satisfies.from.json(), Schema.identifier("ApiMetaSchema")),
 }).pipe(
@@ -40,10 +40,9 @@ export const _BaseResponseFor = <R, I extends _S.Json.Json, A, R1, I1, A1>(
   const extendedData = map(data);
 
   return Schema.transform(
-    Schema.struct({ data: Schema.encodedSchema(extendedData) }),
+    Schema.Struct({ data: Schema.encodedSchema(extendedData) }),
     extendedData,
-    (from) => from.data,
-    (to) => ({ data: to })
+    { decode: (from) => from.data, encode: (to) => ({ data: to }) }
   ).pipe(Schema.identifier(baseAnnotation));
 };
 
@@ -55,14 +54,12 @@ export const BaseResponseManyFor = <A, I extends _S.Json.Json, R>(
   data: Schema.Schema<A, I, R>
 ) =>
   _BaseResponseFor(data, (x) =>
-    Schema.array(x.pipe(Schema.extend(ApiBaseSchema)))
+    Schema.Array(x.pipe(Schema.extend(ApiBaseSchema)))
   );
 
 export const BaseResponseOptionManyFor = <A, I extends _S.Json.Json, R>(
   data: Schema.Schema<A, I, R>
 ) =>
   _BaseResponseFor(data, (x) =>
-    Schema.array(
-      Schema.optionFromNullable(x.pipe(Schema.extend(ApiBaseSchema)))
-    )
+    Schema.Array(Schema.OptionFromNullOr(x.pipe(Schema.extend(ApiBaseSchema))))
   );

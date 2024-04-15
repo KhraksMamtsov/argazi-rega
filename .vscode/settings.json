@@ -1,13 +1,13 @@
 {
-	"editor.codeActionsOnSave": {
-		"source.fixAll.eslint": "explicit"
-	},
-	"eslint.validate": [
-		"javascript",
-		"typescript"
-	],
-	"typescript.tsdk": "node_modules/typescript/lib",
-	"cSpell.words": [
-		"Argazipa"
-	]
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "explicit"
+  },
+  // "[vue]": {
+  // 	"editor.codeActionsOnSave": {
+  // 		"source.fixAll.eslint": false
+  // 	}
+  // },
+  "eslint.validate": ["javascript", "typescript", "javascriptreact", "vue"],
+  "typescript.tsdk": "node_modules/typescript/lib",
+  "cSpell.words": ["Argazipa"]
 }

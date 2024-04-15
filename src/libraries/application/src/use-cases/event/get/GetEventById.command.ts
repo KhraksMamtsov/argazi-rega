@@ -9,7 +9,7 @@ export type GetEventByIdCommandPayloadFrom = {
   readonly id: string;
 };
 
-export const GetEventByIdCommandPayloadSchema = Schema.struct({
+export const GetEventByIdCommandPayloadSchema = Schema.Struct({
   id: IdEventSchema,
 }).pipe(
   _SS.satisfies.from.json<GetEventByIdCommandPayloadFrom>(),

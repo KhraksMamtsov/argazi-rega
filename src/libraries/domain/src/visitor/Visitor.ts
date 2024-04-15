@@ -7,8 +7,8 @@ import { BaseSchema } from "../entities/common/Base.js";
 import { IdUserSchema } from "../user/entity/IdUser.js";
 
 // #region VisitorData
-export const _VisitorDataSchema = Schema.struct({
-  email: Schema.optionFromSelf(Schema.Trim.pipe(Schema.nonEmpty())),
+export const _VisitorDataSchema = Schema.Struct({
+  email: Schema.OptionFromSelf(Schema.Trim.pipe(Schema.nonEmpty())),
   id: IdVisitorSchema,
   idUser: IdUserSchema,
   name: Schema.Trim.pipe(Schema.nonEmpty()),

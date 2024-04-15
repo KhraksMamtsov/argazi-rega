@@ -3,7 +3,7 @@ import { Schema } from "@effect/schema";
 export const IdTelegramChatSymbol: unique symbol = Symbol.for(
   "IdTelegramChatSymbol"
 );
-export const IdTelegramChatSchema = Schema.number.pipe(
+export const IdTelegramChatSchema = Schema.Number.pipe(
   Schema.identifier("IdTelegramChatSchema"),
   Schema.brand(IdTelegramChatSymbol)
 );

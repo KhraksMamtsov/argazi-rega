@@ -5,7 +5,7 @@ import { _SS } from "@argazi/shared";
 
 import { BaseCausedCommandFor } from "../../../common/Base.command.js";
 
-export const GetPlaceGeoPointCommandPayloadSchema = Schema.struct({
+export const GetPlaceGeoPointCommandPayloadSchema = Schema.Struct({
   idPlace: IdPlaceSchema,
 }).pipe(
   _SS.satisfies.from.json(),

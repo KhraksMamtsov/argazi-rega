@@ -13,10 +13,10 @@ export const CreateTicketResponseSchema = TicketApiSchema.pipe(
 );
 
 export const CreateTicketRequest = {
-  body: Schema.struct({
+  body: Schema.Struct({
     idEvent: IdEventSchema,
   }),
-  params: Schema.struct({
+  params: Schema.Struct({
     idUser: IdUserSchema,
   }),
 };
@@ -27,7 +27,7 @@ export const CreateTicketResponse = [
     status: 200 as const,
   },
   {
-    content: Schema.string,
+    content: Schema.String,
     status: 404 as const,
   },
 ] as const;
