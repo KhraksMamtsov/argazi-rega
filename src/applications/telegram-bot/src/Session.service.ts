@@ -33,8 +33,8 @@ export const makeLive = () =>
               onFailure: Effect.logError,
               onSuccess: Effect.logInfo,
             }),
-            Effect.andThen(Effect.unit),
-            Effect.catchAll((_) => Effect.unit)
+            Effect.andThen(Effect.void),
+            Effect.catchAll((_) => Effect.void)
           )
           .pipe(
             Effect.withLogSpan("SessionService.set"),
@@ -51,8 +51,8 @@ export const makeLive = () =>
               onFailure: Effect.logError,
               onSuccess: Effect.logInfo,
             }),
-            Effect.andThen(Effect.unit),
-            Effect.catchAll((_) => Effect.unit)
+            Effect.andThen(Effect.void),
+            Effect.catchAll((_) => Effect.void)
           )
           .pipe(
             Effect.withLogSpan("SessionService.logout"),

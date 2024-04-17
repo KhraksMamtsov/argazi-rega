@@ -1,4 +1,4 @@
-import { Effect, flow, Option, pipe, ReadonlyArray } from "effect";
+import { Effect, flow, Option, pipe, Array } from "effect";
 import { Markup } from "telegraf";
 
 import { _RA } from "@argazi/shared";
@@ -36,7 +36,7 @@ export const EventsCommandHandler = (args: {
 
     const userPlacesActualEvents = yield* _(
       userSubscriptions,
-      ReadonlyArray.map((x) =>
+      Array.map((x) =>
         restApiUserClient.getPlaceActualEvents({
           path: { idPlace: x.idPlace },
         })
@@ -44,7 +44,7 @@ export const EventsCommandHandler = (args: {
       Effect.allWith({
         concurrency: 4,
       }),
-      Effect.map(flow(ReadonlyArray.flatten, _RA.fromArray)),
+      Effect.map(flow(Array.flatten, _RA.fromArray)),
       Effect.tapBoth({
         onFailure: Effect.logError,
         onSuccess: Effect.logInfo,
@@ -55,7 +55,7 @@ export const EventsCommandHandler = (args: {
       userPlacesActualEvents,
       Option.match({
         onNone: () =>
-          ReadonlyArray.of(
+          Array.of(
             ArgazipaSayMdComponent({
               emotion: "😳",
               phrase: "Нет актуальных событий",
@@ -63,8 +63,8 @@ export const EventsCommandHandler = (args: {
               Effect.flatMap((x) => args.command.replyWithMarkdown(x, {}))
             )
           ),
-        onSome: ReadonlyArray.map((actualEvent) => {
-          const eventTicket = ReadonlyArray.findFirst(
+        onSome: Array.map((actualEvent) => {
+          const eventTicket = Array.findFirst(
             userTickets,
             (x) => x.idEvent === actualEvent.id
           );

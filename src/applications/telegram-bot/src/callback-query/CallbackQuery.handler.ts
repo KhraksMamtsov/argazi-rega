@@ -132,5 +132,5 @@ export const CallbackQueryHandler = (args: {
       }
     }
 
-    return absurd<typeof Effect.unit>(callbackQuery);
+    return absurd<typeof Effect.void>(callbackQuery);
   });

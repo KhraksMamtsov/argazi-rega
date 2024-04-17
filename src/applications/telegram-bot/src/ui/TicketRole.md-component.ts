@@ -1,10 +1,10 @@
-import { Effect, ReadonlyRecord } from "effect";
+import { Effect, Record } from "effect";
 
 import { TicketRole } from "@argazi/domain";
 
 import { MD } from "./Markdown.js";
 
-const tickerRoleToString: ReadonlyRecord.ReadonlyRecord<TicketRole, string> = {
+const tickerRoleToString: Record.Record<TicketRole, string> = {
   [TicketRole.ADMIN]: "Админ",
   [TicketRole.CASHIER]: "Кассир",
   [TicketRole.CHIEF]: "Шеф",
@@ -12,7 +12,7 @@ const tickerRoleToString: ReadonlyRecord.ReadonlyRecord<TicketRole, string> = {
   [TicketRole.NONE]: "Участник",
 };
 
-const tickerRoleToEmoji: ReadonlyRecord.ReadonlyRecord<TicketRole, string> = {
+const tickerRoleToEmoji: Record.Record<TicketRole, string> = {
   [TicketRole.ADMIN]: "🧑‍🚒",
   [TicketRole.CASHIER]: "🧑‍💼",
   [TicketRole.CHIEF]: "🧑‍🍳",

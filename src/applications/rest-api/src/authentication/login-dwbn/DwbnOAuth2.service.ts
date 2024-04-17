@@ -1,7 +1,7 @@
 import { HttpClient } from "@effect/platform";
 import * as UrlParams from "@effect/platform/Http/UrlParams";
 import { Schema } from "@effect/schema";
-import { Config, Effect, ReadonlyRecord, Secret } from "effect";
+import { Config, Effect, Record, Secret } from "effect";
 
 import { IdDwbnSchema } from "@argazi/domain";
 import { _JWTSchema } from "@argazi/shared";
@@ -13,7 +13,7 @@ export const DwbnOAuth2Service = Effect.gen(function* (_) {
       dwbnOauth2URL: Config.secret("DWBN_SSO_OAUTH2_URL"),
       redirectURL: Config.secret("DWBN_SSO_REDIRECT_URL"),
     }),
-    Effect.map(ReadonlyRecord.map(Secret.value))
+    Effect.map(Record.map(Secret.value))
   );
 
   const defaultClient = yield* _(HttpClient.client.Client);

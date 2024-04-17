@@ -14,7 +14,7 @@ export enum TelegrafErrorType {
 export class TelegrafCtxSendMessageError extends Data.TaggedError(
   TelegrafErrorType.SEND_MESSAGE
 )<{
-  readonly args: ReadonlyArray<unknown>;
+  readonly args: Array<unknown>;
   readonly error: unknown;
 }> {} //
 
@@ -68,7 +68,7 @@ export class TelegrafTag extends Effect.Tag("Telegraf")<
           // eslint-disable-next-line @typescript-eslint/no-invalid-void-type
           Effect.async<void>((resume) => {
             return void telegrafClient.launch(() => {
-              resume(Effect.unit);
+              resume(Effect.void);
             });
           }),
           (_, exit) =>

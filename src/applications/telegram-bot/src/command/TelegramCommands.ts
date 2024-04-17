@@ -43,4 +43,4 @@ export const TelegramCommands = [
   Me,
   MyEvents,
   MyVisitors,
-] as const satisfies ReadonlyArray<TelegramCommand<string>>;
+] as const satisfies Array<TelegramCommand<string>>;

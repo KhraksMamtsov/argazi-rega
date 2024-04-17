@@ -1,4 +1,4 @@
-import { Effect, ReadonlyArray } from "effect";
+import { Effect, Array } from "effect";
 
 import type { User } from "@argazi/domain";
 
@@ -16,9 +16,9 @@ export const UserCreatedNotificationHandler = (args: {
 
     return yield* _(
       [args.initiator, args.createdUser],
-      ReadonlyArray.map((x) => x.idTelegramChat),
+      Array.map((x) => x.idTelegramChat),
       (x) => [...new Set(x)],
-      ReadonlyArray.map((x) =>
+      Array.map((x) =>
         MD.document(
           ArgazipaSayMdComponent({
             emotion: "ℹ️",

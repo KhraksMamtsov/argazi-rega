@@ -1,5 +1,5 @@
 import { AST, Schema } from "@effect/schema";
-import { Effect, flow, identity, Option, pipe, ReadonlyArray } from "effect";
+import { Effect, flow, identity, Option, pipe, Array } from "effect";
 
 // eslint-disable-next-line @typescript-eslint/no-namespace
 export namespace Json {
@@ -68,7 +68,7 @@ export const OptionNonEmptyArray = <R, I, A>(item: Schema.Schema<A, I, R>) =>
     Schema.OptionFromSelf(Schema.NonEmptyArray(Schema.typeSchema(item))),
     {
       decode: (ss) =>
-        ReadonlyArray.match(ss, {
+        Array.match(ss, {
           onEmpty: () => Option.none(),
           onNonEmpty: (x) => Option.some(x),
         }),

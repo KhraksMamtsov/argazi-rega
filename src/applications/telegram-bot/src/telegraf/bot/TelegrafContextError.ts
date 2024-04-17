@@ -11,7 +11,7 @@ export enum TelegrafContextErrorType {
 export class TelegrafCtxSendMessageError extends Data.TaggedError(
   TelegrafContextErrorType.SEND_MESSAGE
 )<{
-  readonly args: ReadonlyArray<unknown>;
+  readonly args: Array<unknown>;
   readonly error: unknown;
 }> {}
 

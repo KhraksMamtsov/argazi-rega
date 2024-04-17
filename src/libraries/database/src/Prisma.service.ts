@@ -2,8 +2,6 @@ import { Schema, ParseResult } from "@effect/schema";
 import { PrismaClient } from "@prisma/client";
 import { Config, Data, Effect, Layer, pipe, Secret } from "effect";
 
-import type { NoInfer } from "effect/Types";
-
 export class PrismaDecodeError extends Data.TaggedError("PrismaDecodeError")<{
   readonly cause: ParseResult.ParseError;
 }> {}

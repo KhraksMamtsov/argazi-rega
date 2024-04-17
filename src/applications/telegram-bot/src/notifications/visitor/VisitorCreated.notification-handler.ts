@@ -1,4 +1,4 @@
-import { Effect, ReadonlyArray } from "effect";
+import { Effect, Array } from "effect";
 import { Markup } from "telegraf";
 
 import type { User, Visitor } from "@argazi/domain";
@@ -19,9 +19,9 @@ export const VisitorCreatedNotificationHandler = (args: {
 
     return yield* _(
       [args.initiator, args.visitorsUser],
-      ReadonlyArray.map((x) => x.idTelegramChat),
+      Array.map((x) => x.idTelegramChat),
       (x) => [...new Set(x)],
-      ReadonlyArray.map((x) =>
+      Array.map((x) =>
         Effect.all({
           button: DeleteVisitorCbButton({ idVisitor: args.createdVisitor.id }),
           markup: MD.document(

@@ -40,7 +40,7 @@ const toEffect = <T, A = never, E = never, R = never>(
 
 const esc = <E = never, R = never>(
   stringsForEscape: TemplateStringsArray,
-  ...values: ReadonlyArray<string | Effect.Effect<string, E, R>>
+  ...values: Array<string | Effect.Effect<string, E, R>>
 ) =>
   Effect.gen(function* (_) {
     let result = "";
@@ -65,13 +65,13 @@ type DLOptions = {
 
 const join =
   (separator: string) =>
-  (...strings: ReadonlyArray<string>) =>
+  (...strings: Array<string>) =>
     strings.join(separator);
 
 const dl =
   (options?: DLOptions) =>
   <E1 = never, R1 = never, E2 = never, R2 = never>(
-    ...items: ReadonlyArray<
+    ...items: Array<
       [
         dt: string | Effect.Effect<string, E1, R1>,
         dd: string | Effect.Effect<string, E2, R2>,
@@ -109,7 +109,7 @@ export const MD = {
     codeBlockWrap(language + "\n" + code),
   dl,
   document: <E = never, R = never>(
-    ...lines: ReadonlyArray<string | Effect.Effect<string, E, R>>
+    ...lines: Array<string | Effect.Effect<string, E, R>>
   ) =>
     Effect.all(lines.map((line) => toEffect(line, Effect.succeed))).pipe(
       Effect.map((x) => x.join("\n"))
@@ -123,7 +123,7 @@ export const MD = {
   italic: wrap("_"),
   join: join,
   line: <E = never, R = never>(
-    ...parts: ReadonlyArray<string | Effect.Effect<string, E, R>>
+    ...parts: Array<string | Effect.Effect<string, E, R>>
   ) =>
     Effect.all(parts.map((part) => toEffect(part, Effect.succeed))).pipe(
       Effect.map((x) => x.join(""))

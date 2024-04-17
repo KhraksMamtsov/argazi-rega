@@ -6,7 +6,7 @@ interface LogItem<T, K extends keyof T, B extends T[K]> {
 }
 
 interface ChangeResult<T, K extends keyof T, B extends T[K]> {
-  readonly log: ReadonlyArray<LogItem<T, K, B>>;
+  readonly log: Array<LogItem<T, K, B>>;
   readonly result: T;
 }
 

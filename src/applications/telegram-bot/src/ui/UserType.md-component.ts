@@ -1,10 +1,10 @@
-import { Effect, ReadonlyRecord } from "effect";
+import { Effect, Record } from "effect";
 
 import { UserType } from "@argazi/domain";
 
 import { MD } from "./Markdown.js";
 
-const userTypToString: ReadonlyRecord.ReadonlyRecord<UserType, string> = {
+const userTypToString: Record.Record<UserType, string> = {
   [UserType.ADULT]: "Взрослый",
   [UserType.PENSIONER]: "Пенсионер",
   [UserType.STUDENT]: "Студент",

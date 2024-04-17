@@ -85,7 +85,7 @@ export const NotificationsHandler = (args: {
           })
         );
 
-        return Effect.unit;
+        return Effect.void;
       }
 
       if (notification.issue === "deleted") {
@@ -97,7 +97,7 @@ export const NotificationsHandler = (args: {
           })
         );
 
-        return Effect.unit;
+        return Effect.void;
       }
     }
 

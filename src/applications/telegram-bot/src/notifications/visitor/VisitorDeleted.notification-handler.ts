@@ -1,4 +1,4 @@
-import { Effect, ReadonlyArray } from "effect";
+import { Effect, Array } from "effect";
 
 import type { User, Visitor } from "@argazi/domain";
 
@@ -17,9 +17,9 @@ export const VisitorDeletedNotificationHandler = (args: {
 
     return yield* _(
       [args.initiator, args.visitorsUser],
-      ReadonlyArray.map((x) => x.idTelegramChat),
+      Array.map((x) => x.idTelegramChat),
       (x) => [...new Set(x)],
-      ReadonlyArray.map((x) =>
+      Array.map((x) =>
         Effect.all({
           markup: MD.document(
             ArgazipaSayMdComponent({

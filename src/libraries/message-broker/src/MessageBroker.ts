@@ -5,7 +5,7 @@ import {
   Effect,
   Secret,
   Config,
-  ReadonlyRecord,
+  Record,
   Chunk,
   StreamEmit,
   flow,
@@ -40,7 +40,7 @@ const RabbitMQService = Effect.gen(function* (_) {
       port: Config.secret("RABBITMQ_PORT"),
       username: Config.secret("RABBITMQ_DEFAULT_USER"),
     }),
-    Effect.map(ReadonlyRecord.map(Secret.value))
+    Effect.map(Record.map(Secret.value))
   );
 
   const connection = yield* _(
@@ -156,7 +156,7 @@ export const live = Effect.gen(function* (_) {
         ack: (...args: _TS.Tail<Parameters<typeof rabbitMQService.ack>>) =>
           rabbitMQService
             .ack(context.message, ...args)
-            .pipe(Effect.catchAll(() => Effect.unit)),
+            .pipe(Effect.catchAll(() => Effect.void)),
         notification: context.notification,
       }))
     ),

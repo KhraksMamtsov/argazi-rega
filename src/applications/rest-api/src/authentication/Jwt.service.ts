@@ -1,5 +1,5 @@
 import { Schema, ParseResult } from "@effect/schema";
-import { Config, Effect, Layer, ReadonlyRecord, Secret, Data } from "effect";
+import { Config, Effect, Layer, Record, Secret, Data } from "effect";
 
 import { IdUserSchema } from "@argazi/domain";
 import { _SS, _JWT } from "@argazi/shared";
@@ -55,7 +55,7 @@ const makeLive = () =>
         refreshTokenSecret: Config.secret("JWT_REFRESH_TOKEN_SECRET"),
         refreshTokenTtl: Config.secret("JWT_REFRESH_TOKEN_TTL"),
       }),
-      Effect.map(ReadonlyRecord.map(Secret.value))
+      Effect.map(Record.map(Secret.value))
     );
 
     return {

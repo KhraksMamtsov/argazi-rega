@@ -1,4 +1,4 @@
-import { ReadonlyRecord, Data } from "effect";
+import { Record, Data } from "effect";
 
 enum AMQPErrorTag {
   ACK = "ACK::AMQPErrorTag",
@@ -11,7 +11,7 @@ enum AMQPErrorTag {
 
 export class ConnectError extends Data.TaggedError(AMQPErrorTag.CONNECT)<{
   readonly cause: unknown;
-  readonly config: ReadonlyRecord.ReadonlyRecord<string, string>;
+  readonly config: Record.ReadonlyRecord<string, string>;
 }> {}
 export class AckError extends Data.TaggedError(AMQPErrorTag.ACK)<{
   readonly cause: unknown;

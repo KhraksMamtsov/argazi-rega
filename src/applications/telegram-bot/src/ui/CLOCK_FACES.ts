@@ -1,6 +1,6 @@
 type Time = readonly [hours: number, minutes: number];
 
-export const CLOCK_FACES: ReadonlyArray<{
+export const CLOCK_FACES: Array<{
   face: string;
   time: readonly [Time, Time];
 }> = [

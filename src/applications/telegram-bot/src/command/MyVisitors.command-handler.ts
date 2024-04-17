@@ -1,4 +1,4 @@
-import { Effect, pipe, ReadonlyArray } from "effect";
+import { Effect, pipe, Array } from "effect";
 import { Markup } from "telegraf";
 
 import { MyVisitors } from "./TelegramCommands.js";
@@ -23,9 +23,9 @@ export const MyVisitorsCommandHandler = (args: {
 
     const replies = pipe(
       myVisitors,
-      ReadonlyArray.match({
+      Array.match({
         onEmpty: () =>
-          ReadonlyArray.of(
+          Array.of(
             ArgazipaSayMdComponent({
               emotion: "😳",
               phrase: "У вас нет посетителей",
@@ -33,7 +33,7 @@ export const MyVisitorsCommandHandler = (args: {
               Effect.flatMap((x) => args.command.replyWithMarkdown(x, {}))
             )
           ),
-        onNonEmpty: ReadonlyArray.map((visitor) =>
+        onNonEmpty: Array.map((visitor) =>
           Effect.all({
             button: DeleteVisitorCbButton({ idVisitor: visitor.id }),
             markup: VisitorMdComponent({ visitor }),

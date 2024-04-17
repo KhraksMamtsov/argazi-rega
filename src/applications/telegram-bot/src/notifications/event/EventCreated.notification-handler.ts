@@ -1,4 +1,4 @@
-import { Effect, Option, ReadonlyArray } from "effect";
+import { Effect, Option, Array } from "effect";
 import { Markup } from "telegraf";
 
 import type { Event } from "@argazi/domain";
@@ -17,7 +17,7 @@ export const EventCreatedNotificationHandler = (args: {
   Effect.gen(function* (_) {
     const telegraf = yield* _(TelegrafTag);
 
-    let subscribers: ReadonlyArray<Option.Option<User>> = [];
+    let subscribers: Array<Option.Option<User>> = [];
 
     const restApiClient = yield* _(RestApiServiceTag);
 
@@ -49,10 +49,10 @@ export const EventCreatedNotificationHandler = (args: {
     );
 
     return yield* _(
-      [args.initiator, ...ReadonlyArray.getSomes(subscribers)],
-      ReadonlyArray.map((x) => x.idTelegramChat),
+      [args.initiator, ...Array.getSomes(subscribers)],
+      Array.map((x) => x.idTelegramChat),
       (x) => [...new Set(x)],
-      ReadonlyArray.map((x) => {
+      Array.map((x) => {
         return answer.pipe(
           Effect.flatMap((data) =>
             telegraf.sendMessage(x, data[1], Markup.inlineKeyboard([data[0]]))

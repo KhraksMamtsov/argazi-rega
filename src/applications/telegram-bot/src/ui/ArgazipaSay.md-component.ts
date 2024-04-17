@@ -48,7 +48,7 @@ export const ArgazipaEmotion = {
 
 export const ArgazipaSayMdComponent = (props: {
   emotion: string;
-  phrase: string | ReadonlyArray<string>;
+  phrase: string | Array<string>;
 }) =>
   Effect.gen(function* (_) {
     return yield* _(
