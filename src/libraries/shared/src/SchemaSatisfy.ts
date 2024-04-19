@@ -4,22 +4,32 @@ import { type Json } from "./Schema.js";
 
 const encoded =
   <Encoded>() =>
-  <R, Type>(schema: Schema.Schema<Type, Encoded, R>) =>
+  <Context, Type>(schema: Schema.Schema<Type, Encoded, Context>) =>
     schema;
 
 encoded.json =
   <Encoded extends Json.Json>() =>
-  <R, Type>(schema: Schema.Schema<Type, Encoded, R>) =>
+  <Context, Type>(schema: Schema.Schema<Type, Encoded, Context>) =>
     schema;
 
 const type =
   <Type>() =>
-  <R, Encoded>(schema: Schema.Schema<Type, Encoded, R>) =>
+  <Context, Encoded>(schema: Schema.Schema<Type, Encoded, Context>) =>
     schema;
 
 type.json =
   <Type extends Json.Json>() =>
-  <R, Encoded>(schema: Schema.Schema<Type, Encoded, R>) =>
+  <Context, Encoded>(schema: Schema.Schema<Type, Encoded, Context>) =>
     schema;
 
-export const satisfies = { encoded, type: type };
+const context =
+  <Context>() =>
+  <Type, Encoded>(schema: Schema.Schema<Type, Encoded, Context>) =>
+    schema;
+
+context.json =
+  <Context extends Json.Json>() =>
+  <Type, Encoded>(schema: Schema.Schema<Type, Encoded, Context>) =>
+    schema;
+
+export const satisfies = { encoded, type, context };
