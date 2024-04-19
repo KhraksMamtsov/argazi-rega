@@ -18,8 +18,8 @@ export const _UserApi = Schema.Struct({
   phone: Schema.OptionFromNullOr(Schema.Secret),
   type: UserTypeSchema,
 }).pipe(
-  _SS.satisfies.from.json(),
-  _SS.satisfies.to<UserBase>(),
+  _SS.satisfies.encoded.json(),
+  _SS.satisfies.type<UserBase>(),
   Schema.identifier("UserApi")
 );
 

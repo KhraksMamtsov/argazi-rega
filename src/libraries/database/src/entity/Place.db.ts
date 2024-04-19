@@ -17,10 +17,10 @@ const _PlaceDbSchema = Schema.Struct({
   name: Schema.String,
   description: Schema.String,
 }).pipe(
-  _SS.satisfies.to<PlaceBase>(),
+  _SS.satisfies.type<PlaceBase>(),
   Schema.extend(BaseDbSchema),
   Schema.identifier("PlaceDbSchema"),
-  _SS.satisfies.from<_Place>()
+  _SS.satisfies.encoded<_Place>()
 );
 
 export type PlaceDbContext = Schema.Schema.Context<typeof _PlaceDbSchema>;

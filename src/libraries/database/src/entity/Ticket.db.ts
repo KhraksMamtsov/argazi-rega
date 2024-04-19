@@ -29,9 +29,9 @@ export const TicketDbBaseSchema = Schema.Struct({
 
 // #region TicketDb
 const _TicketDbSchema = TicketDbBaseSchema.pipe(
-  _SS.satisfies.to<TicketBase>(),
+  _SS.satisfies.type<TicketBase>(),
   Schema.extend(BaseDbSchema),
-  _SS.satisfies.from<_Ticket>(),
+  _SS.satisfies.encoded<_Ticket>(),
   Schema.identifier("_TicketDbSchema")
 );
 

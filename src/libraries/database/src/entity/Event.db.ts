@@ -27,7 +27,7 @@ export const EventDbSchema = Schema.Struct({
 }).pipe(
   Schema.extend(BaseDbSchema),
   Schema.identifier("EventDbSchema"),
-  _SS.satisfies.from<_Event>()
+  _SS.satisfies.encoded<_Event>()
 );
 
 export const EventDbToDomainSchema = transform(

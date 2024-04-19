@@ -15,7 +15,7 @@ export const CreatePlaceCommandPayloadSchema = Schema.Struct({
   name: Schema.compose(Schema.Trim, Schema.NonEmpty),
   description: Schema.compose(Schema.Trim, Schema.NonEmpty),
 }).pipe(
-  _SS.satisfies.from.json<CreatePlaceCommandPayloadFrom>(),
+  _SS.satisfies.encoded.json<CreatePlaceCommandPayloadFrom>(),
   Schema.identifier("CreatePlaceCommandPayloadSchema")
 );
 

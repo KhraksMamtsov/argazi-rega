@@ -12,8 +12,8 @@ const _SubscriptionApiSchema = Schema.Struct({
   idPlace: IdPlaceSchema,
   idUser: IdUserSchema,
 }).pipe(
-  _SS.satisfies.from.json(),
-  _SS.satisfies.to<SubscriptionBase>(),
+  _SS.satisfies.encoded.json(),
+  _SS.satisfies.type<SubscriptionBase>(),
   Schema.identifier("SubscriptionApiSchema")
 );
 

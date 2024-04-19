@@ -12,7 +12,7 @@ export const CreateTicketCommandPayloadSchema = TicketDbBaseSchema.pipe(
       dateRegistered: Schema.Date,
     })
   ),
-  _SS.satisfies.from.json(),
+  _SS.satisfies.encoded.json(),
   Schema.identifier("CreateTicketCommandPayloadSchema")
 );
 

@@ -18,7 +18,7 @@ const _CreateEventCommandPayloadSchema = Schema.Struct({
   priceEvent: Schema.JsonNumber,
   description: Schema.String,
 }).pipe(
-  _SS.satisfies.from.json(),
+  _SS.satisfies.encoded.json(),
   Schema.identifier("CreateEventCommandPayloadSchema")
 );
 

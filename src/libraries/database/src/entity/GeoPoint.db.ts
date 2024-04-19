@@ -33,7 +33,7 @@ const _GeoPointDbSchema = Schema.Struct({
 }).pipe(
   Schema.extend(BaseDbSchema),
   Schema.identifier("GeoPointDbSchema"),
-  _SS.satisfies.from<GeoPointDbFrom>()
+  _SS.satisfies.encoded<GeoPointDbFrom>()
 );
 
 export type GeoPointDbContext = Schema.Schema.Context<typeof _GeoPointDbSchema>;

@@ -6,7 +6,7 @@ import { _SS } from "@argazi/shared";
 import { TokensResponse, TokensResponseSchema } from "../Tokens.response.js";
 
 export const LoginBasicResponseBodySchema = TokensResponseSchema.pipe(
-  _SS.satisfies.from.json(),
+  _SS.satisfies.encoded.json(),
   Schema.identifier("LoginBasicResponseBodySchema")
 );
 

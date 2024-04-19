@@ -24,7 +24,7 @@ const _TransportDbSchema = Schema.Struct({
 }).pipe(
   Schema.extend(BaseDbSchema),
   Schema.identifier("_TransportDbSchema"),
-  _SS.satisfies.from<TransportDbFrom>()
+  _SS.satisfies.encoded<TransportDbFrom>()
 );
 
 export type TransportDbContext = Schema.Schema.Context<

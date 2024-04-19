@@ -14,8 +14,8 @@ const _TransportApiSchema = Schema.Struct({
   number: Schema.Secret,
   seatsNumber: Schema.Int.pipe(Schema.positive()),
 }).pipe(
-  _SS.satisfies.to<TransportBase>(),
-  _SS.satisfies.from.json(),
+  _SS.satisfies.type<TransportBase>(),
+  _SS.satisfies.encoded.json(),
   Schema.identifier("_TransportApiSchema")
 );
 

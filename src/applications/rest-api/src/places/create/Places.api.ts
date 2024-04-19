@@ -35,8 +35,8 @@ const _CreatePlaceResponseSchema = Schema.Struct({
   name: Schema.compose(Schema.Trim, Schema.NonEmpty),
   description: Schema.compose(Schema.Trim, Schema.NonEmpty),
 }).pipe(
-  _SS.satisfies.to<PlaceBase>(),
-  _SS.satisfies.from.json(),
+  _SS.satisfies.type<PlaceBase>(),
+  _SS.satisfies.encoded.json(),
   Schema.identifier("CreatePlaceResponseSchema"),
   BaseResponseFor
 );

@@ -45,7 +45,7 @@ export const VisitorDbBaseSchema: Schema.Schema<
 const _VisitorDbSchema = VisitorDbBaseSchema.pipe(
   Schema.extend(BaseDbSchema),
   Schema.identifier("VisitorDbSchema"),
-  _SS.satisfies.from<_Visitor>()
+  _SS.satisfies.encoded<_Visitor>()
 );
 
 export type VisitorDbContext = Schema.Schema.Context<typeof _VisitorDbSchema>;

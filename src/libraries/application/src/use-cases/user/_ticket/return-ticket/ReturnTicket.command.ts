@@ -7,7 +7,7 @@ import { BaseCausedCommandFor } from "../../../common/Base.command.js";
 
 export const ReturnTicketCommandPayloadSchema = TicketBaseSchema.pipe(
   Schema.pick("id", "idUser"),
-  _SS.satisfies.from.json(),
+  _SS.satisfies.encoded.json(),
   Schema.identifier("ReturnTicketCommandPayloadSchema")
 );
 

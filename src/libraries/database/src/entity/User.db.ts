@@ -32,7 +32,7 @@ const _UserDbSchema = Schema.Struct({
 }).pipe(
   Schema.extend(BaseDbSchema),
   Schema.identifier("UserDbSchema"),
-  _SS.satisfies.from<_User>()
+  _SS.satisfies.encoded<_User>()
 );
 
 export type UserDbContext = Schema.Schema.Context<typeof _UserDbSchema>;

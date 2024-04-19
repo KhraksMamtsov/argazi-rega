@@ -12,7 +12,7 @@ export type GetEventByIdCommandPayloadFrom = {
 export const GetEventByIdCommandPayloadSchema = Schema.Struct({
   id: IdEventSchema,
 }).pipe(
-  _SS.satisfies.from.json<GetEventByIdCommandPayloadFrom>(),
+  _SS.satisfies.encoded.json<GetEventByIdCommandPayloadFrom>(),
   Schema.identifier("GetEventByIdCommandPayloadSchema")
 );
 

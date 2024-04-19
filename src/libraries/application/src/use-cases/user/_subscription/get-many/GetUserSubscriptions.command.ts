@@ -8,7 +8,7 @@ import { BaseCausedCommandFor } from "../../../common/Base.command.js";
 export const GetUserSubscriptionsCommandPayloadSchema = Schema.Struct({
   idUser: IdUserSchema,
 }).pipe(
-  _SS.satisfies.from.json(),
+  _SS.satisfies.encoded.json(),
   Schema.identifier("GetUserSubscriptionsCommandPayloadSchema")
 );
 

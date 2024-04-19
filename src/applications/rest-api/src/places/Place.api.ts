@@ -11,8 +11,8 @@ export const _PlaceApi = Schema.Struct({
   name: Schema.compose(Schema.Trimmed, Schema.NonEmpty),
   description: Schema.compose(Schema.Trimmed, Schema.NonEmpty),
 }).pipe(
-  _SS.satisfies.from.json(),
-  _SS.satisfies.to<PlaceBase>(),
+  _SS.satisfies.encoded.json(),
+  _SS.satisfies.type<PlaceBase>(),
   Schema.identifier("PlaceApi")
 );
 

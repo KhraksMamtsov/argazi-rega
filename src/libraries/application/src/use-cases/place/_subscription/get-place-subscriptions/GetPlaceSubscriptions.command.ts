@@ -12,7 +12,7 @@ export type GetPlaceSubscriptionsCommandPayloadFrom = {
 export const GetPlaceSubscriptionsCommandPayloadSchema = Schema.Struct({
   idPlace: IdPlaceSchema,
 }).pipe(
-  _SS.satisfies.from.json<GetPlaceSubscriptionsCommandPayloadFrom>(),
+  _SS.satisfies.encoded.json<GetPlaceSubscriptionsCommandPayloadFrom>(),
   Schema.identifier("GetPlaceSubscriptionsCommandPayloadSchema")
 );
 

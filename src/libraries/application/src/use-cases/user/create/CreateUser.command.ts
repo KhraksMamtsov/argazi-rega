@@ -24,7 +24,7 @@ export const CreateUserCommandPayloadSchema = Schema.Struct({
   phone: Schema.NullOr(Schema.String),
   type: Schema.Literal("ADULT", "STUDENT", "PENSIONER"),
 }).pipe(
-  _SS.satisfies.from.json<CreateUserCommandPayloadFrom>(),
+  _SS.satisfies.encoded.json<CreateUserCommandPayloadFrom>(),
   Schema.identifier("CreateUserCommandPayloadSchema")
 );
 

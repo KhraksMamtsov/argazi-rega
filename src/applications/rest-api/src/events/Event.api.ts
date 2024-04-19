@@ -23,8 +23,8 @@ export const _EventApi = Schema.Struct({
   priceEvent: Schema.compose(Schema.BigDecimalFromNumber, PriceSchema),
   description: Schema.String,
 }).pipe(
-  _SS.satisfies.from.json(),
-  _SS.satisfies.to<EventBase>(),
+  _SS.satisfies.encoded.json(),
+  _SS.satisfies.type<EventBase>(),
   Schema.identifier("EventApi")
 );
 

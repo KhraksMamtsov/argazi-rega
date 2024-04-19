@@ -17,7 +17,7 @@ export const _GeoPointApiSchema = Schema.Struct({
     Schema.compose(Schema.compose(Schema.Trim, Schema.NonEmpty), Schema.Secret)
   ),
 }).pipe(
-  _SS.satisfies.to<GeoPointBase>(),
+  _SS.satisfies.type<GeoPointBase>(),
   Schema.identifier("GeoPointApiSchema")
 );
 

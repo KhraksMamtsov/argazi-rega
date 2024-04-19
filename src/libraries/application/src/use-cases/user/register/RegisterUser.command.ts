@@ -26,8 +26,8 @@ export const RegisterUserCommandPayloadSchema = Schema.Struct({
     ["PENSIONER", UserType.PENSIONER]
   ),
 }).pipe(
-  _SS.satisfies.from.json(),
-  _SS.satisfies.to<UserBase>(),
+  _SS.satisfies.encoded.json(),
+  _SS.satisfies.type<UserBase>(),
   Schema.identifier("RegisterUserCommandPayloadSchema")
 );
 

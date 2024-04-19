@@ -26,10 +26,10 @@ export const _MealDbSchema = Schema.Struct({
   ),
   description: Schema.String,
 }).pipe(
-  _SS.satisfies.to<MealBase>(),
+  _SS.satisfies.type<MealBase>(),
   Schema.extend(BaseDbSchema),
   Schema.identifier("MealDbSchema"),
-  _SS.satisfies.from<_Meal>()
+  _SS.satisfies.encoded<_Meal>()
 );
 
 export type MealDbContext = Schema.Schema.Context<typeof _MealDbSchema>;

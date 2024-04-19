@@ -9,7 +9,7 @@ export const GetUserTicketByIdCommandPayloadSchema = Schema.Struct({
   idTicket: IdTicketSchema,
   idUser: IdUserSchema,
 }).pipe(
-  _SS.satisfies.from.json(),
+  _SS.satisfies.encoded.json(),
   Schema.identifier("GetUserTicketByIdCommandPayloadSchema")
 );
 

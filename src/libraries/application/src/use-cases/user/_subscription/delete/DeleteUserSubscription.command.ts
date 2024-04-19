@@ -9,7 +9,7 @@ export const DeleteUserSubscriptionCommandPayloadSchema = Schema.Struct({
   idSubscription: IdSubscriptionSchema,
   idUser: IdUserSchema,
 }).pipe(
-  _SS.satisfies.from.json(),
+  _SS.satisfies.encoded.json(),
   Schema.identifier("DeleteUserSubscriptionCommandPayloadSchema")
 );
 

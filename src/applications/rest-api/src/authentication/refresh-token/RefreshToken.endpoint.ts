@@ -9,7 +9,7 @@ import { TokensResponse } from "../Tokens.response.js";
 export const _RefreshTokenRequestBodySchema = Schema.Struct({
   refreshToken: RefreshTokenSchema,
 }).pipe(
-  _SS.satisfies.from.json(),
+  _SS.satisfies.encoded.json(),
   Schema.identifier("RefreshTokenRequestSchema")
 );
 

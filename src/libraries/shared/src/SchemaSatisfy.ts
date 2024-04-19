@@ -2,24 +2,24 @@ import { Schema } from "@effect/schema";
 
 import { type Json } from "./Schema.js";
 
-const from =
-  <From>() =>
-  <R, To>(schema: Schema.Schema<To, From, R>) =>
+const encoded =
+  <Encoded>() =>
+  <R, Type>(schema: Schema.Schema<Type, Encoded, R>) =>
     schema;
 
-from.json =
-  <From extends Json.Json>() =>
-  <R, To>(schema: Schema.Schema<To, From, R>) =>
+encoded.json =
+  <Encoded extends Json.Json>() =>
+  <R, Type>(schema: Schema.Schema<Type, Encoded, R>) =>
     schema;
 
-const to =
-  <To>() =>
-  <R, From>(schema: Schema.Schema<To, From, R>) =>
+const type =
+  <Type>() =>
+  <R, Encoded>(schema: Schema.Schema<Type, Encoded, R>) =>
     schema;
 
-to.json =
-  <To extends Json.Json>() =>
-  <R, From>(schema: Schema.Schema<To, From, R>) =>
+type.json =
+  <Type extends Json.Json>() =>
+  <R, Encoded>(schema: Schema.Schema<Type, Encoded, R>) =>
     schema;
 
-export const satisfies = { from, to };
+export const satisfies = { encoded, type: type };

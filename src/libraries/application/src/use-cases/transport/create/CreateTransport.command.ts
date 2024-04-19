@@ -9,7 +9,7 @@ import { BaseCausedCommandFor } from "../../common/Base.command.js";
 const _CreateTransportCommandPayloadSchema = TransportDbSchema.pipe(
   Schema.pick("idUser", "number", "model", "color", "seatsNumber"),
   Schema.identifier("CreateTransportCommandPayloadSchema")
-).pipe(_SS.satisfies.from.json());
+).pipe(_SS.satisfies.encoded.json());
 
 export type CreateTransportCommandPayloadContext = Schema.Schema.Context<
   typeof _CreateTransportCommandPayloadSchema

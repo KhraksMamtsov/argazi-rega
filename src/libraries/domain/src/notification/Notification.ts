@@ -24,35 +24,35 @@ const NotificationEntitySchema = Schema.Union(
   Schema.Struct({
     id: IdUserSchema,
     type: Schema.Literal("User"),
-  }).pipe(_SS.satisfies.from.json()),
+  }).pipe(_SS.satisfies.encoded.json()),
   Schema.Struct({
     id: IdGeoPointSchema,
     type: Schema.Literal("GeoPoint"),
-  }).pipe(_SS.satisfies.from.json()),
+  }).pipe(_SS.satisfies.encoded.json()),
   Schema.Struct({
     id: IdPlaceSchema,
     type: Schema.Literal("Place"),
-  }).pipe(_SS.satisfies.from.json()),
+  }).pipe(_SS.satisfies.encoded.json()),
   Schema.Struct({
     id: IdTicketSchema,
     type: Schema.Literal("Ticket"),
-  }).pipe(_SS.satisfies.from.json()),
+  }).pipe(_SS.satisfies.encoded.json()),
   Schema.Struct({
     id: IdTransportSchema,
     type: Schema.Literal("Transport"),
-  }).pipe(_SS.satisfies.from.json()),
+  }).pipe(_SS.satisfies.encoded.json()),
   Schema.Struct({
     id: IdEventSchema,
     type: Schema.Literal("Event"),
-  }).pipe(_SS.satisfies.from.json()),
+  }).pipe(_SS.satisfies.encoded.json()),
   Schema.Struct({
     id: IdSubscriptionSchema,
     type: Schema.Literal("Subscription"),
-  }).pipe(_SS.satisfies.from.json()),
+  }).pipe(_SS.satisfies.encoded.json()),
   Schema.Struct({
     id: IdVisitorSchema,
     type: Schema.Literal("Visitor"),
-  }).pipe(_SS.satisfies.from.json())
+  }).pipe(_SS.satisfies.encoded.json())
 );
 export type NotificationEntity = Schema.Schema.Type<
   typeof NotificationEntitySchema
@@ -64,7 +64,7 @@ export const _NotificationSchema = Schema.parseJson(
     entity: NotificationEntitySchema,
     idInitiator: IdUserSchema,
     issue: NotificationIssueSchema,
-  }).pipe(_SS.satisfies.from.json())
+  }).pipe(_SS.satisfies.encoded.json())
 ).pipe(Schema.identifier("NotificationSchema"));
 
 export type NotificationFrom = Schema.Schema.Encoded<

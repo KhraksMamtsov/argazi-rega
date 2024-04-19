@@ -12,7 +12,7 @@ export const _JWTPayloadSchema = Schema.Struct({
   isAdmin: Schema.Boolean,
   sub: IdUserSchema,
 })
-  .pipe(_SS.satisfies.from.json())
+  .pipe(_SS.satisfies.encoded.json())
   .pipe(Schema.identifier("JWTPayloadSchema"));
 
 export type JWTPayloadContext = Schema.Schema.Context<typeof _JWTPayloadSchema>;

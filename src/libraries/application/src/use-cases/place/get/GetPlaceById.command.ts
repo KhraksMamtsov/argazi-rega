@@ -12,7 +12,7 @@ export type GetPlaceByIdCommandPayloadFrom = {
 export const GetPlaceByIdCommandPayloadSchema = Schema.Struct({
   id: IdPlaceSchema,
 }).pipe(
-  _SS.satisfies.from.json<GetPlaceByIdCommandPayloadFrom>(),
+  _SS.satisfies.encoded.json<GetPlaceByIdCommandPayloadFrom>(),
   Schema.identifier("GetPlaceByIdCommandPayloadSchema")
 );
 

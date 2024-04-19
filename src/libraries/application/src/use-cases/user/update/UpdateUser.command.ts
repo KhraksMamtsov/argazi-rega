@@ -66,8 +66,8 @@ export const UpdateUserCommandPayloadSchema = Schema.Struct({
     })
   ),
   Schema.identifier("UpdateUserCommandPayloadSchema"),
-  _SS.satisfies.from.json<UpdateUserCommandPayloadFrom>(),
-  _SS.satisfies.to<
+  _SS.satisfies.encoded.json<UpdateUserCommandPayloadFrom>(),
+  _SS.satisfies.type<
     _EH.Optionize<Omit<UserBase, "id" | "phone" | "lastName">> &
       Pick<User, "id" | "phone" | "lastName">
   >()

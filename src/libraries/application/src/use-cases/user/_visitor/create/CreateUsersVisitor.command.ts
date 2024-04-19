@@ -9,7 +9,7 @@ import { BaseCausedCommandFor } from "../../../common/Base.command.js";
 export const _CreateUsersVisitorCommandPayloadSchema = VisitorDbBaseSchema.pipe(
   Schema.omit("id"),
   Schema.identifier("CreateUsersVisitorCommandPayloadSchema"),
-  _SS.satisfies.from.json()
+  _SS.satisfies.encoded.json()
 );
 
 export type CreateUsersVisitorCommandPayloadContext = Schema.Schema.Context<

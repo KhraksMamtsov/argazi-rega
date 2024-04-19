@@ -18,7 +18,7 @@ export const _SubscriptionDbSchema = Schema.Struct({
 }).pipe(
   Schema.extend(BaseDbSchema),
   Schema.identifier("SubscriptionDbSchema"),
-  _SS.satisfies.from<_Subscription>()
+  _SS.satisfies.encoded<_Subscription>()
 );
 
 export type SubscriptionDbContext = Schema.Schema.Context<

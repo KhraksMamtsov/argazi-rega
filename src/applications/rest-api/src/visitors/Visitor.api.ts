@@ -15,8 +15,8 @@ export const _VisitorApi = Schema.Struct({
   name: Schema.Trimmed.pipe(Schema.nonEmpty()),
   type: VisitorTypeSchema,
 }).pipe(
-  _SS.satisfies.from.json(),
-  _SS.satisfies.to<VisitorData>(),
+  _SS.satisfies.encoded.json(),
+  _SS.satisfies.type<VisitorData>(),
   Schema.identifier("VisitorApi")
 );
 

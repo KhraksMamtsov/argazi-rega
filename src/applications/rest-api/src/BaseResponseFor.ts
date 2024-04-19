@@ -20,10 +20,10 @@ export const ApiBaseSchema = Schema.Struct({
     idUserCreator: IdUserSchema,
     idUserDeleter: Schema.OptionFromNullOr(IdUserSchema),
     idUserUpdater: IdUserSchema,
-  }).pipe(_SS.satisfies.from.json(), Schema.identifier("ApiMetaSchema")),
+  }).pipe(_SS.satisfies.encoded.json(), Schema.identifier("ApiMetaSchema")),
 }).pipe(
-  _SS.satisfies.from.json(),
-  _SS.satisfies.to<Base>(),
+  _SS.satisfies.encoded.json(),
+  _SS.satisfies.type<Base>(),
   Schema.identifier("ApiBaseSchema")
 );
 

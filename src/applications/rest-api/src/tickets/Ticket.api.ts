@@ -23,8 +23,8 @@ const _TicketApiSchema = Schema.Struct({
     ["NONE", TicketRole.NONE]
   ),
 }).pipe(
-  _SS.satisfies.from.json(),
-  _SS.satisfies.to<TicketBase>(),
+  _SS.satisfies.encoded.json(),
+  _SS.satisfies.type<TicketBase>(),
   Schema.identifier("TicketApiSchema")
 );
 

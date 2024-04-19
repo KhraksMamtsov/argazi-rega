@@ -12,7 +12,7 @@ export type GetVisitorByIdCommandPayloadFrom = {
 export const GetVisitorByIdCommandPayloadSchema = Schema.Struct({
   idVisitor: IdVisitorSchema,
 }).pipe(
-  _SS.satisfies.from.json<GetVisitorByIdCommandPayloadFrom>(),
+  _SS.satisfies.encoded.json<GetVisitorByIdCommandPayloadFrom>(),
   Schema.identifier("GetVisitorByIdCommandPayloadSchema")
 );
 

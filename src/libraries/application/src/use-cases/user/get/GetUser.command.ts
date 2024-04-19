@@ -19,11 +19,11 @@ export const GetUserCommandPayloadSchema = Schema.Union(
   Schema.Struct({
     id: IdUserSchema,
     type: Schema.Literal("id"),
-  }).pipe(_SS.satisfies.from.json()),
+  }).pipe(_SS.satisfies.encoded.json()),
   Schema.Struct({
     idDwbn: IdDwbnSchema,
     type: Schema.Literal("idDwbn"),
-  }).pipe(_SS.satisfies.from.json())
+  }).pipe(_SS.satisfies.encoded.json())
 ).pipe(Schema.identifier("GetUserCommandPayloadSchema"));
 
 export const _GetUserCommandSchema = BaseCommandFor(
