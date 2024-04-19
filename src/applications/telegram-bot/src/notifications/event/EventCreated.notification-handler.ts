@@ -1,4 +1,4 @@
-import { Effect, Option, Array } from "effect";
+import { Effect, Array } from "effect";
 import { Markup } from "telegraf";
 
 import type { Event } from "@argazi/domain";
@@ -17,7 +17,7 @@ export const EventCreatedNotificationHandler = (args: {
   Effect.gen(function* (_) {
     const telegraf = yield* _(TelegrafTag);
 
-    let subscribers: Array<Option.Option<User>> = [];
+    // let subscribers: Array<Option.Option<User>> = [];
 
     const restApiClient = yield* _(RestApiServiceTag);
 
@@ -35,7 +35,7 @@ export const EventCreatedNotificationHandler = (args: {
 
     const idSubscribers = subscriptionsAnswer.map((x) => x.idUser);
 
-    subscribers = yield* _(
+    const subscribers = yield* _(
       restApiClient.getManyUsers({
         body: {
           idsUser: [...idSubscribers, ...idSubscribers],

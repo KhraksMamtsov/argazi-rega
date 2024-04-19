@@ -4,7 +4,7 @@ import { TicketRole } from "@argazi/domain";
 
 import { MD } from "./Markdown.js";
 
-const tickerRoleToString: Record.Record<TicketRole, string> = {
+const tickerRoleToString: Record.ReadonlyRecord<TicketRole, string> = {
   [TicketRole.ADMIN]: "Админ",
   [TicketRole.CASHIER]: "Кассир",
   [TicketRole.CHIEF]: "Шеф",
@@ -12,7 +12,7 @@ const tickerRoleToString: Record.Record<TicketRole, string> = {
   [TicketRole.NONE]: "Участник",
 };
 
-const tickerRoleToEmoji: Record.Record<TicketRole, string> = {
+const tickerRoleToEmoji: Record.ReadonlyRecord<TicketRole, string> = {
   [TicketRole.ADMIN]: "🧑‍🚒",
   [TicketRole.CASHIER]: "🧑‍💼",
   [TicketRole.CHIEF]: "🧑‍🍳",

@@ -4,7 +4,7 @@ import { UserType } from "@argazi/domain";
 
 import { MD } from "./Markdown.js";
 
-const userTypToString: Record.Record<UserType, string> = {
+const userTypToString: Record.ReadonlyRecord<UserType, string> = {
   [UserType.ADULT]: "Взрослый",
   [UserType.PENSIONER]: "Пенсионер",
   [UserType.STUDENT]: "Студент",

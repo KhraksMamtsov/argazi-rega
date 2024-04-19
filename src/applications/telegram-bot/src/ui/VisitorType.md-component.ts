@@ -4,7 +4,7 @@ import { VisitorType } from "@argazi/domain";
 
 import { MD } from "./Markdown.js";
 
-const visitorTypeToString: Record.Record<VisitorType, string> = {
+const visitorTypeToString: Record.ReadonlyRecord<VisitorType, string> = {
   [VisitorType.ADULT]: "Взрослый",
   [VisitorType.PENSIONER]: "Пенсионер",
   [VisitorType.STUDENT]: "Студент",
