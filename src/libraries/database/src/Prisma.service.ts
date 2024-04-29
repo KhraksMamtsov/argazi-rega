@@ -10,19 +10,15 @@ export class PrismaQueryError extends Data.TaggedError("PrismaQueryError")<{
 }> {}
 
 const makeLive = Effect.gen(function* (_) {
-  const credentials = yield* _(
-    Config.all({
-      datasourceUrl: Config.secret("PRISMA_DB_URL"),
-    })
-  );
+  const credentials = yield* Config.all({
+    datasourceUrl: Config.secret("PRISMA_DB_URL"),
+  });
 
-  const prismaClient = yield* _(
-    Effect.sync(
-      () =>
-        new PrismaClient({
-          datasourceUrl: Secret.value(credentials.datasourceUrl),
-        })
-    )
+  const prismaClient = yield* Effect.sync(
+    () =>
+      new PrismaClient({
+        datasourceUrl: Secret.value(credentials.datasourceUrl),
+      })
   );
 
   const _query = <T>(
@@ -71,9 +67,9 @@ const makeLive = Effect.gen(function* (_) {
     const decode = Schema.decode(schema);
 
     return Effect.gen(function* (_) {
-      const queryResult = yield* _(_query(query));
+      const queryResult = yield* _query(query);
 
-      return yield* _(
+      return yield* pipe(
         queryResult,
         decode,
         Effect.mapError((cause) => new PrismaDecodeError({ cause }))

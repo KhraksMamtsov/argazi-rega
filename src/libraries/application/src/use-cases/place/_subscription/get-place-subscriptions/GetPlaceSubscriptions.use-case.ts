@@ -15,16 +15,14 @@ export const GetPlaceSubscriptionsUseCase = BaseCausedUseCaseFor(
   GetPlaceSubscriptionsCommandSchema
 )(({ payload }) =>
   Effect.gen(function* (_) {
-    const prismaClient = yield* _(PrismaServiceTag);
+    const prismaClient = yield* PrismaServiceTag;
 
-    return yield* _(
-      prismaClient.queryDecode(
-        Schema.Array(SubscriptionDbToDomainSchema),
-        (p) =>
-          p.subscription.findMany({
-            where: { idPlace: payload.idPlace },
-          })
-      )
+    return yield* prismaClient.queryDecode(
+      Schema.Array(SubscriptionDbToDomainSchema),
+      (p) =>
+        p.subscription.findMany({
+          where: { idPlace: payload.idPlace },
+        })
     );
   })
 );

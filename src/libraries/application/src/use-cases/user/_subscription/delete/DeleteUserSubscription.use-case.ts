@@ -16,20 +16,19 @@ export const DeleteUserSubscriptionUseCase = BaseCausedUseCaseFor(
 )(({ payload, initiator }) =>
   Effect.gen(function* (_) {
     if (!initiator.isAdmin && initiator.id !== payload.idUser) {
-      yield* _(
-        new DeleteEntityAuthorizationError({
-          entity: "Subscription",
-          idEntity: payload.idSubscription,
-          idInitiator: initiator.id,
-          payload,
-        })
-      );
+      yield* new DeleteEntityAuthorizationError({
+        entity: "Subscription",
+        idEntity: payload.idSubscription,
+        idInitiator: initiator.id,
+        payload,
+      });
     }
 
-    const prismaClient = yield* _(PrismaServiceTag);
+    const prismaClient = yield* PrismaServiceTag;
 
-    const deletedSubscription = yield* _(
-      prismaClient.queryDecode(SubscriptionDbToDomainSchema, (p) =>
+    const deletedSubscription = yield* prismaClient.queryDecode(
+      SubscriptionDbToDomainSchema,
+      (p) =>
         p.subscription.update({
           data: {
             dateDeleted: new Date(),
@@ -39,10 +38,9 @@ export const DeleteUserSubscriptionUseCase = BaseCausedUseCaseFor(
             id: payload.idSubscription,
           },
         })
-      )
     );
 
-    const notificationService = yield* _(NotificationServiceTag);
+    const notificationService = yield* NotificationServiceTag;
 
     Effect.runFork(
       notificationService.queue(

@@ -11,21 +11,20 @@ import { BaseCausedUseCaseFor } from "../../../common/Base.use-case.js";
 export const BookTicketUseCase = BaseCausedUseCaseFor(BookTicketCommandSchema)(
   ({ payload, initiator }) =>
     Effect.gen(function* (_) {
-      const prismaClient = yield* _(PrismaServiceTag);
-      const notificationService = yield* _(NotificationServiceTag);
+      const prismaClient = yield* PrismaServiceTag;
+      const notificationService = yield* NotificationServiceTag;
 
       if (!initiator.isAdmin && initiator.id !== payload.idUser) {
-        yield* _(
-          new CreateEntityAuthorizationError({
-            entity: "Ticket",
-            idInitiator: initiator.id,
-            payload: payload,
-          })
-        );
+        yield* new CreateEntityAuthorizationError({
+          entity: "Ticket",
+          idInitiator: initiator.id,
+          payload: payload,
+        });
       }
 
-      const newTicket = yield* _(
-        prismaClient.queryDecode(TicketDbToDomainSchema, (p) =>
+      const newTicket = yield* prismaClient.queryDecode(
+        TicketDbToDomainSchema,
+        (p) =>
           p.ticket.create({
             data: {
               ...payload,
@@ -34,7 +33,6 @@ export const BookTicketUseCase = BaseCausedUseCaseFor(BookTicketCommandSchema)(
               role: "NONE",
             },
           })
-        )
       );
 
       Effect.runFork(

@@ -13,25 +13,21 @@ export const GetUserTicketByIdUseCase = BaseCausedUseCaseFor(
 )(({ payload, initiator }) =>
   Effect.gen(function* (_) {
     if (!initiator.isAdmin && initiator.id !== payload.idUser) {
-      yield* _(
-        new GetEntityAuthorizationError({
-          entity: ["User", "Ticket"],
-          idInitiator: initiator.id,
-          payload,
-        })
-      );
+      yield* new GetEntityAuthorizationError({
+        entity: ["User", "Ticket"],
+        idInitiator: initiator.id,
+        payload,
+      });
     }
 
-    const prismaClient = yield* _(PrismaServiceTag);
+    const prismaClient = yield* PrismaServiceTag;
 
-    return yield* _(
-      prismaClient.queryDecode(
-        Schema.OptionFromNullOr(TicketDbToDomainSchema),
-        (p) =>
-          p.ticket.findUnique({
-            where: { id: payload.idTicket, idUser: payload.idUser },
-          })
-      )
+    return yield* prismaClient.queryDecode(
+      Schema.OptionFromNullOr(TicketDbToDomainSchema),
+      (p) =>
+        p.ticket.findUnique({
+          where: { id: payload.idTicket, idUser: payload.idUser },
+        })
     );
   })
 );

@@ -12,25 +12,24 @@ export const CreateTicketUseCase = BaseCausedUseCaseFor(
   CreateTicketCommandSchema
 )(({ payload, initiator }) =>
   Effect.gen(function* (_) {
-    const prismaClient = yield* _(PrismaServiceTag);
-    const notificationService = yield* _(NotificationServiceTag);
+    const prismaClient = yield* PrismaServiceTag;
+    const notificationService = yield* NotificationServiceTag;
 
     if (!initiator.isAdmin && initiator.id !== payload.idUser) {
-      yield* _(
-        new CreateEntityAuthorizationError({
-          entity: "Ticket",
-          idInitiator: initiator.id,
-          payload: {
-            ...payload,
-            dateRegistered: payload.dateRegistered.toISOString(),
-            idTransport: Option.getOrNull(payload.idTransport),
-          },
-        })
-      );
+      yield* new CreateEntityAuthorizationError({
+        entity: "Ticket",
+        idInitiator: initiator.id,
+        payload: {
+          ...payload,
+          dateRegistered: payload.dateRegistered.toISOString(),
+          idTransport: Option.getOrNull(payload.idTransport),
+        },
+      });
     }
 
-    const newSubscription = yield* _(
-      prismaClient.queryDecode(TicketDbToDomainSchema, (p) =>
+    const newSubscription = yield* prismaClient.queryDecode(
+      TicketDbToDomainSchema,
+      (p) =>
         p.ticket.create({
           data: {
             ...payload,
@@ -39,7 +38,6 @@ export const CreateTicketUseCase = BaseCausedUseCaseFor(
             idUserUpdater: initiator.id,
           },
         })
-      )
     );
 
     Effect.runFork(

@@ -1,4 +1,4 @@
-import { Effect, Sink, Stream, Layer } from "effect";
+import { Effect, Sink, Stream, Layer, pipe } from "effect";
 
 import { NotificationServiceTag } from "@argazi/domain";
 
@@ -8,9 +8,9 @@ import { TelegrafTag } from "../telegraf/Telegraf.js";
 
 export const NotificationsHandlerLive = Layer.scopedDiscard(
   Effect.gen(function* (_) {
-    const notificationsStream = yield* _(NotificationServiceTag.stream$);
+    const notificationsStream = yield* NotificationServiceTag.stream$;
 
-    yield* _(
+    yield* pipe(
       notificationsStream,
       Stream.run(
         Sink.forEach((context) =>

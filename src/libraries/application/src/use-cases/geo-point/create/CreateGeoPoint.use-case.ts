@@ -11,11 +11,12 @@ export const CreateGeoPointUseCase = BaseCausedUseCaseFor(
   CreateGeoPointCommandSchema
 )(({ payload, initiator }) =>
   Effect.gen(function* (_) {
-    const prismaClient = yield* _(PrismaServiceTag);
-    const notificationService = yield* _(NotificationServiceTag);
+    const prismaClient = yield* PrismaServiceTag;
+    const notificationService = yield* NotificationServiceTag;
 
-    const newGeoPoint = yield* _(
-      prismaClient.queryDecode(GeoPointDbToDomainSchema, (p) =>
+    const newGeoPoint = yield* prismaClient.queryDecode(
+      GeoPointDbToDomainSchema,
+      (p) =>
         p.geoPoint.create({
           data: {
             ...payload,
@@ -24,7 +25,6 @@ export const CreateGeoPointUseCase = BaseCausedUseCaseFor(
             name: payload.name.pipe(Option.map(Secret.value), Option.getOrNull),
           },
         })
-      )
     );
 
     Effect.runFork(

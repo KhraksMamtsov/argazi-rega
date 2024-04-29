@@ -12,16 +12,11 @@ export const GeoPointMdComponent = (props: { geoPoint: GeoPoint }) =>
       onSome: (x) => MD.line("📍 Геоточка: ", MD.bold(Secret.value(x))),
     });
 
-    return yield* _(
-      MD.document(
-        MD.headline(headline),
-        MD.dl()(
-          ["Широта", pipe(geoPoint.latitude, Secret.value, MD.escape, MD.bold)],
-          [
-            "Долгота",
-            pipe(geoPoint.longitude, Secret.value, MD.escape, MD.bold),
-          ]
-        )
+    return yield* MD.document(
+      MD.headline(headline),
+      MD.dl()(
+        ["Широта", pipe(geoPoint.latitude, Secret.value, MD.escape, MD.bold)],
+        ["Долгота", pipe(geoPoint.longitude, Secret.value, MD.escape, MD.bold)]
       )
     );
   });

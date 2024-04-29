@@ -33,7 +33,7 @@ import {
 } from "./MessageBroker.error.js";
 
 const RabbitMQService = Effect.gen(function* (_) {
-  const config = yield* _(
+  const config = yield* pipe(
     Effect.all({
       hostname: Config.secret("RABBITMQ_HOSTNAME"),
       password: Config.secret("RABBITMQ_DEFAULT_PASS"),
@@ -43,43 +43,37 @@ const RabbitMQService = Effect.gen(function* (_) {
     Effect.map(Record.map(Secret.value))
   );
 
-  const connection = yield* _(
-    Effect.acquireRelease(
-      Effect.tryPromise({
-        catch: (cause) => {
-          return new ConnectError({ cause, config });
-        },
-        try: () =>
-          AMQP.connect({
-            hostname: config.hostname,
-            password: config.password,
-            port: Number(config.port),
-            username: config.username,
-          }),
-      }),
-      (connection, _exit) => Effect.promise(() => connection.close())
-    )
-  );
-
-  const channel = yield* _(
-    Effect.acquireRelease(
-      Effect.tryPromise({
-        catch: (cause) => new CreateChannelError({ cause }),
-        try: () => connection.createChannel(),
-      }),
-      (channel, _exit) => Effect.promise(() => channel.close())
-    )
-  );
-
-  yield* _(
+  const connection = yield* Effect.acquireRelease(
     Effect.tryPromise({
-      catch: (cause) => new AssertQueueError({ cause }),
+      catch: (cause) => {
+        return new ConnectError({ cause, config });
+      },
       try: () =>
-        channel.assertQueue("notifications", {
-          durable: true,
+        AMQP.connect({
+          hostname: config.hostname,
+          password: config.password,
+          port: Number(config.port),
+          username: config.username,
         }),
-    })
+    }),
+    (connection, _exit) => Effect.promise(() => connection.close())
   );
+
+  const channel = yield* Effect.acquireRelease(
+    Effect.tryPromise({
+      catch: (cause) => new CreateChannelError({ cause }),
+      try: () => connection.createChannel(),
+    }),
+    (channel, _exit) => Effect.promise(() => channel.close())
+  );
+
+  yield* Effect.tryPromise({
+    catch: (cause) => new AssertQueueError({ cause }),
+    try: () =>
+      channel.assertQueue("notifications", {
+        durable: true,
+      }),
+  });
 
   const sendToQueue = (...args: Parameters<typeof channel.sendToQueue>) =>
     Effect.try({
@@ -117,17 +111,17 @@ const RabbitMQService = Effect.gen(function* (_) {
 });
 
 export const live = Effect.gen(function* (_) {
-  const rabbitMQService = yield* _(RabbitMQService);
+  const rabbitMQService = yield* RabbitMQService;
   const queue = "notifications";
 
   return {
     queue: (notification: Notification) =>
       Effect.gen(function* (_) {
-        const encodedNotification = yield* _(
+        const encodedNotification = yield* pipe(
           encodeNotification(notification),
           Effect.orDie
         );
-        return yield* _(
+        return yield* pipe(
           rabbitMQService.sendToQueue(
             queue,
             Buffer.from(encodedNotification),

@@ -11,13 +11,11 @@ export const GetPlaceByIdUseCase = BaseCausedUseCaseFor(
   GetPlaceByIdCommandSchema
 )(({ payload }) =>
   Effect.gen(function* (_) {
-    const prismaClient = yield* _(PrismaServiceTag);
+    const prismaClient = yield* PrismaServiceTag;
 
-    return yield* _(
-      prismaClient.queryDecode(
-        Schema.OptionFromNullOr(PlaceDbToDomainSchema),
-        (p) => p.place.findUnique({ where: { id: payload.id } })
-      )
+    return yield* prismaClient.queryDecode(
+      Schema.OptionFromNullOr(PlaceDbToDomainSchema),
+      (p) => p.place.findUnique({ where: { id: payload.id } })
     );
   })
 );

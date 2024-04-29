@@ -11,11 +11,12 @@ export const CreateUsersVisitorUseCase = BaseCausedUseCaseFor(
   CreateUsersVisitorCommandSchema
 )(({ payload, initiator }) =>
   Effect.gen(function* (_) {
-    const prismaClient = yield* _(PrismaServiceTag);
-    const notificationService = yield* _(NotificationServiceTag);
+    const prismaClient = yield* PrismaServiceTag;
+    const notificationService = yield* NotificationServiceTag;
 
-    const newVisitor = yield* _(
-      prismaClient.queryDecode(VisitorDbToDomainSchema, (p) =>
+    const newVisitor = yield* prismaClient.queryDecode(
+      VisitorDbToDomainSchema,
+      (p) =>
         p.visitor.create({
           data: {
             ...payload,
@@ -24,7 +25,6 @@ export const CreateUsersVisitorUseCase = BaseCausedUseCaseFor(
             idUserUpdater: initiator.id,
           },
         })
-      )
     );
 
     Effect.runFork(

@@ -12,22 +12,21 @@ export const ReturnTicketUseCase = BaseCausedUseCaseFor(
   ReturnTicketCommandSchema
 )(({ payload, initiator }) =>
   Effect.gen(function* (_) {
-    const prismaClient = yield* _(PrismaServiceTag);
-    const notificationService = yield* _(NotificationServiceTag);
+    const prismaClient = yield* PrismaServiceTag;
+    const notificationService = yield* NotificationServiceTag;
 
     if (!initiator.isAdmin && initiator.id !== payload.idUser) {
-      yield* _(
-        new DeleteEntityAuthorizationError({
-          entity: "Ticket",
-          idEntity: payload.id,
-          idInitiator: initiator.id,
-          payload: payload,
-        })
-      );
+      yield* new DeleteEntityAuthorizationError({
+        entity: "Ticket",
+        idEntity: payload.id,
+        idInitiator: initiator.id,
+        payload: payload,
+      });
     }
 
-    const deletedTicket = yield* _(
-      prismaClient.queryDecode(TicketDbToDomainSchema, (p) =>
+    const deletedTicket = yield* prismaClient.queryDecode(
+      TicketDbToDomainSchema,
+      (p) =>
         p.ticket.update({
           data: {
             dateDeleted: new Date(),
@@ -38,7 +37,6 @@ export const ReturnTicketUseCase = BaseCausedUseCaseFor(
             idUser: payload.idUser,
           },
         })
-      )
     );
 
     Effect.runFork(

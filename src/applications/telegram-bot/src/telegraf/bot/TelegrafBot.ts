@@ -47,10 +47,9 @@ export const on =
   <NewContext>(mapContext: (context: T) => NewContext) =>
   <A, E, R>(handler: (context: NewContext) => Effect.Effect<A, E, R>) =>
     Effect.gen(function* (_) {
-      const { telegrafClient } = yield* _(TelegrafTag);
-      const runFork = yield* _(
-        FiberSet.makeRuntime<Exclude<R, TelegrafContext>>()
-      );
+      const { telegrafClient } = yield* TelegrafTag;
+      const runFork =
+        yield* FiberSet.makeRuntime<Exclude<R, TelegrafContext>>();
 
       telegrafClient.on(filter, async (context, next) => {
         const activationResult = activate(context);
@@ -128,10 +127,8 @@ export const command = <A, E, R>(options: {
   ) => Effect.Effect<A, E, R>;
 }) =>
   Effect.gen(function* (_) {
-    const { telegrafClient } = yield* _(TelegrafTag);
-    const runFork = yield* _(
-      FiberSet.makeRuntime<Exclude<R, TelegrafContext>>()
-    );
+    const { telegrafClient } = yield* TelegrafTag;
+    const runFork = yield* FiberSet.makeRuntime<Exclude<R, TelegrafContext>>();
 
     telegrafClient.command(/.+/, async (context, next) => {
       const { command } = context;

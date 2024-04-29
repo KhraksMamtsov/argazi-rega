@@ -15,23 +15,18 @@ export const VisitorMdComponent = (props: { visitor: Visitor }) =>
       MD.pipe(visitor.name, MD.escape, MD.bold)
     );
 
-    return yield* _(
-      MD.document(
-        MD.headline(headline),
-        MD.dl()(
-          [
-            "Тип",
-            MD.bold(VisitorTypeMdComponent({ visitorType: visitor.type })),
-          ],
-          [
-            "Email",
-            MD.bold(
-              Option.getOrElse(visitor.email, () =>
-                EmptyMdComponent({ length: 4 })
-              )
-            ),
-          ]
-        )
+    return yield* MD.document(
+      MD.headline(headline),
+      MD.dl()(
+        ["Тип", MD.bold(VisitorTypeMdComponent({ visitorType: visitor.type }))],
+        [
+          "Email",
+          MD.bold(
+            Option.getOrElse(visitor.email, () =>
+              EmptyMdComponent({ length: 4 })
+            )
+          ),
+        ]
       )
     );
   });

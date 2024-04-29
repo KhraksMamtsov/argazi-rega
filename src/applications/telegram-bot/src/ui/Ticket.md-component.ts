@@ -10,24 +10,22 @@ export const TicketMdComponent = (props: { ticket: Ticket }) =>
   Effect.gen(function* (_) {
     const { ticket } = props;
 
-    return yield* _(
-      MD.document(
-        MD.headline("🎟️ Билет"),
-        MD.dl()(
-          [
-            "Дата регистрации",
-            pipe(
-              DateMdComponent({
-                date: ticket.dateRegistered,
-              }),
-              MD.bold
-            ),
-          ],
-          [
-            "Роль",
-            pipe(TicketRoleMdComponent({ ticketRole: ticket.role }), MD.bold),
-          ]
-        )
+    return yield* MD.document(
+      MD.headline("🎟️ Билет"),
+      MD.dl()(
+        [
+          "Дата регистрации",
+          pipe(
+            DateMdComponent({
+              date: ticket.dateRegistered,
+            }),
+            MD.bold
+          ),
+        ],
+        [
+          "Роль",
+          pipe(TicketRoleMdComponent({ ticketRole: ticket.role }), MD.bold),
+        ]
       )
     );
   });

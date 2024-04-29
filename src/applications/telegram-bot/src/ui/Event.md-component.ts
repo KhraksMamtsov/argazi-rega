@@ -15,23 +15,18 @@ export const EventMdComponent = (props: { event: Event }) =>
       MD.pipe(Secret.value(event.name), MD.escape, MD.bold)
     );
 
-    return yield* _(
-      MD.document(
-        MD.headline(headline),
+    return yield* MD.document(
+      MD.headline(headline),
 
-        MD.dl()(
-          ["Дедлайн", MD.bold(DateMdComponent({ date: event.dateDeadline }))],
-          ["Начало", MD.bold(DateMdComponent({ date: event.dateStart }))],
-          ["Окончание", MD.bold(DateMdComponent({ date: event.dateFinish }))],
-          [
-            "Цена за день",
-            MD.bold(MoneyMdComponent({ money: event.priceDay })),
-          ],
-          [
-            "Цена за событие",
-            MD.bold(MoneyMdComponent({ money: event.priceEvent })),
-          ]
-        )
+      MD.dl()(
+        ["Дедлайн", MD.bold(DateMdComponent({ date: event.dateDeadline }))],
+        ["Начало", MD.bold(DateMdComponent({ date: event.dateStart }))],
+        ["Окончание", MD.bold(DateMdComponent({ date: event.dateFinish }))],
+        ["Цена за день", MD.bold(MoneyMdComponent({ money: event.priceDay }))],
+        [
+          "Цена за событие",
+          MD.bold(MoneyMdComponent({ money: event.priceEvent })),
+        ]
       )
     );
   });

@@ -14,14 +14,12 @@ export const GetSubscriptionByIdUseCase = BaseCausedUseCaseFor(
   GetSubscriptionByIdCommandSchema
 )(({ payload }) =>
   Effect.gen(function* (_) {
-    const prismaClient = yield* _(PrismaServiceTag);
+    const prismaClient = yield* PrismaServiceTag;
 
-    return yield* _(
-      prismaClient.queryDecode(
-        Schema.OptionFromNullOr(SubscriptionDbToDomainSchema),
-        (p) =>
-          p.subscription.findUnique({ where: { id: payload.idSubscription } })
-      )
+    return yield* prismaClient.queryDecode(
+      Schema.OptionFromNullOr(SubscriptionDbToDomainSchema),
+      (p) =>
+        p.subscription.findUnique({ where: { id: payload.idSubscription } })
     );
   })
 );

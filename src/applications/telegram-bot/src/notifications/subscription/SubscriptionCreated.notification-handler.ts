@@ -16,30 +16,22 @@ export const SubscriptionCreatedNotificationHandler = (args: {
   readonly user: User;
 }) =>
   Effect.gen(function* (_) {
-    const telegraf = yield* _(TelegrafTag);
-    const restApiService = yield* _(RestApiServiceTag);
+    const telegraf = yield* TelegrafTag;
+    const restApiService = yield* RestApiServiceTag;
 
-    const place = yield* _(
-      restApiService.getPlaceById({
-        path: { idPlace: args.createdSubscription.idPlace },
-      })
-    );
+    const place = yield* restApiService.getPlaceById({
+      path: { idPlace: args.createdSubscription.idPlace },
+    });
 
-    yield* _(
-      telegraf.sendMessage(
-        args.user.idTelegramChat,
-        yield* _(
-          SubscriptionCreatedMdComponent({
-            place,
-          })
-        ),
-        Markup.inlineKeyboard([
-          yield* _(
-            UnsubscribePlaceCbButton({
-              id: args.createdSubscription.id,
-            })
-          ),
-        ])
-      )
+    yield* telegraf.sendMessage(
+      args.user.idTelegramChat,
+      yield* SubscriptionCreatedMdComponent({
+        place,
+      }),
+      Markup.inlineKeyboard([
+        yield* UnsubscribePlaceCbButton({
+          id: args.createdSubscription.id,
+        }),
+      ])
     );
   });

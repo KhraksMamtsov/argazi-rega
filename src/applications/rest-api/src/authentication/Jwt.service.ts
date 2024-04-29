@@ -1,5 +1,5 @@
 import { Schema, ParseResult } from "@effect/schema";
-import { Config, Effect, Layer, Record, Secret, Data } from "effect";
+import { Config, Effect, Layer, Record, Secret, Data, pipe } from "effect";
 
 import { IdUserSchema } from "@argazi/domain";
 import { _SS, _JWT } from "@argazi/shared";
@@ -48,7 +48,7 @@ export class JWRServiceVerifyError extends Data.TaggedError(
 
 const makeLive = () =>
   Effect.gen(function* (_) {
-    const jwtConfig = yield* _(
+    const jwtConfig = yield* pipe(
       Effect.all({
         accessTokenSecret: Config.secret("JWT_ACCESS_TOKEN_SECRET"),
         accessTokenTtl: Config.secret("JWT_ACCESS_TOKEN_TTL"),

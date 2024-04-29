@@ -50,7 +50,7 @@ const esc = <E = never, R = never>(
 
       if (i < values.length) {
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        result += yield* _(toEffect(values[i]!, Effect.succeed));
+        result += yield* toEffect(values[i]!, Effect.succeed);
       }
     }
 

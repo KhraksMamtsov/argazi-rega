@@ -1,4 +1,4 @@
-import { Effect, Secret } from "effect";
+import { Effect, Secret, pipe } from "effect";
 import { ServerError } from "effect-http";
 
 import type { IdUser } from "@argazi/domain";
@@ -14,7 +14,7 @@ export const BearerAuthGuard =
   ) =>
   (parameters: P, security: string) =>
     Effect.gen(function* (_) {
-      const { sub } = yield* _(
+      const { sub } = yield* pipe(
         JwtServiceTag.verifyAndDecode({
           token: Secret.fromString(security),
           type: "accessToken",
@@ -24,7 +24,7 @@ export const BearerAuthGuard =
         )
       );
 
-      return yield* _(handler(parameters, { idInitiator: sub }));
+      return yield* handler(parameters, { idInitiator: sub });
     }).pipe(
       Effect.tapBoth({
         onFailure: Effect.logError,

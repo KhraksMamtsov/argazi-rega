@@ -65,7 +65,7 @@ const app = pipe(
   flow(
     RouterBuilder.handle("loginDwbn", ({ body }) =>
       Effect.gen(function* (_) {
-        const loginResult = yield* _(LoginDwbnHandler(body));
+        const loginResult = yield* LoginDwbnHandler(body);
 
         return loginResult;
       }).pipe(
@@ -77,15 +77,13 @@ const app = pipe(
     ),
     RouterBuilder.handle("loginBasic", (_, { pass, user }) =>
       Effect.gen(function* (_) {
-        const loginResult = yield* _(
-          LoginBasicHandler({
-            login: Secret.fromString(user),
-            password: Secret.fromString(pass),
-          })
-        );
+        const loginResult = yield* LoginBasicHandler({
+          login: Secret.fromString(user),
+          password: Secret.fromString(pass),
+        });
 
         if (isServerError(loginResult)) {
-          return yield* _(loginResult);
+          return yield* loginResult;
         }
 
         return loginResult;
@@ -98,14 +96,12 @@ const app = pipe(
     ),
     RouterBuilder.handle("refreshToken", ({ body }) =>
       Effect.gen(function* (_) {
-        const loginResult = yield* _(RefreshTokenHandler(body));
+        const loginResult = yield* RefreshTokenHandler(body);
 
         if (Option.isNone(loginResult)) {
-          return yield* _(
-            ServerError.unauthorizedError({
-              content: "User not found",
-            })
-          );
+          return yield* ServerError.unauthorizedError({
+            content: "User not found",
+          });
         }
 
         return loginResult.value;
@@ -123,15 +119,13 @@ const app = pipe(
       "createUsersVisitor",
       BearerAuthGuard(({ body, path }, { idInitiator }) =>
         Effect.gen(function* (_) {
-          const newVisitor = yield* _(
-            CreateUsersVisitorUseCase({
-              idInitiator,
-              payload: {
-                ...body,
-                idUser: path.idUser,
-              },
-            })
-          );
+          const newVisitor = yield* CreateUsersVisitorUseCase({
+            idInitiator,
+            payload: {
+              ...body,
+              idUser: path.idUser,
+            },
+          });
 
           return newVisitor;
         }).pipe(
@@ -147,12 +141,10 @@ const app = pipe(
   flow(
     RouterBuilder.handle("createUser", ({ body }) =>
       Effect.gen(function* (_) {
-        const newUser = yield* _(
-          CreateUserUseCase({
-            idInitiator: IdAdmin,
-            payload: body,
-          })
-        );
+        const newUser = yield* CreateUserUseCase({
+          idInitiator: IdAdmin,
+          payload: body,
+        });
 
         return newUser;
       }).pipe(
@@ -164,12 +156,10 @@ const app = pipe(
     ),
     RouterBuilder.handle("updateUser", ({ body, path }) =>
       Effect.gen(function* (_) {
-        const newUser = yield* _(
-          UpdateUserUseCase({
-            idInitiator: IdAdmin,
-            payload: { id: path.id, ...body },
-          })
-        );
+        const newUser = yield* UpdateUserUseCase({
+          idInitiator: IdAdmin,
+          payload: { id: path.id, ...body },
+        });
 
         return newUser;
       }).pipe(
@@ -181,8 +171,10 @@ const app = pipe(
     ),
     RouterBuilder.handle("getUser", ({ path }) =>
       Effect.gen(function* (_) {
-        const newUser = yield* _(
-          GetUserUseCase({ payload: { id: path.idUser, type: "id" } }),
+        const newUser = yield* pipe(
+          GetUserUseCase({
+            payload: { id: path.idUser, type: "id" },
+          }),
           Effect.flatten,
           Effect.mapError(() => ServerError.notFoundError("NotFound1"))
         );
@@ -201,11 +193,9 @@ const app = pipe(
           return [];
         }
 
-        const newUserOption = yield* _(
-          GetManyUsersUseCase({
-            payload: { idsUser: body.idsUser, type: "id" },
-          })
-        );
+        const newUserOption = yield* GetManyUsersUseCase({
+          payload: { idsUser: body.idsUser, type: "id" },
+        });
 
         return newUserOption;
       }).pipe(
@@ -218,14 +208,12 @@ const app = pipe(
 
     RouterBuilder.handle("getUserSubscriptions", ({ path }) =>
       Effect.gen(function* (_) {
-        const content = yield* _(
-          GetUserSubscriptionsUseCase({
-            idInitiator: path.idUser, // Todo: take from security
-            payload: {
-              idUser: path.idUser,
-            },
-          })
-        );
+        const content = yield* GetUserSubscriptionsUseCase({
+          idInitiator: path.idUser, // Todo: take from security
+          payload: {
+            idUser: path.idUser,
+          },
+        });
 
         return content;
       }).pipe(
@@ -237,15 +225,13 @@ const app = pipe(
     ),
     RouterBuilder.handle("createUserSubscription", ({ path, body }) =>
       Effect.gen(function* (_) {
-        const content = yield* _(
-          CreateSubscriptionUseCase({
-            idInitiator: path.idUser, // Todo: take from security
-            payload: {
-              idPlace: body.idPlace,
-              idUser: path.idUser,
-            },
-          })
-        );
+        const content = yield* CreateSubscriptionUseCase({
+          idInitiator: path.idUser, // Todo: take from security
+          payload: {
+            idPlace: body.idPlace,
+            idUser: path.idUser,
+          },
+        });
 
         return content;
       }).pipe(
@@ -257,15 +243,13 @@ const app = pipe(
     ),
     RouterBuilder.handle("deleteUserSubscription", ({ path }) =>
       Effect.gen(function* (_) {
-        const content = yield* _(
-          DeleteUserSubscriptionUseCase({
-            idInitiator: path.idUser, // Todo: take from security
-            payload: {
-              idSubscription: path.idSubscription,
-              idUser: path.idUser,
-            },
-          })
-        );
+        const content = yield* DeleteUserSubscriptionUseCase({
+          idInitiator: path.idUser, // Todo: take from security
+          payload: {
+            idSubscription: path.idSubscription,
+            idUser: path.idUser,
+          },
+        });
 
         return content;
       }).pipe(
@@ -279,15 +263,13 @@ const app = pipe(
   flow(
     RouterBuilder.handle("bookTicket", ({ path, body }) =>
       Effect.gen(function* (_) {
-        const result = yield* _(
-          BookTicketUseCase({
-            idInitiator: path.idUser, // Todo: take from security
-            payload: {
-              idEvent: body.idEvent,
-              idUser: path.idUser,
-            },
-          })
-        );
+        const result = yield* BookTicketUseCase({
+          idInitiator: path.idUser, // Todo: take from security
+          payload: {
+            idEvent: body.idEvent,
+            idUser: path.idUser,
+          },
+        });
 
         return result;
       }).pipe(
@@ -299,15 +281,13 @@ const app = pipe(
     ),
     RouterBuilder.handle("returnTicket", ({ path }) =>
       Effect.gen(function* (_) {
-        const content = yield* _(
-          ReturnTicketUseCase({
-            idInitiator: path.idUser, // Todo: take from security
-            payload: {
-              id: path.idTicket,
-              idUser: path.idUser,
-            },
-          })
-        );
+        const content = yield* ReturnTicketUseCase({
+          idInitiator: path.idUser, // Todo: take from security
+          payload: {
+            id: path.idTicket,
+            idUser: path.idUser,
+          },
+        });
 
         return content;
       }).pipe(
@@ -319,7 +299,7 @@ const app = pipe(
     ),
     RouterBuilder.handle("getUserTicketById", ({ path }) =>
       Effect.gen(function* (_) {
-        const ticket = yield* _(
+        const ticket = yield* pipe(
           GetUserTicketByIdUseCase({
             idInitiator: path.idUser, // Todo: take from security
             payload: {
@@ -345,12 +325,10 @@ const app = pipe(
   // region Transport handlers
   RouterBuilder.handle("createTransport", ({ body }) =>
     Effect.gen(function* (_) {
-      const newTransport = yield* _(
-        CreateTransportUseCase({
-          idInitiator: IdAdmin,
-          payload: body,
-        })
-      );
+      const newTransport = yield* CreateTransportUseCase({
+        idInitiator: IdAdmin,
+        payload: body,
+      });
 
       return newTransport;
     }).pipe(
@@ -364,12 +342,10 @@ const app = pipe(
   // region Event handlers
   RouterBuilder.handle("createEvent", ({ body }) =>
     Effect.gen(function* (_) {
-      const newEvent = yield* _(
-        CreateEventUseCase({
-          idInitiator: IdAdmin,
-          payload: body,
-        })
-      );
+      const newEvent = yield* CreateEventUseCase({
+        idInitiator: IdAdmin,
+        payload: body,
+      });
 
       return newEvent;
     }).pipe(
@@ -381,7 +357,7 @@ const app = pipe(
   ),
   RouterBuilder.handle("getEvent", ({ path }) =>
     Effect.gen(function* (_) {
-      const newEventOption = yield* _(
+      const newEventOption = yield* pipe(
         GetEventByIdUseCase({
           idInitiator: IdAdmin,
           payload: { id: path.idEvent },
@@ -403,12 +379,10 @@ const app = pipe(
   flow(
     RouterBuilder.handle("createPlace", ({ body }) =>
       Effect.gen(function* (_) {
-        const newPlace = yield* _(
-          CreatePlaceUseCase({
-            idInitiator: IdAdmin,
-            payload: body,
-          })
-        );
+        const newPlace = yield* CreatePlaceUseCase({
+          idInitiator: IdAdmin,
+          payload: body,
+        });
 
         return newPlace;
       }).pipe(
@@ -420,7 +394,7 @@ const app = pipe(
     ),
     RouterBuilder.handle("getPlaceById", ({ path }) =>
       Effect.gen(function* (_) {
-        const newPlace = yield* _(
+        const newPlace = yield* pipe(
           GetPlaceByIdUseCase({
             idInitiator: IdAdmin,
             payload: { id: path.idPlace },
@@ -439,7 +413,7 @@ const app = pipe(
     ),
     RouterBuilder.handle("getPlaceGeoPoint", ({ path }) =>
       Effect.gen(function* (_) {
-        const geoPoint = yield* _(
+        const geoPoint = yield* pipe(
           GetPlaceGeoPointUseCase({
             idInitiator: IdAdmin,
             payload: { idPlace: path.idPlace },
@@ -458,12 +432,10 @@ const app = pipe(
     ),
     RouterBuilder.handle("getPlaces", () =>
       Effect.gen(function* (_) {
-        const places = yield* _(
-          GetPlacesUseCase({
-            idInitiator: IdAdmin,
-            payload: {},
-          })
-        );
+        const places = yield* GetPlacesUseCase({
+          idInitiator: IdAdmin,
+          payload: {},
+        });
 
         return places;
       }).pipe(
@@ -475,12 +447,10 @@ const app = pipe(
     ),
     RouterBuilder.handle("getPlaceSubscriptions", ({ path }) =>
       Effect.gen(function* (_) {
-        const placeSubscriptions = yield* _(
-          GetPlaceSubscriptionsUseCase({
-            idInitiator: IdAdmin,
-            payload: { idPlace: path.idPlace },
-          })
-        );
+        const placeSubscriptions = yield* GetPlaceSubscriptionsUseCase({
+          idInitiator: IdAdmin,
+          payload: { idPlace: path.idPlace },
+        });
 
         return placeSubscriptions;
       }).pipe(
@@ -493,14 +463,12 @@ const app = pipe(
 
     RouterBuilder.handle("getPlaceActualEvents", ({ path }) =>
       Effect.gen(function* (_) {
-        const placeActualEvents = yield* _(
-          GetPlaceActualEventsUseCase(
-            {
-              idInitiator: IdAdmin,
-              payload: { idPlace: path.idPlace },
-            },
-            { includeDeleted: false }
-          )
+        const placeActualEvents = yield* GetPlaceActualEventsUseCase(
+          {
+            idInitiator: IdAdmin,
+            payload: { idPlace: path.idPlace },
+          },
+          { includeDeleted: false }
         );
 
         return placeActualEvents;
@@ -516,7 +484,7 @@ const app = pipe(
   // region Subscriptions handlers
   RouterBuilder.handle("getSubscription", ({ path }) =>
     Effect.gen(function* (_) {
-      const subscriptionOption = yield* _(
+      const subscriptionOption = yield* pipe(
         GetSubscriptionByIdUseCase({
           idInitiator: IdAdmin,
           payload: { idSubscription: path.idSubscription },
@@ -524,13 +492,11 @@ const app = pipe(
         Effect.tapError((x) => Effect.logError(x))
       );
 
-      return yield* _(
-        subscriptionOption.pipe(
-          Option.match({
-            onNone: () => ServerError.notFoundError("Not Found"),
-            onSome: (subscription) => Effect.succeed(subscription),
-          })
-        )
+      return yield* subscriptionOption.pipe(
+        Option.match({
+          onNone: () => ServerError.notFoundError("Not Found"),
+          onSome: (subscription) => Effect.succeed(subscription),
+        })
       );
     }).pipe(
       Effect.tapBoth({
@@ -545,13 +511,11 @@ const app = pipe(
     "createGeoPoint",
     BearerAuthGuard(({ body }, { idInitiator }) =>
       Effect.gen(function* (_) {
-        const qwe = yield* _(
-          //  ^?
-          CreateGeoPointUseCase({
-            idInitiator,
-            payload: body,
-          })
-        );
+        const qwe = yield* //  ^?
+        CreateGeoPointUseCase({
+          idInitiator,
+          payload: body,
+        });
 
         return qwe;
       })

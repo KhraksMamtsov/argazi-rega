@@ -13,19 +13,18 @@ export const GetUsersVisitorsUseCase = BaseGetCausedUseCaseFor(
 )(({ payload, initiator }, { includeDeleted }) =>
   Effect.gen(function* (_) {
     if (!initiator.isAdmin && initiator.id !== payload.idUser) {
-      yield* _(
-        new GetEntityAuthorizationError({
-          entity: ["User", "Visitor"],
-          idInitiator: initiator.id,
-          payload,
-        })
-      );
+      yield* new GetEntityAuthorizationError({
+        entity: ["User", "Visitor"],
+        idInitiator: initiator.id,
+        payload,
+      });
     }
 
-    const prismaClient = yield* _(PrismaServiceTag);
+    const prismaClient = yield* PrismaServiceTag;
 
-    const visitors = yield* _(
-      prismaClient.queryDecode(Schema.Array(VisitorDbToDomainSchema), (p) =>
+    const visitors = yield* prismaClient.queryDecode(
+      Schema.Array(VisitorDbToDomainSchema),
+      (p) =>
         p.visitor.findMany({
           where: {
             idUser: payload.idUser,
@@ -34,7 +33,6 @@ export const GetUsersVisitorsUseCase = BaseGetCausedUseCaseFor(
               : { dateDeleted: null, idUserDeleter: null }),
           },
         })
-      )
     );
 
     return visitors;

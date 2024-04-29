@@ -10,11 +10,12 @@ import { BaseUseCaseFor } from "../../common/Base.use-case.js";
 export const RegisterUserUseCase = BaseUseCaseFor(RegisterUserCommandSchema)(
   ({ payload }) =>
     Effect.gen(function* (_) {
-      const prismaClient = yield* _(PrismaServiceTag);
-      const notificationService = yield* _(NotificationServiceTag);
+      const prismaClient = yield* PrismaServiceTag;
+      const notificationService = yield* NotificationServiceTag;
 
-      const newUser = yield* _(
-        prismaClient.queryDecode(UserDbToDomainSchema, (p) =>
+      const newUser = yield* prismaClient.queryDecode(
+        UserDbToDomainSchema,
+        (p) =>
           p.user.create({
             data: {
               ...payload,
@@ -30,7 +31,6 @@ export const RegisterUserUseCase = BaseUseCaseFor(RegisterUserCommandSchema)(
               ),
             },
           })
-        )
       );
 
       if (!newUser.isAdmin) {

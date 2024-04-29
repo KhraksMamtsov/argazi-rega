@@ -16,33 +16,25 @@ export const TicketCreatedNotificationHandler = (args: {
   readonly user: User;
 }) =>
   Effect.gen(function* (_) {
-    const telegraf = yield* _(TelegrafTag);
-    const restApiService = yield* _(RestApiServiceTag);
-    const event = yield* _(
-      restApiService.getEvent({
-        path: { idEvent: args.createdTicket.idEvent },
-      })
-    );
+    const telegraf = yield* TelegrafTag;
+    const restApiService = yield* RestApiServiceTag;
+    const event = yield* restApiService.getEvent({
+      path: { idEvent: args.createdTicket.idEvent },
+    });
 
-    const place = yield* _(
-      restApiService.getPlaceById({
-        path: { idPlace: event.idPlace },
-      })
-    );
+    const place = yield* restApiService.getPlaceById({
+      path: { idPlace: event.idPlace },
+    });
 
-    yield* _(
-      telegraf.sendMessage(
-        args.user.idTelegramChat,
-        yield* _(
-          TicketCreatedMdComponent({
-            event,
-            place,
-            ticket: args.createdTicket,
-          })
-        ),
-        Markup.inlineKeyboard([
-          yield* _(ReturnTicketCbButton({ ticket: args.createdTicket })),
-        ])
-      )
+    yield* telegraf.sendMessage(
+      args.user.idTelegramChat,
+      yield* TicketCreatedMdComponent({
+        event,
+        place,
+        ticket: args.createdTicket,
+      }),
+      Markup.inlineKeyboard([
+        yield* ReturnTicketCbButton({ ticket: args.createdTicket }),
+      ])
     );
   });

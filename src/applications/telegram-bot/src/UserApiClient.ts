@@ -14,17 +14,17 @@ export class RestApiClientTag extends Context.Tag(
 
 export const makeLive = () =>
   Effect.gen(function* (_) {
-    const apiUrl = yield* _(Config.secret("API_URL"));
-    const apiPort = yield* _(Config.secret("API_PORT"));
-    // const basicAuthSecret = yield* _(Config.secret("BASIC_AUTH_BOT_SECRET"));
+    const apiUrl = yield* Config.secret("API_URL");
+    const apiPort = yield* Config.secret("API_PORT");
+    // const basicAuthSecret = yield* pipe(Config.secret("BASIC_AUTH_BOT_SECRET"));
 
-    // const { content } = yield* _(
+    // const { content } = yield* pipe(
     //   restApiClient.loginBasic({
     //     body: { basicSecret: Secret.value(basicAuthSecret) },
     //   }),
     // );
     //
-    // const botCredentials = yield* _(SynchronizedRef.make(content));
+    // const botCredentials = yield* pipe(SynchronizedRef.make(content));
     //
     // const refreshCredentials = (refreshToken: RefreshToken) =>
     //   restApiClient
@@ -38,24 +38,24 @@ export const makeLive = () =>
     //
     // const wrapRequest = <R, E, A>(request: Effect.Effect<R, E, A>) =>
     //   Effect.gen(function* (_) {
-    //     const actualCred = yield* _(SynchronizedRef.get(botCredentials));
+    //     const actualCred = yield* pipe(SynchronizedRef.get(botCredentials));
     //
     //     actualCred!;
-    //     const asd = yield* _(request, Effect.either);
+    //     const asd = yield* pipe(request, Effect.either);
     //
     //     if (Either.isRight(asd)) {
     //       return asd;
     //     } else {
-    //       yield* _(
+    //       yield* pipe(
     //         SynchronizedRef.updateEffect(botCredentials, (prevCredentials) =>
     //           refreshCredentials(prevCredentials.refreshToken),
     //         ),
     //       );
     //
-    //       const actualCred = yield* _(SynchronizedRef.get(botCredentials));
+    //       const actualCred = yield* pipe(SynchronizedRef.get(botCredentials));
     //
     //       actualCred!;
-    //       const asd = yield* _(request, Effect.either);
+    //       const asd = yield* pipe(request, Effect.either);
     //       return asd;
     //     }
     //   });

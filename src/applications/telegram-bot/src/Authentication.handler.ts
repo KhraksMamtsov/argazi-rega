@@ -1,6 +1,6 @@
 import { Schema } from "@effect/schema";
 import { Effect, Either } from "effect";
-import { constVoid } from "effect/Function";
+import { constVoid, pipe } from "effect/Function";
 
 import { IdTelegramChatSchema } from "@argazi/domain";
 
@@ -17,20 +17,17 @@ export const decode = Schema.decode(TelegramAuthMiniAppDataSchema);
 
 export const AuthenticationHandler = (webAppDataPayload: WebAppDataPayload) =>
   Effect.gen(function* (_) {
-    const restApiService = yield* _(RestApiServiceTag);
-    const sessionService = yield* _(SessionServiceTag);
+    const restApiService = yield* RestApiServiceTag;
 
-    const authenticationData = yield* _(
-      decode(webAppDataPayload.message.web_app_data.data).pipe(
-        Effect.tapError(Effect.logError)
-      )
-    );
+    const authenticationData = yield* decode(
+      webAppDataPayload.message.web_app_data.data
+    ).pipe(Effect.tapError(Effect.logError));
 
     const idTelegramChat = IdTelegramChatSchema(
       webAppDataPayload.message.chat.id
     );
 
-    const authenticationResult = yield* _(
+    const authenticationResult = yield* pipe(
       restApiService.loginDwbn({
         body: {
           code: authenticationData.data.code,
@@ -45,30 +42,23 @@ export const AuthenticationHandler = (webAppDataPayload: WebAppDataPayload) =>
       return;
     }
 
-    yield* _(
-      sessionService.create(idTelegramChat, {
-        accessToken: authenticationResult.right.credentials.accessToken,
-        refreshToken: authenticationResult.right.credentials.refreshToken,
-      })
+    yield* SessionServiceTag.create(idTelegramChat, {
+      accessToken: authenticationResult.right.credentials.accessToken,
+      refreshToken: authenticationResult.right.credentials.refreshToken,
+    });
+
+    const restApiUserClient =
+      yield* restApiService.__new.getUserApiClientFor(idTelegramChat);
+
+    const myIdentity = yield* restApiUserClient.getMyIdentity({});
+
+    const answerText = yield* MD.document(
+      ArgazipaSayMdComponent({ emotion: "🙏", phrase: "Добро пожаловать" }),
+      MD.br,
+      UserMdComponent({ user: myIdentity })
     );
 
-    const restApiUserClient = yield* _(
-      restApiService.__new.getUserApiClientFor(idTelegramChat)
-    );
-
-    const myIdentity = yield* _(restApiUserClient.getMyIdentity({}));
-
-    const answerText = yield* _(
-      MD.document(
-        ArgazipaSayMdComponent({ emotion: "🙏", phrase: "Добро пожаловать" }),
-        MD.br,
-        UserMdComponent({ user: myIdentity })
-      )
-    );
-
-    return yield* _(
-      webAppDataPayload.replyWithMarkdown(answerText, {
-        reply_markup: { remove_keyboard: true },
-      })
-    );
+    return yield* webAppDataPayload.replyWithMarkdown(answerText, {
+      reply_markup: { remove_keyboard: true },
+    });
   });

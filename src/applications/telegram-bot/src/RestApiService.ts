@@ -8,8 +8,8 @@ import {
   Layer,
   Schedule,
   Secret,
-  Context,
   SynchronizedRef,
+  pipe,
 } from "effect";
 import { Client, ClientError } from "effect-http";
 
@@ -23,7 +23,7 @@ import type { ClientRequest } from "@effect/platform/Http/ClientRequest";
 export interface RestApiService
   extends Effect.Effect.Success<ReturnType<typeof makeLive>> {}
 
-export class RestApiServiceTag extends Context.Tag(
+export class RestApiServiceTag extends Effect.Tag(
   "@argazi/infrastructure/telegram-bot/RestApiClientService"
 )<RestApiServiceTag, RestApiService>() {
   public static readonly Live = () => Layer.effect(this, makeLive());
@@ -36,9 +36,9 @@ export class RefreshTokenExpired extends Data.TaggedError(
 }> {}
 
 export const makeLive = () =>
-  Effect.gen(function* (_) {
-    const apiUrl = yield* _(Config.secret("API_URL"));
-    const apiPort = yield* _(Config.secret("API_PORT"));
+  Effect.gen(function* () {
+    const apiUrl = yield* Config.secret("API_URL");
+    const apiPort = yield* Config.secret("API_PORT");
 
     const restApiClient = Client.make(RestApiSpec, {
       baseUrl: new URL(`${Secret.value(apiUrl)}:${Secret.value(apiPort)}`)
@@ -66,8 +66,7 @@ export const makeLive = () =>
             apiMethod(
               input,
               Client.setBearer(Secret.value(actualUserCredentials.accessToken))
-            ),
-            Effect.either
+            ).pipe(Effect.either)
           );
 
           if (Either.isRight(requestResult)) {
@@ -77,12 +76,12 @@ export const makeLive = () =>
           console.log("TOKEN REFRESHING");
 
           // TODO: check accessToken expired
-          const refreshedCredentials = yield* _(
-            SynchronizedRef.updateAndGetEffect(
+          const refreshedCredentials =
+            yield* SynchronizedRef.updateAndGetEffect(
               args.userCredentialsSyncRef,
               ({ refreshToken }) =>
                 Effect.gen(function* (_) {
-                  const refreshAuthResult = yield* _(
+                  const refreshAuthResult = yield* pipe(
                     restApiClient.refreshToken({
                       body: { refreshToken },
                     }),
@@ -97,31 +96,24 @@ export const makeLive = () =>
                   );
 
                   if (Either.isLeft(refreshAuthResult)) {
-                    yield* _(SessionServiceTag.drop(args.idTelegramChat));
-                    return yield* _(
-                      new RefreshTokenExpired({
-                        clientError: refreshAuthResult.left,
-                      })
-                    );
+                    yield* SessionServiceTag.drop(args.idTelegramChat);
+                    return yield* new RefreshTokenExpired({
+                      clientError: refreshAuthResult.left,
+                    });
                   }
 
-                  yield* _(
-                    SessionServiceTag.create(
-                      args.idTelegramChat,
-                      refreshAuthResult.right
-                    )
+                  yield* SessionServiceTag.create(
+                    args.idTelegramChat,
+                    refreshAuthResult.right
                   );
 
                   return refreshAuthResult.right;
                 })
-            )
-          );
+            );
 
-          return yield* _(
-            apiMethod(
-              input,
-              Client.setBearer(Secret.value(refreshedCredentials.accessToken))
-            )
+          return yield* apiMethod(
+            input,
+            Client.setBearer(Secret.value(refreshedCredentials.accessToken))
           );
         });
 
@@ -129,15 +121,12 @@ export const makeLive = () =>
       readonly idTelegramChat: IdTelegramChat;
     }) =>
       Effect.gen(function* (_) {
-        const sessionService = yield* _(SessionServiceTag);
         const credentials = yield* _(
-          sessionService.get(args.idTelegramChat),
+          SessionServiceTag.get(args.idTelegramChat),
           Effect.flatten
         );
 
-        const userCredentialsSyncRef = yield* _(
-          SynchronizedRef.make(credentials)
-        );
+        const userCredentialsSyncRef = yield* SynchronizedRef.make(credentials);
 
         const wrapMethod = autoRefreshSynchronized({
           idTelegramChat: args.idTelegramChat,
@@ -157,17 +146,30 @@ export const makeLive = () =>
         };
       });
 
-    const cache = yield* _(
-      Cache.make({
-        capacity: Infinity,
-        lookup: (idTelegramChat: IdTelegramChat) =>
-          createUserApiClient({ idTelegramChat }),
-        timeToLive: "60 minutes",
-      })
-    );
+    const cache = yield* Cache.make({
+      capacity: Infinity,
+      lookup: (idTelegramChat: IdTelegramChat) =>
+        createUserApiClient({ idTelegramChat }),
+      timeToLive: "60 minutes",
+    });
 
     return {
-      ...restApiClient,
+      bookTicket: restApiClient.bookTicket,
+      getUser: restApiClient.getUser,
+      getVisitor: restApiClient.getVisitor,
+      getPlaceById: restApiClient.getPlaceById,
+      getSubscription: restApiClient.getSubscription,
+      getUserTicketById: restApiClient.getUserTicketById,
+      getEvent: restApiClient.getEvent,
+      deleteMyVisitor: restApiClient.deleteMyVisitor,
+      getManyUsers: restApiClient.getManyUsers,
+      getPlaceSubscriptions: restApiClient.getPlaceSubscriptions,
+      getPlaceGeoPoint: restApiClient.getPlaceGeoPoint,
+      createMySubscription: restApiClient.createMySubscription,
+      bookMyTicket: restApiClient.bookMyTicket,
+      returnMyTicket: restApiClient.returnMyTicket,
+      loginDwbn: restApiClient.loginDwbn,
+      deleteMySubscription: restApiClient.deleteMySubscription,
       __new: {
         getUserApiClientFor: (idTelegramChat: IdTelegramChat) =>
           cache.get(idTelegramChat),

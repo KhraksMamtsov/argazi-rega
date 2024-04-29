@@ -139,20 +139,18 @@ export class CacheServiceTag extends Context.Tag("CacheService")<
     Layer.effect(
       this,
       Effect.gen(function* (_) {
-        const password = yield* _(Config.secret("REDIS_PASSWORD"));
-        const port = yield* _(Config.secret("REDIS_PORT"));
-        const host = yield* _(Config.secret("REDIS_HOST"));
+        const password = yield* Config.secret("REDIS_PASSWORD");
+        const port = yield* Config.secret("REDIS_PORT");
+        const host = yield* Config.secret("REDIS_HOST");
 
         const redisURL = new URL(
           `redis://:${Secret.value(password)}@${Secret.value(host)}:${Secret.value(port)}`
         );
 
-        const initResult = yield* _(
-          initialize({
-            url: redisURL.toString(),
-            ...options,
-          })
-        );
+        const initResult = yield* initialize({
+          url: redisURL.toString(),
+          ...options,
+        });
 
         return initResult.client;
       })

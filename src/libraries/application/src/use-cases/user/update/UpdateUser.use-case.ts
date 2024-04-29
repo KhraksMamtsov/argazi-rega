@@ -12,15 +12,13 @@ const encodePayload = Schema.encode(UpdateUserCommandPayloadSchema);
 
 export const UpdateUserUseCase = (command: UpdateUserCommand) =>
   Effect.gen(function* (_) {
-    const prismaClient = yield* _(PrismaServiceTag);
+    const prismaClient = yield* PrismaServiceTag;
 
-    const { id, ...rest } = yield* _(encodePayload(command.payload));
+    const { id, ...rest } = yield* encodePayload(command.payload);
 
     // create user using domain userService produced new User? + events about its creation???
-    return yield* _(
-      prismaClient.update("user", UserDbToDomainSchema, {
-        data: { ...rest, idUserUpdater: command.idInitiator },
-        where: { id },
-      })
-    );
+    return yield* prismaClient.update("user", UserDbToDomainSchema, {
+      data: { ...rest, idUserUpdater: command.idInitiator },
+      where: { id },
+    });
   });

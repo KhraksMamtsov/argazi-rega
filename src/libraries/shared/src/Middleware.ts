@@ -86,7 +86,7 @@
 //   (next: (x: number) => Effect.Effect<never, never, 3>) =>
 //     Effect.gen(function* (_) {
 //       if (income > 3) {
-//         const fromNext = yield* _(next(income));
+//         const fromNext = yield* pipe(next(income));
 //
 //         return fromNext;
 //       } else {
@@ -102,8 +102,8 @@
 //   // map((x) => `${x}`),
 //   // flatMap((x) =>
 //   //   Effect.gen(function* (_) {
-//   //     yield* _(asd22);
-//   //     const randomNumber = yield* _(
+//   //     yield* pipe(asd22);
+//   //     const randomNumber = yield* pipe(
 //   //       Random.next,
 //   //       Effect.flatMap(Option.liftPredicate((x) => x > 2)),
 //   //     );

@@ -16,24 +16,18 @@ export const SubscriptionCancelledNotificationHandler = (args: {
   readonly user: User;
 }) =>
   Effect.gen(function* (_) {
-    const telegraf = yield* _(TelegrafTag);
-    const restApiClient = yield* _(RestApiServiceTag);
+    const telegraf = yield* TelegrafTag;
+    const restApiClient = yield* RestApiServiceTag;
 
-    const place = yield* _(
-      restApiClient.getPlaceById({
-        path: {
-          idPlace: args.cancelledSubscription.idPlace,
-        },
-      })
-    );
+    const place = yield* restApiClient.getPlaceById({
+      path: {
+        idPlace: args.cancelledSubscription.idPlace,
+      },
+    });
 
-    yield* _(
-      telegraf.sendMessage(
-        args.user.idTelegramChat,
-        yield* _(SubscriptionCancelledMdComponent({ place })),
-        Markup.inlineKeyboard([
-          yield* _(SubscribePlaceCbButton({ id: place.id })),
-        ])
-      )
+    yield* telegraf.sendMessage(
+      args.user.idTelegramChat,
+      yield* SubscriptionCancelledMdComponent({ place }),
+      Markup.inlineKeyboard([yield* SubscribePlaceCbButton({ id: place.id })])
     );
   });

@@ -10,17 +10,17 @@ import { BaseCausedUseCaseFor } from "../../common/Base.use-case.js";
 export const GetPlacesUseCase = BaseCausedUseCaseFor(GetPlacesCommandSchema)(
   () =>
     Effect.gen(function* (_) {
-      const prismaClient = yield* _(PrismaServiceTag);
+      const prismaClient = yield* PrismaServiceTag;
 
-      return yield* _(
-        prismaClient.queryDecode(Schema.Array(PlaceDbToDomainSchema), (p) =>
+      return yield* prismaClient.queryDecode(
+        Schema.Array(PlaceDbToDomainSchema),
+        (p) =>
           p.place.findMany({
             where: {
               dateDeleted: null,
               idUserDeleter: null,
             },
           })
-        )
       );
     })
 );

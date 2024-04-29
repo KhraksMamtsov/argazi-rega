@@ -15,21 +15,20 @@ export const CreateSubscriptionUseCase = BaseCausedUseCaseFor(
   CreateSubscriptionCommandSchema
 )(({ payload, initiator }) =>
   Effect.gen(function* (_) {
-    const prismaClient = yield* _(PrismaServiceTag);
-    const notificationService = yield* _(NotificationServiceTag);
+    const prismaClient = yield* PrismaServiceTag;
+    const notificationService = yield* NotificationServiceTag;
 
     if (!initiator.isAdmin && initiator.id !== payload.idUser) {
-      yield* _(
-        new CreateEntityAuthorizationError({
-          entity: "Subscription",
-          idInitiator: initiator.id,
-          payload,
-        })
-      );
+      yield* new CreateEntityAuthorizationError({
+        entity: "Subscription",
+        idInitiator: initiator.id,
+        payload,
+      });
     }
 
-    const newSubscription = yield* _(
-      prismaClient.queryDecode(SubscriptionDbToDomainSchema, (p) =>
+    const newSubscription = yield* prismaClient.queryDecode(
+      SubscriptionDbToDomainSchema,
+      (p) =>
         p.subscription.create({
           data: {
             idPlace: payload.idPlace,
@@ -38,7 +37,6 @@ export const CreateSubscriptionUseCase = BaseCausedUseCaseFor(
             idUserUpdater: initiator.id,
           },
         })
-      )
     );
 
     Effect.runFork(

@@ -1,5 +1,5 @@
 import { Schema } from "@effect/schema";
-import { Data, Effect, Either } from "effect";
+import { Data, Effect, Either, pipe } from "effect";
 
 import { UserDbToDomainSchema } from "@argazi/database";
 import { PrismaServiceTag } from "@argazi/database";
@@ -29,9 +29,9 @@ export const BaseCausedUseCaseFor =
   ) =>
   (command: T) =>
     Effect.gen(function* (_) {
-      const prismaService = yield* _(PrismaServiceTag);
+      const prismaService = yield* PrismaServiceTag;
 
-      const initiator = yield* _(
+      const initiator = yield* pipe(
         prismaService.queryDecode(
           Schema.OptionFromNullOr(UserDbToDomainSchema),
           (p) => p.user.findUnique({ where: { id: command.idInitiator } })
@@ -43,12 +43,10 @@ export const BaseCausedUseCaseFor =
         )
       );
 
-      return yield* _(
-        cb({
-          initiator,
-          payload: command.payload,
-        })
-      );
+      return yield* cb({
+        initiator,
+        payload: command.payload,
+      });
     });
 
 export const BaseGetCausedUseCaseFor =
@@ -73,9 +71,9 @@ export const BaseGetCausedUseCaseFor =
     }
   ) =>
     Effect.gen(function* (_) {
-      const prismaService = yield* _(PrismaServiceTag);
+      const prismaService = yield* PrismaServiceTag;
 
-      const initiator = yield* _(
+      const initiator = yield* pipe(
         prismaService.queryDecode(
           Schema.OptionFromNullOr(UserDbToDomainSchema),
           (p) => p.user.findUnique({ where: { id: command.idInitiator } })
@@ -87,14 +85,12 @@ export const BaseGetCausedUseCaseFor =
         )
       );
 
-      return yield* _(
-        cb(
-          {
-            initiator,
-            payload: command.payload,
-          },
-          options
-        )
+      return yield* cb(
+        {
+          initiator,
+          payload: command.payload,
+        },
+        options
       );
     });
 
@@ -103,6 +99,6 @@ export const BaseUseCaseFor =
   <R, E, A>(cb: (args: T) => Effect.Effect<A, E, R>) =>
   (command: I) =>
     Effect.gen(function* (_) {
-      const args = yield* _(Schema.decode(commandSchema)(command));
-      return yield* _(cb(args));
+      const args = yield* Schema.decode(commandSchema)(command);
+      return yield* cb(args);
     });

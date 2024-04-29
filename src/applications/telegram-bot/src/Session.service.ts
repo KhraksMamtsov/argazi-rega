@@ -19,7 +19,7 @@ const REFRESH_TOKEN_FIELD = "refreshToken" satisfies keyof UserCredentials;
 
 export const makeLive = () =>
   Effect.gen(function* (_) {
-    const cacheService = yield* _(CacheServiceTag);
+    const cacheService = yield* CacheServiceTag;
 
     return {
       create: (idTelegramChat: IdTelegramChat, credentials: UserCredentials) =>

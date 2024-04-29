@@ -12,11 +12,12 @@ export const CreateEventUseCase = BaseCausedUseCaseFor(
   CreateEventCommandSchema
 )(({ payload, initiator }) =>
   Effect.gen(function* (_) {
-    const prismaClient = yield* _(PrismaServiceTag);
-    const notificationService = yield* _(NotificationServiceTag);
+    const prismaClient = yield* PrismaServiceTag;
+    const notificationService = yield* NotificationServiceTag;
 
-    const newEvent = yield* _(
-      prismaClient.queryDecode(EventDbToDomainSchema, (p) =>
+    const newEvent = yield* prismaClient.queryDecode(
+      EventDbToDomainSchema,
+      (p) =>
         p.event.create({
           data: {
             description: payload.description,
@@ -32,7 +33,6 @@ export const CreateEventUseCase = BaseCausedUseCaseFor(
             priceEvent: payload.priceEvent,
           },
         })
-      )
     );
 
     Effect.runFork(

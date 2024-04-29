@@ -1,4 +1,4 @@
-import { Effect, Array } from "effect";
+import { Effect, Array, pipe } from "effect";
 
 import type { User } from "@argazi/domain";
 
@@ -12,9 +12,9 @@ export const UserCreatedNotificationHandler = (args: {
   readonly initiator: User;
 }) =>
   Effect.gen(function* (_) {
-    const bot = yield* _(TelegrafTag);
+    const bot = yield* TelegrafTag;
 
-    return yield* _(
+    return yield* pipe(
       [args.initiator, args.createdUser],
       Array.map((x) => x.idTelegramChat),
       (x) => [...new Set(x)],

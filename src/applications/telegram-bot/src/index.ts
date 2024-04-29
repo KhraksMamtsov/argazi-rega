@@ -32,31 +32,27 @@ export const debugLogger = pipe(
 const CallbackQueryHandlerLive = Layer.scopedDiscard(
   TgBot.callBackQuery((context) =>
     Effect.gen(function* (_) {
-      const sessionService = yield* _(SessionServiceTag);
-      const credentialsOption = yield* _(
-        sessionService.get(context.idTelegramChat)
+      const sessionService = yield* SessionServiceTag;
+      const credentialsOption = yield* sessionService.get(
+        context.idTelegramChat
       );
 
-      const text = yield* _(
-        MD.document(
-          ArgazipaSayMdComponent({
-            emotion: "🤨",
-            phrase: "Не узнаю тебя, путник",
-          }),
-          "/login"
-        )
+      const text = yield* MD.document(
+        ArgazipaSayMdComponent({
+          emotion: "🤨",
+          phrase: "Не узнаю тебя, путник",
+        }),
+        "/login"
       );
 
       if (Option.isNone(credentialsOption)) {
-        return yield* _(context.replyWithMarkdown(text, {}));
+        return yield* context.replyWithMarkdown(text, {});
       }
 
-      return yield* _(
-        CallbackQueryHandler({
-          accessToken: credentialsOption.value.accessToken,
-          callbackQueryPayload: context,
-        })
-      );
+      return yield* CallbackQueryHandler({
+        accessToken: credentialsOption.value.accessToken,
+        callbackQueryPayload: context,
+      });
     })
   )
 ).pipe(Layer.provide(TelegrafTag.Live));
@@ -64,7 +60,7 @@ const CallbackQueryHandlerLive = Layer.scopedDiscard(
 const WebAppHandlerLive = Layer.scopedDiscard(
   TgBot.webAppData((context) =>
     Effect.gen(function* (_) {
-      return yield* _(AuthenticationHandler(context));
+      return yield* AuthenticationHandler(context);
     })
   )
 ).pipe(Layer.provide(TelegrafTag.Live));

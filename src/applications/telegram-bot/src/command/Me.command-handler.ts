@@ -1,4 +1,4 @@
-import { Effect } from "effect";
+import { Effect, pipe } from "effect";
 
 import { Me } from "./TelegramCommands.js";
 
@@ -11,16 +11,16 @@ export const MeCommandHandler = (args: {
   readonly command: CommandPayload<typeof Me.command>;
 }) =>
   Effect.gen(function* (_) {
-    const restApiService = yield* _(RestApiServiceTag);
-    const restApiUserClient = yield* _(
-      restApiService.__new.getUserApiClientFor(args.command.idTelegramChat)
+    const restApiService = yield* RestApiServiceTag;
+    const restApiUserClient = yield* restApiService.__new.getUserApiClientFor(
+      args.command.idTelegramChat
     );
 
-    const myIdentity = yield* _(restApiUserClient.getMyIdentity({}));
+    const myIdentity = yield* restApiUserClient.getMyIdentity({});
 
-    const answer = yield* _(UserMdComponent({ user: myIdentity }));
+    const answer = yield* UserMdComponent({ user: myIdentity });
 
-    return yield* _(
+    return yield* pipe(
       args.command.replyWithMarkdown(answer, {}),
       Effect.either,
       Effect.tap(Effect.log)

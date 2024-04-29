@@ -51,12 +51,10 @@ export const ArgazipaSayMdComponent = (props: {
   phrase: string | Array<string>;
 }) =>
   Effect.gen(function* (_) {
-    return yield* _(
-      MD.codeBlock(["🤖", props.emotion].join(NBSP))(
-        ([] as Array<string>)
-          .concat(props.phrase)
-          .map((x) => accentify(x))
-          .join("\n")
-      )
+    return yield* MD.codeBlock(["🤖", props.emotion].join(NBSP))(
+      ([] as Array<string>)
+        .concat(props.phrase)
+        .map((x) => accentify(x))
+        .join("\n")
     );
   });

@@ -12,19 +12,17 @@ export const GetPlaceGeoPointUseCase = BaseCausedUseCaseFor(
   GetPlaceGeoPointCommandSchema
 )(({ payload }) =>
   Effect.gen(function* (_) {
-    const prismaClient = yield* _(PrismaServiceTag);
+    const prismaClient = yield* PrismaServiceTag;
 
-    return yield* _(
-      prismaClient.queryDecode(
-        Schema.OptionFromNullOr(GeoPointDbToDomainSchema),
-        (p) =>
-          p.place
-            .findUnique({
-              include: { geoPoint: true },
-              where: { id: payload.idPlace },
-            })
-            .then((x) => x?.geoPoint ?? null)
-      )
+    return yield* prismaClient.queryDecode(
+      Schema.OptionFromNullOr(GeoPointDbToDomainSchema),
+      (p) =>
+        p.place
+          .findUnique({
+            include: { geoPoint: true },
+            where: { id: payload.idPlace },
+          })
+          .then((x) => x?.geoPoint ?? null)
     );
   })
 );

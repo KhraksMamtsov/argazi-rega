@@ -1,4 +1,4 @@
-import { Effect, Array } from "effect";
+import { Effect, Array, pipe } from "effect";
 import { Markup } from "telegraf";
 
 import type { Event } from "@argazi/domain";
@@ -15,40 +15,34 @@ export const EventCreatedNotificationHandler = (args: {
   readonly initiator: User;
 }) =>
   Effect.gen(function* (_) {
-    const telegraf = yield* _(TelegrafTag);
+    const telegraf = yield* TelegrafTag;
 
     // let subscribers: Array<Option.Option<User>> = [];
 
-    const restApiClient = yield* _(RestApiServiceTag);
+    const restApiClient = yield* RestApiServiceTag;
 
-    const subscriptionsAnswer = yield* _(
-      restApiClient.getPlaceSubscriptions({
-        path: { idPlace: args.createdEvent.idPlace },
-      })
-    );
+    const subscriptionsAnswer = yield* restApiClient.getPlaceSubscriptions({
+      path: { idPlace: args.createdEvent.idPlace },
+    });
 
-    const place = yield* _(
-      restApiClient.getPlaceById({
-        path: { idPlace: args.createdEvent.idPlace },
-      })
-    );
+    const place = yield* restApiClient.getPlaceById({
+      path: { idPlace: args.createdEvent.idPlace },
+    });
 
     const idSubscribers = subscriptionsAnswer.map((x) => x.idUser);
 
-    const subscribers = yield* _(
-      restApiClient.getManyUsers({
-        body: {
-          idsUser: [...idSubscribers, ...idSubscribers],
-        },
-      })
-    );
+    const subscribers = yield* restApiClient.getManyUsers({
+      body: {
+        idsUser: [...idSubscribers, ...idSubscribers],
+      },
+    });
 
     const answer = Effect.zip(
       BookTicketCbButton({ id: args.createdEvent.id }),
       EventCreatedMdComponent({ event: args.createdEvent, place })
     );
 
-    return yield* _(
+    return yield* pipe(
       [args.initiator, ...Array.getSomes(subscribers)],
       Array.map((x) => x.idTelegramChat),
       (x) => [...new Set(x)],

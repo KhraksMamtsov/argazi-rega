@@ -19,22 +19,20 @@ export const EventsCommandHandler = (args: {
   readonly command: CommandPayload<typeof MyEvents.command>;
 }) =>
   Effect.gen(function* (_) {
-    const restApiService = yield* _(RestApiServiceTag);
-    const restApiUserClient = yield* _(
-      restApiService.__new.getUserApiClientFor(args.command.idTelegramChat)
+    const restApiService = yield* RestApiServiceTag;
+    const restApiUserClient = yield* restApiService.__new.getUserApiClientFor(
+      args.command.idTelegramChat
     );
 
-    const { userSubscriptions, userTickets } = yield* _(
-      Effect.all(
-        {
-          userSubscriptions: restApiUserClient.getMySubscriptions({}),
-          userTickets: restApiUserClient.getMyTickets({}),
-        },
-        { concurrency: "unbounded" }
-      )
+    const { userSubscriptions, userTickets } = yield* Effect.all(
+      {
+        userSubscriptions: restApiUserClient.getMySubscriptions({}),
+        userTickets: restApiUserClient.getMyTickets({}),
+      },
+      { concurrency: "unbounded" }
     );
 
-    const userPlacesActualEvents = yield* _(
+    const userPlacesActualEvents = yield* pipe(
       userSubscriptions,
       Array.map((x) =>
         restApiUserClient.getPlaceActualEvents({
@@ -104,8 +102,11 @@ export const EventsCommandHandler = (args: {
       })
     );
 
-    return yield* _(
-      Effect.all(replies, { concurrency: "unbounded", mode: "either" }),
+    return yield* pipe(
+      Effect.all(replies, {
+        concurrency: "unbounded",
+        mode: "either",
+      }),
       Effect.tap(Effect.log)
     );
   });

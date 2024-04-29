@@ -12,13 +12,11 @@ export const GetVisitorByIdUseCase = BaseCausedUseCaseFor(
   GetVisitorByIdCommandSchema
 )(({ payload }) =>
   Effect.gen(function* (_) {
-    const prismaClient = yield* _(PrismaServiceTag);
+    const prismaClient = yield* PrismaServiceTag;
 
-    return yield* _(
-      prismaClient.queryDecode(
-        Schema.OptionFromNullOr(VisitorDbToDomainSchema),
-        (p) => p.visitor.findUnique({ where: { id: payload.idVisitor } })
-      )
+    return yield* prismaClient.queryDecode(
+      Schema.OptionFromNullOr(VisitorDbToDomainSchema),
+      (p) => p.visitor.findUnique({ where: { id: payload.idVisitor } })
     );
   })
 );

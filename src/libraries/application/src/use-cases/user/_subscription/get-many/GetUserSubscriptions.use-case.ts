@@ -16,28 +16,24 @@ export const GetUserSubscriptionsUseCase = BaseCausedUseCaseFor(
 )(({ payload, initiator }) =>
   Effect.gen(function* (_) {
     if (!initiator.isAdmin && initiator.id !== payload.idUser) {
-      yield* _(
-        new GetEntityAuthorizationError({
-          entity: ["User", "Subscription"],
-          idInitiator: initiator.id,
-          payload,
-        })
-      );
+      yield* new GetEntityAuthorizationError({
+        entity: ["User", "Subscription"],
+        idInitiator: initiator.id,
+        payload,
+      });
     }
 
-    const prismaClient = yield* _(PrismaServiceTag);
+    const prismaClient = yield* PrismaServiceTag;
 
-    return yield* _(
-      prismaClient.queryDecode(
-        Schema.Array(SubscriptionDbToDomainSchema),
-        (p) =>
-          p.subscription.findMany({
-            where: {
-              dateDeleted: null,
-              idUser: payload.idUser,
-            },
-          })
-      )
+    return yield* prismaClient.queryDecode(
+      Schema.Array(SubscriptionDbToDomainSchema),
+      (p) =>
+        p.subscription.findMany({
+          where: {
+            dateDeleted: null,
+            idUser: payload.idUser,
+          },
+        })
     );
   })
 );

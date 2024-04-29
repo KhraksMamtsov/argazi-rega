@@ -10,10 +10,11 @@ export const CreateTransportUseCase = BaseCausedUseCaseFor(
   CreateTransportCommandSchema
 )(({ payload, initiator }) =>
   Effect.gen(function* (_) {
-    const prismaClient = yield* _(PrismaServiceTag);
+    const prismaClient = yield* PrismaServiceTag;
 
-    const newTransport = yield* _(
-      prismaClient.queryDecode(TransportDbToDomainSchema, (p) =>
+    const newTransport = yield* prismaClient.queryDecode(
+      TransportDbToDomainSchema,
+      (p) =>
         p.transport.create({
           data: {
             ...payload,
@@ -26,7 +27,6 @@ export const CreateTransportUseCase = BaseCausedUseCaseFor(
             number: Secret.value(payload.number),
           },
         })
-      )
     );
 
     return newTransport;

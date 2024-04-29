@@ -18,15 +18,13 @@ export const TicketCreatedMdComponent = (props: {
   Effect.gen(function* (_) {
     const { place, event, ticket } = props;
 
-    return yield* _(
-      MD.document(
-        ArgazipaSayMdComponent({ emotion: "ℹ️", phrase: "Забронирован билет" }),
-        MD.br,
-        TicketMdComponent({ ticket }),
-        MD.br,
-        PlaceMdComponent({ place }),
-        MD.br,
-        EventMdComponent({ event })
-      )
+    return yield* MD.document(
+      ArgazipaSayMdComponent({ emotion: "ℹ️", phrase: "Забронирован билет" }),
+      MD.br,
+      TicketMdComponent({ ticket }),
+      MD.br,
+      PlaceMdComponent({ place }),
+      MD.br,
+      EventMdComponent({ event })
     );
   });

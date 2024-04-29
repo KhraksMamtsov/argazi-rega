@@ -19,18 +19,16 @@ export class TelegrafCtxSendMessageError extends Data.TaggedError(
 }> {} //
 
 const make = Effect.gen(function* (_) {
-  const config = yield* _(TelegrafOptionsTag);
+  const config = yield* TelegrafOptionsTag;
 
   const client = new Tg.Telegraf(Secret.value(config.token)); //, config.client);
 
-  yield* _(
-    Effect.promise(() =>
-      client.telegram.setMyCommands(TelegramCommands).catch((e) => {
-        console.dir(e, { depth: 10 });
-        // eslint-disable-next-line functional/no-throw-statements
-        throw e;
-      })
-    )
+  yield* Effect.promise(() =>
+    client.telegram.setMyCommands(TelegramCommands).catch((e) => {
+      console.dir(e, { depth: 10 });
+      // eslint-disable-next-line functional/no-throw-statements
+      throw e;
+    })
   );
 
   const sendMessage = (
@@ -60,23 +58,21 @@ export class TelegrafTag extends Effect.Tag("Telegraf")<
 
   static Launch = Layer.scopedDiscard(
     Effect.gen(function* (_) {
-      // const launchOptions = yield* _(TelegrafOptionsTag.launch);
-      const { telegrafClient } = yield* _(TelegrafTag);
+      // const launchOptions = yield* pipe(TelegrafOptionsTag.launch);
+      const { telegrafClient } = yield* TelegrafTag;
 
-      return yield* _(
-        Effect.acquireRelease(
-          // eslint-disable-next-line @typescript-eslint/no-invalid-void-type
-          Effect.async<void>((resume) => {
-            return void telegrafClient.launch(() => {
-              resume(Effect.void);
-            });
-          }),
-          (_, exit) =>
-            Effect.sync(() => {
-              telegrafClient.stop(JSON.stringify(exit.toJSON()));
-            })
-        ).pipe(Effect.tap(Effect.logDebug("Lounched")))
-      );
+      return yield* Effect.acquireRelease(
+        // eslint-disable-next-line @typescript-eslint/no-invalid-void-type
+        Effect.async<void>((resume) => {
+          return void telegrafClient.launch(() => {
+            resume(Effect.void);
+          });
+        }),
+        (_, exit) =>
+          Effect.sync(() => {
+            telegrafClient.stop(JSON.stringify(exit.toJSON()));
+          })
+      ).pipe(Effect.tap(Effect.logDebug("Lounched")));
     })
   ).pipe(Layer.provide(TelegrafTag.Live));
 }

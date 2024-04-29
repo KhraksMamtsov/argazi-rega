@@ -7,17 +7,16 @@ import { type GetManyUsersCommand } from "./GetManyUsers.command.js";
 
 export const GetManyUsersUseCase = ({ payload }: GetManyUsersCommand) =>
   Effect.gen(function* (_) {
-    const prismaClient = yield* _(PrismaServiceTag);
+    const prismaClient = yield* PrismaServiceTag;
 
     const where =
       payload.type === "id"
         ? { id: { in: [...payload.idsUser] } }
         : { idDwbn: { in: [...payload.idsDwbn] } };
 
-    const users = yield* _(
-      prismaClient.queryDecode(Schema.Array(UserDbToDomainSchema), (p) =>
-        p.user.findMany({ where })
-      )
+    const users = yield* prismaClient.queryDecode(
+      Schema.Array(UserDbToDomainSchema),
+      (p) => p.user.findMany({ where })
     );
 
     if (payload.type === "idDwbn") {

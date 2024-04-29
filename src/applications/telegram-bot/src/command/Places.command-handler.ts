@@ -15,15 +15,13 @@ export const PlacesCommandHandler = (args: {
   readonly command: CommandPayload<typeof Places.command>;
 }) =>
   Effect.gen(function* (_) {
-    const restApiService = yield* _(RestApiServiceTag);
-    const restApiUserClient = yield* _(
-      restApiService.__new.getUserApiClientFor(args.command.idTelegramChat)
+    const restApiService = yield* RestApiServiceTag;
+    const restApiUserClient = yield* restApiService.__new.getUserApiClientFor(
+      args.command.idTelegramChat
     );
 
-    const places = yield* _(restApiUserClient.getPlaces({}));
-    const userSubscriptions = yield* _(
-      restApiUserClient.getMySubscriptions({})
-    );
+    const places = yield* restApiUserClient.getPlaces({});
+    const userSubscriptions = yield* restApiUserClient.getMySubscriptions({});
 
     const replies = places.map((place) => {
       const placeSubscription = userSubscriptions.find(
@@ -47,7 +45,8 @@ export const PlacesCommandHandler = (args: {
       );
     });
 
-    return yield* _(
-      Effect.all(replies, { concurrency: "unbounded", mode: "either" })
-    );
+    return yield* Effect.all(replies, {
+      concurrency: "unbounded",
+      mode: "either",
+    });
   });

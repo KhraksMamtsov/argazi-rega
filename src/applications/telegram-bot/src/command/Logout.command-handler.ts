@@ -1,4 +1,4 @@
-import { Effect } from "effect";
+import { Effect, pipe } from "effect";
 
 import { Logout } from "./TelegramCommands.js";
 
@@ -11,15 +11,16 @@ export const LogoutCommandHandler = (args: {
   readonly command: CommandPayload<typeof Logout.command>;
 }) =>
   Effect.gen(function* (_) {
-    const sessionService = yield* _(SessionServiceTag);
+    const sessionService = yield* SessionServiceTag;
 
-    yield* _(sessionService.drop(args.command.idTelegramChat));
+    yield* sessionService.drop(args.command.idTelegramChat);
 
-    const answer = yield* _(
-      ArgazipaSayMdComponent({ emotion: "👋", phrase: "До встречи" })
-    );
+    const answer = yield* ArgazipaSayMdComponent({
+      emotion: "👋",
+      phrase: "До встречи",
+    });
 
-    return yield* _(
+    return yield* pipe(
       args.command.replyWithMarkdown(answer, {}),
       Effect.either,
       Effect.tap(Effect.log)

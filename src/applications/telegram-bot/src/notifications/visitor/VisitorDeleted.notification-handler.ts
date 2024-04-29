@@ -1,4 +1,4 @@
-import { Effect, Array } from "effect";
+import { Effect, Array, pipe } from "effect";
 
 import type { User, Visitor } from "@argazi/domain";
 
@@ -13,9 +13,9 @@ export const VisitorDeletedNotificationHandler = (args: {
   readonly visitorsUser: User;
 }) =>
   Effect.gen(function* (_) {
-    const bot = yield* _(TelegrafTag);
+    const bot = yield* TelegrafTag;
 
-    return yield* _(
+    return yield* pipe(
       [args.initiator, args.visitorsUser],
       Array.map((x) => x.idTelegramChat),
       (x) => [...new Set(x)],

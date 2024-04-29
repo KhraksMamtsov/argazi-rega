@@ -10,11 +10,9 @@ export const SubscriptionCreatedMdComponent = (props: { place: Place }) =>
   Effect.gen(function* (_) {
     const { place } = props;
 
-    return yield* _(
-      MD.document(
-        ArgazipaSayMdComponent({ emotion: "ℹ️", phrase: "Оформлена подписка" }),
-        MD.br,
-        PlaceMdComponent({ place })
-      )
+    return yield* MD.document(
+      ArgazipaSayMdComponent({ emotion: "ℹ️", phrase: "Оформлена подписка" }),
+      MD.br,
+      PlaceMdComponent({ place })
     );
   });

@@ -14,12 +14,12 @@ export const MyVisitorsCommandHandler = (args: {
   readonly command: CommandPayload<typeof MyVisitors.command>;
 }) =>
   Effect.gen(function* (_) {
-    const restApiService = yield* _(RestApiServiceTag);
-    const restApiUserClient = yield* _(
-      restApiService.__new.getUserApiClientFor(args.command.idTelegramChat)
+    const restApiService = yield* RestApiServiceTag;
+    const restApiUserClient = yield* restApiService.__new.getUserApiClientFor(
+      args.command.idTelegramChat
     );
 
-    const myVisitors = yield* _(restApiUserClient.getMyVisitors({}));
+    const myVisitors = yield* restApiUserClient.getMyVisitors({});
 
     const replies = pipe(
       myVisitors,
@@ -49,8 +49,11 @@ export const MyVisitorsCommandHandler = (args: {
       })
     );
 
-    return yield* _(
-      Effect.all(replies, { concurrency: "unbounded", mode: "either" }),
+    return yield* pipe(
+      Effect.all(replies, {
+        concurrency: "unbounded",
+        mode: "either",
+      }),
       Effect.tap(Effect.log)
     );
   });

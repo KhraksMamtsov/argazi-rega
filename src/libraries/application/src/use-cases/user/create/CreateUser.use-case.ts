@@ -10,11 +10,12 @@ import { BaseCausedUseCaseFor } from "../../common/Base.use-case.js";
 export const CreateUserUseCase = BaseCausedUseCaseFor(CreateUserCommandSchema)(
   ({ payload, initiator }) =>
     Effect.gen(function* (_) {
-      const prismaClient = yield* _(PrismaServiceTag);
-      const notificationService = yield* _(NotificationServiceTag);
+      const prismaClient = yield* PrismaServiceTag;
+      const notificationService = yield* NotificationServiceTag;
 
-      const newUser = yield* _(
-        prismaClient.queryDecode(UserDbToDomainSchema, (p) =>
+      const newUser = yield* prismaClient.queryDecode(
+        UserDbToDomainSchema,
+        (p) =>
           p.user.create({
             data: {
               ...payload,
@@ -23,7 +24,6 @@ export const CreateUserUseCase = BaseCausedUseCaseFor(CreateUserCommandSchema)(
               isAdmin: false,
             },
           })
-        )
       );
 
       Effect.runFork(
