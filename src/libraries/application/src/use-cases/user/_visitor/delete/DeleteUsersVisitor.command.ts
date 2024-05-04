@@ -1,16 +1,16 @@
 import { Schema } from "@effect/schema";
 
-import { VisitorDataSchema } from "@argazi/domain";
+import { VisitorData } from "@argazi/domain";
 import { _SS } from "@argazi/shared";
 
 import { BaseCausedCommandFor } from "../../../common/Base.command.js";
 
-export const DeleteUsersVisitorCommandPayloadSchema = VisitorDataSchema.pipe(
+export const DeleteUsersVisitorCommandPayload = VisitorData.pipe(
   Schema.pick("id", "idUser"),
   _SS.satisfies.encoded.json(),
-  Schema.identifier("DeleteUsersVisitorCommandPayloadSchema")
+  Schema.identifier("DeleteUsersVisitorCommandPayload")
 );
 
-export const DeleteUsersVisitorCommandSchema = BaseCausedCommandFor(
-  DeleteUsersVisitorCommandPayloadSchema
-).pipe(Schema.identifier("DeleteUsersVisitorCommandSchema"));
+export const DeleteUsersVisitorCommand = BaseCausedCommandFor(
+  DeleteUsersVisitorCommandPayload
+).pipe(Schema.identifier("DeleteUsersVisitorCommand"));

@@ -2,9 +2,9 @@ import { Schema } from "@effect/schema";
 
 export const IdMealSymbol: unique symbol = Symbol.for("IdMealSymbol");
 
-export const IdMealSchema = Schema.UUID.pipe(
-  Schema.identifier("IdMealSchema"),
+export const IdMeal = Schema.UUID.pipe(
+  Schema.identifier("IdMeal"),
   Schema.brand(IdMealSymbol)
 );
 
-export type IdMeal = Schema.Schema.Type<typeof IdMealSchema>;
+export type IdMeal = Schema.Schema.Type<typeof IdMeal>;

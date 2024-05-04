@@ -9,5 +9,5 @@ export enum TicketRole {
 }
 
 export const TicketRoleSchema = Schema.Enums(TicketRole).pipe(
-  Schema.identifier("TicketRoleSchema")
+  Schema.identifier("TicketRole")
 );

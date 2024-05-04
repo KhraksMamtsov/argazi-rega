@@ -1,7 +1,7 @@
 import { VisitorType } from "@argazi/domain/Visitor";
 import { Schema } from "@effect/schema";
 
-export const VisitorJsonSchema = Schema.Struct({
+export const VisitorJson = Schema.Struct({
   email: Schema.optional(
     Schema.Trim.pipe(
       Schema.annotations({

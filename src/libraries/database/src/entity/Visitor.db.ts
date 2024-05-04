@@ -2,22 +2,16 @@ import { Schema } from "@effect/schema";
 import { type Visitor as _Visitor } from "@prisma/client";
 import { Effect } from "effect";
 
-import {
-  IdVisitorSchema,
-  type Visitor,
-  VisitorSchema,
-  VisitorType,
-  IdUserSchema,
-} from "@argazi/domain";
+import { IdVisitor, Visitor, VisitorType, IdUser } from "@argazi/domain";
 import { _SS } from "@argazi/shared";
 
-import { BaseDbSchema, transform } from "../Base.db.js";
+import { BaseDb, transform } from "../Base.db.js";
 
 // #region VisitorDbBase
-export const _VisitorDbBaseSchema = Schema.Struct({
+export const _VisitorDbBase = Schema.Struct({
   email: Schema.OptionFromNullOr(Schema.Trim.pipe(Schema.nonEmpty())),
-  id: IdVisitorSchema,
-  idUser: IdUserSchema,
+  id: IdVisitor,
+  idUser: IdUser,
   name: Schema.String,
   type: Schema.transformLiterals(
     ["ADULT", VisitorType.ADULT],
@@ -25,44 +19,37 @@ export const _VisitorDbBaseSchema = Schema.Struct({
     ["CHILD", VisitorType.CHILD],
     ["PENSIONER", VisitorType.PENSIONER]
   ),
-}).pipe(Schema.identifier("VisitorDbBaseSchema"));
+}).pipe(Schema.identifier("VisitorDbBase"));
 
-export type VisitorDbBaseContext = Schema.Schema.Context<
-  typeof _VisitorDbBaseSchema
->;
+export type VisitorDbBaseContext = Schema.Schema.Context<typeof _VisitorDbBase>;
 export interface VisitorDbBaseEncoded
-  extends Schema.Schema.Encoded<typeof _VisitorDbBaseSchema> {}
+  extends Schema.Schema.Encoded<typeof _VisitorDbBase> {}
 export interface VisitorDbBase
-  extends Schema.Schema.Type<typeof _VisitorDbBaseSchema> {}
+  extends Schema.Schema.Type<typeof _VisitorDbBase> {}
 
-export const VisitorDbBaseSchema: Schema.Schema<
-  VisitorDbBase,
-  VisitorDbBaseEncoded
-> = _VisitorDbBaseSchema;
-// #endregion VisitorDbBaseSchema
+export const VisitorDbBase: Schema.Schema<VisitorDbBase, VisitorDbBaseEncoded> =
+  _VisitorDbBase;
+// #endregion VisitorDbBase
 
 // #region VisitorDb
-const _VisitorDbSchema = VisitorDbBaseSchema.pipe(
-  Schema.extend(BaseDbSchema),
-  Schema.identifier("VisitorDbSchema"),
+const _VisitorDb = VisitorDbBase.pipe(
+  Schema.extend(BaseDb),
+  Schema.identifier("VisitorDb"),
   _SS.satisfies.encoded<_Visitor>()
 );
 
-export type VisitorDbContext = Schema.Schema.Context<typeof _VisitorDbSchema>;
+export type VisitorDbContext = Schema.Schema.Context<typeof _VisitorDb>;
 export interface VisitorDbEncoded
-  extends Schema.Schema.Encoded<typeof _VisitorDbSchema> {}
-export interface VisitorDb
-  extends Schema.Schema.Type<typeof _VisitorDbSchema> {}
+  extends Schema.Schema.Encoded<typeof _VisitorDb> {}
+export interface VisitorDb extends Schema.Schema.Type<typeof _VisitorDb> {}
 
-export const VisitorDbSchema: Schema.Schema<VisitorDb, VisitorDbEncoded> =
-  _VisitorDbSchema;
-// #endregion VisitorDbSchema
+export const VisitorDb: Schema.Schema<VisitorDb, VisitorDbEncoded> = _VisitorDb;
+// #endregion VisitorDb
 
-export const VisitorDbToDomainSchema: Schema.Schema<Visitor, _Visitor> =
-  transform(
-    //
-    VisitorDbSchema,
-    VisitorSchema,
-    Effect.succeed,
-    Effect.succeed
-  );
+export const VisitorDbToDomain: Schema.Schema<Visitor, _Visitor> = transform(
+  //
+  VisitorDb,
+  Visitor,
+  Effect.succeed,
+  Effect.succeed
+);

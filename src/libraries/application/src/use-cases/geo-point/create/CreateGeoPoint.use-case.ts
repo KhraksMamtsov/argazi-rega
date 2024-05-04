@@ -1,21 +1,21 @@
 import { Effect, Option, Secret } from "effect";
 
-import { GeoPointDbToDomainSchema, PrismaServiceTag } from "@argazi/database";
+import { GeoPointDbToDomain, PrismaServiceTag } from "@argazi/database";
 import { notification, NotificationServiceTag } from "@argazi/domain";
 
-import { CreateGeoPointCommandSchema } from "./CreateGeoPoint.command.js";
+import { CreateGeoPointCommand } from "./CreateGeoPoint.command.js";
 
 import { BaseCausedUseCaseFor } from "../../common/Base.use-case.js";
 
 export const CreateGeoPointUseCase = BaseCausedUseCaseFor(
-  CreateGeoPointCommandSchema
+  CreateGeoPointCommand
 )(({ payload, initiator }) =>
   Effect.gen(function* (_) {
     const prismaClient = yield* PrismaServiceTag;
     const notificationService = yield* NotificationServiceTag;
 
     const newGeoPoint = yield* prismaClient.queryDecode(
-      GeoPointDbToDomainSchema,
+      GeoPointDbToDomain,
       (p) =>
         p.geoPoint.create({
           data: {

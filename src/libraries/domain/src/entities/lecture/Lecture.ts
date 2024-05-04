@@ -1,22 +1,21 @@
 import { Schema } from "@effect/schema";
 
-import { IdLectureSchema } from "./IdLecture.js";
+import { IdLecture } from "./IdLecture.js";
 
-import { IdEventSchema } from "../../event/entity/IdEvent.js";
-import { PriceSchema } from "../../value-objects/Price.js";
+import { IdEvent } from "../../event/entity/IdEvent.js";
+import { Price } from "../../value-objects/Price.js";
 
-const _LectureSchema = Schema.Struct({
+const _Lecture = Schema.Struct({
   dateFinish: Schema.Option(Schema.Date),
   dateStart: Schema.Date,
-  id: IdLectureSchema,
-  idEvent: IdEventSchema,
+  id: IdLecture,
+  idEvent: IdEvent,
   name: Schema.Trim.pipe(Schema.nonEmpty()),
-  priceDay: PriceSchema,
-  priceLecture: PriceSchema,
-}).pipe(Schema.identifier("LectureSchema"));
+  priceDay: Price,
+  priceLecture: Price,
+}).pipe(Schema.identifier("Lecture"));
 
-export type LectureFrom = Schema.Schema.Encoded<typeof _LectureSchema>;
-export type Lecture = Schema.Schema.Type<typeof _LectureSchema>;
+export type LectureFrom = Schema.Schema.Encoded<typeof _Lecture>;
+export type Lecture = Schema.Schema.Type<typeof _Lecture>;
 
-export const LectureSchema: Schema.Schema<Lecture, LectureFrom> =
-  _LectureSchema;
+export const Lecture: Schema.Schema<Lecture, LectureFrom> = _Lecture;

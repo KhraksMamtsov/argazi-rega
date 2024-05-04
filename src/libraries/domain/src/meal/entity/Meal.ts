@@ -1,31 +1,31 @@
 import { Schema } from "@effect/schema";
 
-import { IdMealSchema } from "./IdMeal.js";
+import { IdMeal } from "./IdMeal.js";
 import { MealTypeSchema } from "./MealType.js";
 
-import { BaseSchema } from "../../entities/common/Base.js";
-import { IdEventSchema } from "../../event/entity/IdEvent.js";
-import { PriceSchema } from "../../value-objects/Price.js";
+import { Base } from "../../entities/common/Base.js";
+import { IdEvent } from "../../event/entity/IdEvent.js";
+import { Price } from "../../value-objects/Price.js";
 
-export const MealBaseSchema = Schema.Struct({
+export const MealBase = Schema.Struct({
   dateFinish: Schema.OptionFromSelf(Schema.ValidDateFromSelf),
   dateStart: Schema.ValidDateFromSelf,
-  id: IdMealSchema,
-  idEvent: IdEventSchema,
+  id: IdMeal,
+  idEvent: IdEvent,
   name: Schema.Trim.pipe(Schema.nonEmpty()),
-  price: PriceSchema,
+  price: Price,
   type: MealTypeSchema,
   description: Schema.compose(Schema.Trimmed, Schema.NonEmpty),
-}).pipe(Schema.identifier("MealBaseSchema"));
+}).pipe(Schema.identifier("MealBase"));
 
-export type MealBase = Schema.Schema.Type<typeof MealBaseSchema>;
+export type MealBase = Schema.Schema.Type<typeof MealBase>;
 
-export const MealSchema = MealBaseSchema.pipe(
+export const Meal = MealBase.pipe(
   //
-  Schema.extend(BaseSchema),
+  Schema.extend(Base),
   Schema.typeSchema,
-  Schema.identifier("MealSchema")
+  Schema.identifier("Meal")
 );
 
-export interface MealFrom extends Schema.Schema.Encoded<typeof MealSchema> {}
-export interface Meal extends Schema.Schema.Type<typeof MealSchema> {}
+export interface MealFrom extends Schema.Schema.Encoded<typeof Meal> {}
+export interface Meal extends Schema.Schema.Type<typeof Meal> {}

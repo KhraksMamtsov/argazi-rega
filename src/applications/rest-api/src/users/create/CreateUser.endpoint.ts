@@ -1,57 +1,57 @@
 import * as Schema from "@effect/schema/Schema";
 import { ApiEndpoint } from "effect-http";
 
-import { CreateUserCommandPayloadSchema } from "@argazi/application";
+import { CreateUserCommandPayload } from "@argazi/application";
 
 import { BaseResponseFor } from "../../BaseResponseFor.js";
 import { BearerAuth } from "../../BearerAuth.security-scheme.js";
 import { UserApi } from "../User.api.js";
 
 // #region CreateUserRequestBody
-const _CreateUserRequestBodySchema = CreateUserCommandPayloadSchema.pipe(
-  Schema.identifier("CreateUserRequestBodySchema")
+const _CreateUserRequestBody = CreateUserCommandPayload.pipe(
+  Schema.identifier("CreateUserRequestBody")
 );
 
 export type CreateUserRequestBodyContext = Schema.Schema.Context<
-  typeof _CreateUserRequestBodySchema
+  typeof _CreateUserRequestBody
 >;
 export interface CreateUserRequestBodyEncoded
-  extends Schema.Schema.Encoded<typeof _CreateUserRequestBodySchema> {}
+  extends Schema.Schema.Encoded<typeof _CreateUserRequestBody> {}
 export interface CreateUserRequestBody
-  extends Schema.Schema.Type<typeof _CreateUserRequestBodySchema> {}
+  extends Schema.Schema.Type<typeof _CreateUserRequestBody> {}
 
-export const CreateUserRequestBodySchema: Schema.Schema<
+export const CreateUserRequestBody: Schema.Schema<
   CreateUserRequestBody,
   CreateUserRequestBodyEncoded
-> = _CreateUserRequestBodySchema;
-// #endregion CreateUserRequestBodySchema
+> = _CreateUserRequestBody;
+// #endregion CreateUserRequestBody
 
 // #region CreateUserResponseBody
-const _CreateUserResponseBodySchema = UserApi.pipe(
-  Schema.identifier("CreateUserResponseBodySchema"),
+const _CreateUserResponseBody = UserApi.pipe(
+  Schema.identifier("CreateUserResponseBody"),
   BaseResponseFor
 );
 
 export type CreateUserResponseBodyContext = Schema.Schema.Context<
-  typeof _CreateUserResponseBodySchema
+  typeof _CreateUserResponseBody
 >;
 export interface CreateUserResponseBodyEncoded
-  extends Schema.Schema.Encoded<typeof _CreateUserResponseBodySchema> {}
+  extends Schema.Schema.Encoded<typeof _CreateUserResponseBody> {}
 export interface CreateUserResponseBody
-  extends Schema.Schema.Type<typeof _CreateUserResponseBodySchema> {}
+  extends Schema.Schema.Type<typeof _CreateUserResponseBody> {}
 
-export const CreateUserResponseBodySchema: Schema.Schema<
+export const CreateUserResponseBody: Schema.Schema<
   CreateUserResponseBody,
   CreateUserResponseBodyEncoded
-> = _CreateUserResponseBodySchema;
-// #endregion CreateUserResponseBodySchema
+> = _CreateUserResponseBody;
+// #endregion CreateUserResponseBody
 
 export const CreateUserEndpoint = ApiEndpoint.post(
   "createUser",
   "/users",
   {}
 ).pipe(
-  ApiEndpoint.setRequestBody(CreateUserRequestBodySchema),
-  ApiEndpoint.setResponseBody(CreateUserResponseBodySchema),
+  ApiEndpoint.setRequestBody(CreateUserRequestBody),
+  ApiEndpoint.setResponseBody(CreateUserResponseBody),
   ApiEndpoint.setSecurity(BearerAuth)
 );

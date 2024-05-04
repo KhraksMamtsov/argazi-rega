@@ -1,7 +1,7 @@
 import { Schema } from "@effect/schema";
 import { Data, Effect, Either, pipe } from "effect";
 
-import { UserDbToDomainSchema } from "@argazi/database";
+import { UserDbToDomain } from "@argazi/database";
 import { PrismaServiceTag } from "@argazi/database";
 import type { User } from "@argazi/domain";
 
@@ -33,7 +33,7 @@ export const BaseCausedUseCaseFor =
 
       const initiator = yield* pipe(
         prismaService.queryDecode(
-          Schema.OptionFromNullOr(UserDbToDomainSchema),
+          Schema.OptionFromNullOr(UserDbToDomain),
           (p) => p.user.findUnique({ where: { id: command.idInitiator } })
         ),
         Effect.flatMap(
@@ -75,7 +75,7 @@ export const BaseGetCausedUseCaseFor =
 
       const initiator = yield* pipe(
         prismaService.queryDecode(
-          Schema.OptionFromNullOr(UserDbToDomainSchema),
+          Schema.OptionFromNullOr(UserDbToDomain),
           (p) => p.user.findUnique({ where: { id: command.idInitiator } })
         ),
         Effect.flatMap(

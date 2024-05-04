@@ -1,6 +1,6 @@
 import { Schema } from "@effect/schema";
 
-import { IdDwbnSchema, IdTelegramChatSchema } from "@argazi/domain";
+import { IdDwbn, IdTelegramChat } from "@argazi/domain";
 import { _SS } from "@argazi/shared";
 
 import { BaseCausedCommandFor } from "../../common/Base.command.js";
@@ -15,19 +15,19 @@ export type CreateUserCommandPayloadFrom = {
   readonly type: "ADULT" | "STUDENT" | "PENSIONER";
 };
 
-export const CreateUserCommandPayloadSchema = Schema.Struct({
+export const CreateUserCommandPayload = Schema.Struct({
   email: Schema.Trim,
   firstName: Schema.Trim,
-  idDwbn: IdDwbnSchema,
-  idTelegramChat: IdTelegramChatSchema,
+  idDwbn: IdDwbn,
+  idTelegramChat: IdTelegramChat,
   lastName: Schema.NullOr(Schema.String),
   phone: Schema.NullOr(Schema.String),
   type: Schema.Literal("ADULT", "STUDENT", "PENSIONER"),
 }).pipe(
   _SS.satisfies.encoded.json<CreateUserCommandPayloadFrom>(),
-  Schema.identifier("CreateUserCommandPayloadSchema")
+  Schema.identifier("CreateUserCommandPayload")
 );
 
-export const CreateUserCommandSchema = BaseCausedCommandFor(
-  CreateUserCommandPayloadSchema
-).pipe(Schema.identifier("CreateUserCommandSchema"));
+export const CreateUserCommand = BaseCausedCommandFor(
+  CreateUserCommandPayload
+).pipe(Schema.identifier("CreateUserCommand"));

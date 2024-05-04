@@ -1,25 +1,24 @@
 import { Schema } from "@effect/schema";
 
-import { IdUserSchema } from "../../user/entity/IdUser.js";
-import { DateCreatedSchema } from "../../value-objects/DateCreated.js";
-import { DateDeletedSchema } from "../../value-objects/DateDeleted.js";
-import { DateUpdatedSchema } from "../../value-objects/DateUpdated.js";
+import { IdUser } from "../../user/entity/IdUser.js";
+import { DateCreated } from "../../value-objects/DateCreated.js";
+import { DateDeleted } from "../../value-objects/DateDeleted.js";
+import { DateUpdated } from "../../value-objects/DateUpdated.js";
 
 // #region Meta
-const _MetaSchema = Schema.Struct({
-  dateCreated: DateCreatedSchema,
-  dateDeleted: Schema.OptionFromSelf(DateDeletedSchema),
-  dateUpdated: DateUpdatedSchema,
+const _Meta = Schema.Struct({
+  dateCreated: DateCreated,
+  dateDeleted: Schema.OptionFromSelf(DateDeleted),
+  dateUpdated: DateUpdated,
   //
-  idUserCreator: IdUserSchema,
-  idUserDeleter: Schema.OptionFromSelf(IdUserSchema),
-  idUserUpdater: IdUserSchema,
-}).pipe(Schema.typeSchema, Schema.identifier("MetaSchema"));
+  idUserCreator: IdUser,
+  idUserDeleter: Schema.OptionFromSelf(IdUser),
+  idUserUpdater: IdUser,
+}).pipe(Schema.typeSchema, Schema.identifier("Meta"));
 
-export type MetaContext = Schema.Schema.Context<typeof _MetaSchema>;
-export interface MetaEncoded
-  extends Schema.Schema.Encoded<typeof _MetaSchema> {}
-export interface Meta extends Schema.Schema.Type<typeof _MetaSchema> {}
+export type MetaContext = Schema.Schema.Context<typeof _Meta>;
+export interface MetaEncoded extends Schema.Schema.Encoded<typeof _Meta> {}
+export interface Meta extends Schema.Schema.Type<typeof _Meta> {}
 
-export const MetaSchema: Schema.Schema<Meta> = _MetaSchema;
+export const Meta: Schema.Schema<Meta> = _Meta;
 // #endregion MetaSchema

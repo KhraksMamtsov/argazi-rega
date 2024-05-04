@@ -1,46 +1,46 @@
 import { Schema } from "@effect/schema";
 
-import { VisitorDbBaseSchema } from "@argazi/database";
+import { VisitorDbBase } from "@argazi/database";
 import { _SS } from "@argazi/shared";
 
 import { BaseCausedCommandFor } from "../../../common/Base.command.js";
 
 // #region GetUsersVisitorsCommandPayload
-export const _GetUsersVisitorsCommandPayloadSchema = VisitorDbBaseSchema.pipe(
+export const _GetUsersVisitorsCommandPayload = VisitorDbBase.pipe(
   Schema.pick("idUser"),
-  Schema.identifier("GetUsersVisitorsCommandPayloadSchema"),
+  Schema.identifier("GetUsersVisitorsCommandPayload"),
   _SS.satisfies.encoded.json()
 );
 
 export type GetUsersVisitorsCommandPayloadContext = Schema.Schema.Context<
-  typeof _GetUsersVisitorsCommandPayloadSchema
+  typeof _GetUsersVisitorsCommandPayload
 >;
 export interface GetUsersVisitorsCommandPayloadEncoded
-  extends Schema.Schema.Encoded<typeof _GetUsersVisitorsCommandPayloadSchema> {}
+  extends Schema.Schema.Encoded<typeof _GetUsersVisitorsCommandPayload> {}
 export interface GetUsersVisitorsCommandPayload
-  extends Schema.Schema.Type<typeof _GetUsersVisitorsCommandPayloadSchema> {}
+  extends Schema.Schema.Type<typeof _GetUsersVisitorsCommandPayload> {}
 
-export const GetUsersVisitorsCommandPayloadSchema: Schema.Schema<
+export const GetUsersVisitorsCommandPayload: Schema.Schema<
   GetUsersVisitorsCommandPayload,
   GetUsersVisitorsCommandPayloadEncoded
-> = _GetUsersVisitorsCommandPayloadSchema;
-// #endregion GetUsersVisitorsCommandPayloadSchema
+> = _GetUsersVisitorsCommandPayload;
+// #endregion GetUsersVisitorsCommandPayload
 
 // #region GetUsersVisitorsCommand
-export const _GetUsersVisitorsCommandSchema = BaseCausedCommandFor(
-  GetUsersVisitorsCommandPayloadSchema
-).pipe(Schema.identifier("GetUsersVisitorsCommandSchema"));
+export const _GetUsersVisitorsCommand = BaseCausedCommandFor(
+  GetUsersVisitorsCommandPayload
+).pipe(Schema.identifier("GetUsersVisitorsCommand"));
 
 export type GetUsersVisitorsCommandContext = Schema.Schema.Context<
-  typeof _GetUsersVisitorsCommandSchema
+  typeof _GetUsersVisitorsCommand
 >;
 export interface GetUsersVisitorsCommandEncoded
-  extends Schema.Schema.Encoded<typeof _GetUsersVisitorsCommandSchema> {}
+  extends Schema.Schema.Encoded<typeof _GetUsersVisitorsCommand> {}
 export interface GetUsersVisitorsCommand
-  extends Schema.Schema.Type<typeof _GetUsersVisitorsCommandSchema> {}
+  extends Schema.Schema.Type<typeof _GetUsersVisitorsCommand> {}
 
-export const GetUsersVisitorsCommandSchema: Schema.Schema<
+export const GetUsersVisitorsCommand: Schema.Schema<
   GetUsersVisitorsCommand,
   GetUsersVisitorsCommandEncoded
-> = _GetUsersVisitorsCommandSchema;
-// #endregion GetUsersVisitorsCommandSchema
+> = _GetUsersVisitorsCommand;
+// #endregion GetUsersVisitorsCommand

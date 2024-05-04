@@ -1,6 +1,6 @@
 import { Schema } from "@effect/schema";
 
-import { IdVisitorSchema } from "@argazi/domain";
+import { IdVisitor } from "@argazi/domain";
 import { _SS } from "@argazi/shared";
 
 import { BaseCausedCommandFor } from "../../common/Base.command.js";
@@ -9,13 +9,13 @@ export type GetVisitorByIdCommandPayloadFrom = {
   readonly idVisitor: string;
 };
 
-export const GetVisitorByIdCommandPayloadSchema = Schema.Struct({
-  idVisitor: IdVisitorSchema,
+export const GetVisitorByIdCommandPayload = Schema.Struct({
+  idVisitor: IdVisitor,
 }).pipe(
   _SS.satisfies.encoded.json<GetVisitorByIdCommandPayloadFrom>(),
-  Schema.identifier("GetVisitorByIdCommandPayloadSchema")
+  Schema.identifier("GetVisitorByIdCommandPayload")
 );
 
-export const GetVisitorByIdCommandSchema = BaseCausedCommandFor(
-  GetVisitorByIdCommandPayloadSchema
-).pipe(Schema.identifier("GetVisitorByIdCommandSchema"));
+export const GetVisitorByIdCommand = BaseCausedCommandFor(
+  GetVisitorByIdCommandPayload
+).pipe(Schema.identifier("GetVisitorByIdCommand"));

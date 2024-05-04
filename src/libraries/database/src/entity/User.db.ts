@@ -2,25 +2,18 @@ import { Schema } from "@effect/schema";
 import { type User as _User } from "@prisma/client";
 import { Effect } from "effect";
 
-import {
-  IdDwbnSchema,
-  IdTelegramChatSchema,
-  IdUserSchema,
-  type User,
-  UserSchema,
-  UserType,
-} from "@argazi/domain";
+import { IdDwbn, IdTelegramChat, IdUser, User, UserType } from "@argazi/domain";
 import { _SS } from "@argazi/shared";
 
-import { BaseDbSchema, transform } from "../Base.db.js";
+import { BaseDb, transform } from "../Base.db.js";
 
-// #region UserDbSchema
-const _UserDbSchema = Schema.Struct({
+// #region UserDb
+const _UserDb = Schema.Struct({
   email: Schema.Secret,
   firstName: Schema.Secret,
-  id: IdUserSchema,
-  idDwbn: IdDwbnSchema,
-  idTelegramChat: IdTelegramChatSchema,
+  id: IdUser,
+  idDwbn: IdDwbn,
+  idTelegramChat: IdTelegramChat,
   isAdmin: Schema.Boolean,
   lastName: Schema.OptionFromNullOr(Schema.Secret),
   phone: Schema.OptionFromNullOr(Schema.Secret),
@@ -30,22 +23,21 @@ const _UserDbSchema = Schema.Struct({
     ["PENSIONER", UserType.PENSIONER]
   ),
 }).pipe(
-  Schema.extend(BaseDbSchema),
-  Schema.identifier("UserDbSchema"),
+  Schema.extend(BaseDb),
+  Schema.identifier("UserDb"),
   _SS.satisfies.encoded<_User>()
 );
 
-export type UserDbContext = Schema.Schema.Context<typeof _UserDbSchema>;
-export interface UserDbEncoded
-  extends Schema.Schema.Encoded<typeof _UserDbSchema> {}
-export interface UserDb extends Schema.Schema.Type<typeof _UserDbSchema> {}
+export type UserDbContext = Schema.Schema.Context<typeof _UserDb>;
+export interface UserDbEncoded extends Schema.Schema.Encoded<typeof _UserDb> {}
+export interface UserDb extends Schema.Schema.Type<typeof _UserDb> {}
 
-export const UserDbSchema: Schema.Schema<UserDb, UserDbEncoded> = _UserDbSchema;
-// #endregion UserDbSchema
+export const UserDb: Schema.Schema<UserDb, UserDbEncoded> = _UserDb;
+// #endregion UserDb
 
-export const UserDbToDomainSchema: Schema.Schema<User, _User> = transform(
-  UserDbSchema,
-  UserSchema,
+export const UserDbToDomain: Schema.Schema<User, _User> = transform(
+  UserDb,
+  User,
   Effect.succeed,
   (x) => Effect.succeed(x)
 );

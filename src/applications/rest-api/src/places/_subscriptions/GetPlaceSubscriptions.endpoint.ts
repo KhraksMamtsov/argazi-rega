@@ -1,46 +1,42 @@
 import * as Schema from "@effect/schema/Schema";
 import { ApiEndpoint, ApiResponse } from "effect-http";
 
-import { IdPlaceSchema } from "@argazi/domain";
+import { IdPlace } from "@argazi/domain";
 
 import { BaseResponseManyFor } from "../../BaseResponseFor.js";
-import { SubscriptionApiSchema } from "../../subscriptions/Subscription.api.js";
+import { SubscriptionApi } from "../../subscriptions/Subscription.api.js";
 
-export const GetPlaceSubscriptionsResponseSchema = SubscriptionApiSchema.pipe(
-  Schema.identifier("GetPlaceSubscriptionsResponseSchema"),
+export const GetPlaceSubscriptionsResponse = SubscriptionApi.pipe(
+  Schema.identifier("GetPlaceSubscriptionsResponse"),
   BaseResponseManyFor
 );
 
 // #region GetPlaceSubscriptionsRequestPath
-const _GetPlaceSubscriptionsRequestPathSchema = Schema.Struct({
-  idPlace: IdPlaceSchema,
-}).pipe(Schema.identifier("GetPlaceSubscriptionsRequestPathSchema"));
+const _GetPlaceSubscriptionsRequestPath = Schema.Struct({
+  idPlace: IdPlace,
+}).pipe(Schema.identifier("GetPlaceSubscriptionsRequestPath"));
 
 export type GetPlaceSubscriptionsRequestPathContext = Schema.Schema.Context<
-  typeof _GetPlaceSubscriptionsRequestPathSchema
+  typeof _GetPlaceSubscriptionsRequestPath
 >;
 export interface GetPlaceSubscriptionsRequestPathEncoded
-  extends Schema.Schema.Encoded<
-    typeof _GetPlaceSubscriptionsRequestPathSchema
-  > {}
+  extends Schema.Schema.Encoded<typeof _GetPlaceSubscriptionsRequestPath> {}
 export interface GetPlaceSubscriptionsRequestPath
-  extends Schema.Schema.Type<typeof _GetPlaceSubscriptionsRequestPathSchema> {}
+  extends Schema.Schema.Type<typeof _GetPlaceSubscriptionsRequestPath> {}
 
-export const GetPlaceSubscriptionsRequestPathSchema: Schema.Schema<
+export const GetPlaceSubscriptionsRequestPath: Schema.Schema<
   GetPlaceSubscriptionsRequestPath,
   GetPlaceSubscriptionsRequestPathEncoded
-> = _GetPlaceSubscriptionsRequestPathSchema;
-// #endregion GetPlaceSubscriptionsRequestPathSchema
+> = _GetPlaceSubscriptionsRequestPath;
+// #endregion GetPlaceSubscriptionsRequestPath
 
 export const GetPlaceSubscriptionsEndpoint = ApiEndpoint.get(
   "getPlaceSubscriptions",
   "/places/:idPlace/subscriptions",
   {}
 ).pipe(
-  ApiEndpoint.setRequestPath(GetPlaceSubscriptionsRequestPathSchema),
-  ApiEndpoint.setResponse(
-    ApiResponse.make(200, GetPlaceSubscriptionsResponseSchema)
-  ),
+  ApiEndpoint.setRequestPath(GetPlaceSubscriptionsRequestPath),
+  ApiEndpoint.setResponse(ApiResponse.make(200, GetPlaceSubscriptionsResponse)),
   ApiEndpoint.addResponse(
     ApiResponse.make(
       404,

@@ -1,29 +1,27 @@
 import { Schema } from "@effect/schema";
 
-import { IdTransportOnEventSchema } from "./IdTransportOnEvent.js";
+import { IdTransportOnEvent } from "./IdTransportOnEvent.js";
 
-import { IdEventSchema } from "../../event/entity/IdEvent.js";
-import { IdTransportSchema } from "../../transport/entity/IdTransport.js";
-import { PriceSchema } from "../../value-objects/Price.js";
-import { BaseSchema } from "../common/Base.js";
+import { IdEvent } from "../../event/entity/IdEvent.js";
+import { IdTransport } from "../../transport/entity/IdTransport.js";
+import { Price } from "../../value-objects/Price.js";
+import { Base } from "../common/Base.js";
 
-const _TransportOnEventSchema = Schema.Struct({
-  id: IdTransportOnEventSchema,
-  idEvent: IdEventSchema,
-  idTransport: IdTransportSchema,
+const _TransportOnEvent = Schema.Struct({
+  id: IdTransportOnEvent,
+  idEvent: IdEvent,
+  idTransport: IdTransport,
   //
-  price: PriceSchema,
+  price: Price,
   seatsNumber: Schema.Int.pipe(Schema.positive()),
-}).pipe(Schema.extend(BaseSchema), Schema.identifier("TransportOnEventSchema"));
+}).pipe(Schema.extend(Base), Schema.identifier("TransportOnEvent"));
 
 export type TransportOnEventFrom = Schema.Schema.Encoded<
-  typeof _TransportOnEventSchema
+  typeof _TransportOnEvent
 >;
-export type TransportOnEvent = Schema.Schema.Type<
-  typeof _TransportOnEventSchema
->;
+export type TransportOnEvent = Schema.Schema.Type<typeof _TransportOnEvent>;
 
-export const TransportOnEventSchema: Schema.Schema<
+export const TransportOnEvent: Schema.Schema<
   TransportOnEvent,
   TransportOnEventFrom
-> = _TransportOnEventSchema;
+> = _TransportOnEvent;

@@ -1,9 +1,9 @@
 import { Schema } from "@effect/schema";
 
-export const RouteFromEventIdSymbol: unique symbol = Symbol.for(
+export const IdRouteFromEventSymbol: unique symbol = Symbol.for(
   "RouteFromEventIdSymbol"
 );
-export const RouteFromEventIdSchema = Schema.UUID.pipe(
-  Schema.brand(RouteFromEventIdSymbol),
-  Schema.identifier("RouteFromEventIdSchema")
+export const IdRouteFromEvent = Schema.UUID.pipe(
+  Schema.brand(IdRouteFromEventSymbol),
+  Schema.identifier("IdRouteFromEvent")
 );

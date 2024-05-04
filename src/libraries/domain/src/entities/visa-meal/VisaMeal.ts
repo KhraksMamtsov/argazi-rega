@@ -1,19 +1,18 @@
 import { Schema } from "@effect/schema";
 
-import { VisaMealIdSchema } from "./VisaMealId.js";
+import { IdVisaMeal } from "./VisaMealId.js";
 
-import { IdMealSchema } from "../../meal/entity/IdMeal.js";
-import { BaseSchema } from "../common/Base.js";
-import { VisaIdSchema } from "../visa/VisaId.js";
+import { IdMeal } from "../../meal/entity/IdMeal.js";
+import { Base } from "../common/Base.js";
+import { IdVisa } from "../visa/VisaId.js";
 
-const _VisaMealSchema = Schema.Struct({
-  id: VisaMealIdSchema,
-  idMeal: IdMealSchema,
-  idVisa: VisaIdSchema,
-}).pipe(Schema.extend(BaseSchema), Schema.identifier("VisaMealSchema"));
+const _VisaMeal = Schema.Struct({
+  id: IdVisaMeal,
+  idMeal: IdMeal,
+  idVisa: IdVisa,
+}).pipe(Schema.extend(Base), Schema.identifier("VisaMeal"));
 
-export type VisaMealFrom = Schema.Schema.Encoded<typeof _VisaMealSchema>;
-export type VisaMealMeal = Schema.Schema.Type<typeof _VisaMealSchema>;
+export type VisaMealFrom = Schema.Schema.Encoded<typeof _VisaMeal>;
+export type VisaMealMeal = Schema.Schema.Type<typeof _VisaMeal>;
 
-export const VisaMealSchema: Schema.Schema<VisaMealMeal, VisaMealFrom> =
-  _VisaMealSchema;
+export const VisaMeal: Schema.Schema<VisaMealMeal, VisaMealFrom> = _VisaMeal;

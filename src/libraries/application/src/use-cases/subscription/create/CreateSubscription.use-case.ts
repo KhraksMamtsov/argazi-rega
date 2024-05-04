@@ -1,18 +1,15 @@
 import { Effect } from "effect";
 
-import {
-  PrismaServiceTag,
-  SubscriptionDbToDomainSchema,
-} from "@argazi/database";
+import { PrismaServiceTag, SubscriptionDbToDomain } from "@argazi/database";
 import { NotificationServiceTag, notification } from "@argazi/domain";
 
-import { CreateSubscriptionCommandSchema } from "./CreateSubscription.command.js";
+import { CreateSubscriptionCommand } from "./CreateSubscription.command.js";
 
 import { CreateEntityAuthorizationError } from "../../common/AuthorizationError.js";
 import { BaseCausedUseCaseFor } from "../../common/Base.use-case.js";
 
 export const CreateSubscriptionUseCase = BaseCausedUseCaseFor(
-  CreateSubscriptionCommandSchema
+  CreateSubscriptionCommand
 )(({ payload, initiator }) =>
   Effect.gen(function* (_) {
     const prismaClient = yield* PrismaServiceTag;
@@ -27,7 +24,7 @@ export const CreateSubscriptionUseCase = BaseCausedUseCaseFor(
     }
 
     const newSubscription = yield* prismaClient.queryDecode(
-      SubscriptionDbToDomainSchema,
+      SubscriptionDbToDomain,
       (p) =>
         p.subscription.create({
           data: {

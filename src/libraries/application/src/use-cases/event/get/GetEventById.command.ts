@@ -1,6 +1,6 @@
 import { Schema } from "@effect/schema";
 
-import { IdEventSchema } from "@argazi/domain";
+import { IdEvent } from "@argazi/domain";
 import { _SS } from "@argazi/shared";
 
 import { BaseCausedCommandFor } from "../../common/Base.command.js";
@@ -9,13 +9,13 @@ export type GetEventByIdCommandPayloadFrom = {
   readonly id: string;
 };
 
-export const GetEventByIdCommandPayloadSchema = Schema.Struct({
-  id: IdEventSchema,
+export const GetEventByIdCommandPayload = Schema.Struct({
+  id: IdEvent,
 }).pipe(
   _SS.satisfies.encoded.json<GetEventByIdCommandPayloadFrom>(),
-  Schema.identifier("GetEventByIdCommandPayloadSchema")
+  Schema.identifier("GetEventByIdCommandPayload")
 );
 
-export const GetEventByIdCommandSchema = BaseCausedCommandFor(
-  GetEventByIdCommandPayloadSchema
-).pipe(Schema.identifier("GetEventByIdCommandSchema"));
+export const GetEventByIdCommand = BaseCausedCommandFor(
+  GetEventByIdCommandPayload
+).pipe(Schema.identifier("GetEventByIdCommand"));

@@ -1,9 +1,9 @@
 import { Schema } from "@effect/schema";
 
-export const TicketPaymentIdSymbol: unique symbol = Symbol.for(
-  "TicketPaymentIdSymbol"
+export const IdTicketPaymentSymbol: unique symbol = Symbol.for(
+  "IdTicketPaymentSymbol"
 );
-export const TicketPaymentIdSchema = Schema.UUID.pipe(
-  Schema.brand(TicketPaymentIdSymbol),
-  Schema.identifier("TicketPaymentIdSchema")
+export const IdTicketPayment = Schema.UUID.pipe(
+  Schema.brand(IdTicketPaymentSymbol),
+  Schema.identifier("IdTicketPayment")
 );

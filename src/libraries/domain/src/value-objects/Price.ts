@@ -1,13 +1,13 @@
 import { Schema } from "@effect/schema";
 
-import { MoneySchema } from "./Money.js";
+import { Money } from "./Money.js";
 
 export const PriceSymbol: unique symbol = Symbol.for("Price");
-export const PriceSchema = MoneySchema.pipe(
+export const Price = Money.pipe(
   Schema.nonNegativeBigDecimal(),
   Schema.identifier("Price"),
   Schema.brand(PriceSymbol)
 );
 
-export type PriceFrom = Schema.Schema.Encoded<typeof PriceSchema>;
-export type Price = Schema.Schema.Type<typeof PriceSchema>;
+export type PriceFrom = Schema.Schema.Encoded<typeof Price>;
+export type Price = Schema.Schema.Type<typeof Price>;

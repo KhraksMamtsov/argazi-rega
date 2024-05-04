@@ -1,78 +1,78 @@
 import * as Schema from "@effect/schema/Schema";
 import { ApiEndpoint } from "effect-http";
 
-import { UpdateUserCommandPayloadSchema } from "@argazi/application";
-import { IdUserSchema } from "@argazi/domain";
+import { UpdateUserCommandPayload } from "@argazi/application";
+import { IdUser } from "@argazi/domain";
 
 import { BaseResponseFor } from "../../BaseResponseFor.js";
 import { BearerAuth } from "../../BearerAuth.security-scheme.js";
 import { UserApi } from "../User.api.js";
 
 // #region UpdateUserRequestParams
-const _UpdateUserRequestParamsSchema = Schema.Struct({
-  id: IdUserSchema,
-}).pipe(Schema.identifier("UpdateUserRequestParamsSchema"));
+const _UpdateUserRequestParams = Schema.Struct({
+  id: IdUser,
+}).pipe(Schema.identifier("UpdateUserRequestParams"));
 
 export type UpdateUserRequestParamsContext = Schema.Schema.Context<
-  typeof _UpdateUserRequestParamsSchema
+  typeof _UpdateUserRequestParams
 >;
 export interface UpdateUserRequestParamsEncoded
-  extends Schema.Schema.Encoded<typeof _UpdateUserRequestParamsSchema> {}
+  extends Schema.Schema.Encoded<typeof _UpdateUserRequestParams> {}
 export interface UpdateUserRequestParams
-  extends Schema.Schema.Type<typeof _UpdateUserRequestParamsSchema> {}
+  extends Schema.Schema.Type<typeof _UpdateUserRequestParams> {}
 
-export const UpdateUserRequestParamsSchema: Schema.Schema<
+export const UpdateUserRequestParams: Schema.Schema<
   UpdateUserRequestParams,
   UpdateUserRequestParamsEncoded
-> = _UpdateUserRequestParamsSchema;
-// #endregion UpdateUserRequestParamsSchema
+> = _UpdateUserRequestParams;
+// #endregion UpdateUserRequestParams
 
 // #region UpdateUserRequestBody
-const _UpdateUserRequestBodySchema = UpdateUserCommandPayloadSchema.pipe(
+const _UpdateUserRequestBody = UpdateUserCommandPayload.pipe(
   Schema.omit("id")
-).pipe(Schema.identifier("UpdateUserRequestBodySchema"));
+).pipe(Schema.identifier("UpdateUserRequestBody"));
 
 export type UpdateUserRequestBodyContext = Schema.Schema.Context<
-  typeof _UpdateUserRequestBodySchema
+  typeof _UpdateUserRequestBody
 >;
 export interface UpdateUserRequestBodyEncoded
-  extends Schema.Schema.Encoded<typeof _UpdateUserRequestBodySchema> {}
+  extends Schema.Schema.Encoded<typeof _UpdateUserRequestBody> {}
 export interface UpdateUserRequestBody
-  extends Schema.Schema.Type<typeof _UpdateUserRequestBodySchema> {}
+  extends Schema.Schema.Type<typeof _UpdateUserRequestBody> {}
 
-export const UpdateUserRequestBodySchema: Schema.Schema<
+export const UpdateUserRequestBody: Schema.Schema<
   UpdateUserRequestBody,
   UpdateUserRequestBodyEncoded
-> = _UpdateUserRequestBodySchema;
-// #endregion UpdateUserRequestBodySchema
+> = _UpdateUserRequestBody;
+// #endregion UpdateUserRequestBody
 
 // #region UpdateUserResponseBody
-const _UpdateUserResponseBodySchema = UserApi.pipe(
-  Schema.identifier("_UpdateUserResponseBodySchema"),
+const _UpdateUserResponseBody = UserApi.pipe(
+  Schema.identifier("_UpdateUserResponseBody"),
   BaseResponseFor
 );
 
 export type UpdateUserResponseBodyContext = Schema.Schema.Context<
-  typeof _UpdateUserResponseBodySchema
+  typeof _UpdateUserResponseBody
 >;
 export interface UpdateUserResponseBodyEncoded
-  extends Schema.Schema.Encoded<typeof _UpdateUserResponseBodySchema> {}
+  extends Schema.Schema.Encoded<typeof _UpdateUserResponseBody> {}
 export interface UpdateUserResponseBody
-  extends Schema.Schema.Type<typeof _UpdateUserResponseBodySchema> {}
+  extends Schema.Schema.Type<typeof _UpdateUserResponseBody> {}
 
-export const UpdateUserResponseBodySchema: Schema.Schema<
+export const UpdateUserResponseBody: Schema.Schema<
   UpdateUserResponseBody,
   UpdateUserResponseBodyEncoded
-> = _UpdateUserResponseBodySchema;
-// #endregion UpdateUserResponseBodySchema
+> = _UpdateUserResponseBody;
+// #endregion UpdateUserResponseBody
 
 export const UpdateUserEndpoint = ApiEndpoint.patch(
   "updateUser",
   "/users/:id",
   {}
 ).pipe(
-  ApiEndpoint.setRequestPath(UpdateUserRequestParamsSchema),
-  ApiEndpoint.setRequestBody(UpdateUserRequestBodySchema),
-  ApiEndpoint.setResponseBody(UpdateUserResponseBodySchema),
+  ApiEndpoint.setRequestPath(UpdateUserRequestParams),
+  ApiEndpoint.setRequestBody(UpdateUserRequestBody),
+  ApiEndpoint.setResponseBody(UpdateUserResponseBody),
   ApiEndpoint.setSecurity(BearerAuth)
 );

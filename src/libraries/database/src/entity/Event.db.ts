@@ -2,37 +2,32 @@ import { Schema } from "@effect/schema";
 import { type Event as _Event } from "@prisma/client";
 import { Effect } from "effect";
 
-import {
-  EventSchema,
-  IdEventSchema,
-  IdPlaceSchema,
-  PriceSchema,
-} from "@argazi/domain";
+import { Event, IdEvent, IdPlace, Price } from "@argazi/domain";
 import { _SS } from "@argazi/shared";
 
-import { BaseDbSchema, transform } from "../Base.db.js";
+import { BaseDb, transform } from "../Base.db.js";
 import { BigDecimalFromPrismaDecimal } from "../PrismaDecimalSchema.js";
 
-export const EventDbSchema = Schema.Struct({
+export const EventDb = Schema.Struct({
   dateAnnouncement: Schema.ValidDateFromSelf,
   dateDeadline: Schema.ValidDateFromSelf,
   dateFinish: Schema.ValidDateFromSelf,
   dateStart: Schema.ValidDateFromSelf,
-  id: IdEventSchema,
-  idPlace: IdPlaceSchema,
+  id: IdEvent,
+  idPlace: IdPlace,
   name: Schema.Secret,
-  priceDay: Schema.compose(BigDecimalFromPrismaDecimal, PriceSchema),
-  priceEvent: Schema.compose(BigDecimalFromPrismaDecimal, PriceSchema),
+  priceDay: Schema.compose(BigDecimalFromPrismaDecimal, Price),
+  priceEvent: Schema.compose(BigDecimalFromPrismaDecimal, Price),
   description: Schema.String,
 }).pipe(
-  Schema.extend(BaseDbSchema),
-  Schema.identifier("EventDbSchema"),
+  Schema.extend(BaseDb),
+  Schema.identifier("EventDb"),
   _SS.satisfies.encoded<_Event>()
 );
 
-export const EventDbToDomainSchema = transform(
-  EventDbSchema,
-  EventSchema,
+export const EventDbToDomain = transform(
+  EventDb,
+  Event,
   Effect.succeed,
   Effect.succeed
 );

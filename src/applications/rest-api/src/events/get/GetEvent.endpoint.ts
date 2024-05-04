@@ -1,45 +1,45 @@
 import * as Schema from "@effect/schema/Schema";
 import { ApiEndpoint } from "effect-http";
 
-import { IdEventSchema } from "@argazi/domain";
+import { IdEvent } from "@argazi/domain";
 
 import { BaseResponseFor } from "../../BaseResponseFor.js";
 import { EventApi } from "../Event.api.js";
 
-export const _GetEventResponseBodySchema = EventApi.pipe(
-  Schema.identifier("GetEventResponseSchema"),
+export const _GetEventResponseBody = EventApi.pipe(
+  Schema.identifier("GetEventResponse"),
   BaseResponseFor
 );
 
 export interface GetEventResponseBodyFrom
-  extends Schema.Schema.Encoded<typeof _GetEventResponseBodySchema> {}
+  extends Schema.Schema.Encoded<typeof _GetEventResponseBody> {}
 export interface GetEventResponseBody
-  extends Schema.Schema.Type<typeof _GetEventResponseBodySchema> {}
+  extends Schema.Schema.Type<typeof _GetEventResponseBody> {}
 
-export const GetEventResponseBodySchema: Schema.Schema<
+export const GetEventResponseBody: Schema.Schema<
   GetEventResponseBody,
   GetEventResponseBodyFrom
-> = _GetEventResponseBodySchema;
+> = _GetEventResponseBody;
 
-export const _GetEventRequestPathSchema = Schema.Struct({
-  idEvent: IdEventSchema,
+export const _GetEventRequestPath = Schema.Struct({
+  idEvent: IdEvent,
 });
 
 export interface GetEventRequestPathFrom
-  extends Schema.Schema.Encoded<typeof _GetEventRequestPathSchema> {}
+  extends Schema.Schema.Encoded<typeof _GetEventRequestPath> {}
 export interface GetEventRequestPath
-  extends Schema.Schema.Type<typeof _GetEventRequestPathSchema> {}
+  extends Schema.Schema.Type<typeof _GetEventRequestPath> {}
 
-export const GetEventRequestPathSchema: Schema.Schema<
+export const GetEventRequestPath: Schema.Schema<
   GetEventRequestPath,
   GetEventRequestPathFrom
-> = _GetEventRequestPathSchema;
+> = _GetEventRequestPath;
 
 export const GetEventEndpoint = ApiEndpoint.get(
   "getEvent",
   "/events/:idEvent",
   {}
 ).pipe(
-  ApiEndpoint.setRequestPath(GetEventRequestPathSchema),
-  ApiEndpoint.setResponseBody(GetEventResponseBodySchema)
+  ApiEndpoint.setRequestPath(GetEventRequestPath),
+  ApiEndpoint.setResponseBody(GetEventResponseBody)
 );

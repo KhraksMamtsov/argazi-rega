@@ -2,7 +2,7 @@ import { Config, Effect, Option, Secret } from "effect";
 import { ServerError } from "effect-http";
 
 import { GetUserUseCase, RegisterUserUseCase } from "@argazi/application";
-import { IdDwbnSchema, IdTelegramChatSchema } from "@argazi/domain";
+import { IdDwbn, IdTelegramChat } from "@argazi/domain";
 
 import { IdAdmin, IdArgazipaBot } from "../constants.js";
 import { JwtServiceTag } from "../Jwt.service.js";
@@ -35,8 +35,8 @@ export const LoginBasicHandler = (args: {
             email: "argazipa.bot@gmail.com",
             firstName: "Argazipa",
             id: IdArgazipaBot,
-            idDwbn: IdDwbnSchema("ArgazipaBot"),
-            idTelegramChat: IdTelegramChatSchema(0),
+            idDwbn: IdDwbn("ArgazipaBot"),
+            idTelegramChat: IdTelegramChat(0),
             isAdmin: true,
             lastName: "Bot",
             phone: null,

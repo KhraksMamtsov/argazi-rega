@@ -1,27 +1,25 @@
 import { Schema } from "@effect/schema";
 
-import { RouteFromEventIdSchema } from "./RouteFromEventId.js";
+import { IdRouteFromEvent } from "./RouteFromEventId.js";
 
-import { IdGeoPointSchema } from "../../geo-point/entity/IdGeoPoint.js";
-import { BaseSchema } from "../common/Base.js";
-import { IdTransportOnEventSchema } from "../transport-on-event/IdTransportOnEvent.js";
+import { IdGeoPoint } from "../../geo-point/entity/IdGeoPoint.js";
+import { Base } from "../common/Base.js";
+import { IdTransportOnEvent } from "../transport-on-event/IdTransportOnEvent.js";
 
-const _RouteFromEventSchema = Schema.Struct({
+const _RouteFromEvent = Schema.Struct({
   dateFinish: Schema.Option(Schema.Date),
   dateStart: Schema.Option(Schema.Date),
-  id: RouteFromEventIdSchema,
-  idGeoPoint: IdGeoPointSchema,
-  idTransportOnEvent: IdTransportOnEventSchema,
+  id: IdRouteFromEvent,
+  idGeoPoint: IdGeoPoint,
+  idTransportOnEvent: IdTransportOnEvent,
   //
   name: Schema.Option(Schema.Trim.pipe(Schema.nonEmpty())),
-}).pipe(Schema.extend(BaseSchema), Schema.identifier("RouteFromEventSchema"));
+}).pipe(Schema.extend(Base), Schema.identifier("RouteFromEvent"));
 
-export type RouteFromEventFrom = Schema.Schema.Encoded<
-  typeof _RouteFromEventSchema
->;
-export type RouteFromEvent = Schema.Schema.Type<typeof _RouteFromEventSchema>;
+export interface RouteFromEventFrom
+  extends Schema.Schema.Encoded<typeof _RouteFromEvent> {}
+export interface RouteFromEvent
+  extends Schema.Schema.Type<typeof _RouteFromEvent> {}
 
-export const RouteFromEventSchema: Schema.Schema<
-  RouteFromEvent,
-  RouteFromEventFrom
-> = _RouteFromEventSchema;
+export const RouteFromEvent: Schema.Schema<RouteFromEvent, RouteFromEventFrom> =
+  _RouteFromEvent;

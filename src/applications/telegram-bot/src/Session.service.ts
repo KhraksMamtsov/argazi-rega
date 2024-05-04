@@ -2,12 +2,7 @@ import { Effect, flow, Layer, Option, Secret, Struct } from "effect";
 
 import { CacheServiceTag } from "@argazi/cache";
 import type { IdTelegramChat } from "@argazi/domain";
-import {
-  type AccessToken,
-  type RefreshToken,
-  AccessTokenSchema,
-  RefreshTokenSchema,
-} from "@argazi/rest-api";
+import { AccessToken, RefreshToken } from "@argazi/rest-api";
 
 export interface UserCredentials {
   readonly accessToken: AccessToken;
@@ -79,8 +74,8 @@ export const makeLive = () =>
                 Option.all,
                 Option.map(
                   Struct.evolve({
-                    accessToken: AccessTokenSchema,
-                    refreshToken: RefreshTokenSchema,
+                    accessToken: AccessToken,
+                    refreshToken: RefreshToken,
                   })
                 )
               )

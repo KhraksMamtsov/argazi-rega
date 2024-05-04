@@ -1,6 +1,6 @@
 import { Schema } from "@effect/schema";
 
-export const _TelegramAuthMiniAppDataSchema = Schema.parseJson(
+export const _TelegramAuthMiniAppData = Schema.parseJson(
   Schema.Struct({
     data: Schema.Struct({
       code: Schema.String,
@@ -13,13 +13,13 @@ export const _TelegramAuthMiniAppDataSchema = Schema.parseJson(
 );
 
 export type TelegramAuthMiniAppDataFrom = Schema.Schema.Encoded<
-  typeof _TelegramAuthMiniAppDataSchema
+  typeof _TelegramAuthMiniAppData
 >;
 export type TelegramAuthMiniAppData = Schema.Schema.Type<
-  typeof _TelegramAuthMiniAppDataSchema
+  typeof _TelegramAuthMiniAppData
 >;
 
-export const TelegramAuthMiniAppDataSchema: Schema.Schema<
+export const TelegramAuthMiniAppData: Schema.Schema<
   TelegramAuthMiniAppData,
   TelegramAuthMiniAppDataFrom
-> = _TelegramAuthMiniAppDataSchema;
+> = _TelegramAuthMiniAppData;

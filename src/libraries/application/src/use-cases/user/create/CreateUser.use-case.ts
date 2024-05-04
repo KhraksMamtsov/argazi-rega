@@ -1,29 +1,27 @@
 import { Effect } from "effect";
 
-import { PrismaServiceTag, UserDbToDomainSchema } from "@argazi/database";
+import { PrismaServiceTag, UserDbToDomain } from "@argazi/database";
 import { NotificationServiceTag, notification } from "@argazi/domain";
 
-import { CreateUserCommandSchema } from "./CreateUser.command.js";
+import { CreateUserCommand } from "./CreateUser.command.js";
 
 import { BaseCausedUseCaseFor } from "../../common/Base.use-case.js";
 
-export const CreateUserUseCase = BaseCausedUseCaseFor(CreateUserCommandSchema)(
+export const CreateUserUseCase = BaseCausedUseCaseFor(CreateUserCommand)(
   ({ payload, initiator }) =>
     Effect.gen(function* (_) {
       const prismaClient = yield* PrismaServiceTag;
       const notificationService = yield* NotificationServiceTag;
 
-      const newUser = yield* prismaClient.queryDecode(
-        UserDbToDomainSchema,
-        (p) =>
-          p.user.create({
-            data: {
-              ...payload,
-              idUserCreator: initiator.id,
-              idUserUpdater: initiator.id,
-              isAdmin: false,
-            },
-          })
+      const newUser = yield* prismaClient.queryDecode(UserDbToDomain, (p) =>
+        p.user.create({
+          data: {
+            ...payload,
+            idUserCreator: initiator.id,
+            idUserUpdater: initiator.id,
+            isAdmin: false,
+          },
+        })
       );
 
       Effect.runFork(

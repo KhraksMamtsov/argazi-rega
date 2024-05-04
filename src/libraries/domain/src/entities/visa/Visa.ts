@@ -1,23 +1,23 @@
 import { Schema } from "@effect/schema";
 
-import { VisaIdSchema } from "./VisaId.js";
+import { IdVisa } from "./VisaId.js";
 
-import { IdEventSchema } from "../../event/entity/IdEvent.js";
-import { PriceSchema } from "../../value-objects/Price.js";
-import { IdVisitorSchema } from "../../visitor/IdVisitor.js";
-import { BaseSchema } from "../common/Base.js";
-import { TransportOnEventSchema } from "../transport-on-event/TransportOnEvent.js";
+import { IdEvent } from "../../event/entity/IdEvent.js";
+import { Price } from "../../value-objects/Price.js";
+import { IdVisitor } from "../../visitor/IdVisitor.js";
+import { Base } from "../common/Base.js";
+import { TransportOnEvent } from "../transport-on-event/TransportOnEvent.js";
 
-const _VisaSchema = Schema.Struct({
-  id: VisaIdSchema,
-  idEvent: IdEventSchema,
-  idTransportOnEvent: Schema.Option(TransportOnEventSchema),
-  idVisitor: IdVisitorSchema,
+const _Visa = Schema.Struct({
+  id: IdVisa,
+  idEvent: IdEvent,
+  idTransportOnEvent: Schema.Option(TransportOnEvent),
+  idVisitor: IdVisitor,
   //
-  totalPrice: PriceSchema,
-}).pipe(Schema.extend(BaseSchema), Schema.identifier("VisaSchema"));
+  totalPrice: Price,
+}).pipe(Schema.extend(Base), Schema.identifier("Visa"));
 
-export type VisaFrom = Schema.Schema.Encoded<typeof _VisaSchema>;
-export type Visa = Schema.Schema.Type<typeof _VisaSchema>;
+export type VisaFrom = Schema.Schema.Encoded<typeof _Visa>;
+export type Visa = Schema.Schema.Type<typeof _Visa>;
 
-export const VisaSchema: Schema.Schema<Visa, VisaFrom> = _VisaSchema;
+export const Visa: Schema.Schema<Visa, VisaFrom> = _Visa;

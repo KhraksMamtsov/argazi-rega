@@ -25,11 +25,11 @@ import {
 import { Option } from "effect";
 import { defineComponent } from "vue";
 
-import { VisitorJsonSchema } from "./Visitor.form.ts";
+import { VisitorJson } from "./Visitor.form.ts";
 // mergeStyles combines all classes from both styles definitions into one
 const myStyles = mergeStyles(defaultStyles, { control: { label: "mylabel" } });
 
-const schema = JSONSchema.make(VisitorJsonSchema);
+const schema = JSONSchema.make(VisitorJson);
 
 console.log("schema: ", schema);
 
@@ -64,7 +64,7 @@ export default defineComponent({
   data() {
     return {
       title: Option.getOrElse(
-        AST.getTitleAnnotation(VisitorJsonSchema.ast),
+        AST.getTitleAnnotation(VisitorJson.ast),
         () => "www"
       ),
       data: {},

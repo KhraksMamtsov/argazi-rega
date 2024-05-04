@@ -1,73 +1,70 @@
 import * as Schema from "@effect/schema/Schema";
 import { ApiEndpoint } from "effect-http";
 
-import { CreateUsersVisitorCommandPayloadSchema } from "@argazi/application";
-import { IdUserSchema } from "@argazi/domain";
+import { CreateUsersVisitorCommandPayload } from "@argazi/application";
+import { IdUser } from "@argazi/domain";
 
 import { BaseResponseFor } from "../../BaseResponseFor.js";
 import { BearerAuth } from "../../BearerAuth.security-scheme.js";
 import { VisitorApi } from "../../visitors/Visitor.api.js";
 
 // #region CreateUsersVisitorResponseBody
-const _CreateUsersVisitorResponseBodySchema = VisitorApi.pipe(
+const _CreateUsersVisitorResponseBody = VisitorApi.pipe(
   Schema.identifier("CreateUsersVisitorResponseBody"),
   BaseResponseFor
 );
 
 export type CreateUsersVisitorResponseBodyContext = Schema.Schema.Context<
-  typeof _CreateUsersVisitorResponseBodySchema
+  typeof _CreateUsersVisitorResponseBody
 >;
 export interface CreateUsersVisitorResponseBodyEncoded
-  extends Schema.Schema.Encoded<typeof _CreateUsersVisitorResponseBodySchema> {}
+  extends Schema.Schema.Encoded<typeof _CreateUsersVisitorResponseBody> {}
 export interface CreateUsersVisitorResponseBody
-  extends Schema.Schema.Type<typeof _CreateUsersVisitorResponseBodySchema> {}
+  extends Schema.Schema.Type<typeof _CreateUsersVisitorResponseBody> {}
 
-export const CreateUsersVisitorResponseBodySchema: Schema.Schema<
+export const CreateUsersVisitorResponseBody: Schema.Schema<
   CreateUsersVisitorResponseBody,
   CreateUsersVisitorResponseBodyEncoded
-> = _CreateUsersVisitorResponseBodySchema;
-// #endregion CreateUsersVisitorResponseBodySchema
+> = _CreateUsersVisitorResponseBody;
+// #endregion CreateUsersVisitorResponseBody
 
 // #region CreateUsersVisitorRequestBody
-const _CreateUsersVisitorRequestBodySchema =
-  CreateUsersVisitorCommandPayloadSchema.pipe(
-    Schema.omit("idUser"),
-    Schema.identifier("CreateUsersVisitorRequestBodySchema")
-  );
+const _CreateUsersVisitorRequestBody = CreateUsersVisitorCommandPayload.pipe(
+  Schema.omit("idUser"),
+  Schema.identifier("CreateUsersVisitorRequestBody")
+);
 
 export type CreateUsersVisitorRequestBodyContext = Schema.Schema.Context<
-  typeof _CreateUsersVisitorRequestBodySchema
+  typeof _CreateUsersVisitorRequestBody
 >;
 export interface CreateUsersVisitorRequestBodyEncoded
-  extends Schema.Schema.Encoded<typeof _CreateUsersVisitorRequestBodySchema> {}
+  extends Schema.Schema.Encoded<typeof _CreateUsersVisitorRequestBody> {}
 export interface CreateUsersVisitorRequestBody
-  extends Schema.Schema.Type<typeof _CreateUsersVisitorRequestBodySchema> {}
+  extends Schema.Schema.Type<typeof _CreateUsersVisitorRequestBody> {}
 
-export const CreateUsersVisitorRequestBodySchema: Schema.Schema<
+export const CreateUsersVisitorRequestBody: Schema.Schema<
   CreateUsersVisitorRequestBody,
   CreateUsersVisitorRequestBodyEncoded
-> = _CreateUsersVisitorRequestBodySchema;
-// #endregion CreateUsersVisitorRequestBodySchema
+> = _CreateUsersVisitorRequestBody;
+// #endregion CreateUsersVisitorRequestBody
 // #region CreateUsersVisitorRequestParams
-const _CreateUsersVisitorRequestParamsSchema = Schema.Struct({
-  idUser: IdUserSchema,
-}).pipe(Schema.identifier("CreateUsersVisitorRequestParamsSchema"));
+const _CreateUsersVisitorRequestParams = Schema.Struct({
+  idUser: IdUser,
+}).pipe(Schema.identifier("CreateUsersVisitorRequestParams"));
 
 export type CreateUsersVisitorRequestParamsContext = Schema.Schema.Context<
-  typeof _CreateUsersVisitorRequestParamsSchema
+  typeof _CreateUsersVisitorRequestParams
 >;
 export interface CreateUsersVisitorRequestParamsEncoded
-  extends Schema.Schema.Encoded<
-    typeof _CreateUsersVisitorRequestParamsSchema
-  > {}
+  extends Schema.Schema.Encoded<typeof _CreateUsersVisitorRequestParams> {}
 export interface CreateUsersVisitorRequestParams
-  extends Schema.Schema.Type<typeof _CreateUsersVisitorRequestParamsSchema> {}
+  extends Schema.Schema.Type<typeof _CreateUsersVisitorRequestParams> {}
 
-export const CreateUsersVisitorRequestParamsSchema: Schema.Schema<
+export const CreateUsersVisitorRequestParams: Schema.Schema<
   CreateUsersVisitorRequestParams,
   CreateUsersVisitorRequestParamsEncoded
-> = _CreateUsersVisitorRequestParamsSchema;
-// #endregion CreateUsersVisitorRequestParamsSchema
+> = _CreateUsersVisitorRequestParams;
+// #endregion CreateUsersVisitorRequestParams
 
 export const CreateUsersVisitorEndpoint = ApiEndpoint.post(
   "createUsersVisitor",
@@ -76,8 +73,8 @@ export const CreateUsersVisitorEndpoint = ApiEndpoint.post(
     summary: "Creates user's visitor",
   }
 ).pipe(
-  ApiEndpoint.setRequestPath(CreateUsersVisitorRequestParamsSchema),
-  ApiEndpoint.setRequestBody(CreateUsersVisitorRequestBodySchema),
-  ApiEndpoint.setResponseBody(CreateUsersVisitorResponseBodySchema),
+  ApiEndpoint.setRequestPath(CreateUsersVisitorRequestParams),
+  ApiEndpoint.setRequestBody(CreateUsersVisitorRequestBody),
+  ApiEndpoint.setResponseBody(CreateUsersVisitorResponseBody),
   ApiEndpoint.setSecurity(BearerAuth)
 );

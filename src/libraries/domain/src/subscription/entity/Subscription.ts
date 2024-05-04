@@ -1,28 +1,28 @@
 import { Schema } from "@effect/schema";
 
-import { IdSubscriptionSchema } from "./IdSubscription.js";
+import { IdSubscription } from "./IdSubscription.js";
 
-import { BaseSchema } from "../../entities/common/Base.js";
-import { IdPlaceSchema } from "../../place/entity/IdPlace.js";
-import { IdUserSchema } from "../../user/entity/IdUser.js";
+import { Base } from "../../entities/common/Base.js";
+import { IdPlace } from "../../place/entity/IdPlace.js";
+import { IdUser } from "../../user/entity/IdUser.js";
 
-export const SubscriptionBaseSchema = Schema.Struct({
-  id: IdSubscriptionSchema,
-  idPlace: IdPlaceSchema,
-  idUser: IdUserSchema,
-});
+export const SubscriptionBase = Schema.Struct({
+  id: IdSubscription,
+  idPlace: IdPlace,
+  idUser: IdUser,
+}).pipe(Schema.identifier("SubscriptionBase"));
 
 export interface SubscriptionBase
-  extends Schema.Schema.Type<typeof SubscriptionBaseSchema> {}
+  extends Schema.Schema.Type<typeof SubscriptionBase> {}
 
-const _SubscriptionSchema = SubscriptionBaseSchema.pipe(
+const _Subscription = SubscriptionBase.pipe(
   //
-  Schema.extend(BaseSchema),
-  Schema.identifier("SubscriptionSchema")
+  Schema.extend(Base),
+  Schema.identifier("Subscription")
 );
 
 export interface Subscription
-  extends Schema.Schema.Type<typeof _SubscriptionSchema> {}
+  extends Schema.Schema.Type<typeof _Subscription> {}
 
-export const SubscriptionSchema: Schema.Schema<Subscription> =
-  Schema.typeSchema(_SubscriptionSchema);
+export const Subscription: Schema.Schema<Subscription> =
+  Schema.typeSchema(_Subscription);

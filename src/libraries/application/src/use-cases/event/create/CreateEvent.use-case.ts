@@ -1,23 +1,20 @@
 import { Effect } from "effect";
 
-import { EventDbToDomainSchema, PrismaServiceTag } from "@argazi/database";
+import { EventDbToDomain, PrismaServiceTag } from "@argazi/database";
 import { notification } from "@argazi/domain";
 import { NotificationServiceTag } from "@argazi/domain";
 
-import { CreateEventCommandSchema } from "./CreateEvent.command.js";
+import { CreateEventCommand } from "./CreateEvent.command.js";
 
 import { BaseCausedUseCaseFor } from "../../common/Base.use-case.js";
 
-export const CreateEventUseCase = BaseCausedUseCaseFor(
-  CreateEventCommandSchema
-)(({ payload, initiator }) =>
-  Effect.gen(function* (_) {
-    const prismaClient = yield* PrismaServiceTag;
-    const notificationService = yield* NotificationServiceTag;
+export const CreateEventUseCase = BaseCausedUseCaseFor(CreateEventCommand)(
+  ({ payload, initiator }) =>
+    Effect.gen(function* (_) {
+      const prismaClient = yield* PrismaServiceTag;
+      const notificationService = yield* NotificationServiceTag;
 
-    const newEvent = yield* prismaClient.queryDecode(
-      EventDbToDomainSchema,
-      (p) =>
+      const newEvent = yield* prismaClient.queryDecode(EventDbToDomain, (p) =>
         p.event.create({
           data: {
             description: payload.description,
@@ -33,17 +30,17 @@ export const CreateEventUseCase = BaseCausedUseCaseFor(
             priceEvent: payload.priceEvent,
           },
         })
-    );
+      );
 
-    Effect.runFork(
-      notificationService.queue(
-        notification.event("created")({
-          idEntity: newEvent.id,
-          idInitiator: initiator.id,
-        })
-      )
-    );
+      Effect.runFork(
+        notificationService.queue(
+          notification.event("created")({
+            idEntity: newEvent.id,
+            idInitiator: initiator.id,
+          })
+        )
+      );
 
-    return newEvent;
-  })
+      return newEvent;
+    })
 );

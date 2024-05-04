@@ -1,17 +1,17 @@
 import { Schema } from "@effect/schema";
 
-import { IdPlaceSchema } from "@argazi/domain";
+import { IdPlace } from "@argazi/domain";
 import { _SS } from "@argazi/shared";
 
 import { BaseCausedCommandFor } from "../../../common/Base.command.js";
 
-export const GetPlaceActualEventsCommandPayloadSchema = Schema.Struct({
-  idPlace: IdPlaceSchema,
+export const GetPlaceActualEventsCommandPayload = Schema.Struct({
+  idPlace: IdPlace,
 }).pipe(
   _SS.satisfies.encoded.json(),
-  Schema.identifier("GetPlaceActualEventsCommandPayloadSchema")
+  Schema.identifier("GetPlaceActualEventsCommandPayload")
 );
 
-export const GetPlaceActualEventsCommandSchema = BaseCausedCommandFor(
-  GetPlaceActualEventsCommandPayloadSchema
-).pipe(Schema.identifier("GetPlaceActualEventsCommandSchema"));
+export const GetPlaceActualEventsCommand = BaseCausedCommandFor(
+  GetPlaceActualEventsCommandPayload
+).pipe(Schema.identifier("GetPlaceActualEventsCommand"));

@@ -2,15 +2,11 @@ import { Schema } from "@effect/schema";
 
 import type { Branded } from "effect/Brand";
 
-export const EntitySchema = <
-  R,
-  I extends string,
-  A extends Branded<string, symbol>,
->(
+export const Entity = <R, I extends string, A extends Branded<string, symbol>>(
   idSchema: Schema.Schema<A, I, R>
 ) =>
   Schema.Struct({
     id: idSchema,
-  }).pipe(Schema.typeSchema, Schema.identifier("EntitySchema"));
+  }).pipe(Schema.typeSchema, Schema.identifier("Entity"));
 
-export type Entity = Schema.Schema.Type<typeof EntitySchema>;
+export type Entity = Schema.Schema.Type<ReturnType<typeof Entity>>;

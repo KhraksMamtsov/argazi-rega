@@ -2,22 +2,22 @@ import { Schema } from "@effect/schema";
 import { type Ticket as _Ticket } from "@prisma/client";
 import { Effect } from "effect";
 
-import { IdTransportOnEventSchema } from "@argazi/domain";
-import { IdEventSchema } from "@argazi/domain";
-import { IdTicketSchema } from "@argazi/domain";
-import { type TicketBase, TicketSchema } from "@argazi/domain";
+import { IdTransportOnEvent } from "@argazi/domain";
+import { IdEvent } from "@argazi/domain";
+import { IdTicket } from "@argazi/domain";
+import { type TicketBase, Ticket } from "@argazi/domain";
 import { TicketRole } from "@argazi/domain";
-import { IdUserSchema } from "@argazi/domain";
+import { IdUser } from "@argazi/domain";
 import { _SS } from "@argazi/shared";
 
-import { BaseDbSchema, transform } from "../Base.db.js";
+import { BaseDb, transform } from "../Base.db.js";
 
-export const TicketDbBaseSchema = Schema.Struct({
+export const TicketDbBase = Schema.Struct({
   dateRegistered: Schema.ValidDateFromSelf,
-  id: IdTicketSchema,
-  idEvent: IdEventSchema,
-  idTransport: Schema.OptionFromNullOr(IdTransportOnEventSchema),
-  idUser: IdUserSchema,
+  id: IdTicket,
+  idEvent: IdEvent,
+  idTransport: Schema.OptionFromNullOr(IdTransportOnEvent),
+  idUser: IdUser,
   role: Schema.transformLiterals(
     ["ADMIN", TicketRole.ADMIN],
     ["CASHIER", TicketRole.CASHIER],
@@ -25,28 +25,27 @@ export const TicketDbBaseSchema = Schema.Struct({
     ["NONE", TicketRole.NONE],
     ["CHIEF", TicketRole.CHIEF]
   ),
-}).pipe(Schema.identifier("TicketDbBaseSchema"));
+}).pipe(Schema.identifier("TicketDbBase"));
 
 // #region TicketDb
-const _TicketDbSchema = TicketDbBaseSchema.pipe(
+const _TicketDb = TicketDbBase.pipe(
   _SS.satisfies.type<TicketBase>(),
-  Schema.extend(BaseDbSchema),
+  Schema.extend(BaseDb),
   _SS.satisfies.encoded<_Ticket>(),
-  Schema.identifier("_TicketDbSchema")
+  Schema.identifier("_TicketDb")
 );
 
-export type TicketDbContext = Schema.Schema.Context<typeof _TicketDbSchema>;
+export type TicketDbContext = Schema.Schema.Context<typeof _TicketDb>;
 export interface TicketDbEncoded
-  extends Schema.Schema.Encoded<typeof _TicketDbSchema> {}
-export interface TicketDb extends Schema.Schema.Type<typeof _TicketDbSchema> {}
+  extends Schema.Schema.Encoded<typeof _TicketDb> {}
+export interface TicketDb extends Schema.Schema.Type<typeof _TicketDb> {}
 
-export const TicketDbSchema: Schema.Schema<TicketDb, TicketDbEncoded> =
-  _TicketDbSchema;
-// #endregion TicketDbSchema
+export const TicketDb: Schema.Schema<TicketDb, TicketDbEncoded> = _TicketDb;
+// #endregion TicketDb
 
-export const TicketDbToDomainSchema = transform(
-  TicketDbSchema,
-  TicketSchema,
+export const TicketDbToDomain = transform(
+  TicketDb,
+  Ticket,
   Effect.succeed,
   Effect.succeed
 );

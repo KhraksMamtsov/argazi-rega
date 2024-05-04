@@ -1,6 +1,6 @@
 import { Schema } from "@effect/schema";
 
-import { IdUserSchema } from "@argazi/domain";
+import { IdUser } from "@argazi/domain";
 import { _SS } from "@argazi/shared";
 
 import { BaseCausedCommandFor } from "../../common/Base.command.js";
@@ -12,26 +12,26 @@ export type CreateGeoPointCommandPayloadFrom = {
   readonly name: string | null;
 };
 
-export const CreateGeoPointCommandPayloadSchema = Schema.Struct({
-  idUser: IdUserSchema,
+export const CreateGeoPointCommandPayload = Schema.Struct({
+  idUser: IdUser,
   latitude: Schema.Number,
   longitude: Schema.Number,
   name: Schema.OptionFromNullOr(Schema.Secret),
 }).pipe(
   _SS.satisfies.encoded.json<CreateGeoPointCommandPayloadFrom>(),
-  Schema.identifier("CreateGeoPointCommandPayloadSchema")
+  Schema.identifier("CreateGeoPointCommandPayload")
 );
 
-export const _CreateGeoPointCommandSchema = BaseCausedCommandFor(
-  CreateGeoPointCommandPayloadSchema
-).pipe(Schema.identifier("CreateGeoPointCommandSchema"));
+export const _CreateGeoPointCommand = BaseCausedCommandFor(
+  CreateGeoPointCommandPayload
+).pipe(Schema.identifier("CreateGeoPointCommand"));
 
 export interface CreateGeoPointCommandFrom
-  extends Schema.Schema.Encoded<typeof _CreateGeoPointCommandSchema> {}
+  extends Schema.Schema.Encoded<typeof _CreateGeoPointCommand> {}
 export interface CreateGeoPointCommand
-  extends Schema.Schema.Type<typeof _CreateGeoPointCommandSchema> {}
+  extends Schema.Schema.Type<typeof _CreateGeoPointCommand> {}
 
-export const CreateGeoPointCommandSchema: Schema.Schema<
+export const CreateGeoPointCommand: Schema.Schema<
   CreateGeoPointCommand,
   CreateGeoPointCommandFrom
-> = _CreateGeoPointCommandSchema;
+> = _CreateGeoPointCommand;

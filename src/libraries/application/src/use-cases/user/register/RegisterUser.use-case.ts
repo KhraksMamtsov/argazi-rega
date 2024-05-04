@@ -1,36 +1,34 @@
 import { Effect, Option, Secret } from "effect";
 
-import { PrismaServiceTag, UserDbToDomainSchema } from "@argazi/database";
+import { PrismaServiceTag, UserDbToDomain } from "@argazi/database";
 import { NotificationServiceTag, notification } from "@argazi/domain";
 
-import { RegisterUserCommandSchema } from "./RegisterUser.command.js";
+import { RegisterUserCommand } from "./RegisterUser.command.js";
 
 import { BaseUseCaseFor } from "../../common/Base.use-case.js";
 
-export const RegisterUserUseCase = BaseUseCaseFor(RegisterUserCommandSchema)(
+export const RegisterUserUseCase = BaseUseCaseFor(RegisterUserCommand)(
   ({ payload }) =>
     Effect.gen(function* (_) {
       const prismaClient = yield* PrismaServiceTag;
       const notificationService = yield* NotificationServiceTag;
 
-      const newUser = yield* prismaClient.queryDecode(
-        UserDbToDomainSchema,
-        (p) =>
-          p.user.create({
-            data: {
-              ...payload,
-              email: Secret.value(payload.email),
-              firstName: Secret.value(payload.firstName),
-              idUserCreator: payload.id,
-              idUserUpdater: payload.id,
-              lastName: Option.map(payload.lastName, Secret.value).pipe(
-                Option.getOrNull
-              ),
-              phone: Option.map(payload.phone, Secret.value).pipe(
-                Option.getOrNull
-              ),
-            },
-          })
+      const newUser = yield* prismaClient.queryDecode(UserDbToDomain, (p) =>
+        p.user.create({
+          data: {
+            ...payload,
+            email: Secret.value(payload.email),
+            firstName: Secret.value(payload.firstName),
+            idUserCreator: payload.id,
+            idUserUpdater: payload.id,
+            lastName: Option.map(payload.lastName, Secret.value).pipe(
+              Option.getOrNull
+            ),
+            phone: Option.map(payload.phone, Secret.value).pipe(
+              Option.getOrNull
+            ),
+          },
+        })
       );
 
       if (!newUser.isAdmin) {

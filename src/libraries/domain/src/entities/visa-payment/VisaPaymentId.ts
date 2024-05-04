@@ -1,9 +1,9 @@
 import { Schema } from "@effect/schema";
 
-export const VisaPaymentIdSymbol: unique symbol = Symbol.for(
-  "VisaPaymentIdSymbol"
+export const IdVisaPaymentSymbol: unique symbol = Symbol.for(
+  "IdVisaPaymentSymbol"
 );
-export const VisaPaymentIdSchema = Schema.UUID.pipe(
-  Schema.brand(VisaPaymentIdSymbol),
-  Schema.identifier("VisaPaymentIdSchema")
+export const IdVisaPayment = Schema.UUID.pipe(
+  Schema.brand(IdVisaPaymentSymbol),
+  Schema.identifier("IdVisaPayment")
 );

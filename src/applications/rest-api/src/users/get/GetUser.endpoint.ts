@@ -1,55 +1,55 @@
 import * as Schema from "@effect/schema/Schema";
 import { ApiEndpoint } from "effect-http";
 
-import { IdUserSchema } from "@argazi/domain";
+import { IdUser } from "@argazi/domain";
 
 import { BaseResponseFor } from "../../BaseResponseFor.js";
 import { UserApi } from "../User.api.js";
 
 // #region GetUserResponseBody
-const _GetUserResponseBodySchema = UserApi.pipe(
-  Schema.identifier("GetUserResponseSchema"),
+const _GetUserResponseBody = UserApi.pipe(
+  Schema.identifier("GetUserResponse"),
   BaseResponseFor
-).pipe(Schema.identifier("GetUserResponseBodySchema"));
+).pipe(Schema.identifier("GetUserResponseBody"));
 
 export type GetUserResponseBodyContext = Schema.Schema.Context<
-  typeof _GetUserResponseBodySchema
+  typeof _GetUserResponseBody
 >;
 export interface GetUserResponseBodyEncoded
-  extends Schema.Schema.Encoded<typeof _GetUserResponseBodySchema> {}
+  extends Schema.Schema.Encoded<typeof _GetUserResponseBody> {}
 export interface GetUserResponseBody
-  extends Schema.Schema.Type<typeof _GetUserResponseBodySchema> {}
+  extends Schema.Schema.Type<typeof _GetUserResponseBody> {}
 
-export const GetUserResponseBodySchema: Schema.Schema<
+export const GetUserResponseBody: Schema.Schema<
   GetUserResponseBody,
   GetUserResponseBodyEncoded
-> = _GetUserResponseBodySchema;
-// #endregion GetUserResponseBodySchema
+> = _GetUserResponseBody;
+// #endregion GetUserResponseBody
 
 // #region GetUserRequestParams
-const _GetUserRequestParamsSchema = Schema.Struct({
-  idUser: IdUserSchema,
-}).pipe(Schema.identifier("GetUserRequestParamsSchema"));
+const _GetUserRequestParams = Schema.Struct({
+  idUser: IdUser,
+}).pipe(Schema.identifier("GetUserRequestParams"));
 
 export type GetUserRequestParamsContext = Schema.Schema.Context<
-  typeof _GetUserRequestParamsSchema
+  typeof _GetUserRequestParams
 >;
 export interface GetUserRequestParamsEncoded
-  extends Schema.Schema.Encoded<typeof _GetUserRequestParamsSchema> {}
+  extends Schema.Schema.Encoded<typeof _GetUserRequestParams> {}
 export interface GetUserRequestParams
-  extends Schema.Schema.Type<typeof _GetUserRequestParamsSchema> {}
+  extends Schema.Schema.Type<typeof _GetUserRequestParams> {}
 
-export const GetUserRequestParamsSchema: Schema.Schema<
+export const GetUserRequestParams: Schema.Schema<
   GetUserRequestParams,
   GetUserRequestParamsEncoded
-> = _GetUserRequestParamsSchema;
-// #endregion GetUserRequestParamsSchema
+> = _GetUserRequestParams;
+// #endregion GetUserRequestParams
 
 export const GetUserEndpoint = ApiEndpoint.get(
   "getUser",
   "/users/:idUser",
   {}
 ).pipe(
-  ApiEndpoint.setRequestPath(GetUserRequestParamsSchema),
-  ApiEndpoint.setResponseBody(GetUserResponseBodySchema)
+  ApiEndpoint.setRequestPath(GetUserRequestParams),
+  ApiEndpoint.setResponseBody(GetUserResponseBody)
 );

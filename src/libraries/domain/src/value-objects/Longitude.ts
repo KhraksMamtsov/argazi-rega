@@ -1,8 +1,10 @@
 import { Schema } from "@effect/schema";
-export const LongitudeSchema = Schema.SecretFromSelf.pipe(
+
+export const Longitude = Schema.SecretFromSelf.pipe(
   Schema.identifier("Longitude"),
   Schema.brand("Longitude")
 );
 
-export type LongitudeFrom = Schema.Schema.Encoded<typeof LongitudeSchema>;
-export type Longitude = Schema.Schema.Type<typeof LongitudeSchema>;
+export interface LongitudeFrom
+  extends Schema.Schema.Encoded<typeof Longitude> {}
+export interface Longitude extends Schema.Schema.Type<typeof Longitude> {}

@@ -1,18 +1,18 @@
 import { Schema } from "@effect/schema";
 
-import { IdPlaceSchema, IdUserSchema } from "@argazi/domain";
+import { IdPlace, IdUser } from "@argazi/domain";
 import { _SS } from "@argazi/shared";
 
 import { BaseCausedCommandFor } from "../../common/Base.command.js";
 
-export const CreateSubscriptionCommandPayloadSchema = Schema.Struct({
-  idPlace: IdPlaceSchema,
-  idUser: IdUserSchema,
+export const CreateSubscriptionCommandPayload = Schema.Struct({
+  idPlace: IdPlace,
+  idUser: IdUser,
 }).pipe(
   _SS.satisfies.encoded.json(),
-  Schema.identifier("CreateSubscriptionCommandPayloadSchema")
+  Schema.identifier("CreateSubscriptionCommandPayload")
 );
 
-export const CreateSubscriptionCommandSchema = BaseCausedCommandFor(
-  CreateSubscriptionCommandPayloadSchema
-).pipe(Schema.identifier("CreateSubscriptionCommandSchema"));
+export const CreateSubscriptionCommand = BaseCausedCommandFor(
+  CreateSubscriptionCommandPayload
+).pipe(Schema.identifier("CreateSubscriptionCommand"));

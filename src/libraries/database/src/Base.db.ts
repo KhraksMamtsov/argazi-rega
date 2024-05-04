@@ -2,42 +2,40 @@ import { Schema, AST, ParseResult } from "@effect/schema";
 import { Effect, Option, pipe } from "effect";
 
 import {
-  type Base,
-  BaseSchema,
-  IdUserSchema,
-  DateCreatedSchema,
-  DateDeletedSchema,
-  DateUpdatedSchema,
+  Base,
+  IdUser,
+  DateCreated,
+  DateDeleted,
+  DateUpdated,
 } from "@argazi/domain";
 import { _TS } from "@argazi/shared";
 
-const _BaseDbSchema = Schema.Struct({
+const _BaseDb = Schema.Struct({
   dateCreated: Schema.ValidDateFromSelf,
   dateDeleted: Schema.NullOr(Schema.ValidDateFromSelf),
   dateUpdated: Schema.ValidDateFromSelf,
   idUserCreator: Schema.UUID,
   idUserDeleter: Schema.NullOr(Schema.UUID),
   idUserUpdater: Schema.UUID,
-}).pipe(Schema.identifier("BaseDbSchema"));
+}).pipe(Schema.identifier("BaseDb"));
 
-export interface BaseDbFrom
-  extends Schema.Schema.Encoded<typeof _BaseDbSchema> {}
-export interface BaseDb extends Schema.Schema.Type<typeof _BaseDbSchema> {}
-export const BaseDbSchema: Schema.Schema<BaseDb, BaseDbFrom> = _BaseDbSchema;
+export interface BaseDbFrom extends Schema.Schema.Encoded<typeof _BaseDb> {}
+export interface BaseDb extends Schema.Schema.Type<typeof _BaseDb> {}
+export const BaseDb: Schema.Schema<BaseDb, BaseDbFrom> = _BaseDb;
 
-export const ToDomainBase = Schema.transform(BaseDbSchema, BaseSchema, {
+export const ToDomainBase = Schema.transform(BaseDb, Base, {
   decode: (x) => ({
     meta: {
-      dateCreated: DateCreatedSchema(x.dateCreated),
+      dateCreated: DateCreated(x.dateCreated),
       dateDeleted: Option.fromNullable(x.dateDeleted).pipe(
-        Option.map(DateDeletedSchema)
+        Option.map(DateDeleted)
       ),
-      dateUpdated: DateUpdatedSchema(x.dateUpdated),
-      idUserCreator: IdUserSchema(x.idUserCreator),
+      dateUpdated: DateUpdated(x.dateUpdated),
+      idUserCreator: IdUser(x.idUserCreator),
       idUserDeleter: Option.fromNullable(x.idUserDeleter).pipe(
-        Option.map(IdUserSchema)
+        Option.map(IdUser)
       ),
-      idUserUpdater: IdUserSchema(x.idUserUpdater),
+      idUserUpdater: IdUser(x.idUserUpdater),
     },
   }),
   encode: ({ meta }) => ({

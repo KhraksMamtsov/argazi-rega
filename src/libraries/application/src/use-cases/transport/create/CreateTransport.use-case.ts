@@ -1,19 +1,19 @@
 import { Effect, Option, Secret } from "effect";
 
-import { PrismaServiceTag, TransportDbToDomainSchema } from "@argazi/database";
+import { PrismaServiceTag, TransportDbToDomain } from "@argazi/database";
 
-import { CreateTransportCommandSchema } from "./CreateTransport.command.js";
+import { CreateTransportCommand } from "./CreateTransport.command.js";
 
 import { BaseCausedUseCaseFor } from "../../common/Base.use-case.js";
 
 export const CreateTransportUseCase = BaseCausedUseCaseFor(
-  CreateTransportCommandSchema
+  CreateTransportCommand
 )(({ payload, initiator }) =>
   Effect.gen(function* (_) {
     const prismaClient = yield* PrismaServiceTag;
 
     const newTransport = yield* prismaClient.queryDecode(
-      TransportDbToDomainSchema,
+      TransportDbToDomain,
       (p) =>
         p.transport.create({
           data: {

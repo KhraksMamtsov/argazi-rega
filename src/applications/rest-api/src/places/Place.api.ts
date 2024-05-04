@@ -1,13 +1,13 @@
 import * as Schema from "@effect/schema/Schema";
 
-import { IdGeoPointSchema } from "@argazi/domain";
-import { IdPlaceSchema } from "@argazi/domain";
+import { IdGeoPoint } from "@argazi/domain";
+import { IdPlace } from "@argazi/domain";
 import type { PlaceBase } from "@argazi/domain";
 import { _SS } from "@argazi/shared";
 
 export const _PlaceApi = Schema.Struct({
-  id: IdPlaceSchema,
-  idGeoPoint: IdGeoPointSchema,
+  id: IdPlace,
+  idGeoPoint: IdGeoPoint,
   name: Schema.compose(Schema.Trimmed, Schema.NonEmpty),
   description: Schema.compose(Schema.Trimmed, Schema.NonEmpty),
 }).pipe(

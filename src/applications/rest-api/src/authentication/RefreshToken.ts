@@ -3,9 +3,9 @@ import { Schema } from "@effect/schema";
 export const RefreshTokenSymbol: unique symbol =
   Symbol.for("RefreshTokenSymbol");
 
-export const RefreshTokenSchema = Schema.Secret.pipe(
-  Schema.identifier("RefreshTokenSchema"),
+export const RefreshToken = Schema.Secret.pipe(
+  Schema.identifier("RefreshToken"),
   Schema.brand(RefreshTokenSymbol)
 );
 
-export type RefreshToken = Schema.Schema.Type<typeof RefreshTokenSchema>;
+export type RefreshToken = Schema.Schema.Type<typeof RefreshToken>;

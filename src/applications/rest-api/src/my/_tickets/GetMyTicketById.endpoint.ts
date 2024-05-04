@@ -1,50 +1,50 @@
 import * as Schema from "@effect/schema/Schema";
 import { ApiEndpoint } from "effect-http";
 
-import { IdTicketSchema } from "@argazi/domain";
+import { IdTicket } from "@argazi/domain";
 
 import { BaseResponseFor } from "../../BaseResponseFor.js";
 import { BearerAuth } from "../../BearerAuth.security-scheme.js";
-import { TicketApiSchema } from "../../tickets/Ticket.api.js";
+import { TicketApi } from "../../tickets/Ticket.api.js";
 
 // #region GetMyTicketByIdResponseBody
-const _GetMyTicketByIdResponseBodySchema = TicketApiSchema.pipe(
-  Schema.identifier("GetMyTicketByIdResponseSchema"),
+const _GetMyTicketByIdResponseBody = TicketApi.pipe(
+  Schema.identifier("GetMyTicketByIdResponse"),
   BaseResponseFor
 );
 
 export type GetMyTicketByIdResponseBodyContext = Schema.Schema.Context<
-  typeof _GetMyTicketByIdResponseBodySchema
+  typeof _GetMyTicketByIdResponseBody
 >;
 export interface GetMyTicketByIdResponseBodyEncoded
-  extends Schema.Schema.Encoded<typeof _GetMyTicketByIdResponseBodySchema> {}
+  extends Schema.Schema.Encoded<typeof _GetMyTicketByIdResponseBody> {}
 export interface GetMyTicketByIdResponseBody
-  extends Schema.Schema.Type<typeof _GetMyTicketByIdResponseBodySchema> {}
+  extends Schema.Schema.Type<typeof _GetMyTicketByIdResponseBody> {}
 
-export const GetMyTicketByIdResponseBodySchema: Schema.Schema<
+export const GetMyTicketByIdResponseBody: Schema.Schema<
   GetMyTicketByIdResponseBody,
   GetMyTicketByIdResponseBodyEncoded
-> = _GetMyTicketByIdResponseBodySchema;
-// #endregion GetMyTicketByIdResponseBodySchema
+> = _GetMyTicketByIdResponseBody;
+// #endregion GetMyTicketByIdResponseBody
 
 // #region GetMyTicketByIdRequestParams
-const _GetMyTicketByIdRequestParamsSchema = Schema.Struct({
-  idTicket: IdTicketSchema,
-}).pipe(Schema.identifier("GetMyTicketByIdRequestParamsSchema"));
+const _GetMyTicketByIdRequestParams = Schema.Struct({
+  idTicket: IdTicket,
+}).pipe(Schema.identifier("GetMyTicketByIdRequestParams"));
 
 export type GetMyTicketByIdRequestParamsContext = Schema.Schema.Context<
-  typeof _GetMyTicketByIdRequestParamsSchema
+  typeof _GetMyTicketByIdRequestParams
 >;
 export interface GetMyTicketByIdRequestParamsEncoded
-  extends Schema.Schema.Encoded<typeof _GetMyTicketByIdRequestParamsSchema> {}
+  extends Schema.Schema.Encoded<typeof _GetMyTicketByIdRequestParams> {}
 export interface GetMyTicketByIdRequestParams
-  extends Schema.Schema.Type<typeof _GetMyTicketByIdRequestParamsSchema> {}
+  extends Schema.Schema.Type<typeof _GetMyTicketByIdRequestParams> {}
 
-export const GetMyTicketByIdRequestParamsSchema: Schema.Schema<
+export const GetMyTicketByIdRequestParams: Schema.Schema<
   GetMyTicketByIdRequestParams,
   GetMyTicketByIdRequestParamsEncoded
-> = _GetMyTicketByIdRequestParamsSchema;
-// #endregion GetMyTicketByIdRequestParamsSchema
+> = _GetMyTicketByIdRequestParams;
+// #endregion GetMyTicketByIdRequestParams
 
 export const GetMyTicketByIdEndpoint = ApiEndpoint.get(
   "getMyTicketById",
@@ -53,7 +53,7 @@ export const GetMyTicketByIdEndpoint = ApiEndpoint.get(
     summary: "Get user's ticket",
   }
 ).pipe(
-  ApiEndpoint.setResponseBody(GetMyTicketByIdResponseBodySchema),
-  ApiEndpoint.setRequestPath(GetMyTicketByIdRequestParamsSchema),
+  ApiEndpoint.setResponseBody(GetMyTicketByIdResponseBody),
+  ApiEndpoint.setRequestPath(GetMyTicketByIdRequestParams),
   ApiEndpoint.setSecurity(BearerAuth)
 );

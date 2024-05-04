@@ -1,11 +1,6 @@
 import * as Schema from "@effect/schema/Schema";
 
-import {
-  IdEventSchema,
-  IdPlaceSchema,
-  PriceSchema,
-  type EventBase,
-} from "@argazi/domain";
+import { IdEvent, IdPlace, Price, type EventBase } from "@argazi/domain";
 import { _SS } from "@argazi/shared";
 
 export const _EventApi = Schema.Struct({
@@ -16,11 +11,11 @@ export const _EventApi = Schema.Struct({
   dateDeadline: Schema.compose(Schema.DateFromString, Schema.ValidDateFromSelf),
   dateFinish: Schema.compose(Schema.DateFromString, Schema.ValidDateFromSelf),
   dateStart: Schema.compose(Schema.DateFromString, Schema.ValidDateFromSelf),
-  id: IdEventSchema,
-  idPlace: IdPlaceSchema,
+  id: IdEvent,
+  idPlace: IdPlace,
   name: Schema.Secret,
-  priceDay: Schema.compose(Schema.BigDecimalFromNumber, PriceSchema),
-  priceEvent: Schema.compose(Schema.BigDecimalFromNumber, PriceSchema),
+  priceDay: Schema.compose(Schema.BigDecimalFromNumber, Price),
+  priceEvent: Schema.compose(Schema.BigDecimalFromNumber, Price),
   description: Schema.String,
 }).pipe(
   _SS.satisfies.encoded.json(),

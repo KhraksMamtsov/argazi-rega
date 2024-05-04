@@ -1,9 +1,9 @@
 import { Schema } from "@effect/schema";
 
 export const IdDwbnSymbol: unique symbol = Symbol.for("IdDwbnSymbol");
-export const IdDwbnSchema = Schema.String.pipe(
-  Schema.identifier("IdDwbnSchema"),
+export const IdDwbn = Schema.String.pipe(
+  Schema.identifier("IdDwbn"),
   Schema.brand(IdDwbnSymbol)
 );
 
-export type IdDwbn = Schema.Schema.Type<typeof IdDwbnSchema>;
+export type IdDwbn = Schema.Schema.Type<typeof IdDwbn>;

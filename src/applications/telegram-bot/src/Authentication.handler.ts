@@ -2,18 +2,18 @@ import { Schema } from "@effect/schema";
 import { Effect, Either } from "effect";
 import { constVoid, pipe } from "effect/Function";
 
-import { IdTelegramChatSchema } from "@argazi/domain";
+import { IdTelegramChat } from "@argazi/domain";
 
 import { RestApiServiceTag } from "./RestApiService.js";
 import { SessionServiceTag } from "./Session.service.js";
-import { TelegramAuthMiniAppDataSchema } from "./TelegramAuthMiniAppData.js";
+import { TelegramAuthMiniAppData } from "./TelegramAuthMiniAppData.js";
 import { ArgazipaSayMdComponent } from "./ui/ArgazipaSay.md-component.js";
 import { MD } from "./ui/Markdown.js";
 import { UserMdComponent } from "./ui/User.md-component.js";
 
 import type { WebAppDataPayload } from "./telegraf/bot/TelegramPayload.js";
 
-export const decode = Schema.decode(TelegramAuthMiniAppDataSchema);
+export const decode = Schema.decode(TelegramAuthMiniAppData);
 
 export const AuthenticationHandler = (webAppDataPayload: WebAppDataPayload) =>
   Effect.gen(function* (_) {
@@ -23,9 +23,7 @@ export const AuthenticationHandler = (webAppDataPayload: WebAppDataPayload) =>
       webAppDataPayload.message.web_app_data.data
     ).pipe(Effect.tapError(Effect.logError));
 
-    const idTelegramChat = IdTelegramChatSchema(
-      webAppDataPayload.message.chat.id
-    );
+    const idTelegramChat = IdTelegramChat(webAppDataPayload.message.chat.id);
 
     const authenticationResult = yield* pipe(
       restApiService.loginDwbn({

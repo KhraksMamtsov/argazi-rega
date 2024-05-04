@@ -1,25 +1,25 @@
 import { Schema } from "@effect/schema";
 
-import { IdPlaceSchema } from "./IdPlace.js";
+import { IdPlace } from "./IdPlace.js";
 
-import { BaseSchema } from "../../entities/common/Base.js";
-import { IdGeoPointSchema } from "../../geo-point/entity/IdGeoPoint.js";
+import { Base } from "../../entities/common/Base.js";
+import { IdGeoPoint } from "../../geo-point/entity/IdGeoPoint.js";
 
-export const PlaceBaseSchema = Schema.Struct({
-  id: IdPlaceSchema,
-  idGeoPoint: IdGeoPointSchema,
+export const PlaceBase = Schema.Struct({
+  id: IdPlace,
+  idGeoPoint: IdGeoPoint,
   name: Schema.compose(Schema.Trimmed, Schema.NonEmpty),
   description: Schema.compose(Schema.Trimmed, Schema.NonEmpty),
-}).pipe(Schema.typeSchema, Schema.identifier("PlaceBaseSchema"));
+}).pipe(Schema.typeSchema, Schema.identifier("PlaceBase"));
 
-export type PlaceBase = Schema.Schema.Type<typeof PlaceBaseSchema>;
+export interface PlaceBase extends Schema.Schema.Type<typeof PlaceBase> {}
 
-const _PlaceSchema = PlaceBaseSchema.pipe(
+const _Place = PlaceBase.pipe(
   //
-  Schema.extend(BaseSchema),
-  Schema.identifier("PlaceSchema")
+  Schema.extend(Base),
+  Schema.identifier("Place")
 );
 
-export interface Place extends Schema.Schema.Type<typeof _PlaceSchema> {}
+export interface Place extends Schema.Schema.Type<typeof _Place> {}
 
-export const PlaceSchema: Schema.Schema<Place> = _PlaceSchema;
+export const Place: Schema.Schema<Place> = _Place;

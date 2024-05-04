@@ -6,24 +6,24 @@ import { BearerAuth } from "../../BearerAuth.security-scheme.js";
 import { VisitorApi } from "../../visitors/Visitor.api.js";
 
 // #region GetMyVisitorsResponseBody
-export const _GetMyVisitorsResponseBodySchema = VisitorApi.pipe(
-  Schema.identifier("GetMyVisitorsResponseSchema"),
+export const _GetMyVisitorsResponseBody = VisitorApi.pipe(
+  Schema.identifier("GetMyVisitorsResponse"),
   BaseResponseManyFor
 );
 
 export type GetMyVisitorsResponseBodyContext = Schema.Schema.Context<
-  typeof _GetMyVisitorsResponseBodySchema
+  typeof _GetMyVisitorsResponseBody
 >;
 export interface GetMyVisitorsResponseBodyEncoded
-  extends Schema.Schema.Encoded<typeof _GetMyVisitorsResponseBodySchema> {}
+  extends Schema.Schema.Encoded<typeof _GetMyVisitorsResponseBody> {}
 export interface GetMyVisitorsResponseBody
-  extends Schema.Schema.Type<typeof _GetMyVisitorsResponseBodySchema> {}
+  extends Schema.Schema.Type<typeof _GetMyVisitorsResponseBody> {}
 
-export const GetMyVisitorsResponseBodySchema: Schema.Schema<
+export const GetMyVisitorsResponseBody: Schema.Schema<
   GetMyVisitorsResponseBody,
   GetMyVisitorsResponseBodyEncoded
-> = _GetMyVisitorsResponseBodySchema;
-// #endregion GetMyVisitorsResponseBodySchema
+> = _GetMyVisitorsResponseBody;
+// #endregion GetMyVisitorsResponseBody
 
 export const GetMyVisitorsEndpoint = ApiEndpoint.get(
   "getMyVisitors",
@@ -32,6 +32,6 @@ export const GetMyVisitorsEndpoint = ApiEndpoint.get(
     summary: "Get user's visitors",
   }
 ).pipe(
-  ApiEndpoint.setResponseBody(GetMyVisitorsResponseBodySchema),
+  ApiEndpoint.setResponseBody(GetMyVisitorsResponseBody),
   ApiEndpoint.setSecurity(BearerAuth)
 );

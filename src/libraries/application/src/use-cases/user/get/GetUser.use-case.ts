@@ -1,7 +1,7 @@
 import { Schema } from "@effect/schema";
 import { absurd, Effect } from "effect";
 
-import { PrismaServiceTag, UserDbToDomainSchema } from "@argazi/database";
+import { PrismaServiceTag, UserDbToDomain } from "@argazi/database";
 
 import { type GetUserCommand } from "./GetUser.command.js";
 
@@ -17,7 +17,7 @@ export const GetUserUseCase = ({ payload }: GetUserCommand) =>
           : absurd<never>(payload);
 
     return yield* prismaClient.queryDecode(
-      Schema.OptionFromNullOr(UserDbToDomainSchema),
+      Schema.OptionFromNullOr(UserDbToDomain),
       (p) => p.user.findUnique({ where })
     );
   });

@@ -1,19 +1,19 @@
 import { Schema } from "@effect/schema";
 
-import { IdTicketMealSchema } from "./IdTicketMeal.js";
+import { IdTicketMeal } from "./IdTicketMeal.js";
 
-import { IdMealSchema } from "../../meal/entity/IdMeal.js";
-import { IdTicketSchema } from "../../ticket/entity/IdTicket.js";
-import { BaseSchema } from "../common/Base.js";
+import { IdMeal } from "../../meal/entity/IdMeal.js";
+import { IdTicket } from "../../ticket/entity/IdTicket.js";
+import { Base } from "../common/Base.js";
 
-const _TicketMealSchema = Schema.Struct({
-  id: IdTicketMealSchema,
-  idMeal: IdMealSchema,
-  idTicket: IdTicketSchema,
-}).pipe(Schema.extend(BaseSchema), Schema.identifier("TicketMealSchema"));
+const _TicketMeal = Schema.Struct({
+  id: IdTicketMeal,
+  idMeal: IdMeal,
+  idTicket: IdTicket,
+}).pipe(Schema.extend(Base), Schema.identifier("TicketMeal"));
 
-export type TicketMealFrom = Schema.Schema.Encoded<typeof _TicketMealSchema>;
-export type TicketMeal = Schema.Schema.Type<typeof _TicketMealSchema>;
+export type TicketMealFrom = Schema.Schema.Encoded<typeof _TicketMeal>;
+export type TicketMeal = Schema.Schema.Type<typeof _TicketMeal>;
 
-export const TicketMealSchema: Schema.Schema<TicketMeal, TicketMealFrom> =
-  _TicketMealSchema;
+export const TicketMeal: Schema.Schema<TicketMeal, TicketMealFrom> =
+  _TicketMeal;

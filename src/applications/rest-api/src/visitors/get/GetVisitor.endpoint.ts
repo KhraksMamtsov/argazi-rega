@@ -1,55 +1,55 @@
 import * as Schema from "@effect/schema/Schema";
 import { ApiEndpoint } from "effect-http";
 
-import { IdVisitorSchema } from "@argazi/domain";
+import { IdVisitor } from "@argazi/domain";
 
 import { BaseResponseFor } from "../../BaseResponseFor.js";
 import { VisitorApi } from "../Visitor.api.js";
 
 // #region GetVisitorResponseBody
-const _GetVisitorResponseBodySchema = VisitorApi.pipe(
-  Schema.identifier("GetVisitorResponseSchema"),
+const _GetVisitorResponseBody = VisitorApi.pipe(
+  Schema.identifier("GetVisitorResponse"),
   BaseResponseFor
-).pipe(Schema.identifier("GetVisitorResponseBodySchema"));
+).pipe(Schema.identifier("GetVisitorResponseBody"));
 
 export type GetVisitorResponseBodyContext = Schema.Schema.Context<
-  typeof _GetVisitorResponseBodySchema
+  typeof _GetVisitorResponseBody
 >;
 export interface GetVisitorResponseBodyEncoded
-  extends Schema.Schema.Encoded<typeof _GetVisitorResponseBodySchema> {}
+  extends Schema.Schema.Encoded<typeof _GetVisitorResponseBody> {}
 export interface GetVisitorResponseBody
-  extends Schema.Schema.Type<typeof _GetVisitorResponseBodySchema> {}
+  extends Schema.Schema.Type<typeof _GetVisitorResponseBody> {}
 
-export const GetVisitorResponseBodySchema: Schema.Schema<
+export const GetVisitorResponseBody: Schema.Schema<
   GetVisitorResponseBody,
   GetVisitorResponseBodyEncoded
-> = _GetVisitorResponseBodySchema;
-// #endregion GetVisitorResponseBodySchema
+> = _GetVisitorResponseBody;
+// #endregion GetVisitorResponseBody
 
 // #region GetVisitorRequestParams
-const _GetVisitorRequestParamsSchema = Schema.Struct({
-  idVisitor: IdVisitorSchema,
-}).pipe(Schema.identifier("GetVisitorRequestParamsSchema"));
+const _GetVisitorRequestParams = Schema.Struct({
+  idVisitor: IdVisitor,
+}).pipe(Schema.identifier("GetVisitorRequestParams"));
 
 export type GetVisitorRequestParamsContext = Schema.Schema.Context<
-  typeof _GetVisitorRequestParamsSchema
+  typeof _GetVisitorRequestParams
 >;
 export interface GetVisitorRequestParamsEncoded
-  extends Schema.Schema.Encoded<typeof _GetVisitorRequestParamsSchema> {}
+  extends Schema.Schema.Encoded<typeof _GetVisitorRequestParams> {}
 export interface GetVisitorRequestParams
-  extends Schema.Schema.Type<typeof _GetVisitorRequestParamsSchema> {}
+  extends Schema.Schema.Type<typeof _GetVisitorRequestParams> {}
 
-export const GetVisitorRequestParamsSchema: Schema.Schema<
+export const GetVisitorRequestParams: Schema.Schema<
   GetVisitorRequestParams,
   GetVisitorRequestParamsEncoded
-> = _GetVisitorRequestParamsSchema;
-// #endregion GetVisitorRequestParamsSchema
+> = _GetVisitorRequestParams;
+// #endregion GetVisitorRequestParams
 
 export const GetVisitorEndpoint = ApiEndpoint.get(
   "getVisitor",
   "/visitors/:idVisitor",
   {}
 ).pipe(
-  ApiEndpoint.setRequestPath(GetVisitorRequestParamsSchema),
-  ApiEndpoint.setResponseBody(GetVisitorResponseBodySchema)
+  ApiEndpoint.setRequestPath(GetVisitorRequestParams),
+  ApiEndpoint.setResponseBody(GetVisitorResponseBody)
 );

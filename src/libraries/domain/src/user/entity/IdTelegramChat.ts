@@ -3,9 +3,9 @@ import { Schema } from "@effect/schema";
 export const IdTelegramChatSymbol: unique symbol = Symbol.for(
   "IdTelegramChatSymbol"
 );
-export const IdTelegramChatSchema = Schema.Number.pipe(
-  Schema.identifier("IdTelegramChatSchema"),
+export const IdTelegramChat = Schema.Number.pipe(
+  Schema.identifier("IdTelegramChat"),
   Schema.brand(IdTelegramChatSymbol)
 );
 
-export type IdTelegramChat = Schema.Schema.Type<typeof IdTelegramChatSchema>;
+export type IdTelegramChat = Schema.Schema.Type<typeof IdTelegramChat>;

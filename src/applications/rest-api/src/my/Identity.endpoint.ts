@@ -5,20 +5,20 @@ import { BaseResponseFor } from "../BaseResponseFor.js";
 import { BearerAuth } from "../BearerAuth.security-scheme.js";
 import { UserApi } from "../users/User.api.js";
 
-export const _GetMyIdentityResponseSchema = UserApi.pipe(
-  Schema.identifier("GetMyIdentityResponseSchema"),
+export const _GetMyIdentityResponse = UserApi.pipe(
+  Schema.identifier("GetMyIdentityResponse"),
   BaseResponseFor
 );
 
 export interface GetMyIdentityResponseFrom
-  extends Schema.Schema.Encoded<typeof _GetMyIdentityResponseSchema> {}
+  extends Schema.Schema.Encoded<typeof _GetMyIdentityResponse> {}
 export interface GetMyIdentityResponse
-  extends Schema.Schema.Type<typeof _GetMyIdentityResponseSchema> {}
+  extends Schema.Schema.Type<typeof _GetMyIdentityResponse> {}
 
-export const GetMyIdentityResponseSchema: Schema.Schema<
+export const GetMyIdentityResponse: Schema.Schema<
   GetMyIdentityResponse,
   GetMyIdentityResponseFrom
-> = _GetMyIdentityResponseSchema;
+> = _GetMyIdentityResponse;
 
 export const GetMyIdentityEndpoint = ApiEndpoint.get(
   "getMyIdentity",
@@ -27,6 +27,6 @@ export const GetMyIdentityEndpoint = ApiEndpoint.get(
     summary: "Get user",
   }
 ).pipe(
-  ApiEndpoint.setResponseBody(GetMyIdentityResponseSchema),
+  ApiEndpoint.setResponseBody(GetMyIdentityResponse),
   ApiEndpoint.setSecurity(BearerAuth)
 );

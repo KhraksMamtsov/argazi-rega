@@ -1,7 +1,7 @@
 import { Schema } from "@effect/schema";
 
-export const VisaIdSymbol: unique symbol = Symbol.for("VisaIdSymbol");
-export const VisaIdSchema = Schema.UUID.pipe(
-  Schema.brand(VisaIdSymbol),
-  Schema.identifier("VisaIdSchema")
+export const IdVisaSymbol: unique symbol = Symbol.for("IdVisaSymbol");
+export const IdVisa = Schema.UUID.pipe(
+  Schema.brand(IdVisaSymbol),
+  Schema.identifier("IdVisa")
 );

@@ -1,59 +1,55 @@
 import * as Schema from "@effect/schema/Schema";
 import { ApiEndpoint } from "effect-http";
 
-import { IdPlaceSchema } from "@argazi/domain";
+import { IdPlace } from "@argazi/domain";
 
 import { BaseResponseFor } from "../../BaseResponseFor.js";
 import { BearerAuth } from "../../BearerAuth.security-scheme.js";
-import { SubscriptionApiSchema } from "../../subscriptions/Subscription.api.js";
+import { SubscriptionApi } from "../../subscriptions/Subscription.api.js";
 
 // #region CreateMySubscriptionRequestBody
-const _CreateMySubscriptionRequestBodySchema = Schema.Struct({
-  idPlace: IdPlaceSchema,
-}).pipe(Schema.identifier("CreateMySubscriptionRequestBodySchema"));
+const _CreateMySubscriptionRequestBody = Schema.Struct({
+  idPlace: IdPlace,
+}).pipe(Schema.identifier("CreateMySubscriptionRequestBody"));
 
 export type CreateMySubscriptionRequestBodyContext = Schema.Schema.Context<
-  typeof _CreateMySubscriptionRequestBodySchema
+  typeof _CreateMySubscriptionRequestBody
 >;
 export interface CreateMySubscriptionRequestBodyEncoded
-  extends Schema.Schema.Encoded<
-    typeof _CreateMySubscriptionRequestBodySchema
-  > {}
+  extends Schema.Schema.Encoded<typeof _CreateMySubscriptionRequestBody> {}
 export interface CreateMySubscriptionRequestBody
-  extends Schema.Schema.Type<typeof _CreateMySubscriptionRequestBodySchema> {}
+  extends Schema.Schema.Type<typeof _CreateMySubscriptionRequestBody> {}
 
-export const CreateMySubscriptionRequestBodySchema: Schema.Schema<
+export const CreateMySubscriptionRequestBody: Schema.Schema<
   CreateMySubscriptionRequestBody,
   CreateMySubscriptionRequestBodyEncoded
-> = _CreateMySubscriptionRequestBodySchema;
-// #endregion CreateMySubscriptionRequestBodySchema
+> = _CreateMySubscriptionRequestBody;
+// #endregion CreateMySubscriptionRequestBody
 
-export const CreateMySubscriptionResponseSchema = SubscriptionApiSchema.pipe(
-  Schema.identifier("CreateMySubscriptionResponseSchema"),
+export const CreateMySubscriptionResponse = SubscriptionApi.pipe(
+  Schema.identifier("CreateMySubscriptionResponse"),
   BaseResponseFor
 );
 
 // #region CreateMySubscriptionResponseBody
-const _CreateMySubscriptionResponseBodySchema = SubscriptionApiSchema.pipe(
-  Schema.identifier("_CreateMySubscriptionResponseBodySchema"),
+const _CreateMySubscriptionResponseBody = SubscriptionApi.pipe(
+  Schema.identifier("_CreateMySubscriptionResponseBody"),
   BaseResponseFor
 );
 
 export type CreateMySubscriptionResponseBodyContext = Schema.Schema.Context<
-  typeof _CreateMySubscriptionResponseBodySchema
+  typeof _CreateMySubscriptionResponseBody
 >;
 export interface CreateMySubscriptionResponseBodyEncoded
-  extends Schema.Schema.Encoded<
-    typeof _CreateMySubscriptionResponseBodySchema
-  > {}
+  extends Schema.Schema.Encoded<typeof _CreateMySubscriptionResponseBody> {}
 export interface CreateMySubscriptionResponseBody
-  extends Schema.Schema.Type<typeof _CreateMySubscriptionResponseBodySchema> {}
+  extends Schema.Schema.Type<typeof _CreateMySubscriptionResponseBody> {}
 
-export const CreateMySubscriptionResponseBodySchema: Schema.Schema<
+export const CreateMySubscriptionResponseBody: Schema.Schema<
   CreateMySubscriptionResponseBody,
   CreateMySubscriptionResponseBodyEncoded
-> = _CreateMySubscriptionResponseBodySchema;
-// #endregion CreateMySubscriptionResponseBodySchema
+> = _CreateMySubscriptionResponseBody;
+// #endregion CreateMySubscriptionResponseBody
 
 export const CreateMySubscriptionEndpoint = ApiEndpoint.post(
   "createMySubscription",
@@ -62,7 +58,7 @@ export const CreateMySubscriptionEndpoint = ApiEndpoint.post(
     summary: "Subscribe user on events of some place",
   }
 ).pipe(
-  ApiEndpoint.setRequestBody(CreateMySubscriptionRequestBodySchema),
-  ApiEndpoint.setResponseBody(CreateMySubscriptionResponseBodySchema),
+  ApiEndpoint.setRequestBody(CreateMySubscriptionRequestBody),
+  ApiEndpoint.setResponseBody(CreateMySubscriptionResponseBody),
   ApiEndpoint.setSecurity(BearerAuth)
 );

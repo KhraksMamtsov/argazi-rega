@@ -1,50 +1,50 @@
 import * as Schema from "@effect/schema/Schema";
 import { ApiEndpoint } from "effect-http";
 
-import { IdVisitorSchema } from "@argazi/domain";
+import { IdVisitor } from "@argazi/domain";
 
 import { BaseResponseFor } from "../../BaseResponseFor.js";
 import { BearerAuth } from "../../BearerAuth.security-scheme.js";
 import { VisitorApi } from "../../visitors/Visitor.api.js";
 
 // #region DeleteMyVisitorResponseBody
-const _DeleteMyVisitorResponseBodySchema = VisitorApi.pipe(
-  Schema.identifier("_DeleteMyVisitorResponseBodySchema"),
+const _DeleteMyVisitorResponseBody = VisitorApi.pipe(
+  Schema.identifier("_DeleteMyVisitorResponseBody"),
   BaseResponseFor
 );
 
 export type DeleteMyVisitorResponseBodyContext = Schema.Schema.Context<
-  typeof _DeleteMyVisitorResponseBodySchema
+  typeof _DeleteMyVisitorResponseBody
 >;
 export interface DeleteMyVisitorResponseBodyEncoded
-  extends Schema.Schema.Encoded<typeof _DeleteMyVisitorResponseBodySchema> {}
+  extends Schema.Schema.Encoded<typeof _DeleteMyVisitorResponseBody> {}
 export interface DeleteMyVisitorResponseBody
-  extends Schema.Schema.Type<typeof _DeleteMyVisitorResponseBodySchema> {}
+  extends Schema.Schema.Type<typeof _DeleteMyVisitorResponseBody> {}
 
-export const DeleteMyVisitorResponseBodySchema: Schema.Schema<
+export const DeleteMyVisitorResponseBody: Schema.Schema<
   DeleteMyVisitorResponseBody,
   DeleteMyVisitorResponseBodyEncoded
-> = _DeleteMyVisitorResponseBodySchema;
-// #endregion DeleteMyVisitorResponseBodySchema
+> = _DeleteMyVisitorResponseBody;
+// #endregion DeleteMyVisitorResponseBody
 
 // #region DeleteMyVisitorRequestParams
-const _DeleteMyVisitorRequestParamsSchema = Schema.Struct({
-  idVisitor: IdVisitorSchema,
-}).pipe(Schema.identifier("DeleteMyVisitorRequestParamsSchema"));
+const _DeleteMyVisitorRequestParams = Schema.Struct({
+  idVisitor: IdVisitor,
+}).pipe(Schema.identifier("DeleteMyVisitorRequestParams"));
 
 export type DeleteMyVisitorRequestParamsContext = Schema.Schema.Context<
-  typeof _DeleteMyVisitorRequestParamsSchema
+  typeof _DeleteMyVisitorRequestParams
 >;
 export interface DeleteMyVisitorRequestParamsEncoded
-  extends Schema.Schema.Encoded<typeof _DeleteMyVisitorRequestParamsSchema> {}
+  extends Schema.Schema.Encoded<typeof _DeleteMyVisitorRequestParams> {}
 export interface DeleteMyVisitorRequestParams
-  extends Schema.Schema.Type<typeof _DeleteMyVisitorRequestParamsSchema> {}
+  extends Schema.Schema.Type<typeof _DeleteMyVisitorRequestParams> {}
 
-export const DeleteMyVisitorRequestParamsSchema: Schema.Schema<
+export const DeleteMyVisitorRequestParams: Schema.Schema<
   DeleteMyVisitorRequestParams,
   DeleteMyVisitorRequestParamsEncoded
-> = _DeleteMyVisitorRequestParamsSchema;
-// #endregion DeleteMyVisitorRequestParamsSchema
+> = _DeleteMyVisitorRequestParams;
+// #endregion DeleteMyVisitorRequestParams
 
 export const DeleteMyVisitorEndpoint = ApiEndpoint.delete(
   "deleteMyVisitor",
@@ -54,6 +54,6 @@ export const DeleteMyVisitorEndpoint = ApiEndpoint.delete(
   }
 ).pipe(
   ApiEndpoint.setSecurity(BearerAuth),
-  ApiEndpoint.setRequestPath(DeleteMyVisitorRequestParamsSchema),
-  ApiEndpoint.setResponseBody(DeleteMyVisitorResponseBodySchema)
+  ApiEndpoint.setRequestPath(DeleteMyVisitorRequestParams),
+  ApiEndpoint.setResponseBody(DeleteMyVisitorResponseBody)
 );

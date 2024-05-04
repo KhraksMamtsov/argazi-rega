@@ -1,18 +1,15 @@
 import { Schema } from "@effect/schema";
 import { Effect } from "effect";
 
-import {
-  PrismaServiceTag,
-  SubscriptionDbToDomainSchema,
-} from "@argazi/database";
+import { PrismaServiceTag, SubscriptionDbToDomain } from "@argazi/database";
 
-import { GetUserSubscriptionsCommandSchema } from "./GetUserSubscriptions.command.js";
+import { GetUserSubscriptionsCommand } from "./GetUserSubscriptions.command.js";
 
 import { GetEntityAuthorizationError } from "../../../common/AuthorizationError.js";
 import { BaseCausedUseCaseFor } from "../../../common/Base.use-case.js";
 
 export const GetUserSubscriptionsUseCase = BaseCausedUseCaseFor(
-  GetUserSubscriptionsCommandSchema
+  GetUserSubscriptionsCommand
 )(({ payload, initiator }) =>
   Effect.gen(function* (_) {
     if (!initiator.isAdmin && initiator.id !== payload.idUser) {
@@ -26,7 +23,7 @@ export const GetUserSubscriptionsUseCase = BaseCausedUseCaseFor(
     const prismaClient = yield* PrismaServiceTag;
 
     return yield* prismaClient.queryDecode(
-      Schema.Array(SubscriptionDbToDomainSchema),
+      Schema.Array(SubscriptionDbToDomain),
       (p) =>
         p.subscription.findMany({
           where: {

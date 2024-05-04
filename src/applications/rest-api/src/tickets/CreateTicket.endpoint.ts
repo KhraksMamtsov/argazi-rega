@@ -1,29 +1,29 @@
 import * as Schema from "@effect/schema/Schema";
 
-import { IdEventSchema } from "@argazi/domain";
-import { IdUserSchema } from "@argazi/domain";
+import { IdEvent } from "@argazi/domain";
+import { IdUser } from "@argazi/domain";
 
-import { TicketApiSchema } from "./Ticket.api.js";
+import { TicketApi } from "./Ticket.api.js";
 
 import { BaseResponseFor } from "../BaseResponseFor.js";
 
-export const CreateTicketResponseSchema = TicketApiSchema.pipe(
-  Schema.identifier("CreateTicketResponseSchema"),
+export const CreateTicketApi = TicketApi.pipe(
+  Schema.identifier("CreateTicketResponse"),
   BaseResponseFor
 );
 
 export const CreateTicketRequest = {
   body: Schema.Struct({
-    idEvent: IdEventSchema,
+    idEvent: IdEvent,
   }),
   params: Schema.Struct({
-    idUser: IdUserSchema,
+    idUser: IdUser,
   }),
 };
 
 export const CreateTicketResponse = [
   {
-    content: CreateTicketResponseSchema,
+    content: CreateTicketApi,
     status: 200 as const,
   },
   {

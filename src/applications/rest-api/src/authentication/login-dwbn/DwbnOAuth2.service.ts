@@ -3,7 +3,7 @@ import * as UrlParams from "@effect/platform/Http/UrlParams";
 import { Schema } from "@effect/schema";
 import { Config, Effect, Record, Secret, pipe } from "effect";
 
-import { IdDwbnSchema } from "@argazi/domain";
+import { IdDwbn } from "@argazi/domain";
 import { _JWTSchema } from "@argazi/shared";
 
 export const DwbnOAuth2Service = Effect.gen(function* (_) {
@@ -40,7 +40,7 @@ export const DwbnOAuth2Service = Effect.gen(function* (_) {
           HttpClient.response.schemaBodyJson(
             Schema.Struct({
               id_token: Schema.compose(
-                _JWTSchema.JWTStructSchema,
+                _JWTSchema.JWTStruct,
                 Schema.Tuple(
                   Schema.String,
                   Schema.parseJson(
@@ -48,7 +48,7 @@ export const DwbnOAuth2Service = Effect.gen(function* (_) {
                       email: Schema.String,
                       family_name: Schema.String,
                       given_name: Schema.String,
-                      sub: IdDwbnSchema,
+                      sub: IdDwbn,
                     })
                   ),
                   Schema.String

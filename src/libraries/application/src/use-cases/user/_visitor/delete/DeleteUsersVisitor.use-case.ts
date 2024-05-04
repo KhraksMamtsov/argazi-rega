@@ -1,15 +1,15 @@
 import { Effect } from "effect";
 
-import { PrismaServiceTag, VisitorDbToDomainSchema } from "@argazi/database";
+import { PrismaServiceTag, VisitorDbToDomain } from "@argazi/database";
 import { NotificationServiceTag, notification } from "@argazi/domain";
 
-import { DeleteUsersVisitorCommandSchema } from "./DeleteUsersVisitor.command.js";
+import { DeleteUsersVisitorCommand } from "./DeleteUsersVisitor.command.js";
 
 import { DeleteEntityAuthorizationError } from "../../../common/AuthorizationError.js";
 import { BaseCausedUseCaseFor } from "../../../common/Base.use-case.js";
 
 export const DeleteUsersVisitorUseCase = BaseCausedUseCaseFor(
-  DeleteUsersVisitorCommandSchema
+  DeleteUsersVisitorCommand
 )(({ payload, initiator }) =>
   Effect.gen(function* (_) {
     const prismaClient = yield* PrismaServiceTag;
@@ -25,7 +25,7 @@ export const DeleteUsersVisitorUseCase = BaseCausedUseCaseFor(
     }
 
     const deletedTicket = yield* prismaClient.queryDecode(
-      VisitorDbToDomainSchema,
+      VisitorDbToDomain,
       (p) =>
         p.visitor.update({
           data: {

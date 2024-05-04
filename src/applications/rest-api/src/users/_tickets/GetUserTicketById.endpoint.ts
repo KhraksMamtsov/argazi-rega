@@ -1,51 +1,51 @@
 import * as Schema from "@effect/schema/Schema";
 import { ApiEndpoint } from "effect-http";
 
-import { IdTicketSchema } from "@argazi/domain";
-import { IdUserSchema } from "@argazi/domain";
+import { IdTicket } from "@argazi/domain";
+import { IdUser } from "@argazi/domain";
 
 import { BaseResponseFor } from "../../BaseResponseFor.js";
-import { TicketApiSchema } from "../../tickets/Ticket.api.js";
+import { TicketApi } from "../../tickets/Ticket.api.js";
 
 // #region GetUserTicketByIdResponseBody
-const _GetUserTicketByIdResponseBodySchema = TicketApiSchema.pipe(
-  Schema.identifier("_GetUserTicketByIdResponseBodySchema"),
+const _GetUserTicketByIdResponseBody = TicketApi.pipe(
+  Schema.identifier("_GetUserTicketByIdResponseBody"),
   BaseResponseFor
 );
 
 export type GetUserTicketByIdResponseBodyContext = Schema.Schema.Context<
-  typeof _GetUserTicketByIdResponseBodySchema
+  typeof _GetUserTicketByIdResponseBody
 >;
 export interface GetUserTicketByIdResponseBodyEncoded
-  extends Schema.Schema.Encoded<typeof _GetUserTicketByIdResponseBodySchema> {}
+  extends Schema.Schema.Encoded<typeof _GetUserTicketByIdResponseBody> {}
 export interface GetUserTicketByIdResponseBody
-  extends Schema.Schema.Type<typeof _GetUserTicketByIdResponseBodySchema> {}
+  extends Schema.Schema.Type<typeof _GetUserTicketByIdResponseBody> {}
 
-export const GetUserTicketByIdResponseBodySchema: Schema.Schema<
+export const GetUserTicketByIdResponseBody: Schema.Schema<
   GetUserTicketByIdResponseBody,
   GetUserTicketByIdResponseBodyEncoded
-> = _GetUserTicketByIdResponseBodySchema;
-// #endregion GetUserTicketByIdResponseBodySchema
+> = _GetUserTicketByIdResponseBody;
+// #endregion GetUserTicketByIdResponseBody
 
 // #region GetUserTicketByIdRequestParams
-const _GetUserTicketByIdRequestParamsSchema = Schema.Struct({
-  idTicket: IdTicketSchema,
-  idUser: IdUserSchema,
-}).pipe(Schema.identifier("GetUserTicketByIdRequestParamsSchema"));
+const _GetUserTicketByIdRequestParams = Schema.Struct({
+  idTicket: IdTicket,
+  idUser: IdUser,
+}).pipe(Schema.identifier("GetUserTicketByIdRequestParams"));
 
 export type GetUserTicketByIdRequestParamsContext = Schema.Schema.Context<
-  typeof _GetUserTicketByIdRequestParamsSchema
+  typeof _GetUserTicketByIdRequestParams
 >;
 export interface GetUserTicketByIdRequestParamsEncoded
-  extends Schema.Schema.Encoded<typeof _GetUserTicketByIdRequestParamsSchema> {}
+  extends Schema.Schema.Encoded<typeof _GetUserTicketByIdRequestParams> {}
 export interface GetUserTicketByIdRequestParams
-  extends Schema.Schema.Type<typeof _GetUserTicketByIdRequestParamsSchema> {}
+  extends Schema.Schema.Type<typeof _GetUserTicketByIdRequestParams> {}
 
-export const GetUserTicketByIdRequestParamsSchema: Schema.Schema<
+export const GetUserTicketByIdRequestParams: Schema.Schema<
   GetUserTicketByIdRequestParams,
   GetUserTicketByIdRequestParamsEncoded
-> = _GetUserTicketByIdRequestParamsSchema;
-// #endregion GetUserTicketByIdRequestParamsSchema
+> = _GetUserTicketByIdRequestParams;
+// #endregion GetUserTicketByIdRequestParams
 
 export const GetUserTicketByIdEndpoint = ApiEndpoint.get(
   "getUserTicketById",
@@ -54,6 +54,6 @@ export const GetUserTicketByIdEndpoint = ApiEndpoint.get(
     summary: "Get user's ticket",
   }
 ).pipe(
-  ApiEndpoint.setRequestPath(GetUserTicketByIdRequestParamsSchema),
-  ApiEndpoint.setResponseBody(GetUserTicketByIdResponseBodySchema)
+  ApiEndpoint.setRequestPath(GetUserTicketByIdRequestParams),
+  ApiEndpoint.setResponseBody(GetUserTicketByIdResponseBody)
 );

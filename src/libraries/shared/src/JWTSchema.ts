@@ -1,19 +1,19 @@
 import { ParseResult, Schema } from "@effect/schema";
 import { Either, Encoding } from "effect";
 
-export type JWTStruct = Schema.Schema.Type<typeof JWTStructSchema>;
+export type JWTStruct = Schema.Schema.Type<typeof JWTStruct>;
 
-const WithMessageSchema = Schema.Struct({
+const WithMessage = Schema.Struct({
   message: Schema.String,
 });
-const isWithMessage = Schema.is(WithMessageSchema);
+const isWithMessage = Schema.is(WithMessage);
 
-export const JWTStructSchema = Schema.transformOrFail(
+export const JWTStruct = Schema.transformOrFail(
   Schema.split(".").pipe(
     Schema.filter(
       (x): x is readonly [string, string, string] => x.length === 3
     ),
-    Schema.identifier("JWTLikeSchema")
+    Schema.identifier("JWTLike")
   ),
   Schema.Tuple(Schema.String, Schema.String, Schema.String),
   {
@@ -47,4 +47,4 @@ export const JWTStructSchema = Schema.transformOrFail(
         sign,
       ] as const),
   }
-).pipe(Schema.identifier("JWTStructSchema"));
+).pipe(Schema.identifier("JWTStruct"));

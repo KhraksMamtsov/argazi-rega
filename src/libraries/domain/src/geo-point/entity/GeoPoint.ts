@@ -1,26 +1,25 @@
 import { Schema } from "@effect/schema";
 
-import { IdGeoPointSchema } from "./IdGeoPoint.js";
+import { IdGeoPoint } from "./IdGeoPoint.js";
 
-import { BaseSchema } from "../../entities/common/Base.js";
-import { IdUserSchema } from "../../user/entity/IdUser.js";
-import { LatitudeSchema } from "../../value-objects/Latitude.js";
-import { LongitudeSchema } from "../../value-objects/Longitude.js";
+import { Base } from "../../entities/common/Base.js";
+import { IdUser } from "../../user/entity/IdUser.js";
+import { Latitude } from "../../value-objects/Latitude.js";
+import { Longitude } from "../../value-objects/Longitude.js";
 
-export const GeoPointBaseSchema = Schema.Struct({
-  id: IdGeoPointSchema,
-  idUser: IdUserSchema,
-  latitude: LatitudeSchema,
-  longitude: LongitudeSchema,
+export const GeoPointBase = Schema.Struct({
+  id: IdGeoPoint,
+  idUser: IdUser,
+  latitude: Latitude,
+  longitude: Longitude,
   name: Schema.OptionFromSelf(Schema.SecretFromSelf),
-}).pipe(Schema.typeSchema, Schema.identifier("GeoPointBaseSchema"));
+}).pipe(Schema.typeSchema, Schema.identifier("GeoPointBase"));
 
-export interface GeoPointBase
-  extends Schema.Schema.Type<typeof GeoPointBaseSchema> {}
+export interface GeoPointBase extends Schema.Schema.Type<typeof GeoPointBase> {}
 
-export const GeoPointSchema = GeoPointBaseSchema.pipe(
-  Schema.extend(BaseSchema),
-  Schema.identifier("GeoPointSchema")
+export const GeoPoint = GeoPointBase.pipe(
+  Schema.extend(Base),
+  Schema.identifier("GeoPoint")
 );
 
-export interface GeoPoint extends Schema.Schema.Type<typeof GeoPointSchema> {}
+export interface GeoPoint extends Schema.Schema.Type<typeof GeoPoint> {}

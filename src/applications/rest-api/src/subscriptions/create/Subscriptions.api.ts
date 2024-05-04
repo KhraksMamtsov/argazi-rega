@@ -1,17 +1,17 @@
 import * as Schema from "@effect/schema/Schema";
 
-import { CreateSubscriptionCommandPayloadSchema } from "@argazi/application";
+import { CreateSubscriptionCommandPayload } from "@argazi/application";
 
 import { BaseResponseFor } from "../../BaseResponseFor.js";
-import { SubscriptionApiSchema } from "../Subscription.api.js";
+import { SubscriptionApi } from "../Subscription.api.js";
 
 export const CreateSubscriptionRequest = {
-  body: CreateSubscriptionCommandPayloadSchema.pipe(
-    Schema.identifier("CreateSubscriptionRequestBodySchema")
+  body: CreateSubscriptionCommandPayload.pipe(
+    Schema.identifier("CreateSubscriptionRequestBody")
   ),
 };
 
-export const CreateSubscriptionResponseSchema = SubscriptionApiSchema.pipe(
-  Schema.identifier("CreateSubscriptionResponseSchema"),
+export const CreateSubscriptionResponse = SubscriptionApi.pipe(
+  Schema.identifier("CreateSubscriptionResponse"),
   BaseResponseFor
 );

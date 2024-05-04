@@ -2,76 +2,70 @@ import { Schema } from "@effect/schema";
 
 import { _TS, _SS } from "@argazi/shared";
 
-import { IdEventSchema } from "../event/entity/IdEvent.js";
-import { IdGeoPointSchema } from "../geo-point/entity/IdGeoPoint.js";
-import { IdPlaceSchema } from "../place/entity/IdPlace.js";
-import { IdSubscriptionSchema } from "../subscription/entity/IdSubscription.js";
-import { IdTicketSchema } from "../ticket/entity/IdTicket.js";
-import { IdTransportSchema } from "../transport/entity/IdTransport.js";
-import { type IdUser, IdUserSchema } from "../user/entity/IdUser.js";
-import { IdVisitorSchema } from "../visitor/IdVisitor.js";
+import { IdEvent } from "../event/entity/IdEvent.js";
+import { IdGeoPoint } from "../geo-point/entity/IdGeoPoint.js";
+import { IdPlace } from "../place/entity/IdPlace.js";
+import { IdSubscription } from "../subscription/entity/IdSubscription.js";
+import { IdTicket } from "../ticket/entity/IdTicket.js";
+import { IdTransport } from "../transport/entity/IdTransport.js";
+import { IdUser } from "../user/entity/IdUser.js";
+import { IdVisitor } from "../visitor/IdVisitor.js";
 
-export const NotificationIssueSchema = Schema.Literal(
+export const NotificationIssue = Schema.Literal(
   "updated",
   "created",
   "deleted"
 );
-export type NotificationIssue = Schema.Schema.Type<
-  typeof NotificationIssueSchema
->;
+export type NotificationIssue = Schema.Schema.Type<typeof NotificationIssue>;
 
-const NotificationEntitySchema = Schema.Union(
+const NotificationEntity = Schema.Union(
   Schema.Struct({
-    id: IdUserSchema,
+    id: IdUser,
     type: Schema.Literal("User"),
   }).pipe(_SS.satisfies.encoded.json()),
   Schema.Struct({
-    id: IdGeoPointSchema,
+    id: IdGeoPoint,
     type: Schema.Literal("GeoPoint"),
   }).pipe(_SS.satisfies.encoded.json()),
   Schema.Struct({
-    id: IdPlaceSchema,
+    id: IdPlace,
     type: Schema.Literal("Place"),
   }).pipe(_SS.satisfies.encoded.json()),
   Schema.Struct({
-    id: IdTicketSchema,
+    id: IdTicket,
     type: Schema.Literal("Ticket"),
   }).pipe(_SS.satisfies.encoded.json()),
   Schema.Struct({
-    id: IdTransportSchema,
+    id: IdTransport,
     type: Schema.Literal("Transport"),
   }).pipe(_SS.satisfies.encoded.json()),
   Schema.Struct({
-    id: IdEventSchema,
+    id: IdEvent,
     type: Schema.Literal("Event"),
   }).pipe(_SS.satisfies.encoded.json()),
   Schema.Struct({
-    id: IdSubscriptionSchema,
+    id: IdSubscription,
     type: Schema.Literal("Subscription"),
   }).pipe(_SS.satisfies.encoded.json()),
   Schema.Struct({
-    id: IdVisitorSchema,
+    id: IdVisitor,
     type: Schema.Literal("Visitor"),
   }).pipe(_SS.satisfies.encoded.json())
 );
-export type NotificationEntity = Schema.Schema.Type<
-  typeof NotificationEntitySchema
->;
+export type NotificationEntity = Schema.Schema.Type<typeof NotificationEntity>;
 
-export const _NotificationSchema = Schema.parseJson(
+export const _Notification = Schema.parseJson(
   Schema.Struct({
     _tag: Schema.Literal("Notification"),
-    entity: NotificationEntitySchema,
-    idInitiator: IdUserSchema,
-    issue: NotificationIssueSchema,
+    entity: NotificationEntity,
+    idInitiator: IdUser,
+    issue: NotificationIssue,
   }).pipe(_SS.satisfies.encoded.json())
-).pipe(Schema.identifier("NotificationSchema"));
+).pipe(Schema.identifier("Notification"));
 
-export type NotificationFrom = Schema.Schema.Encoded<
-  typeof _NotificationSchema
->;
+export type NotificationFrom = Schema.Schema.Encoded<typeof _Notification>;
 export interface Notification
-  extends Schema.Schema.Type<typeof _NotificationSchema> {}
+  extends Schema.Schema.Type<typeof _Notification> {}
 
 export type NotificationWithIssue<
   I extends NotificationIssue,
@@ -87,11 +81,11 @@ export type NotificationWithEntity<
   }
 >;
 
-export const NotificationSchema: Schema.Schema<Notification, NotificationFrom> =
-  _NotificationSchema;
+export const Notification: Schema.Schema<Notification, NotificationFrom> =
+  _Notification;
 
-export const encodeNotification = Schema.encode(NotificationSchema);
-export const decodeEitherNotification = Schema.decodeEither(NotificationSchema);
+export const encodeNotification = Schema.encode(Notification);
+export const decodeEitherNotification = Schema.decodeEither(Notification);
 
 const _notification =
   <Type extends NotificationEntity["type"]>(type: Type) =>

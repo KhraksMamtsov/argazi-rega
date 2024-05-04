@@ -1,43 +1,40 @@
 import * as Schema from "@effect/schema/Schema";
 import { ApiEndpoint, ApiResponse } from "effect-http";
 
-import { _CreateUsersVisitorCommandPayloadSchema } from "@argazi/application";
+import { _CreateUsersVisitorCommandPayload } from "@argazi/application";
 
 import { BaseResponseFor } from "../../BaseResponseFor.js";
 import { BearerAuth } from "../../BearerAuth.security-scheme.js";
 import { VisitorApi } from "../../visitors/Visitor.api.js";
 
-export const CreateMyVisitorResponseSchema = VisitorApi.pipe(
-  Schema.identifier("CreateMyVisitorResponseSchema"),
+export const CreateMyVisitorResponseBody = VisitorApi.pipe(
+  Schema.identifier("CreateMyVisitorResponseBody"),
   BaseResponseFor
 );
 
 // #region CreateMyVisitorRequestBody
-const _CreateMyVisitorRequestBodySchema =
-  _CreateUsersVisitorCommandPayloadSchema.pipe(
-    Schema.omit("idUser"),
-    Schema.identifier("CreateMyVisitorRequestBodySchema")
-  );
+const _CreateMyVisitorRequestBody = _CreateUsersVisitorCommandPayload.pipe(
+  Schema.omit("idUser"),
+  Schema.identifier("CreateMyVisitorRequestBody")
+);
 
 export type CreateMyVisitorRequestBodyContext = Schema.Schema.Context<
-  typeof _CreateMyVisitorRequestBodySchema
+  typeof _CreateMyVisitorRequestBody
 >;
 export interface CreateMyVisitorRequestBodyEncoded
-  extends Schema.Schema.Encoded<typeof _CreateMyVisitorRequestBodySchema> {}
+  extends Schema.Schema.Encoded<typeof _CreateMyVisitorRequestBody> {}
 export interface CreateMyVisitorRequestBody
-  extends Schema.Schema.Type<typeof _CreateMyVisitorRequestBodySchema> {}
+  extends Schema.Schema.Type<typeof _CreateMyVisitorRequestBody> {}
 
-export const CreateMyVisitorRequestBodySchema: Schema.Schema<
+export const CreateMyVisitorRequestBody: Schema.Schema<
   CreateMyVisitorRequestBody,
   CreateMyVisitorRequestBodyEncoded
-> = _CreateMyVisitorRequestBodySchema;
-// #endregion CreateMyVisitorRequestBodySchema
+> = _CreateMyVisitorRequestBody;
+// #endregion CreateMyVisitorRequestBody
 
 export const CreateMyVisitorResponse = [
   {
-    content: CreateMyVisitorResponseSchema.pipe(
-      Schema.description("My visitor")
-    ),
+    content: CreateMyVisitorResponseBody.pipe(Schema.description("My visitor")),
     status: 200 as const,
   },
   {
@@ -53,11 +50,11 @@ export const CreateMyVisitorEndpoint = ApiEndpoint.post(
     summary: "Creates visitor",
   }
 ).pipe(
-  ApiEndpoint.setRequestBody(CreateMyVisitorRequestBodySchema),
+  ApiEndpoint.setRequestBody(CreateMyVisitorRequestBody),
   ApiEndpoint.setResponse(
     ApiResponse.make(
       200,
-      CreateMyVisitorResponseSchema.pipe(Schema.description("My visitor"))
+      CreateMyVisitorResponseBody.pipe(Schema.description("My visitor"))
     )
   ),
   ApiEndpoint.setSecurity(BearerAuth)

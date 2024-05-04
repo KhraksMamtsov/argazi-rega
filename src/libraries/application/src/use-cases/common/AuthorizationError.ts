@@ -1,6 +1,6 @@
 import { Schema } from "@effect/schema";
 
-import { IdUserSchema } from "@argazi/domain";
+import { IdUser } from "@argazi/domain";
 import { _S } from "@argazi/shared";
 
 export const EntityType = Schema.Literal(
@@ -14,7 +14,7 @@ export class ValidationError extends Schema.TaggedError<ValidationError>()(
   "ValidationError",
   {
     entity: Schema.Array(EntityType),
-    idInitiator: IdUserSchema,
+    idInitiator: IdUser,
     payload: _S.Json.JsonRecord,
   }
 ) {}
@@ -23,7 +23,7 @@ export class CreateEntityAuthorizationError extends Schema.TaggedError<CreateEnt
   "CreateEntityAuthorizationError",
   {
     entity: EntityType,
-    idInitiator: IdUserSchema,
+    idInitiator: IdUser,
     payload: _S.Json.JsonRecord,
   }
 ) {}
@@ -32,7 +32,7 @@ export class GetEntityAuthorizationError extends Schema.TaggedError<GetEntityAut
   "GetEntityAuthorizationError",
   {
     entity: Schema.Array(EntityType),
-    idInitiator: IdUserSchema,
+    idInitiator: IdUser,
     payload: _S.Json.JsonRecord,
   }
 ) {}
@@ -42,7 +42,7 @@ export class UpdateEntityAuthorizationError extends Schema.TaggedError<UpdateEnt
   {
     entity: Schema.Array(EntityType),
     idEntity: Schema.UUID,
-    idInitiator: IdUserSchema,
+    idInitiator: IdUser,
     payload: _S.Json.JsonRecord,
   }
 ) {}
@@ -52,7 +52,7 @@ export class DeleteEntityAuthorizationError extends Schema.TaggedError<DeleteEnt
   {
     entity: EntityType,
     idEntity: Schema.UUID,
-    idInitiator: IdUserSchema,
+    idInitiator: IdUser,
     payload: _S.Json.JsonRecord,
   }
 ) {}

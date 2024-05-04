@@ -1,6 +1,6 @@
 import { Effect } from "effect";
 
-import { PlaceDbToDomainSchema, PrismaServiceTag } from "@argazi/database";
+import { PlaceDbToDomain, PrismaServiceTag } from "@argazi/database";
 
 import type { CreatePlaceCommand } from "./CreatePlace.command.js";
 
@@ -10,18 +10,16 @@ export const CreatePlaceUseCase = (command: CreatePlaceCommand) =>
 
     // create user using domain userService produced new User? + events about its creation???
 
-    const newPlace = yield* prismaClient.queryDecode(
-      PlaceDbToDomainSchema,
-      (p) =>
-        p.place.create({
-          data: {
-            description: command.payload.description,
-            idGeoPoint: command.payload.idGeoPoint,
-            idUserCreator: command.idInitiator,
-            idUserUpdater: command.idInitiator,
-            name: command.payload.name,
-          },
-        })
+    const newPlace = yield* prismaClient.queryDecode(PlaceDbToDomain, (p) =>
+      p.place.create({
+        data: {
+          description: command.payload.description,
+          idGeoPoint: command.payload.idGeoPoint,
+          idUserCreator: command.idInitiator,
+          idUserUpdater: command.idInitiator,
+          name: command.payload.name,
+        },
+      })
     );
 
     return newPlace;

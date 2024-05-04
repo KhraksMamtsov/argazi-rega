@@ -1,34 +1,32 @@
 import { Schema } from "@effect/schema";
 
-import { IdTicketSchema } from "./IdTicket.js";
+import { IdTicket } from "./IdTicket.js";
 import { TicketRoleSchema } from "./TicketRole.js";
 
-import { BaseSchema } from "../../entities/common/Base.js";
-import { IdTransportOnEventSchema } from "../../entities/transport-on-event/IdTransportOnEvent.js";
-import { IdEventSchema } from "../../event/entity/IdEvent.js";
-import { IdUserSchema } from "../../user/entity/IdUser.js";
+import { Base } from "../../entities/common/Base.js";
+import { IdTransportOnEvent } from "../../entities/transport-on-event/IdTransportOnEvent.js";
+import { IdEvent } from "../../event/entity/IdEvent.js";
+import { IdUser } from "../../user/entity/IdUser.js";
 
-export const TicketBaseSchema = Schema.Struct({
+export const TicketBase = Schema.Struct({
   dateRegistered: Schema.ValidDateFromSelf,
-  id: IdTicketSchema,
-  idEvent: IdEventSchema,
-  idTransport: Schema.OptionFromSelf(IdTransportOnEventSchema),
-  idUser: IdUserSchema,
+  id: IdTicket,
+  idEvent: IdEvent,
+  idTransport: Schema.OptionFromSelf(IdTransportOnEvent),
+  idUser: IdUser,
   //
   role: TicketRoleSchema,
-}).pipe(Schema.identifier("TicketBaseSchema"));
+}).pipe(Schema.identifier("TicketBase"));
 
-export interface TicketBase
-  extends Schema.Schema.Type<typeof TicketBaseSchema> {}
+export interface TicketBase extends Schema.Schema.Type<typeof TicketBase> {}
 
-export const _TicketSchema = TicketBaseSchema.pipe(
+export const _Ticket = TicketBase.pipe(
   Schema.typeSchema,
-  Schema.extend(BaseSchema),
-  Schema.identifier("TicketSchema")
+  Schema.extend(Base),
+  Schema.identifier("Ticket")
 );
 
-export interface TicketFrom
-  extends Schema.Schema.Encoded<typeof _TicketSchema> {}
-export interface Ticket extends Schema.Schema.Type<typeof _TicketSchema> {}
+export interface TicketFrom extends Schema.Schema.Encoded<typeof _Ticket> {}
+export interface Ticket extends Schema.Schema.Type<typeof _Ticket> {}
 
-export const TicketSchema: Schema.Schema<Ticket, TicketFrom> = _TicketSchema;
+export const Ticket: Schema.Schema<Ticket, TicketFrom> = _Ticket;

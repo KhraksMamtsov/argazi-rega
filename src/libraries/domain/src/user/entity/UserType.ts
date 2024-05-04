@@ -7,5 +7,5 @@ export enum UserType {
 }
 
 export const UserTypeSchema = Schema.Enums(UserType).pipe(
-  Schema.identifier("UserTypeSchema")
+  Schema.identifier("UserType")
 );

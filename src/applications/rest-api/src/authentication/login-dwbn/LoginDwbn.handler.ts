@@ -6,7 +6,7 @@ import { GetUserUseCase } from "@argazi/application";
 import { RegisterUserUseCase } from "@argazi/application";
 import { notification } from "@argazi/domain";
 import { NotificationServiceTag } from "@argazi/domain";
-import { IdUserSchema } from "@argazi/domain";
+import { IdUser } from "@argazi/domain";
 
 import { DwbnOAuth2Service } from "./DwbnOAuth2.service.js";
 
@@ -34,9 +34,7 @@ export const LoginDwbnHandler = (body: LoginDwbnRequestBody) =>
 
     if (Option.isNone(registeredUserOption)) {
       const isAdmin = Secret.value(idDwbnAdmin) === idTokenPayload.sub;
-      const idNewUser = IdUserSchema(
-        isAdmin ? IdAdmin : webcrypto.randomUUID()
-      );
+      const idNewUser = IdUser(isAdmin ? IdAdmin : webcrypto.randomUUID());
 
       const newlyRegisteredUser = yield* RegisterUserUseCase({
         payload: {

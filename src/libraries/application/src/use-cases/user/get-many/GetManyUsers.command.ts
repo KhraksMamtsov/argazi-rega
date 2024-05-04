@@ -1,25 +1,25 @@
 import { Schema } from "@effect/schema";
 
-import { IdDwbnSchema, IdUserSchema } from "@argazi/domain";
+import { IdDwbn, IdUser } from "@argazi/domain";
 import { _SS } from "@argazi/shared";
 
 import { BaseCommandFor } from "../../common/Base.command.js";
 
-export const GetManyUsersCommandPayloadSchema = Schema.Union(
+export const GetManyUsersCommandPayload = Schema.Union(
   Schema.Struct({
-    idsUser: Schema.Array(IdUserSchema),
+    idsUser: Schema.Array(IdUser),
     type: Schema.Literal("id"),
   }).pipe(_SS.satisfies.encoded.json()),
   Schema.Struct({
-    idsDwbn: Schema.Array(IdDwbnSchema),
+    idsDwbn: Schema.Array(IdDwbn),
     type: Schema.Literal("idDwbn"),
   }).pipe(_SS.satisfies.encoded.json())
-).pipe(Schema.identifier("GetManyUsersCommandPayloadSchema"));
+).pipe(Schema.identifier("GetManyUsersCommandPayload"));
 
-export const GetManyUsersCommandSchema = BaseCommandFor(
-  GetManyUsersCommandPayloadSchema
-).pipe(Schema.identifier("GetManyUsersCommandSchema"));
+export const GetManyUsersCommand = BaseCommandFor(
+  GetManyUsersCommandPayload
+).pipe(Schema.identifier("GetManyUsersCommand"));
 
 export type GetManyUsersCommand = Schema.Schema.Type<
-  typeof GetManyUsersCommandSchema
+  typeof GetManyUsersCommand
 >;

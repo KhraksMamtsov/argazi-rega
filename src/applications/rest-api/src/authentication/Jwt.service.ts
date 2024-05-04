@@ -1,34 +1,31 @@
 import { Schema, ParseResult } from "@effect/schema";
 import { Config, Effect, Layer, Record, Secret, Data, pipe } from "effect";
 
-import { IdUserSchema } from "@argazi/domain";
+import { IdUser } from "@argazi/domain";
 import { _SS, _JWT } from "@argazi/shared";
 
-import { AccessTokenSchema } from "./AccessToken.js";
-import { RefreshTokenSchema } from "./RefreshToken.js";
+import { AccessToken } from "./AccessToken.js";
+import { RefreshToken } from "./RefreshToken.js";
 
 // #region JWTPayload
-export const _JWTPayloadSchema = Schema.Struct({
+export const _JWTPayload = Schema.Struct({
   isAdmin: Schema.Boolean,
-  sub: IdUserSchema,
+  sub: IdUser,
 })
   .pipe(_SS.satisfies.encoded.json())
-  .pipe(Schema.identifier("JWTPayloadSchema"));
+  .pipe(Schema.identifier("JWTPayload"));
 
-export type JWTPayloadContext = Schema.Schema.Context<typeof _JWTPayloadSchema>;
+export type _JWTPayloadContext = Schema.Schema.Context<typeof _JWTPayload>;
 export interface JWTPayloadEncoded
-  extends Schema.Schema.Encoded<typeof _JWTPayloadSchema> {}
-export interface JWTPayload
-  extends Schema.Schema.Type<typeof _JWTPayloadSchema> {}
+  extends Schema.Schema.Encoded<typeof _JWTPayload> {}
+export interface JWTPayload extends Schema.Schema.Type<typeof _JWTPayload> {}
 
-export const JWTPayloadSchema: Schema.Schema<JWTPayload, JWTPayloadEncoded> =
-  _JWTPayloadSchema;
+export const JWTPayload: Schema.Schema<JWTPayload, JWTPayloadEncoded> =
+  _JWTPayload;
 // #endregion JWTPayloadSchema
 
-const encodeJWT = Schema.encode(JWTPayloadSchema);
-const decodeJWT = Schema.decodeUnknown(JWTPayloadSchema);
-
-type JWTPayloadSchema = Schema.Schema.Type<typeof JWTPayloadSchema>;
+const encodeJWT = Schema.encode(JWTPayload);
+const decodeJWT = Schema.decodeUnknown(JWTPayload);
 
 export enum JWTServiceErrorType {
   SIGN = "SIGN::JWTServiceErrorType",
@@ -59,7 +56,7 @@ const makeLive = () =>
     );
 
     return {
-      sign: (payload: JWTPayloadSchema) =>
+      sign: (payload: JWTPayload) =>
         encodeJWT(payload).pipe(
           Effect.flatMap((encodedPayload) =>
             Effect.all({
@@ -69,20 +66,14 @@ const makeLive = () =>
                   key: jwtConfig.accessTokenSecret,
                   payload: encodedPayload,
                 })
-                .pipe(
-                  Effect.map(Secret.fromString),
-                  Effect.map(AccessTokenSchema)
-                ),
+                .pipe(Effect.map(Secret.fromString), Effect.map(AccessToken)),
               refreshToken: _JWT
                 .sign({
                   expiresIn: jwtConfig.refreshTokenTtl,
                   key: jwtConfig.refreshTokenSecret,
                   payload: encodedPayload,
                 })
-                .pipe(
-                  Effect.map(Secret.fromString),
-                  Effect.map(RefreshTokenSchema)
-                ),
+                .pipe(Effect.map(Secret.fromString), Effect.map(RefreshToken)),
             })
           ),
           Effect.mapError((cause) => new JWRServiceSignError({ cause }))

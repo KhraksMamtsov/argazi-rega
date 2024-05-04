@@ -1,9 +1,9 @@
 import { Schema } from "@effect/schema";
 
 import {
-  IdDwbnSchema,
-  IdTelegramChatSchema,
-  IdUserSchema,
+  IdDwbn,
+  IdTelegramChat,
+  IdUser,
   UserType,
   type UserBase,
 } from "@argazi/domain";
@@ -11,12 +11,12 @@ import { _SS } from "@argazi/shared";
 
 import { BaseCommandFor } from "../../common/Base.command.js";
 
-export const RegisterUserCommandPayloadSchema = Schema.Struct({
+export const RegisterUserCommandPayload = Schema.Struct({
   email: Schema.Secret,
   firstName: Schema.Secret,
-  id: IdUserSchema,
-  idDwbn: IdDwbnSchema,
-  idTelegramChat: IdTelegramChatSchema,
+  id: IdUser,
+  idDwbn: IdDwbn,
+  idTelegramChat: IdTelegramChat,
   isAdmin: Schema.Boolean,
   lastName: Schema.OptionFromNullOr(Schema.Secret),
   phone: Schema.OptionFromNullOr(Schema.Secret),
@@ -28,9 +28,9 @@ export const RegisterUserCommandPayloadSchema = Schema.Struct({
 }).pipe(
   _SS.satisfies.encoded.json(),
   _SS.satisfies.type<UserBase>(),
-  Schema.identifier("RegisterUserCommandPayloadSchema")
+  Schema.identifier("RegisterUserCommandPayload")
 );
 
-export const RegisterUserCommandSchema = BaseCommandFor(
-  RegisterUserCommandPayloadSchema
-).pipe(Schema.identifier("RegisterUserCommandSchema"));
+export const RegisterUserCommand = BaseCommandFor(
+  RegisterUserCommandPayload
+).pipe(Schema.identifier("RegisterUserCommand"));

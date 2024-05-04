@@ -1,9 +1,9 @@
 import { Schema } from "@effect/schema";
 
 export const IdUserSymbol: unique symbol = Symbol.for("IdUserSymbol");
-export const IdUserSchema = Schema.UUID.pipe(
-  Schema.identifier("IdUserSchema"),
+export const IdUser = Schema.UUID.pipe(
+  Schema.identifier("IdUser"),
   Schema.brand(IdUserSymbol)
 );
 
-export type IdUser = Schema.Schema.Type<typeof IdUserSchema>;
+export type IdUser = Schema.Schema.Type<typeof IdUser>;

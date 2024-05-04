@@ -4,7 +4,7 @@ import { _SS } from "@argazi/shared";
 
 import { BaseCausedCommandFor } from "../../common/Base.command.js";
 
-const _CreateEventCommandPayloadSchema = Schema.Struct({
+const _CreateEventCommandPayload = Schema.Struct({
   dateAnnouncement: Schema.compose(
     Schema.DateFromString,
     Schema.ValidDateFromSelf
@@ -19,29 +19,29 @@ const _CreateEventCommandPayloadSchema = Schema.Struct({
   description: Schema.String,
 }).pipe(
   _SS.satisfies.encoded.json(),
-  Schema.identifier("CreateEventCommandPayloadSchema")
+  Schema.identifier("CreateEventCommandPayload")
 );
 
 export interface CreateEventCommandPayloadEncoded
-  extends Schema.Schema.Encoded<typeof _CreateEventCommandPayloadSchema> {}
+  extends Schema.Schema.Encoded<typeof _CreateEventCommandPayload> {}
 export interface CreateEventCommandPayload
-  extends Schema.Schema.Type<typeof _CreateEventCommandPayloadSchema> {}
+  extends Schema.Schema.Type<typeof _CreateEventCommandPayload> {}
 
-export const CreateEventCommandPayloadSchema: Schema.Schema<
+export const CreateEventCommandPayload: Schema.Schema<
   CreateEventCommandPayload,
   CreateEventCommandPayloadEncoded
-> = _CreateEventCommandPayloadSchema;
+> = _CreateEventCommandPayload;
 
-export const _CreateEventCommandSchema = BaseCausedCommandFor(
-  CreateEventCommandPayloadSchema
-).pipe(Schema.identifier("CreateEventCommandSchema"));
+export const _CreateEventCommand = BaseCausedCommandFor(
+  CreateEventCommandPayload
+).pipe(Schema.identifier("CreateEventCommand"));
 
 export interface CreateEventCommandFrom
-  extends Schema.Schema.Encoded<typeof _CreateEventCommandSchema> {}
+  extends Schema.Schema.Encoded<typeof _CreateEventCommand> {}
 export interface CreateEventCommand
-  extends Schema.Schema.Type<typeof _CreateEventCommandSchema> {}
+  extends Schema.Schema.Type<typeof _CreateEventCommand> {}
 
-export const CreateEventCommandSchema: Schema.Schema<
+export const CreateEventCommand: Schema.Schema<
   CreateEventCommand,
   CreateEventCommandFrom
-> = _CreateEventCommandSchema;
+> = _CreateEventCommand;

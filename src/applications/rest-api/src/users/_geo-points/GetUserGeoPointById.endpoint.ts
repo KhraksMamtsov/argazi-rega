@@ -1,55 +1,51 @@
 import * as Schema from "@effect/schema/Schema";
 import { ApiEndpoint } from "effect-http";
 
-import { IdGeoPointSchema } from "@argazi/domain";
-import { IdUserSchema } from "@argazi/domain";
+import { IdGeoPoint } from "@argazi/domain";
+import { IdUser } from "@argazi/domain";
 
 import { BaseResponseFor } from "../../BaseResponseFor.js";
-import { GeoPointApiSchema } from "../../geo-points/GeoPoint.api.js";
+import { GeoPointApi } from "../../geo-points/GeoPoint.api.js";
 
 // #region GetUserGeoPointByIdResponseBody
-const _GetUserGeoPointByIdResponseBodySchema = GeoPointApiSchema.pipe(
-  Schema.identifier("GetUserGeoPointByIdResponseBodySchema"),
+const _GetUserGeoPointByIdResponseBody = GeoPointApi.pipe(
+  Schema.identifier("GetUserGeoPointByIdResponseBody"),
   BaseResponseFor
 );
 
 export type GetUserGeoPointByIdResponseBodyContext = Schema.Schema.Context<
-  typeof _GetUserGeoPointByIdResponseBodySchema
+  typeof _GetUserGeoPointByIdResponseBody
 >;
 export interface GetUserGeoPointByIdResponseBodyEncoded
-  extends Schema.Schema.Encoded<
-    typeof _GetUserGeoPointByIdResponseBodySchema
-  > {}
+  extends Schema.Schema.Encoded<typeof _GetUserGeoPointByIdResponseBody> {}
 export interface GetUserGeoPointByIdResponseBody
-  extends Schema.Schema.Type<typeof _GetUserGeoPointByIdResponseBodySchema> {}
+  extends Schema.Schema.Type<typeof _GetUserGeoPointByIdResponseBody> {}
 
-export const GetUserGeoPointByIdResponseBodySchema: Schema.Schema<
+export const GetUserGeoPointByIdResponseBody: Schema.Schema<
   GetUserGeoPointByIdResponseBody,
   GetUserGeoPointByIdResponseBodyEncoded
-> = _GetUserGeoPointByIdResponseBodySchema;
-// #endregion GetUserGeoPointByIdResponseBodySchema
+> = _GetUserGeoPointByIdResponseBody;
+// #endregion GetUserGeoPointByIdResponseBody
 
 // #region GetUserGeoPointByIdRequestParams
-const _GetUserGeoPointByIdRequestParamsSchema = Schema.Struct({
-  idGeoPoint: IdGeoPointSchema,
-  idUser: IdUserSchema,
-}).pipe(Schema.identifier("GetUserGeoPointByIdRequestParamsSchema"));
+const _GetUserGeoPointByIdRequestParams = Schema.Struct({
+  idGeoPoint: IdGeoPoint,
+  idUser: IdUser,
+}).pipe(Schema.identifier("GetUserGeoPointByIdRequestParams"));
 
 export type GetUserGeoPointByIdRequestParamsContext = Schema.Schema.Context<
-  typeof _GetUserGeoPointByIdRequestParamsSchema
+  typeof _GetUserGeoPointByIdRequestParams
 >;
 export interface GetUserGeoPointByIdRequestParamsEncoded
-  extends Schema.Schema.Encoded<
-    typeof _GetUserGeoPointByIdRequestParamsSchema
-  > {}
+  extends Schema.Schema.Encoded<typeof _GetUserGeoPointByIdRequestParams> {}
 export interface GetUserGeoPointByIdRequestParams
-  extends Schema.Schema.Type<typeof _GetUserGeoPointByIdRequestParamsSchema> {}
+  extends Schema.Schema.Type<typeof _GetUserGeoPointByIdRequestParams> {}
 
-export const GetUserGeoPointByIdRequestParamsSchema: Schema.Schema<
+export const GetUserGeoPointByIdRequestParams: Schema.Schema<
   GetUserGeoPointByIdRequestParams,
   GetUserGeoPointByIdRequestParamsEncoded
-> = _GetUserGeoPointByIdRequestParamsSchema;
-// #endregion GetUserGeoPointByIdRequestParamsSchema
+> = _GetUserGeoPointByIdRequestParams;
+// #endregion GetUserGeoPointByIdRequestParams
 
 export const GetUserGeoPointByIdEndpoint = ApiEndpoint.get(
   "getUserGeoPointById",
@@ -58,6 +54,6 @@ export const GetUserGeoPointByIdEndpoint = ApiEndpoint.get(
     summary: "Get user's geo-point",
   }
 ).pipe(
-  ApiEndpoint.setRequestPath(GetUserGeoPointByIdRequestParamsSchema),
-  ApiEndpoint.setResponseBody(GetUserGeoPointByIdResponseBodySchema)
+  ApiEndpoint.setRequestPath(GetUserGeoPointByIdRequestParams),
+  ApiEndpoint.setResponseBody(GetUserGeoPointByIdResponseBody)
 );

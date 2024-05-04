@@ -1,13 +1,13 @@
 import * as Schema from "@effect/schema/Schema";
 import { ApiEndpoint } from "effect-http";
 
-import { IdPlaceSchema } from "@argazi/domain";
+import { IdPlace } from "@argazi/domain";
 
 import { BaseResponseFor } from "../../BaseResponseFor.js";
 import { PlaceApi } from "../Place.api.js";
 
 export const _GetPlaceByIdRequest = Schema.Struct({
-  idPlace: IdPlaceSchema,
+  idPlace: IdPlace,
 });
 
 export interface GetPlaceByIdRequestEncoded
@@ -20,25 +20,25 @@ export const GetPlaceByIdRequest: Schema.Schema<
   GetPlaceByIdRequestEncoded
 > = _GetPlaceByIdRequest;
 
-export const _GetPlaceByIdResponseBodySchema = PlaceApi.pipe(
-  Schema.identifier("GetPlaceByIdResponseSchema"),
+export const _GetPlaceByIdResponseBody = PlaceApi.pipe(
+  Schema.identifier("GetPlaceByIdResponse"),
   BaseResponseFor
 ).pipe(Schema.description("Place"));
 
 export interface GetPlaceByIdResponseBodyEncoded
-  extends Schema.Schema.Encoded<typeof _GetPlaceByIdResponseBodySchema> {}
+  extends Schema.Schema.Encoded<typeof _GetPlaceByIdResponseBody> {}
 export interface GetPlaceByIdResponseBody
-  extends Schema.Schema.Type<typeof _GetPlaceByIdResponseBodySchema> {}
+  extends Schema.Schema.Type<typeof _GetPlaceByIdResponseBody> {}
 
-export const GetPlaceByIdResponseBodySchema: Schema.Schema<
+export const GetPlaceByIdResponseBody: Schema.Schema<
   GetPlaceByIdResponseBody,
   GetPlaceByIdResponseBodyEncoded
-> = _GetPlaceByIdResponseBodySchema;
+> = _GetPlaceByIdResponseBody;
 
 export const GetPlaceByIdEndpoint = ApiEndpoint.get(
   "getPlaceById",
   "/places/:idPlace"
 ).pipe(
   ApiEndpoint.setRequestPath(GetPlaceByIdRequest),
-  ApiEndpoint.setResponseBody(GetPlaceByIdResponseBodySchema)
+  ApiEndpoint.setResponseBody(GetPlaceByIdResponseBody)
 );

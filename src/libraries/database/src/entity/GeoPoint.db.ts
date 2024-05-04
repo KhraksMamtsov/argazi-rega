@@ -2,55 +2,53 @@ import { Schema } from "@effect/schema";
 import { Effect } from "effect";
 
 import {
-  type GeoPoint,
-  GeoPointSchema,
-  IdGeoPointSchema,
-  IdUserSchema,
-  LatitudeSchema,
-  LongitudeSchema,
+  GeoPoint,
+  IdGeoPoint,
+  IdUser,
+  Latitude,
+  Longitude,
 } from "@argazi/domain";
 import { _TS, _SS, _S } from "@argazi/shared";
 
-import { BaseDbSchema, transform } from "../Base.db.js";
+import { BaseDb, transform } from "../Base.db.js";
 
 import type { GeoPoint as _GeoPoint } from "@prisma/client";
 
 export type GeoPointDbFrom = _TS.Simplify<Readonly<_GeoPoint>>;
 
 // #region GeoPointDb
-const _GeoPointDbSchema = Schema.Struct({
-  id: IdGeoPointSchema,
-  idUser: IdUserSchema,
+const _GeoPointDb = Schema.Struct({
+  id: IdGeoPoint,
+  idUser: IdUser,
   latitude: _S.StringFromNumber.pipe(
     Schema.compose(Schema.Secret),
-    Schema.compose(LatitudeSchema)
+    Schema.compose(Latitude)
   ),
   longitude: _S.StringFromNumber.pipe(
     Schema.compose(Schema.Secret),
-    Schema.compose(LongitudeSchema)
+    Schema.compose(Longitude)
   ),
   name: Schema.OptionFromNullOr(Schema.Secret),
 }).pipe(
-  Schema.extend(BaseDbSchema),
-  Schema.identifier("GeoPointDbSchema"),
+  Schema.extend(BaseDb),
+  Schema.identifier("GeoPointDb"),
   _SS.satisfies.encoded<GeoPointDbFrom>()
 );
 
-export type GeoPointDbContext = Schema.Schema.Context<typeof _GeoPointDbSchema>;
+export type GeoPointDbContext = Schema.Schema.Context<typeof _GeoPointDb>;
 export interface GeoPointDbEncoded
-  extends Schema.Schema.Encoded<typeof _GeoPointDbSchema> {}
-export interface GeoPointDb
-  extends Schema.Schema.Type<typeof _GeoPointDbSchema> {}
+  extends Schema.Schema.Encoded<typeof _GeoPointDb> {}
+export interface GeoPointDb extends Schema.Schema.Type<typeof _GeoPointDb> {}
 
-export const GeoPointDbSchema: Schema.Schema<GeoPointDb, GeoPointDbEncoded> =
-  _GeoPointDbSchema;
-// #endregion GeoPointDbSchema
+export const GeoPointDb: Schema.Schema<GeoPointDb, GeoPointDbEncoded> =
+  _GeoPointDb;
+// #endregion GeoPointDb
 
-const _GeoPointDbToDomainSchema = transform(
-  GeoPointDbSchema,
-  GeoPointSchema,
+const _GeoPointDbToDomain = transform(
+  GeoPointDb,
+  GeoPoint,
   Effect.succeed,
   Effect.succeed
 );
-export const GeoPointDbToDomainSchema: Schema.Schema<GeoPoint, GeoPointDbFrom> =
-  _GeoPointDbToDomainSchema;
+export const GeoPointDbToDomain: Schema.Schema<GeoPoint, GeoPointDbFrom> =
+  _GeoPointDbToDomain;

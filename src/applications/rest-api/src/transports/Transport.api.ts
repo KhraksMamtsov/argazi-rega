@@ -1,34 +1,30 @@
 import * as Schema from "@effect/schema/Schema";
 
-import { IdTransportSchema } from "@argazi/domain";
-import { IdUserSchema } from "@argazi/domain";
+import { IdTransport } from "@argazi/domain";
+import { IdUser } from "@argazi/domain";
 import type { TransportBase } from "@argazi/domain";
 import { _SS } from "@argazi/shared";
 
 // #region TransportApi
-const _TransportApiSchema = Schema.Struct({
+const _TransportApi = Schema.Struct({
   color: Schema.NonEmpty.pipe(Schema.trimmed()),
-  id: IdTransportSchema,
-  idUser: IdUserSchema,
+  id: IdTransport,
+  idUser: IdUser,
   model: Schema.OptionFromNullOr(Schema.Secret),
   number: Schema.Secret,
   seatsNumber: Schema.Int.pipe(Schema.positive()),
 }).pipe(
   _SS.satisfies.type<TransportBase>(),
   _SS.satisfies.encoded.json(),
-  Schema.identifier("_TransportApiSchema")
+  Schema.identifier("_TransportApi")
 );
 
-export type TransportApiContext = Schema.Schema.Context<
-  typeof _TransportApiSchema
->;
+export type TransportApiContext = Schema.Schema.Context<typeof _TransportApi>;
 export interface TransportApiEncoded
-  extends Schema.Schema.Encoded<typeof _TransportApiSchema> {}
+  extends Schema.Schema.Encoded<typeof _TransportApi> {}
 export interface TransportApi
-  extends Schema.Schema.Type<typeof _TransportApiSchema> {}
+  extends Schema.Schema.Type<typeof _TransportApi> {}
 
-export const TransportApiSchema: Schema.Schema<
-  TransportApi,
-  TransportApiEncoded
-> = _TransportApiSchema;
-// #endregion TransportApiSchema
+export const TransportApi: Schema.Schema<TransportApi, TransportApiEncoded> =
+  _TransportApi;
+// #endregion TransportApi

@@ -10,25 +10,25 @@ export type CreatePlaceCommandPayloadFrom = {
   readonly description: string;
 };
 
-export const CreatePlaceCommandPayloadSchema = Schema.Struct({
+export const CreatePlaceCommandPayload = Schema.Struct({
   idGeoPoint: Schema.UUID,
   name: Schema.compose(Schema.Trim, Schema.NonEmpty),
   description: Schema.compose(Schema.Trim, Schema.NonEmpty),
 }).pipe(
   _SS.satisfies.encoded.json<CreatePlaceCommandPayloadFrom>(),
-  Schema.identifier("CreatePlaceCommandPayloadSchema")
+  Schema.identifier("CreatePlaceCommandPayload")
 );
 
-export const _CreatePlaceCommandSchema = BaseCausedCommandFor(
-  CreatePlaceCommandPayloadSchema
-).pipe(Schema.identifier("CreatePlaceCommandSchema"));
+export const _CreatePlaceCommand = BaseCausedCommandFor(
+  CreatePlaceCommandPayload
+).pipe(Schema.identifier("CreatePlaceCommand"));
 
 export interface CreatePlaceCommandFrom
-  extends Schema.Schema.Encoded<typeof _CreatePlaceCommandSchema> {}
+  extends Schema.Schema.Encoded<typeof _CreatePlaceCommand> {}
 export interface CreatePlaceCommand
-  extends Schema.Schema.Type<typeof _CreatePlaceCommandSchema> {}
+  extends Schema.Schema.Type<typeof _CreatePlaceCommand> {}
 
-export const CreatePlaceCommandSchema: Schema.Schema<
+export const CreatePlaceCommand: Schema.Schema<
   CreatePlaceCommand,
   CreatePlaceCommandFrom
-> = _CreatePlaceCommandSchema;
+> = _CreatePlaceCommand;

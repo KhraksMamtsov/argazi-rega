@@ -1,7 +1,7 @@
 import { Schema } from "@effect/schema";
 import { Effect, Array, HashMap, pipe } from "effect";
 
-import { PrismaServiceTag, UserDbToDomainSchema } from "@argazi/database";
+import { PrismaServiceTag, UserDbToDomain } from "@argazi/database";
 
 import { type GetManyUsersCommand } from "./GetManyUsers.command.js";
 
@@ -15,7 +15,7 @@ export const GetManyUsersUseCase = ({ payload }: GetManyUsersCommand) =>
         : { idDwbn: { in: [...payload.idsDwbn] } };
 
     const users = yield* prismaClient.queryDecode(
-      Schema.Array(UserDbToDomainSchema),
+      Schema.Array(UserDbToDomain),
       (p) => p.user.findMany({ where })
     );
 

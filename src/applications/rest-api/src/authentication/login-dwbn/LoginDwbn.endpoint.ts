@@ -1,46 +1,46 @@
 import * as Schema from "@effect/schema/Schema";
 import { ApiEndpoint } from "effect-http";
 
-import { IdTelegramChatSchema } from "@argazi/domain";
-import { IdUserSchema } from "@argazi/domain";
+import { IdTelegramChat } from "@argazi/domain";
+import { IdUser } from "@argazi/domain";
 
-import { TokensResponseSchema } from "../Tokens.response.js";
+import { CredentialsApi } from "../Tokens.response.js";
 
-export const _LoginDwbnRequestBodySchema = Schema.Struct({
+export const _LoginDwbnRequestBody = Schema.Struct({
   code: Schema.compose(Schema.Trim, Schema.NonEmpty),
-  idTelegramChat: IdTelegramChatSchema,
-}).pipe(Schema.identifier("LoginDwbnRequestBodySchema"));
+  idTelegramChat: IdTelegramChat,
+}).pipe(Schema.identifier("LoginDwbnRequestBody"));
 
 export interface LoginDwbnRequestBodyEncoded
-  extends Schema.Schema.Encoded<typeof _LoginDwbnRequestBodySchema> {}
+  extends Schema.Schema.Encoded<typeof _LoginDwbnRequestBody> {}
 export interface LoginDwbnRequestBody
-  extends Schema.Schema.Type<typeof _LoginDwbnRequestBodySchema> {}
+  extends Schema.Schema.Type<typeof _LoginDwbnRequestBody> {}
 
-export const LoginDwbnRequestBodySchema: Schema.Schema<
+export const LoginDwbnRequestBody: Schema.Schema<
   LoginDwbnRequestBody,
   LoginDwbnRequestBodyEncoded
-> = _LoginDwbnRequestBodySchema;
+> = _LoginDwbnRequestBody;
 
-export const _LoginDwbnResponseBodySchema = Schema.Struct({
-  credentials: TokensResponseSchema,
-  idUser: IdUserSchema,
-}).pipe(Schema.identifier("LoginDwbnResponseBodySchema"));
+export const _LoginDwbnResponseBody = Schema.Struct({
+  credentials: CredentialsApi,
+  idUser: IdUser,
+}).pipe(Schema.identifier("LoginDwbnResponseBody"));
 
 export interface LoginDwbnResponseBodyEncoded
-  extends Schema.Schema.Encoded<typeof _LoginDwbnResponseBodySchema> {}
+  extends Schema.Schema.Encoded<typeof _LoginDwbnResponseBody> {}
 export interface LoginDwbnResponseBody
-  extends Schema.Schema.Type<typeof _LoginDwbnResponseBodySchema> {}
+  extends Schema.Schema.Type<typeof _LoginDwbnResponseBody> {}
 
-export const LoginDwbnResponseBodySchema: Schema.Schema<
+export const LoginDwbnResponseBody: Schema.Schema<
   LoginDwbnResponseBody,
   LoginDwbnResponseBodyEncoded
-> = _LoginDwbnResponseBodySchema;
+> = _LoginDwbnResponseBody;
 
 export const LoginDwbnEndpoint = ApiEndpoint.post(
   "loginDwbn",
   "/authentication/login-dwbn",
   {}
 ).pipe(
-  ApiEndpoint.setRequestBody(LoginDwbnRequestBodySchema),
-  ApiEndpoint.setResponseBody(LoginDwbnResponseBodySchema)
+  ApiEndpoint.setRequestBody(LoginDwbnRequestBody),
+  ApiEndpoint.setResponseBody(LoginDwbnResponseBody)
 );

@@ -1,9 +1,9 @@
 import { Schema } from "@effect/schema";
 
 export const AccessTokenSymbol: unique symbol = Symbol.for("AccessTokenSymbol");
-export const AccessTokenSchema = Schema.Secret.pipe(
-  Schema.identifier("AccessTokenSchema"),
+export const AccessToken = Schema.Secret.pipe(
+  Schema.identifier("AccessToken"),
   Schema.brand(AccessTokenSymbol)
 );
 
-export type AccessToken = Schema.Schema.Type<typeof AccessTokenSchema>;
+export type AccessToken = Schema.Schema.Type<typeof AccessToken>;

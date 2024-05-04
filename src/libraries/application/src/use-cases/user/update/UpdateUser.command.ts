@@ -1,9 +1,9 @@
 import { Schema } from "@effect/schema";
 
 import {
-  IdDwbnSchema,
-  IdTelegramChatSchema,
-  IdUserSchema,
+  IdDwbn,
+  IdTelegramChat,
+  IdUser,
   UserTypeSchema,
   type User,
   type UserBase,
@@ -24,7 +24,7 @@ export type UpdateUserCommandPayloadFrom = {
   readonly type?: UserType;
 };
 
-export const UpdateUserCommandPayloadSchema = Schema.Struct({
+export const UpdateUserCommandPayload = Schema.Struct({
   email: Schema.optional(Schema.Secret, {
     as: "Option",
     exact: true,
@@ -33,11 +33,11 @@ export const UpdateUserCommandPayloadSchema = Schema.Struct({
     as: "Option",
     exact: true,
   }),
-  idDwbn: Schema.optional(IdDwbnSchema, {
+  idDwbn: Schema.optional(IdDwbn, {
     as: "Option",
     exact: true,
   }),
-  idTelegramChat: Schema.optional(IdTelegramChatSchema, {
+  idTelegramChat: Schema.optional(IdTelegramChat, {
     as: "Option",
     exact: true,
   }),
@@ -62,10 +62,10 @@ export const UpdateUserCommandPayloadSchema = Schema.Struct({
 }).pipe(
   Schema.extend(
     Schema.Struct({
-      id: IdUserSchema,
+      id: IdUser,
     })
   ),
-  Schema.identifier("UpdateUserCommandPayloadSchema"),
+  Schema.identifier("UpdateUserCommandPayload"),
   _SS.satisfies.encoded.json<UpdateUserCommandPayloadFrom>(),
   _SS.satisfies.type<
     _EH.Optionize<Omit<UserBase, "id" | "phone" | "lastName">> &
@@ -73,16 +73,16 @@ export const UpdateUserCommandPayloadSchema = Schema.Struct({
   >()
 );
 
-export const _UpdateUserCommandSchema = BaseCausedCommandFor(
-  UpdateUserCommandPayloadSchema
-).pipe(Schema.identifier("UpdateUserCommandSchema"));
+export const _UpdateUserCommand = BaseCausedCommandFor(
+  UpdateUserCommandPayload
+).pipe(Schema.identifier("UpdateUserCommand"));
 
 export interface UpdateUserCommandFrom
-  extends Schema.Schema.Encoded<typeof _UpdateUserCommandSchema> {}
+  extends Schema.Schema.Encoded<typeof _UpdateUserCommand> {}
 export interface UpdateUserCommand
-  extends Schema.Schema.Type<typeof _UpdateUserCommandSchema> {}
+  extends Schema.Schema.Type<typeof _UpdateUserCommand> {}
 
-export const UpdateUserCommandSchema: Schema.Schema<
+export const UpdateUserCommand: Schema.Schema<
   UpdateUserCommand,
   UpdateUserCommandFrom
-> = _UpdateUserCommandSchema;
+> = _UpdateUserCommand;

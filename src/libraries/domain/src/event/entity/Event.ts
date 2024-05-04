@@ -1,33 +1,32 @@
 import { Schema } from "@effect/schema";
 
-import { IdEventSchema } from "./IdEvent.js";
+import { IdEvent } from "./IdEvent.js";
 
-import { BaseSchema } from "../../entities/common/Base.js";
-import { IdPlaceSchema } from "../../place/entity/IdPlace.js";
-import { PriceSchema } from "../../value-objects/Price.js";
+import { Base } from "../../entities/common/Base.js";
+import { IdPlace } from "../../place/entity/IdPlace.js";
+import { Price } from "../../value-objects/Price.js";
 
-export const EventBaseSchema = Schema.Struct({
+export const EventBase = Schema.Struct({
   dateAnnouncement: Schema.ValidDateFromSelf,
   dateDeadline: Schema.ValidDateFromSelf,
   dateFinish: Schema.ValidDateFromSelf,
   dateStart: Schema.ValidDateFromSelf,
-  id: IdEventSchema,
-  idPlace: IdPlaceSchema,
+  id: IdEvent,
+  idPlace: IdPlace,
   name: Schema.SecretFromSelf,
-  priceDay: PriceSchema,
-  priceEvent: PriceSchema,
+  priceDay: Price,
+  priceEvent: Price,
   description: Schema.String,
-});
+}).pipe(Schema.identifier("EventBase"));
 
-export type EventBase = Schema.Schema.Type<typeof EventBaseSchema>;
+export type EventBase = Schema.Schema.Type<typeof EventBase>;
 
-const _EventSchema = EventBaseSchema.pipe(
+const _Event = EventBase.pipe(
   //
-  Schema.extend(BaseSchema),
-  Schema.identifier("EventSchema")
+  Schema.extend(Base),
+  Schema.identifier("Event")
 );
 
-export interface Event extends Schema.Schema.Type<typeof _EventSchema> {}
+export interface Event extends Schema.Schema.Type<typeof _Event> {}
 
-export const EventSchema: Schema.Schema<Event> =
-  Schema.typeSchema(_EventSchema);
+export const Event: Schema.Schema<Event> = Schema.typeSchema(_Event);

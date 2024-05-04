@@ -4,9 +4,9 @@ export const IdSubscriptionSymbol: unique symbol = Symbol.for(
   "IdSubscriptionSymbol"
 );
 
-export const IdSubscriptionSchema = Schema.UUID.pipe(
-  Schema.identifier("IdSubscriptionSchema"),
+export const IdSubscription = Schema.UUID.pipe(
+  Schema.identifier("IdSubscription"),
   Schema.brand(IdSubscriptionSymbol)
 );
 
-export type IdSubscription = Schema.Schema.Type<typeof IdSubscriptionSchema>;
+export type IdSubscription = Schema.Schema.Type<typeof IdSubscription>;

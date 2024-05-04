@@ -1,78 +1,68 @@
 import * as Schema from "@effect/schema/Schema";
 import { ApiEndpoint } from "effect-http";
 
-import { IdPlaceSchema } from "@argazi/domain";
-import { IdUserSchema } from "@argazi/domain";
+import { IdPlace } from "@argazi/domain";
+import { IdUser } from "@argazi/domain";
 
 import { BaseResponseFor } from "../../BaseResponseFor.js";
-import { SubscriptionApiSchema } from "../../subscriptions/Subscription.api.js";
+import { SubscriptionApi } from "../../subscriptions/Subscription.api.js";
 
 // #region CreateUserSubscriptionResponseBody
-const _CreateUserSubscriptionResponseBodySchema = SubscriptionApiSchema.pipe(
+const _CreateUserSubscriptionResponseBody = SubscriptionApi.pipe(
   Schema.identifier("CreateUserSubscriptionResponseBody"),
   BaseResponseFor
 );
 
 export type CreateUserSubscriptionResponseBodyContext = Schema.Schema.Context<
-  typeof _CreateUserSubscriptionResponseBodySchema
+  typeof _CreateUserSubscriptionResponseBody
 >;
 export interface CreateUserSubscriptionResponseBodyEncoded
-  extends Schema.Schema.Encoded<
-    typeof _CreateUserSubscriptionResponseBodySchema
-  > {}
+  extends Schema.Schema.Encoded<typeof _CreateUserSubscriptionResponseBody> {}
 export interface CreateUserSubscriptionResponseBody
-  extends Schema.Schema.Type<
-    typeof _CreateUserSubscriptionResponseBodySchema
-  > {}
+  extends Schema.Schema.Type<typeof _CreateUserSubscriptionResponseBody> {}
 
-export const CreateUserSubscriptionResponseBodySchema: Schema.Schema<
+export const CreateUserSubscriptionResponseBody: Schema.Schema<
   CreateUserSubscriptionResponseBody,
   CreateUserSubscriptionResponseBodyEncoded
-> = _CreateUserSubscriptionResponseBodySchema;
-// #endregion CreateUserSubscriptionResponseBodySchema
+> = _CreateUserSubscriptionResponseBody;
+// #endregion CreateUserSubscriptionResponseBody
 
 // #region CreateUserSubscriptionRequestBody
-const _CreateUserSubscriptionRequestBodySchema = Schema.Struct({
-  idPlace: IdPlaceSchema,
-}).pipe(Schema.identifier("CreateUserSubscriptionRequestBodySchema"));
+const _CreateUserSubscriptionRequestBody = Schema.Struct({
+  idPlace: IdPlace,
+}).pipe(Schema.identifier("CreateUserSubscriptionRequestBody"));
 
 export type CreateUserSubscriptionRequestBodyContext = Schema.Schema.Context<
-  typeof _CreateUserSubscriptionRequestBodySchema
+  typeof _CreateUserSubscriptionRequestBody
 >;
 export interface CreateUserSubscriptionRequestBodyEncoded
-  extends Schema.Schema.Encoded<
-    typeof _CreateUserSubscriptionRequestBodySchema
-  > {}
+  extends Schema.Schema.Encoded<typeof _CreateUserSubscriptionRequestBody> {}
 export interface CreateUserSubscriptionRequestBody
-  extends Schema.Schema.Type<typeof _CreateUserSubscriptionRequestBodySchema> {}
+  extends Schema.Schema.Type<typeof _CreateUserSubscriptionRequestBody> {}
 
-export const CreateUserSubscriptionRequestBodySchema: Schema.Schema<
+export const CreateUserSubscriptionRequestBody: Schema.Schema<
   CreateUserSubscriptionRequestBody,
   CreateUserSubscriptionRequestBodyEncoded
-> = _CreateUserSubscriptionRequestBodySchema;
-// #endregion CreateUserSubscriptionRequestBodySchema
+> = _CreateUserSubscriptionRequestBody;
+// #endregion CreateUserSubscriptionRequestBody
 // #region CreateUserSubscriptionRequestParams
-const _CreateUserSubscriptionRequestParamsSchema = Schema.Struct({
-  idUser: IdUserSchema,
-}).pipe(Schema.identifier("CreateUserSubscriptionRequestParamsSchema"));
+const _CreateUserSubscriptionRequestParams = Schema.Struct({
+  idUser: IdUser,
+}).pipe(Schema.identifier("CreateUserSubscriptionRequestParams"));
 
 export type CreateUserSubscriptionRequestParamsContext = Schema.Schema.Context<
-  typeof _CreateUserSubscriptionRequestParamsSchema
+  typeof _CreateUserSubscriptionRequestParams
 >;
 export interface CreateUserSubscriptionRequestParamsEncoded
-  extends Schema.Schema.Encoded<
-    typeof _CreateUserSubscriptionRequestParamsSchema
-  > {}
+  extends Schema.Schema.Encoded<typeof _CreateUserSubscriptionRequestParams> {}
 export interface CreateUserSubscriptionRequestParams
-  extends Schema.Schema.Type<
-    typeof _CreateUserSubscriptionRequestParamsSchema
-  > {}
+  extends Schema.Schema.Type<typeof _CreateUserSubscriptionRequestParams> {}
 
-export const CreateUserSubscriptionRequestParamsSchema: Schema.Schema<
+export const CreateUserSubscriptionRequestParams: Schema.Schema<
   CreateUserSubscriptionRequestParams,
   CreateUserSubscriptionRequestParamsEncoded
-> = _CreateUserSubscriptionRequestParamsSchema;
-// #endregion CreateUserSubscriptionRequestParamsSchema
+> = _CreateUserSubscriptionRequestParams;
+// #endregion CreateUserSubscriptionRequestParams
 
 export const CreateUserSubscriptionEndpoint = ApiEndpoint.post(
   "createUserSubscription",
@@ -81,7 +71,7 @@ export const CreateUserSubscriptionEndpoint = ApiEndpoint.post(
     summary: "Subscribe user on events of some place",
   }
 ).pipe(
-  ApiEndpoint.setRequestBody(CreateUserSubscriptionRequestBodySchema),
-  ApiEndpoint.setRequestPath(CreateUserSubscriptionRequestParamsSchema),
-  ApiEndpoint.setResponseBody(CreateUserSubscriptionResponseBodySchema)
+  ApiEndpoint.setRequestBody(CreateUserSubscriptionRequestBody),
+  ApiEndpoint.setRequestPath(CreateUserSubscriptionRequestParams),
+  ApiEndpoint.setResponseBody(CreateUserSubscriptionResponseBody)
 );

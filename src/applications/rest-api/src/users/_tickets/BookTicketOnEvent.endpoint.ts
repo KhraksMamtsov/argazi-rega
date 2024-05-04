@@ -1,69 +1,69 @@
 import * as Schema from "@effect/schema/Schema";
 import { ApiEndpoint, ApiResponse } from "effect-http";
 
-import { IdEventSchema } from "@argazi/domain";
-import { IdUserSchema } from "@argazi/domain";
+import { IdEvent } from "@argazi/domain";
+import { IdUser } from "@argazi/domain";
 
 import { BaseResponseFor } from "../../BaseResponseFor.js";
-import { TicketApiSchema } from "../../tickets/Ticket.api.js";
+import { TicketApi } from "../../tickets/Ticket.api.js";
 
 // #region BookTicketResponseBody
-const _BookTicketResponseBodySchema = TicketApiSchema.pipe(
-  Schema.identifier("BookTicketResponseBodySchema"),
+const _BookTicketResponseBody = TicketApi.pipe(
+  Schema.identifier("BookTicketResponseBody"),
   BaseResponseFor
 );
 
 export type BookTicketResponseBodyContext = Schema.Schema.Context<
-  typeof _BookTicketResponseBodySchema
+  typeof _BookTicketResponseBody
 >;
 export interface BookTicketResponseBodyEncoded
-  extends Schema.Schema.Encoded<typeof _BookTicketResponseBodySchema> {}
+  extends Schema.Schema.Encoded<typeof _BookTicketResponseBody> {}
 export interface BookTicketResponseBody
-  extends Schema.Schema.Type<typeof _BookTicketResponseBodySchema> {}
+  extends Schema.Schema.Type<typeof _BookTicketResponseBody> {}
 
-export const BookTicketResponseBodySchema: Schema.Schema<
+export const BookTicketResponseBody: Schema.Schema<
   BookTicketResponseBody,
   BookTicketResponseBodyEncoded
-> = _BookTicketResponseBodySchema;
-// #endregion BookTicketResponseBodySchema
+> = _BookTicketResponseBody;
+// #endregion BookTicketResponseBody
 
 // #region BookTicketRequestBody
-const _BookTicketRequestBodySchema = Schema.Struct({
-  idEvent: IdEventSchema,
-}).pipe(Schema.identifier("BookTicketRequestBodySchema"));
+const _BookTicketRequestBody = Schema.Struct({
+  idEvent: IdEvent,
+}).pipe(Schema.identifier("BookTicketRequestBody"));
 
 export type BookTicketRequestBodyContext = Schema.Schema.Context<
-  typeof _BookTicketRequestBodySchema
+  typeof _BookTicketRequestBody
 >;
 export interface BookTicketRequestBodyEncoded
-  extends Schema.Schema.Encoded<typeof _BookTicketRequestBodySchema> {}
+  extends Schema.Schema.Encoded<typeof _BookTicketRequestBody> {}
 export interface BookTicketRequestBody
-  extends Schema.Schema.Type<typeof _BookTicketRequestBodySchema> {}
+  extends Schema.Schema.Type<typeof _BookTicketRequestBody> {}
 
-export const BookTicketRequestBodySchema: Schema.Schema<
+export const BookTicketRequestBody: Schema.Schema<
   BookTicketRequestBody,
   BookTicketRequestBodyEncoded
-> = _BookTicketRequestBodySchema;
-// #endregion BookTicketRequestBodySchema
+> = _BookTicketRequestBody;
+// #endregion BookTicketRequestBody
 
 // #region BookTicketRequestParams
-const _BookTicketRequestParamsSchema = Schema.Struct({
-  idUser: IdUserSchema,
-}).pipe(Schema.identifier("BookTicketRequestParamsSchema"));
+const _BookTicketRequestParams = Schema.Struct({
+  idUser: IdUser,
+}).pipe(Schema.identifier("BookTicketRequestParams"));
 
 export type BookTicketRequestParamsContext = Schema.Schema.Context<
-  typeof _BookTicketRequestParamsSchema
+  typeof _BookTicketRequestParams
 >;
 export interface BookTicketRequestParamsEncoded
-  extends Schema.Schema.Encoded<typeof _BookTicketRequestParamsSchema> {}
+  extends Schema.Schema.Encoded<typeof _BookTicketRequestParams> {}
 export interface BookTicketRequestParams
-  extends Schema.Schema.Type<typeof _BookTicketRequestParamsSchema> {}
+  extends Schema.Schema.Type<typeof _BookTicketRequestParams> {}
 
-export const BookTicketRequestParamsSchema: Schema.Schema<
+export const BookTicketRequestParams: Schema.Schema<
   BookTicketRequestParams,
   BookTicketRequestParamsEncoded
-> = _BookTicketRequestParamsSchema;
-// #endregion BookTicketRequestParamsSchema
+> = _BookTicketRequestParams;
+// #endregion BookTicketRequestParams
 
 export const BookTicketEndpoint = ApiEndpoint.post(
   "bookTicket",
@@ -72,9 +72,9 @@ export const BookTicketEndpoint = ApiEndpoint.post(
     summary: "Book ticket for user on particular event",
   }
 ).pipe(
-  ApiEndpoint.setRequestPath(BookTicketRequestParamsSchema),
-  ApiEndpoint.setRequestBody(BookTicketRequestBodySchema),
-  ApiEndpoint.setResponse(ApiResponse.make(200, BookTicketResponseBodySchema)),
+  ApiEndpoint.setRequestPath(BookTicketRequestParams),
+  ApiEndpoint.setRequestBody(BookTicketRequestBody),
+  ApiEndpoint.setResponse(ApiResponse.make(200, BookTicketResponseBody)),
   ApiEndpoint.addResponse(
     ApiResponse.make(
       400,

@@ -1,18 +1,15 @@
 import { Effect } from "effect";
 
-import {
-  PrismaServiceTag,
-  SubscriptionDbToDomainSchema,
-} from "@argazi/database";
+import { PrismaServiceTag, SubscriptionDbToDomain } from "@argazi/database";
 import { NotificationServiceTag, notification } from "@argazi/domain";
 
-import { DeleteUserSubscriptionCommandSchema } from "./DeleteUserSubscription.command.js";
+import { DeleteUserSubscriptionCommand } from "./DeleteUserSubscription.command.js";
 
 import { DeleteEntityAuthorizationError } from "../../../common/AuthorizationError.js";
 import { BaseCausedUseCaseFor } from "../../../common/Base.use-case.js";
 
 export const DeleteUserSubscriptionUseCase = BaseCausedUseCaseFor(
-  DeleteUserSubscriptionCommandSchema
+  DeleteUserSubscriptionCommand
 )(({ payload, initiator }) =>
   Effect.gen(function* (_) {
     if (!initiator.isAdmin && initiator.id !== payload.idUser) {
@@ -27,7 +24,7 @@ export const DeleteUserSubscriptionUseCase = BaseCausedUseCaseFor(
     const prismaClient = yield* PrismaServiceTag;
 
     const deletedSubscription = yield* prismaClient.queryDecode(
-      SubscriptionDbToDomainSchema,
+      SubscriptionDbToDomain,
       (p) =>
         p.subscription.update({
           data: {

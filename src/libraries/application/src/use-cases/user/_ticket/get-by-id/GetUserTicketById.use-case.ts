@@ -1,15 +1,15 @@
 import { Schema } from "@effect/schema";
 import { Effect } from "effect";
 
-import { PrismaServiceTag, TicketDbToDomainSchema } from "@argazi/database";
+import { PrismaServiceTag, TicketDbToDomain } from "@argazi/database";
 
-import { GetUserTicketByIdCommandSchema } from "./GetUserTicketById.command.js";
+import { GetUserTicketByIdCommand } from "./GetUserTicketById.command.js";
 
 import { GetEntityAuthorizationError } from "../../../common/AuthorizationError.js";
 import { BaseCausedUseCaseFor } from "../../../common/Base.use-case.js";
 
 export const GetUserTicketByIdUseCase = BaseCausedUseCaseFor(
-  GetUserTicketByIdCommandSchema
+  GetUserTicketByIdCommand
 )(({ payload, initiator }) =>
   Effect.gen(function* (_) {
     if (!initiator.isAdmin && initiator.id !== payload.idUser) {
@@ -23,7 +23,7 @@ export const GetUserTicketByIdUseCase = BaseCausedUseCaseFor(
     const prismaClient = yield* PrismaServiceTag;
 
     return yield* prismaClient.queryDecode(
-      Schema.OptionFromNullOr(TicketDbToDomainSchema),
+      Schema.OptionFromNullOr(TicketDbToDomain),
       (p) =>
         p.ticket.findUnique({
           where: { id: payload.idTicket, idUser: payload.idUser },

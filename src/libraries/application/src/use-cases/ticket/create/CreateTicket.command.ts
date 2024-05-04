@@ -1,11 +1,11 @@
 import { Schema } from "@effect/schema";
 
-import { TicketDbBaseSchema } from "@argazi/database";
+import { TicketDbBase } from "@argazi/database";
 import { _SS } from "@argazi/shared";
 
 import { BaseCausedCommandFor } from "../../common/Base.command.js";
 
-export const CreateTicketCommandPayloadSchema = TicketDbBaseSchema.pipe(
+export const CreateTicketCommandPayload = TicketDbBase.pipe(
   Schema.omit("dateRegistered"),
   Schema.extend(
     Schema.Struct({
@@ -13,9 +13,9 @@ export const CreateTicketCommandPayloadSchema = TicketDbBaseSchema.pipe(
     })
   ),
   _SS.satisfies.encoded.json(),
-  Schema.identifier("CreateTicketCommandPayloadSchema")
+  Schema.identifier("CreateTicketCommandPayload")
 );
 
-export const CreateTicketCommandSchema = BaseCausedCommandFor(
-  CreateTicketCommandPayloadSchema
-).pipe(Schema.identifier("CreateTicketCommandSchema"));
+export const CreateTicketCommand = BaseCausedCommandFor(
+  CreateTicketCommandPayload
+).pipe(Schema.identifier("CreateTicketCommand"));

@@ -1,58 +1,54 @@
 import * as Schema from "@effect/schema/Schema";
 import { ApiEndpoint } from "effect-http";
 
-import { IdPlaceSchema } from "@argazi/domain";
+import { IdPlace } from "@argazi/domain";
 
 import { BaseResponseManyFor } from "../../BaseResponseFor.js";
 import { EventApi } from "../../events/Event.api.js";
 
 // #region Schema for GetPlaceActualEventsResponseBody
-const _GetPlaceActualEventsResponseBodySchema = EventApi.pipe(
-  Schema.identifier("GetPlaceActualEventsResponseSchema"),
+const _GetPlaceActualEventsResponseBody = EventApi.pipe(
+  Schema.identifier("GetPlaceActualEventsResponse"),
   BaseResponseManyFor
 );
 
 export type GetPlaceActualEventsResponseBodyContext = Schema.Schema.Context<
-  typeof _GetPlaceActualEventsResponseBodySchema
+  typeof _GetPlaceActualEventsResponseBody
 >;
 export interface GetPlaceActualEventsResponseBodyEncoded
-  extends Schema.Schema.Encoded<
-    typeof _GetPlaceActualEventsResponseBodySchema
-  > {}
+  extends Schema.Schema.Encoded<typeof _GetPlaceActualEventsResponseBody> {}
 export interface GetPlaceActualEventsResponseBody
-  extends Schema.Schema.Type<typeof _GetPlaceActualEventsResponseBodySchema> {}
+  extends Schema.Schema.Type<typeof _GetPlaceActualEventsResponseBody> {}
 
-export const GetPlaceActualEventsResponseBodySchema: Schema.Schema<
+export const GetPlaceActualEventsResponseBody: Schema.Schema<
   GetPlaceActualEventsResponseBody,
   GetPlaceActualEventsResponseBodyEncoded
-> = _GetPlaceActualEventsResponseBodySchema;
-// #endregion Schema for  GetPlaceActualEventsResponseBodySchema
+> = _GetPlaceActualEventsResponseBody;
+// #endregion Schema for  GetPlaceActualEventsResponseBody
 
 // #region GetPlaceActualEventsRequestParams
-const _GetPlaceActualEventsRequestParamsSchema = Schema.Struct({
-  idPlace: IdPlaceSchema,
-}).pipe(Schema.identifier("GetPlaceActualEventsRequestParamsSchema"));
+const _GetPlaceActualEventsRequestParams = Schema.Struct({
+  idPlace: IdPlace,
+}).pipe(Schema.identifier("GetPlaceActualEventsRequestParams"));
 
 export type GetPlaceActualEventsRequestParamsContext = Schema.Schema.Context<
-  typeof _GetPlaceActualEventsRequestParamsSchema
+  typeof _GetPlaceActualEventsRequestParams
 >;
 export interface GetPlaceActualEventsRequestParamsEncoded
-  extends Schema.Schema.Encoded<
-    typeof _GetPlaceActualEventsRequestParamsSchema
-  > {}
+  extends Schema.Schema.Encoded<typeof _GetPlaceActualEventsRequestParams> {}
 export interface GetPlaceActualEventsRequestParams
-  extends Schema.Schema.Type<typeof _GetPlaceActualEventsRequestParamsSchema> {}
+  extends Schema.Schema.Type<typeof _GetPlaceActualEventsRequestParams> {}
 
-export const GetPlaceActualEventsRequestParamsSchema: Schema.Schema<
+export const GetPlaceActualEventsRequestParams: Schema.Schema<
   GetPlaceActualEventsRequestParams,
   GetPlaceActualEventsRequestParamsEncoded
-> = _GetPlaceActualEventsRequestParamsSchema;
-// #endregion GetPlaceActualEventsRequestParamsSchema
+> = _GetPlaceActualEventsRequestParams;
+// #endregion GetPlaceActualEventsRequestParams
 
 export const GetPlaceActualEventsEndpoint = ApiEndpoint.get(
   "getPlaceActualEvents",
   "/places/:idPlace/actual-events"
 ).pipe(
-  ApiEndpoint.setRequestPath(GetPlaceActualEventsRequestParamsSchema),
-  ApiEndpoint.setResponseBody(GetPlaceActualEventsResponseBodySchema)
+  ApiEndpoint.setRequestPath(GetPlaceActualEventsRequestParams),
+  ApiEndpoint.setResponseBody(GetPlaceActualEventsResponseBody)
 );

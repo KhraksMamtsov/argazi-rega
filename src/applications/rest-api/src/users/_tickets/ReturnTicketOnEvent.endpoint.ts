@@ -1,51 +1,51 @@
 import * as Schema from "@effect/schema/Schema";
 import { ApiEndpoint } from "effect-http";
 
-import { IdTicketSchema } from "@argazi/domain";
-import { IdUserSchema } from "@argazi/domain";
+import { IdTicket } from "@argazi/domain";
+import { IdUser } from "@argazi/domain";
 
 import { BaseResponseFor } from "../../BaseResponseFor.js";
-import { TicketApiSchema } from "../../tickets/Ticket.api.js";
+import { TicketApi } from "../../tickets/Ticket.api.js";
 
 // #region ReturnTicketResponseBody
-const _ReturnTicketResponseBodySchema = TicketApiSchema.pipe(
-  Schema.identifier("ReturnTicketResponseSchema"),
+const _ReturnTicketResponseBody = TicketApi.pipe(
+  Schema.identifier("ReturnTicketResponse"),
   BaseResponseFor
 );
 
 export type ReturnTicketResponseBodyContext = Schema.Schema.Context<
-  typeof _ReturnTicketResponseBodySchema
+  typeof _ReturnTicketResponseBody
 >;
 export interface ReturnTicketResponseBodyEncoded
-  extends Schema.Schema.Encoded<typeof _ReturnTicketResponseBodySchema> {}
+  extends Schema.Schema.Encoded<typeof _ReturnTicketResponseBody> {}
 export interface ReturnTicketResponseBody
-  extends Schema.Schema.Type<typeof _ReturnTicketResponseBodySchema> {}
+  extends Schema.Schema.Type<typeof _ReturnTicketResponseBody> {}
 
-export const ReturnTicketResponseBodySchema: Schema.Schema<
+export const ReturnTicketResponseBody: Schema.Schema<
   ReturnTicketResponseBody,
   ReturnTicketResponseBodyEncoded
-> = _ReturnTicketResponseBodySchema;
-// #endregion ReturnTicketResponseBodySchema
+> = _ReturnTicketResponseBody;
+// #endregion ReturnTicketResponseBody
 
 // #region ReturnTicketRequestParams
-const _ReturnTicketRequestParamsSchema = Schema.Struct({
-  idTicket: IdTicketSchema,
-  idUser: IdUserSchema,
-}).pipe(Schema.identifier("ReturnTicketRequestParamsSchema"));
+const _ReturnTicketRequestParams = Schema.Struct({
+  idTicket: IdTicket,
+  idUser: IdUser,
+}).pipe(Schema.identifier("ReturnTicketRequestParams"));
 
 export type ReturnTicketRequestParamsContext = Schema.Schema.Context<
-  typeof _ReturnTicketRequestParamsSchema
+  typeof _ReturnTicketRequestParams
 >;
 export interface ReturnTicketRequestParamsEncoded
-  extends Schema.Schema.Encoded<typeof _ReturnTicketRequestParamsSchema> {}
+  extends Schema.Schema.Encoded<typeof _ReturnTicketRequestParams> {}
 export interface ReturnTicketRequestParams
-  extends Schema.Schema.Type<typeof _ReturnTicketRequestParamsSchema> {}
+  extends Schema.Schema.Type<typeof _ReturnTicketRequestParams> {}
 
-export const ReturnTicketRequestParamsSchema: Schema.Schema<
+export const ReturnTicketRequestParams: Schema.Schema<
   ReturnTicketRequestParams,
   ReturnTicketRequestParamsEncoded
-> = _ReturnTicketRequestParamsSchema;
-// #endregion ReturnTicketRequestParamsSchema
+> = _ReturnTicketRequestParams;
+// #endregion ReturnTicketRequestParams
 
 export const ReturnTicketEndpoint = ApiEndpoint.delete(
   "returnTicket",
@@ -54,6 +54,6 @@ export const ReturnTicketEndpoint = ApiEndpoint.delete(
     summary: "Return ticket for user on particular event",
   }
 ).pipe(
-  ApiEndpoint.setResponseBody(ReturnTicketResponseBodySchema),
-  ApiEndpoint.setRequestPath(ReturnTicketRequestParamsSchema)
+  ApiEndpoint.setResponseBody(ReturnTicketResponseBody),
+  ApiEndpoint.setRequestPath(ReturnTicketRequestParams)
 );

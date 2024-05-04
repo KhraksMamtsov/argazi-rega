@@ -1,32 +1,32 @@
 import * as Schema from "@effect/schema/Schema";
 
-import { IdPlaceSchema } from "@argazi/domain";
-import { IdSubscriptionSchema } from "@argazi/domain";
-import { IdUserSchema } from "@argazi/domain";
+import { IdPlace } from "@argazi/domain";
+import { IdSubscription } from "@argazi/domain";
+import { IdUser } from "@argazi/domain";
 import type { SubscriptionBase } from "@argazi/domain";
 import { _SS } from "@argazi/shared";
 
 // #region SubscriptionApi
-const _SubscriptionApiSchema = Schema.Struct({
-  id: IdSubscriptionSchema,
-  idPlace: IdPlaceSchema,
-  idUser: IdUserSchema,
+const _SubscriptionApi = Schema.Struct({
+  id: IdSubscription,
+  idPlace: IdPlace,
+  idUser: IdUser,
 }).pipe(
   _SS.satisfies.encoded.json(),
   _SS.satisfies.type<SubscriptionBase>(),
-  Schema.identifier("SubscriptionApiSchema")
+  Schema.identifier("SubscriptionApi")
 );
 
 export type SubscriptionApiContext = Schema.Schema.Context<
-  typeof _SubscriptionApiSchema
+  typeof _SubscriptionApi
 >;
 export interface SubscriptionApiEncoded
-  extends Schema.Schema.Encoded<typeof _SubscriptionApiSchema> {}
+  extends Schema.Schema.Encoded<typeof _SubscriptionApi> {}
 export interface SubscriptionApi
-  extends Schema.Schema.Type<typeof _SubscriptionApiSchema> {}
+  extends Schema.Schema.Type<typeof _SubscriptionApi> {}
 
-export const SubscriptionApiSchema: Schema.Schema<
+export const SubscriptionApi: Schema.Schema<
   SubscriptionApi,
   SubscriptionApiEncoded
-> = _SubscriptionApiSchema;
-// #endregion SubscriptionApiSchema
+> = _SubscriptionApi;
+// #endregion SubscriptionApi

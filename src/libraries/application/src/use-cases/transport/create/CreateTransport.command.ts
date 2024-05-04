@@ -1,45 +1,45 @@
 import { Schema } from "@effect/schema";
 
-import { TransportDbSchema } from "@argazi/database";
+import { TransportDb } from "@argazi/database";
 import { _SS } from "@argazi/shared";
 
 import { BaseCausedCommandFor } from "../../common/Base.command.js";
 
 // #region CreateTransportCommandPayload
-const _CreateTransportCommandPayloadSchema = TransportDbSchema.pipe(
+const _CreateTransportCommandPayload = TransportDb.pipe(
   Schema.pick("idUser", "number", "model", "color", "seatsNumber"),
-  Schema.identifier("CreateTransportCommandPayloadSchema")
+  Schema.identifier("CreateTransportCommandPayload")
 ).pipe(_SS.satisfies.encoded.json());
 
 export type CreateTransportCommandPayloadContext = Schema.Schema.Context<
-  typeof _CreateTransportCommandPayloadSchema
+  typeof _CreateTransportCommandPayload
 >;
 export interface CreateTransportCommandPayloadEncoded
-  extends Schema.Schema.Encoded<typeof _CreateTransportCommandPayloadSchema> {}
+  extends Schema.Schema.Encoded<typeof _CreateTransportCommandPayload> {}
 export interface CreateTransportCommandPayload
-  extends Schema.Schema.Type<typeof _CreateTransportCommandPayloadSchema> {}
+  extends Schema.Schema.Type<typeof _CreateTransportCommandPayload> {}
 
-export const CreateTransportCommandPayloadSchema: Schema.Schema<
+export const CreateTransportCommandPayload: Schema.Schema<
   CreateTransportCommandPayload,
   CreateTransportCommandPayloadEncoded
-> = _CreateTransportCommandPayloadSchema;
-// #endregion CreateTransportCommandPayloadSchema
+> = _CreateTransportCommandPayload;
+// #endregion CreateTransportCommandPayload
 
 // #region CreateTransportCommand
-const _CreateTransportCommandSchema = BaseCausedCommandFor(
-  CreateTransportCommandPayloadSchema
-).pipe(Schema.identifier("CreateTransportCommandSchema"));
+const _CreateTransportCommand = BaseCausedCommandFor(
+  CreateTransportCommandPayload
+).pipe(Schema.identifier("CreateTransportCommand"));
 
 export type CreateTransportCommandContext = Schema.Schema.Context<
-  typeof _CreateTransportCommandSchema
+  typeof _CreateTransportCommand
 >;
 export interface CreateTransportCommandEncoded
-  extends Schema.Schema.Encoded<typeof _CreateTransportCommandSchema> {}
+  extends Schema.Schema.Encoded<typeof _CreateTransportCommand> {}
 export interface CreateTransportCommand
-  extends Schema.Schema.Type<typeof _CreateTransportCommandSchema> {}
+  extends Schema.Schema.Type<typeof _CreateTransportCommand> {}
 
-export const CreateTransportCommandSchema: Schema.Schema<
+export const CreateTransportCommand: Schema.Schema<
   CreateTransportCommand,
   CreateTransportCommandEncoded
-> = _CreateTransportCommandSchema;
-// #endregion CreateTransportCommandSchema
+> = _CreateTransportCommand;
+// #endregion CreateTransportCommand

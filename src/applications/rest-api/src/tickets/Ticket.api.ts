@@ -1,20 +1,20 @@
 import * as Schema from "@effect/schema/Schema";
 
-import { IdTransportOnEventSchema } from "@argazi/domain";
-import { IdEventSchema } from "@argazi/domain";
-import { IdTicketSchema } from "@argazi/domain";
+import { IdTransportOnEvent } from "@argazi/domain";
+import { IdEvent } from "@argazi/domain";
+import { IdTicket } from "@argazi/domain";
 import { TicketRole } from "@argazi/domain";
-import { IdUserSchema } from "@argazi/domain";
+import { IdUser } from "@argazi/domain";
 import type { TicketBase } from "@argazi/domain";
 import { _SS } from "@argazi/shared";
 
 // #region TicketApi
-const _TicketApiSchema = Schema.Struct({
+const _TicketApi = Schema.Struct({
   dateRegistered: Schema.Date,
-  id: IdTicketSchema,
-  idEvent: IdEventSchema,
-  idTransport: Schema.OptionFromNullOr(IdTransportOnEventSchema),
-  idUser: IdUserSchema,
+  id: IdTicket,
+  idEvent: IdEvent,
+  idTransport: Schema.OptionFromNullOr(IdTransportOnEvent),
+  idUser: IdUser,
   role: Schema.transformLiterals(
     ["ADMIN", TicketRole.ADMIN],
     ["LEAD", TicketRole.LEAD],
@@ -25,15 +25,13 @@ const _TicketApiSchema = Schema.Struct({
 }).pipe(
   _SS.satisfies.encoded.json(),
   _SS.satisfies.type<TicketBase>(),
-  Schema.identifier("TicketApiSchema")
+  Schema.identifier("TicketApi")
 );
 
-export type TicketApiContext = Schema.Schema.Context<typeof _TicketApiSchema>;
+export type TicketApiContext = Schema.Schema.Context<typeof _TicketApi>;
 export interface TicketApiEncoded
-  extends Schema.Schema.Encoded<typeof _TicketApiSchema> {}
-export interface TicketApi
-  extends Schema.Schema.Type<typeof _TicketApiSchema> {}
+  extends Schema.Schema.Encoded<typeof _TicketApi> {}
+export interface TicketApi extends Schema.Schema.Type<typeof _TicketApi> {}
 
-export const TicketApiSchema: Schema.Schema<TicketApi, TicketApiEncoded> =
-  _TicketApiSchema;
-// #endregion TicketApiSchema
+export const TicketApi: Schema.Schema<TicketApi, TicketApiEncoded> = _TicketApi;
+// #endregion TicketApi

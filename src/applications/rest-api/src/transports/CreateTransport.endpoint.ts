@@ -1,57 +1,56 @@
 import * as Schema from "@effect/schema/Schema";
 import { ApiEndpoint } from "effect-http";
 
-import { CreateTransportCommandPayloadSchema } from "@argazi/application";
+import { CreateTransportCommandPayload } from "@argazi/application";
 
-import { TransportApiSchema } from "./Transport.api.js";
+import { TransportApi } from "./Transport.api.js";
 
 import { BaseResponseFor } from "../BaseResponseFor.js";
 
 // #region CreateTransportRequestBody
-const _CreateTransportRequestBodySchema =
-  CreateTransportCommandPayloadSchema.pipe(
-    Schema.identifier("CreateTransportRequestBodySchema")
-  );
+const _CreateTransportRequestBody = CreateTransportCommandPayload.pipe(
+  Schema.identifier("CreateTransportRequestBody")
+);
 
 export type CreateTransportRequestBodyContext = Schema.Schema.Context<
-  typeof _CreateTransportRequestBodySchema
+  typeof _CreateTransportRequestBody
 >;
 export interface CreateTransportRequestBodyEncoded
-  extends Schema.Schema.Encoded<typeof _CreateTransportRequestBodySchema> {}
+  extends Schema.Schema.Encoded<typeof _CreateTransportRequestBody> {}
 export interface CreateTransportRequestBody
-  extends Schema.Schema.Type<typeof _CreateTransportRequestBodySchema> {}
+  extends Schema.Schema.Type<typeof _CreateTransportRequestBody> {}
 
-export const CreateTransportRequestBodySchema: Schema.Schema<
+export const CreateTransportRequestBody: Schema.Schema<
   CreateTransportRequestBody,
   CreateTransportRequestBodyEncoded
-> = _CreateTransportRequestBodySchema;
-// #endregion CreateTransportRequestBodySchema
+> = _CreateTransportRequestBody;
+// #endregion CreateTransportRequestBody
 
 // #region CreateTransportResponse
-const _CreateTransportResponseSchema = TransportApiSchema.pipe(
-  Schema.identifier("CreateTransportResponseSchema"),
+const _CreateTransportResponse = TransportApi.pipe(
+  Schema.identifier("CreateTransportResponse"),
   BaseResponseFor
 );
 
 export type CreateTransportResponseContext = Schema.Schema.Context<
-  typeof _CreateTransportResponseSchema
+  typeof _CreateTransportResponse
 >;
 export interface CreateTransportResponseEncoded
-  extends Schema.Schema.Encoded<typeof _CreateTransportResponseSchema> {}
+  extends Schema.Schema.Encoded<typeof _CreateTransportResponse> {}
 export interface CreateTransportResponse
-  extends Schema.Schema.Type<typeof _CreateTransportResponseSchema> {}
+  extends Schema.Schema.Type<typeof _CreateTransportResponse> {}
 
-export const CreateTransportResponseSchema: Schema.Schema<
+export const CreateTransportResponse: Schema.Schema<
   CreateTransportResponse,
   CreateTransportResponseEncoded
-> = _CreateTransportResponseSchema;
-// #endregion CreateTransportResponseSchema
+> = _CreateTransportResponse;
+// #endregion CreateTransportResponse
 
 export const CreateTransportEndpoint = ApiEndpoint.post(
   "createTransport",
   "/transports",
   {}
 ).pipe(
-  ApiEndpoint.setRequestBody(CreateTransportRequestBodySchema),
-  ApiEndpoint.setResponseBody(CreateTransportResponseSchema)
+  ApiEndpoint.setRequestBody(CreateTransportRequestBody),
+  ApiEndpoint.setResponseBody(CreateTransportResponse)
 );

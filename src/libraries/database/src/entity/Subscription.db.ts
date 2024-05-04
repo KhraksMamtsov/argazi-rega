@@ -2,42 +2,42 @@ import { Schema } from "@effect/schema";
 import { type Subscription as _Subscription } from "@prisma/client";
 import { Effect } from "effect";
 
-import { IdPlaceSchema } from "@argazi/domain";
-import { IdSubscriptionSchema } from "@argazi/domain";
-import { SubscriptionSchema } from "@argazi/domain";
-import { IdUserSchema } from "@argazi/domain";
+import { IdPlace } from "@argazi/domain";
+import { IdSubscription } from "@argazi/domain";
+import { Subscription } from "@argazi/domain";
+import { IdUser } from "@argazi/domain";
 import { _SS } from "@argazi/shared";
 
-import { BaseDbSchema, transform } from "../Base.db.js";
+import { BaseDb, transform } from "../Base.db.js";
 
 // #region SubscriptionDb
-export const _SubscriptionDbSchema = Schema.Struct({
-  id: IdSubscriptionSchema,
-  idPlace: IdPlaceSchema,
-  idUser: IdUserSchema,
+export const _SubscriptionDb = Schema.Struct({
+  id: IdSubscription,
+  idPlace: IdPlace,
+  idUser: IdUser,
 }).pipe(
-  Schema.extend(BaseDbSchema),
-  Schema.identifier("SubscriptionDbSchema"),
+  Schema.extend(BaseDb),
+  Schema.identifier("SubscriptionDb"),
   _SS.satisfies.encoded<_Subscription>()
 );
 
 export type SubscriptionDbContext = Schema.Schema.Context<
-  typeof _SubscriptionDbSchema
+  typeof _SubscriptionDb
 >;
 export interface SubscriptionDbEncoded
-  extends Schema.Schema.Encoded<typeof _SubscriptionDbSchema> {}
+  extends Schema.Schema.Encoded<typeof _SubscriptionDb> {}
 export interface SubscriptionDb
-  extends Schema.Schema.Type<typeof _SubscriptionDbSchema> {}
+  extends Schema.Schema.Type<typeof _SubscriptionDb> {}
 
-export const SubscriptionDbSchema: Schema.Schema<
+export const SubscriptionDb: Schema.Schema<
   SubscriptionDb,
   SubscriptionDbEncoded
-> = _SubscriptionDbSchema;
-// #endregion SubscriptionDbSchema
+> = _SubscriptionDb;
+// #endregion SubscriptionDb
 
-export const SubscriptionDbToDomainSchema = transform(
-  SubscriptionDbSchema,
-  SubscriptionSchema,
+export const SubscriptionDbToDomain = transform(
+  SubscriptionDb,
+  Subscription,
   Effect.succeed,
   Effect.succeed
 );

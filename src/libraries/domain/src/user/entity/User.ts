@@ -1,32 +1,29 @@
 import { Schema } from "@effect/schema";
 
-import { IdDwbnSchema } from "./IdDwbn.js";
-import { IdTelegramChatSchema } from "./IdTelegramChat.js";
-import { IdUserSchema } from "./IdUser.js";
+import { IdDwbn } from "./IdDwbn.js";
+import { IdTelegramChat } from "./IdTelegramChat.js";
+import { IdUser } from "./IdUser.js";
 import { UserTypeSchema } from "./UserType.js";
 
-import { BaseSchema } from "../../entities/common/Base.js";
+import { Base } from "../../entities/common/Base.js";
 
-export const UserBaseSchema = Schema.Struct({
+export const UserBase = Schema.Struct({
   //
   email: Schema.SecretFromSelf,
   firstName: Schema.SecretFromSelf,
-  id: IdUserSchema,
-  idDwbn: IdDwbnSchema,
-  idTelegramChat: IdTelegramChatSchema,
+  id: IdUser,
+  idDwbn: IdDwbn,
+  idTelegramChat: IdTelegramChat,
   isAdmin: Schema.Boolean,
   lastName: Schema.OptionFromSelf(Schema.SecretFromSelf),
   phone: Schema.OptionFromSelf(Schema.SecretFromSelf),
   type: UserTypeSchema,
-}).pipe(Schema.identifier("UserBaseSchema"));
+}).pipe(Schema.identifier("UserBase"));
 
-export interface UserBase extends Schema.Schema.Type<typeof UserBaseSchema> {}
+export interface UserBase extends Schema.Schema.Type<typeof UserBase> {}
 
-const _UserSchema = UserBaseSchema.pipe(
-  Schema.extend(BaseSchema),
-  Schema.identifier("UserSchema")
-);
+const _User = UserBase.pipe(Schema.extend(Base), Schema.identifier("User"));
 
-export interface User extends Schema.Schema.Type<typeof _UserSchema> {}
+export interface User extends Schema.Schema.Type<typeof _User> {}
 
-export const UserSchema: Schema.Schema<User> = Schema.typeSchema(_UserSchema);
+export const User: Schema.Schema<User> = Schema.typeSchema(_User);

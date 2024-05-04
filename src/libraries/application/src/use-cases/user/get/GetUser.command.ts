@@ -1,6 +1,6 @@
 import { Schema } from "@effect/schema";
 
-import { IdDwbnSchema, IdUserSchema } from "@argazi/domain";
+import { IdDwbn, IdUser } from "@argazi/domain";
 import { _SS } from "@argazi/shared";
 
 import { BaseCommandFor } from "../../common/Base.command.js";
@@ -15,27 +15,23 @@ export type GetUserCommandPayloadFrom =
       readonly type: "idDwbn";
     };
 
-export const GetUserCommandPayloadSchema = Schema.Union(
+export const GetUserCommandPayload = Schema.Union(
   Schema.Struct({
-    id: IdUserSchema,
+    id: IdUser,
     type: Schema.Literal("id"),
   }).pipe(_SS.satisfies.encoded.json()),
   Schema.Struct({
-    idDwbn: IdDwbnSchema,
+    idDwbn: IdDwbn,
     type: Schema.Literal("idDwbn"),
   }).pipe(_SS.satisfies.encoded.json())
-).pipe(Schema.identifier("GetUserCommandPayloadSchema"));
+).pipe(Schema.identifier("GetUserCommandPayload"));
 
-export const _GetUserCommandSchema = BaseCommandFor(
-  GetUserCommandPayloadSchema
-).pipe(Schema.identifier("GetUserCommandSchema"));
+export const _GetUserCommand = BaseCommandFor(GetUserCommandPayload).pipe(
+  Schema.identifier("GetUserCommand")
+);
 
-export type GetUserCommandFrom = Schema.Schema.Encoded<
-  typeof _GetUserCommandSchema
->;
-export type GetUserCommand = Schema.Schema.Type<typeof _GetUserCommandSchema>;
+export type GetUserCommandFrom = Schema.Schema.Encoded<typeof _GetUserCommand>;
+export type GetUserCommand = Schema.Schema.Type<typeof _GetUserCommand>;
 
-export const GetUserCommandSchema: Schema.Schema<
-  GetUserCommand,
-  GetUserCommandFrom
-> = _GetUserCommandSchema;
+export const GetUserCommand: Schema.Schema<GetUserCommand, GetUserCommandFrom> =
+  _GetUserCommand;

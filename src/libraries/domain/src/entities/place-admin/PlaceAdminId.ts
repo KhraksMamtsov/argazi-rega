@@ -1,10 +1,11 @@
 import { Schema } from "@effect/schema";
 
-export const PlaceAdminIdSymbol: unique symbol = Symbol.for("PlaceAdminId");
+export const IdPlaceAdminSymbol: unique symbol =
+  Symbol.for("IdPlaceAdminSymbol");
 
-export const PlaceAdminIdSchema = Schema.UUID.pipe(
-  Schema.brand(PlaceAdminIdSymbol),
-  Schema.identifier("PlaceAdminIdSchema")
+export const IdPlaceAdmin = Schema.UUID.pipe(
+  Schema.brand(IdPlaceAdminSymbol),
+  Schema.identifier("IdPlaceAdmin")
 );
 
-export type PlaceAdminId = Schema.Schema.Type<typeof PlaceAdminIdSchema>;
+export type IdPlaceAdmin = Schema.Schema.Type<typeof IdPlaceAdmin>;

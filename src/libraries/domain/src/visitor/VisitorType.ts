@@ -8,5 +8,5 @@ export enum VisitorType {
 }
 
 export const VisitorTypeSchema = Schema.Enums(VisitorType).pipe(
-  Schema.identifier("VisitorTypeSchema")
+  Schema.identifier("VisitorType")
 );

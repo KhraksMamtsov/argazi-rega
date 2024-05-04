@@ -1,39 +1,39 @@
 import * as Schema from "@effect/schema/Schema";
 import { ApiEndpoint } from "effect-http";
 
-import { IdEventSchema } from "@argazi/domain";
+import { IdEvent } from "@argazi/domain";
 
 import { BaseResponseFor } from "../../BaseResponseFor.js";
 import { BearerAuth } from "../../BearerAuth.security-scheme.js";
-import { TicketApiSchema } from "../../tickets/Ticket.api.js";
+import { TicketApi } from "../../tickets/Ticket.api.js";
 
-export const BookMyTicketResponseSchema = TicketApiSchema.pipe(
-  Schema.identifier("BookMyTicketResponseSchema"),
+export const BookMyTicketResponseBody = TicketApi.pipe(
+  Schema.identifier("BookMyTicketResponseBody"),
   BaseResponseFor
 );
 
 // #region BookMyTicketRequestBody
-const _BookMyTicketRequestBodySchema = Schema.Struct({
-  idEvent: IdEventSchema,
-}).pipe(Schema.identifier("BookMyTicketRequestBodySchema"));
+const _BookMyTicketRequestBody = Schema.Struct({
+  idEvent: IdEvent,
+}).pipe(Schema.identifier("BookMyTicketRequestBody"));
 
 export type BookMyTicketRequestBodyContext = Schema.Schema.Context<
-  typeof _BookMyTicketRequestBodySchema
+  typeof _BookMyTicketRequestBody
 >;
 export interface BookMyTicketRequestBodyEncoded
-  extends Schema.Schema.Encoded<typeof _BookMyTicketRequestBodySchema> {}
+  extends Schema.Schema.Encoded<typeof _BookMyTicketRequestBody> {}
 export interface BookMyTicketRequestBody
-  extends Schema.Schema.Type<typeof _BookMyTicketRequestBodySchema> {}
+  extends Schema.Schema.Type<typeof _BookMyTicketRequestBody> {}
 
-export const BookMyTicketRequestBodySchema: Schema.Schema<
+export const BookMyTicketRequestBody: Schema.Schema<
   BookMyTicketRequestBody,
   BookMyTicketRequestBodyEncoded
-> = _BookMyTicketRequestBodySchema;
-// #endregion BookMyTicketRequestBodySchema
+> = _BookMyTicketRequestBody;
+// #endregion BookMyTicketRequestBody
 
 export const BookMyTicketResponse = [
   {
-    content: BookMyTicketResponseSchema.pipe(Schema.description("My ticket")),
+    content: BookMyTicketResponseBody.pipe(Schema.description("My ticket")),
     status: 200 as const,
   },
   {
@@ -49,6 +49,6 @@ export const BookMyTicketEndpoint = ApiEndpoint.post(
     summary: "Book ticket for user on particular event",
   }
 ).pipe(
-  ApiEndpoint.setRequestBody(BookMyTicketRequestBodySchema),
+  ApiEndpoint.setRequestBody(BookMyTicketRequestBody),
   ApiEndpoint.setSecurity(BearerAuth)
 );

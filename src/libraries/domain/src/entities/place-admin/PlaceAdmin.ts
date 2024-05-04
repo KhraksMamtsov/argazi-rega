@@ -1,23 +1,23 @@
 import { Schema } from "@effect/schema";
 
-import { PlaceAdminIdSchema } from "./PlaceAdminId.js";
+import { IdPlaceAdmin } from "./PlaceAdminId.js";
 
-import { IdPlaceSchema } from "../../place/entity/IdPlace.js";
-import { IdUserSchema } from "../../user/entity/IdUser.js";
-import { BaseSchema } from "../common/Base.js";
+import { IdPlace } from "../../place/entity/IdPlace.js";
+import { IdUser } from "../../user/entity/IdUser.js";
+import { Base } from "../common/Base.js";
 
-const _PlaceAdminSchema = Schema.Struct({
-  id: PlaceAdminIdSchema,
-  idPlace: IdPlaceSchema,
-  idUser: IdUserSchema,
+const _PlaceAdmin = Schema.Struct({
+  id: IdPlaceAdmin,
+  idPlace: IdPlace,
+  idUser: IdUser,
 }).pipe(
   //
-  Schema.extend(BaseSchema),
-  Schema.identifier("PlaceAdminSchema")
+  Schema.extend(Base),
+  Schema.identifier("PlaceAdmin")
 );
 
-export type PlaceAdminFrom = Schema.Schema.Encoded<typeof _PlaceAdminSchema>;
-export type PlaceAdmin = Schema.Schema.Type<typeof _PlaceAdminSchema>;
+export type PlaceAdminFrom = Schema.Schema.Encoded<typeof _PlaceAdmin>;
+export type PlaceAdmin = Schema.Schema.Type<typeof _PlaceAdmin>;
 
-export const PlaceAdminSchema: Schema.Schema<PlaceAdmin, PlaceAdminFrom> =
-  _PlaceAdminSchema;
+export const PlaceAdmin: Schema.Schema<PlaceAdmin, PlaceAdminFrom> =
+  _PlaceAdmin;

@@ -2,46 +2,39 @@ import { Schema } from "@effect/schema";
 import { type Transport as _Transport } from "@prisma/client";
 import { Effect } from "effect";
 
-import {
-  IdTransportSchema,
-  TransportSchema,
-  IdUserSchema,
-} from "@argazi/domain";
+import { IdTransport, Transport, IdUser } from "@argazi/domain";
 import { _SS } from "@argazi/shared";
 
-import { BaseDbSchema, transform } from "../Base.db.js";
+import { BaseDb, transform } from "../Base.db.js";
 
 export type TransportDbFrom = Readonly<_Transport>;
 
 // #region TransportDb
-const _TransportDbSchema = Schema.Struct({
+const _TransportDb = Schema.Struct({
   color: Schema.Trim.pipe(Schema.nonEmpty()),
-  id: IdTransportSchema,
-  idUser: IdUserSchema,
+  id: IdTransport,
+  idUser: IdUser,
   model: Schema.OptionFromNullOr(Schema.Secret),
   number: Schema.Secret,
   seatsNumber: Schema.Int.pipe(Schema.positive()),
 }).pipe(
-  Schema.extend(BaseDbSchema),
-  Schema.identifier("_TransportDbSchema"),
+  Schema.extend(BaseDb),
+  Schema.identifier("_TransportDb"),
   _SS.satisfies.encoded<TransportDbFrom>()
 );
 
-export type TransportDbContext = Schema.Schema.Context<
-  typeof _TransportDbSchema
->;
+export type TransportDbContext = Schema.Schema.Context<typeof _TransportDb>;
 export interface TransportDbEncoded
-  extends Schema.Schema.Encoded<typeof _TransportDbSchema> {}
-export interface TransportDb
-  extends Schema.Schema.Type<typeof _TransportDbSchema> {}
+  extends Schema.Schema.Encoded<typeof _TransportDb> {}
+export interface TransportDb extends Schema.Schema.Type<typeof _TransportDb> {}
 
-export const TransportDbSchema: Schema.Schema<TransportDb, TransportDbEncoded> =
-  _TransportDbSchema;
-// #endregion TransportDbSchema
+export const TransportDb: Schema.Schema<TransportDb, TransportDbEncoded> =
+  _TransportDb;
+// #endregion TransportDb
 
-export const TransportDbToDomainSchema = transform(
-  TransportDbSchema,
-  TransportSchema,
+export const TransportDbToDomain = transform(
+  TransportDb,
+  Transport,
   Effect.succeed,
   Effect.succeed
 );
