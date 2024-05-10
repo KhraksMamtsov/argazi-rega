@@ -26,16 +26,16 @@ export const BaseDb: Schema.Schema<BaseDb, BaseDbFrom> = _BaseDb;
 export const ToDomainBase = Schema.transform(BaseDb, Base, {
   decode: (x) => ({
     meta: {
-      dateCreated: DateCreated(x.dateCreated),
+      dateCreated: DateCreated.make(x.dateCreated),
       dateDeleted: Option.fromNullable(x.dateDeleted).pipe(
-        Option.map(DateDeleted)
+        Option.map(DateDeleted.make)
       ),
-      dateUpdated: DateUpdated(x.dateUpdated),
-      idUserCreator: IdUser(x.idUserCreator),
+      dateUpdated: DateUpdated.make(x.dateUpdated),
+      idUserCreator: IdUser.make(x.idUserCreator),
       idUserDeleter: Option.fromNullable(x.idUserDeleter).pipe(
-        Option.map(IdUser)
+        Option.map(IdUser.make)
       ),
-      idUserUpdater: IdUser(x.idUserUpdater),
+      idUserUpdater: IdUser.make(x.idUserUpdater),
     },
   }),
   encode: ({ meta }) => ({

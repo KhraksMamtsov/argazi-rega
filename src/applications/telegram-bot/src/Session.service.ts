@@ -74,8 +74,8 @@ export const makeLive = () =>
                 Option.all,
                 Option.map(
                   Struct.evolve({
-                    accessToken: AccessToken,
-                    refreshToken: RefreshToken,
+                    accessToken: AccessToken.make,
+                    refreshToken: RefreshToken.make,
                   })
                 )
               )

@@ -23,7 +23,9 @@ export const AuthenticationHandler = (webAppDataPayload: WebAppDataPayload) =>
       webAppDataPayload.message.web_app_data.data
     ).pipe(Effect.tapError(Effect.logError));
 
-    const idTelegramChat = IdTelegramChat(webAppDataPayload.message.chat.id);
+    const idTelegramChat = IdTelegramChat.make(
+      webAppDataPayload.message.chat.id
+    );
 
     const authenticationResult = yield* pipe(
       restApiService.loginDwbn({

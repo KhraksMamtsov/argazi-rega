@@ -16,19 +16,40 @@
 	// 	"description": "Log output to console"
 	// }
 
-		"Generate schema": {
+		"Generate struct schema": {
 		"scope": "javascript,typescript",
-		"prefix": "sg",
+		"prefix": "sgs",
 		"body": [
 			"// #region $1",
-			"export const _$1Schema = $1Schema.pipe(Schema.identifier(\"$1Schema\"));",
-			"",			
-			"export type $1Context = Schema.Schema.Context<typeof _$1Schema>;",
-			"export interface $1Encoded extends Schema.Schema.Encoded<typeof _$1Schema> {};",
-			"export interface $1 extends Schema.Schema.Type<typeof _$1Schema> {};",
+			"export const _$1 = Schema.Struct({",
 			"",
-			"export const $1Schema: Schema.Schema<$1, $1Encoded, $1Context> = _$1Schema;",
-			"// #endregion $1Schema",
+			"}).pipe(Schema.identifier(\"$1\"));",
+			"",			
+			"export type $1Context = Schema.Schema.Context<typeof _$1>;",
+			"export interface $1Encoded extends Schema.Schema.Encoded<typeof _$1> {};",
+			"export interface $1 extends Schema.Schema.Type<typeof _$1> {};",
+			"",
+			"export const $1: Schema.Schema<$1, $1Encoded, $1Context> = _$1;",
+			"// #endregion $1",
+		],
+		"description": "Generate schema"
+	},
+	"Generate Class schema": {
+		"scope": "javascript,typescript",
+		"prefix": "sgc",
+		"body": [
+			"// #region $1",
+			"export class $1 extends Schema.Class<$1>(\"$1\")({",
+			"",
+			"}) {};",
+			"",			
+			"export declare namespace $1 {",
+			"    export type Context = Schema.Schema.Context<typeof $1>;",
+			"    export type EncodedType = typeof $1.Encoded;",
+			"    export interface Encoded extends EncodedType {};",
+			"    export type Type = Simplify<typeof $1.Type>;",
+			"}",
+			"// #endregion $1",
 		],
 		"description": "Generate schema"
 	}

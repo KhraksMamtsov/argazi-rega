@@ -1,0 +1,20 @@
+{
+  "name": "@argazi/workbench",
+  "version": "0.0.0",
+  "type": "module",
+  "exports": {
+    ".": {
+      "import": "./dist/src/index.js",
+      "types": "./dist/src/index.d.ts"
+    }
+  },
+  "scripts": {
+    "build": "tsc -b",
+    "build:watch": "tsc -b --watch",
+    "start:watch": "node --watch dist/src/index.js",
+    "dex": "dexnode dist/src/index.js"
+  },
+  "dependencies": {
+    "@argazi/domain": "workspace:*"
+  }
+}

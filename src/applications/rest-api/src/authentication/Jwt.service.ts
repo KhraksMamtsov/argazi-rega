@@ -66,14 +66,20 @@ const makeLive = () =>
                   key: jwtConfig.accessTokenSecret,
                   payload: encodedPayload,
                 })
-                .pipe(Effect.map(Secret.fromString), Effect.map(AccessToken)),
+                .pipe(
+                  Effect.map(Secret.fromString),
+                  Effect.map(AccessToken.make)
+                ),
               refreshToken: _JWT
                 .sign({
                   expiresIn: jwtConfig.refreshTokenTtl,
                   key: jwtConfig.refreshTokenSecret,
                   payload: encodedPayload,
                 })
-                .pipe(Effect.map(Secret.fromString), Effect.map(RefreshToken)),
+                .pipe(
+                  Effect.map(Secret.fromString),
+                  Effect.map(RefreshToken.make)
+                ),
             })
           ),
           Effect.mapError((cause) => new JWRServiceSignError({ cause }))

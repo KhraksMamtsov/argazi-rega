@@ -34,7 +34,7 @@ export const LoginDwbnHandler = (body: LoginDwbnRequestBody) =>
 
     if (Option.isNone(registeredUserOption)) {
       const isAdmin = Secret.value(idDwbnAdmin) === idTokenPayload.sub;
-      const idNewUser = IdUser(isAdmin ? IdAdmin : webcrypto.randomUUID());
+      const idNewUser = IdUser.make(isAdmin ? IdAdmin : webcrypto.randomUUID());
 
       const newlyRegisteredUser = yield* RegisterUserUseCase({
         payload: {

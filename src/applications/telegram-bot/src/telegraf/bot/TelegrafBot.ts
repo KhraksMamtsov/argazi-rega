@@ -94,7 +94,7 @@ export const callBackQuery = on(TF.callbackQuery("data"))((context) => {
   return new TgP.CallbackQueryPayload({
     callback_query: context.update.callback_query,
     editMessageText: TgP.editMessageText(context, message.chat.id),
-    idTelegramChat: IdTelegramChat(context.update.callback_query.from.id),
+    idTelegramChat: IdTelegramChat.make(context.update.callback_query.from.id),
     message,
     replyWithMarkdown: TgP.replyWithMarkdown(context),
     sendLocation: (latitude, longitude, extra) =>
@@ -105,7 +105,7 @@ export const callBackQuery = on(TF.callbackQuery("data"))((context) => {
 export const webAppData = on(TF.message("web_app_data"))(Option.some)(
   (context) =>
     new TgP.WebAppDataPayload({
-      idTelegramChat: IdTelegramChat(context.message.chat.id),
+      idTelegramChat: IdTelegramChat.make(context.message.chat.id),
       message: context.message,
       replyWithMarkdown: TgP.replyWithMarkdown(context),
     })
@@ -115,7 +115,7 @@ export const text = on(TF.message("text"))(Option.some)(
   (context) =>
     new TgP.TextPayload({
       editMessageText: TgP.editMessageText(context),
-      idTelegramChat: IdTelegramChat(context.message.chat.id),
+      idTelegramChat: IdTelegramChat.make(context.message.chat.id),
       message: context.message,
       replyWithMarkdown: TgP.replyWithMarkdown(context),
     })
@@ -140,7 +140,7 @@ export const command = <A, E, R>(options: {
               new TgP.CommandPayload({
                 command,
                 editMessageText: TgP.editMessageText(context),
-                idTelegramChat: IdTelegramChat(context.message.chat.id),
+                idTelegramChat: IdTelegramChat.make(context.message.chat.id),
                 message: context.message,
                 replyWithMarkdown: TgP.replyWithMarkdown(context),
               }) as any
