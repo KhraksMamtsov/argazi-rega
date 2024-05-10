@@ -51,6 +51,6 @@
 			"}",
 			"// #endregion $1",
 		],
-		"description": "Generate schema"
+		"description": "Generate class schema"
 	}
 }

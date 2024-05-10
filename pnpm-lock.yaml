@@ -42,11 +42,11 @@ importers:
         specifier: ^3.1.3
         version: 3.1.3
       effect-http:
-        specifier: ^0.65.0
-        version: 0.65.0(@effect/platform@0.53.3(@effect/schema@0.67.0(effect@3.1.3))(effect@3.1.3))(@effect/schema@0.67.0(effect@3.1.3))(effect@3.1.3)
+        specifier: ^0.66.0
+        version: 0.66.0(@effect/platform@0.53.3(@effect/schema@0.67.0(effect@3.1.3))(effect@3.1.3))(@effect/schema@0.67.0(effect@3.1.3))(effect@3.1.3)
       effect-http-node:
-        specifier: ^0.12.5
-        version: 0.12.5(@effect/platform-node@0.49.3(@effect/platform@0.53.3(@effect/schema@0.67.0(effect@3.1.3))(effect@3.1.3))(effect@3.1.3))(@effect/platform@0.53.3(@effect/schema@0.67.0(effect@3.1.3))(effect@3.1.3))(@effect/schema@0.67.0(effect@3.1.3))(effect-http@0.65.0(@effect/platform@0.53.3(@effect/schema@0.67.0(effect@3.1.3))(effect@3.1.3))(@effect/schema@0.67.0(effect@3.1.3))(effect@3.1.3))(effect@3.1.3)
+        specifier: ^0.13.0
+        version: 0.13.0(@effect/platform-node@0.49.3(@effect/platform@0.53.3(@effect/schema@0.67.0(effect@3.1.3))(effect@3.1.3))(effect@3.1.3))(@effect/platform@0.53.3(@effect/schema@0.67.0(effect@3.1.3))(effect@3.1.3))(@effect/schema@0.67.0(effect@3.1.3))(effect-http@0.66.0(@effect/platform@0.53.3(@effect/schema@0.67.0(effect@3.1.3))(effect@3.1.3))(@effect/schema@0.67.0(effect@3.1.3))(effect@3.1.3))(effect@3.1.3)
       effect-log:
         specifier: ^0.31.1
         version: 0.31.1(effect@3.1.3)
@@ -63,8 +63,8 @@ importers:
         specifier: ^4.6.13
         version: 4.6.13
       schema-openapi:
-        specifier: ^0.37.2
-        version: 0.37.2(@effect/schema@0.67.0(effect@3.1.3))(effect@3.1.3)
+        specifier: ^0.38.1
+        version: 0.38.1(@effect/schema@0.67.0(effect@3.1.3))(effect@3.1.3)
       telegraf:
         specifier: ^4.16.3
         version: 4.16.3
@@ -1213,20 +1213,20 @@ packages:
   ecdsa-sig-formatter@1.0.11:
     resolution: {integrity: sha512-nagl3RYrbNv6kQkeJIpt6NJZy8twLB/2vtz6yN9Z4vRKHN4/QZJIEbqohALSgwKdnksuY3k5Addp5lg8sVoVcQ==}
 
-  effect-http-node@0.12.5:
-    resolution: {integrity: sha512-AWbQhmWxMUU1u68G6HmMrwcPvV7SbSLD7e0Lx6NWA0GmMd1dpbkpBSxPgQQDsA1klDKrVZSPLExAwCeGqKh9Pw==}
+  effect-http-node@0.13.0:
+    resolution: {integrity: sha512-yupkUdxyYgDSXBNftLhST2YfjabKjbGGFR91FRog1/BCevNf2FQvQanckbRhRBwXaeQ/mPcvv0cqo/CaqwRRVQ==}
     peerDependencies:
       '@effect/platform': ^0.53.0
       '@effect/platform-node': ^0.49.0
-      '@effect/schema': ^0.66.0
+      '@effect/schema': ^0.67.0
       effect: ^3.1.0
-      effect-http: ^0.65.0
+      effect-http: ^0.66.0
 
-  effect-http@0.65.0:
-    resolution: {integrity: sha512-Og/i2ArGFYD7DNPusxXVIlcHl+zwjpzb5kyPZrgpo5FHbwgSfZwK2qaq1sLYK09+hFACE/d0QXROevILMmdghg==}
+  effect-http@0.66.0:
+    resolution: {integrity: sha512-0I63SmG1qOOeeAUkKj8jqD8mAkHTAA7bsV+2PB4x2ISeB80kFOuUDLbi4OKqecRVeo0d1dKliX4jaftdgEZHfw==}
     peerDependencies:
       '@effect/platform': ^0.53.0
-      '@effect/schema': ^0.66.0
+      '@effect/schema': ^0.67.0
       effect: ^3.1.0
 
   effect-log@0.31.1:
@@ -2024,10 +2024,10 @@ packages:
     resolution: {integrity: sha512-jLYV0DORrzY3xaz/S9ydJL6Iz7essZeAfnAavsJ+zsJGZ1MOnsS52yRjU3uF3pJa/lla7+wisp//fxOwOH8SKQ==}
     engines: {node: '>= 0.10'}
 
-  schema-openapi@0.37.2:
-    resolution: {integrity: sha512-6JiagAhbC8HudXxtnol3z4nA5AluxGefkwM2Dz7U8LRMGKPgDa2DHMCIjJdOXiWPqOnNF7xIRAlzEzH88UvUrA==}
+  schema-openapi@0.38.1:
+    resolution: {integrity: sha512-lhAiBUulEVgDSKEO5//3BbBlNv4/zyz1UG0/mVo1O3reTox4eMxFx9abD8MiNxRxGJFx6GjSD7oV9byYpyCekA==}
     peerDependencies:
-      '@effect/schema': ^0.66.0
+      '@effect/schema': ^0.67.0
       effect: ^3.1.0
 
   semver@6.3.1:
@@ -3362,21 +3362,21 @@ snapshots:
     dependencies:
       safe-buffer: 5.2.1
 
-  effect-http-node@0.12.5(@effect/platform-node@0.49.3(@effect/platform@0.53.3(@effect/schema@0.67.0(effect@3.1.3))(effect@3.1.3))(effect@3.1.3))(@effect/platform@0.53.3(@effect/schema@0.67.0(effect@3.1.3))(effect@3.1.3))(@effect/schema@0.67.0(effect@3.1.3))(effect-http@0.65.0(@effect/platform@0.53.3(@effect/schema@0.67.0(effect@3.1.3))(effect@3.1.3))(@effect/schema@0.67.0(effect@3.1.3))(effect@3.1.3))(effect@3.1.3):
+  effect-http-node@0.13.0(@effect/platform-node@0.49.3(@effect/platform@0.53.3(@effect/schema@0.67.0(effect@3.1.3))(effect@3.1.3))(effect@3.1.3))(@effect/platform@0.53.3(@effect/schema@0.67.0(effect@3.1.3))(effect@3.1.3))(@effect/schema@0.67.0(effect@3.1.3))(effect-http@0.66.0(@effect/platform@0.53.3(@effect/schema@0.67.0(effect@3.1.3))(effect@3.1.3))(@effect/schema@0.67.0(effect@3.1.3))(effect@3.1.3))(effect@3.1.3):
     dependencies:
       '@effect/platform': 0.53.3(@effect/schema@0.67.0(effect@3.1.3))(effect@3.1.3)
       '@effect/platform-node': 0.49.3(@effect/platform@0.53.3(@effect/schema@0.67.0(effect@3.1.3))(effect@3.1.3))(effect@3.1.3)
       '@effect/schema': 0.67.0(effect@3.1.3)
       effect: 3.1.3
-      effect-http: 0.65.0(@effect/platform@0.53.3(@effect/schema@0.67.0(effect@3.1.3))(effect@3.1.3))(@effect/schema@0.67.0(effect@3.1.3))(effect@3.1.3)
+      effect-http: 0.66.0(@effect/platform@0.53.3(@effect/schema@0.67.0(effect@3.1.3))(effect@3.1.3))(@effect/schema@0.67.0(effect@3.1.3))(effect@3.1.3)
       swagger-ui-dist: 5.17.7
 
-  effect-http@0.65.0(@effect/platform@0.53.3(@effect/schema@0.67.0(effect@3.1.3))(effect@3.1.3))(@effect/schema@0.67.0(effect@3.1.3))(effect@3.1.3):
+  effect-http@0.66.0(@effect/platform@0.53.3(@effect/schema@0.67.0(effect@3.1.3))(effect@3.1.3))(@effect/schema@0.67.0(effect@3.1.3))(effect@3.1.3):
     dependencies:
       '@effect/platform': 0.53.3(@effect/schema@0.67.0(effect@3.1.3))(effect@3.1.3)
       '@effect/schema': 0.67.0(effect@3.1.3)
       effect: 3.1.3
-      schema-openapi: 0.37.2(@effect/schema@0.67.0(effect@3.1.3))(effect@3.1.3)
+      schema-openapi: 0.38.1(@effect/schema@0.67.0(effect@3.1.3))(effect@3.1.3)
 
   effect-log@0.31.1(effect@3.1.3):
     dependencies:
@@ -4275,7 +4275,7 @@ snapshots:
 
   sandwich-stream@2.0.2: {}
 
-  schema-openapi@0.37.2(@effect/schema@0.67.0(effect@3.1.3))(effect@3.1.3):
+  schema-openapi@0.38.1(@effect/schema@0.67.0(effect@3.1.3))(effect@3.1.3):
     dependencies:
       '@effect/schema': 0.67.0(effect@3.1.3)
       effect: 3.1.3
