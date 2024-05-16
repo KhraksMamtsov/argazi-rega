@@ -1,0 +1,1 @@
+type asd = [string, number];
