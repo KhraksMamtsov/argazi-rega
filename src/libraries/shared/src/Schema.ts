@@ -1,4 +1,4 @@
-import { AST, Schema } from "@effect/schema";
+import { AST, ParseResult, Schema } from "@effect/schema";
 import { Effect, flow, identity, Option, pipe, Array } from "effect";
 
 // eslint-disable-next-line @typescript-eslint/no-namespace
@@ -75,3 +75,21 @@ export const OptionNonEmptyArray = <R, I, A>(item: Schema.Schema<A, I, R>) =>
       encode: Option.match({ onNone: () => [], onSome: identity }),
     }
   );
+
+export const URLFromSelf = Schema.declare((x) => x instanceof URL);
+
+const _URLFromString = Schema.transformOrFail(Schema.String, URLFromSelf, {
+  decode: (encoded, _, ast) =>
+    ParseResult.try({
+      try: () => new URL(encoded),
+      catch: (err) =>
+        new ParseResult.Type(
+          ast,
+          encoded,
+          err instanceof Error ? err.message : undefined
+        ),
+    }),
+  encode: (type) => ParseResult.succeed(type.toString()),
+});
+
+export const URLFromString: Schema.Schema<URL, string> = _URLFromString;

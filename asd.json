@@ -1,0 +1,36 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "definitions": {
+    "ASD": {
+      "additionalItems": {
+        "type": "string"
+      },
+      "items": [
+        {
+          "const": false,
+          "type": "boolean"
+        },
+        {
+          "type": "number"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "minItems": 3,
+      "type": "array"
+    },
+    "Root": {
+      "additionalProperties": false,
+      "properties": {
+        "asd": {
+          "$ref": "#/definitions/ASD"
+        }
+      },
+      "required": [
+        "asd"
+      ],
+      "type": "object"
+    }
+  }
+}

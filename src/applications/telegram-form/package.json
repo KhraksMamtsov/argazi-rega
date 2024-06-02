@@ -13,5 +13,8 @@
     "@argazi/domain": "workspace:*",
     "@argazi/rest-api": "workspace:*",
     "@argazi/shared": "workspace:*"
+  },
+  "devDependencies": {
+    "vite": "^5.2.11"
   }
 }

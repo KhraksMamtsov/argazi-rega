@@ -1,32 +1,55 @@
-import { VisitorType } from "@argazi/domain/Visitor";
-import { Schema } from "@effect/schema";
+import * as Visitor from "@argazi/domain/Visitor";
+import { Schema, JSONSchema as JSONSchema_ } from "@effect/schema";
+import * as _SS from "@argazi/shared/SchemaSatisfy";
+import { mutateTransformationFromAnnotations } from "./Helpers";
 
-export const VisitorJson = Schema.Struct({
-  email: Schema.optional(
-    Schema.Trim.pipe(
-      Schema.annotations({
-        jsonSchema: { type: "string" },
-        title: "Email",
-      }),
-      Schema.nonEmpty()
-    )
-  ),
-  name: Schema.Trim.pipe(
-    Schema.annotations({
-      jsonSchema: { type: "string" },
-      title: "Имя",
-    }),
-    Schema.nonEmpty()
-  ),
+export const EmailForm = Schema.NonEmpty.pipe(
+  Schema.trimmed(),
+  Schema.pattern(/^\S+@\S+\.\S{2,}$/i)
+).annotations({
+  title: "Email",
+  description: "email22",
+  identifier: "EmailForm",
+});
+
+export const NameForm = Schema.NonEmpty.pipe(Schema.trimmed()).annotations({
+  title: "Имя",
+  identifier: "NameForm",
+});
+
+export const optionalForm = <A, I, R>(schema: Schema.Schema<A, I, R>) =>
+  Schema.optional(schema, { as: "Option", exact: true });
+
+export const VisitorForm = Schema.Struct({
+  email: optionalForm(EmailForm),
+  name: NameForm,
   type: Schema.transformLiterals(
-    ["ADULT", VisitorType.ADULT],
-    ["PENSIONER", VisitorType.PENSIONER],
-    ["STUDENT", VisitorType.STUDENT],
-    ["CHILD", VisitorType.CHILD]
+    ["Взрослый", Visitor.VisitorType.ADULT],
+    ["Пенсионер", Visitor.VisitorType.PENSIONER],
+    ["Студент", Visitor.VisitorType.STUDENT],
+    ["Ребенок", Visitor.VisitorType.CHILD]
   ).annotations({
-    default: VisitorType.ADULT,
+    default: Visitor.VisitorType.ADULT,
     title: "Тип",
   }),
-}).annotations({
-  title: "👤 Посетитель",
-}); // satisfies Schema.Schema<asd, any>;
+})
+  .annotations({
+    title: "👤 Посетитель",
+    description: "descr",
+  })
+  .pipe(
+    mutateTransformationFromAnnotations({
+      title: "👤 Посетитель",
+      description: "descr",
+    }),
+    _SS.satisfies.type<Omit<Visitor.VisitorData, "id" | "idUser">>(),
+    _SS.satisfies.encoded.json()
+  );
+
+export type VisitorForm = typeof VisitorForm.Type;
+export type VisitorFormEncoded = typeof VisitorForm.Encoded;
+export const JSONSchema = JSONSchema_.make(VisitorForm);
+export const decode = Schema.decodeUnknownEither(VisitorForm, {
+  errors: "all",
+});
+export const is = Schema.is(VisitorForm);

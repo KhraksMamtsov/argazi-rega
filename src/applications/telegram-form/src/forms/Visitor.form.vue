@@ -1,6 +1,7 @@
 <template>
   <h1>{{ title }}</h1>
   <div class="myform">
+    <form @submit.prevent="onSubmit">      
     <json-forms
       :data="data"
       :renderers="renderers"
@@ -8,36 +9,32 @@
       :uischema="uischema"
       @change="onChange"
     />
+    <button type="submit">DONE</button>
+    </form>
   </div>
   <div>
-    <pre>{{ JSON.stringify(data, null, 2) }}</pre>
+    <pre>{{ JSON.stringify(data, null, 1) }}</pre>
+    <pre>{{ JSON.stringify(schema, null,1) }}</pre>
   </div>
 </template>
 
-<script lang="ts">
-import { JSONSchema, AST } from "@effect/schema";
+<script setup lang="ts">
+import { Either } from "effect";
 import { JsonForms, type JsonFormsChangeEvent } from "@jsonforms/vue";
-import {
-  defaultStyles,
-  mergeStyles,
+import { 
   vanillaRenderers,
 } from "@jsonforms/vue-vanilla";
-import { Option } from "effect";
-import { defineComponent } from "vue";
+import {  markRaw, ref } from "vue";
 
-import { VisitorJson } from "./Visitor.form.ts";
-// mergeStyles combines all classes from both styles definitions into one
-const myStyles = mergeStyles(defaultStyles, { control: { label: "mylabel" } });
+import * as VisitorForm from "./Visitor.form.ts";
 
-const schema = JSONSchema.make(VisitorJson);
-
-console.log("schema: ", schema);
-
-const renderers = [
+const schema = markRaw(VisitorForm.JSONSchema);
+const renderers = markRaw([
   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
   ...vanillaRenderers,
   // here you can add custom renderers
-];
+]);
+
 if (!("type" in schema)) {
   // eslint-disable-next-line functional/no-throw-statements
   throw new Error("should be object");
@@ -48,42 +45,39 @@ if (schema.type !== "object") {
   throw new Error("should be object");
 }
 
-const uischema = {
+const uischema = markRaw({
   elements: Object.keys(schema.properties).map((prop) => ({
     scope: "#/properties/" + prop,
     type: "Control",
   })),
   type: "VerticalLayout",
-};
-
-export default defineComponent({
-  name: "VisitorForm",
-  components: {
-    JsonForms,
-  },
-  data() {
-    return {
-      title: Option.getOrElse(
-        AST.getTitleAnnotation(VisitorJson.ast),
-        () => "www"
-      ),
-      data: {},
-      // freeze renderers for performance gains
-      renderers: Object.freeze(renderers),
-      schema,
-      uischema,
-    };
-  },
-  methods: {
-    onChange(event: JsonFormsChangeEvent) {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-      this.data = event.data;
-    },
-  },
-  provide() {
-    return {
-      styles: myStyles,
-    };
-  },
 });
+
+const data = ref<Record<string, string>>({})
+const title = schema.title ?? "Форма"
+
+const emit = defineEmits({
+  done: (payload: VisitorForm.VisitorForm) => VisitorForm.is(payload),
+})
+
+const onSubmit = () => {
+  VisitorForm.decode(data.value).pipe(
+    Either.match({
+      onLeft: (error) => {
+        console.log(456,error)
+      },
+      onRight: (type) => {
+        console.log(123,type)
+      }
+    })
+  )
+}
+const onChange = (event: JsonFormsChangeEvent) =>{
+  Object.keys(data.value).forEach((k) => {
+    delete data.value[k]
+  })
+  Object.entries(event.data).forEach(([k, v]) => {
+    data.value[k] = v as string
+  })
+}
 </script>

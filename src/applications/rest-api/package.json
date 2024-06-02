@@ -6,6 +6,10 @@
     ".": {
       "types": "./dist/src/index.d.ts",
       "import": "./dist/src/index.js"
+    },
+    "./AccessToken": {
+      "types": "./dist/src/authentication/AccessToken.d.ts",
+      "import": "./dist/src/authentication/AccessToken.js"
     }
   },
   "scripts": {

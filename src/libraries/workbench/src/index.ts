@@ -1,23 +1,23 @@
-import { Schema, JSONSchema } from "@effect/schema";
-import { Schema as S } from "@effect/schema";
+import { Schema } from "@effect/schema";
 
-const tuple = Schema.Tuple(
-  //
-  [Schema.Number],
-  Schema.String
-  // Schema.Boolean
-);
-
-try {
-  const asd = JSONSchema.make(tuple);
-  console.log(asd);
-} catch (e) {
-  console.log(e);
-}
-
-const Person = S.Struct({
-  name: S.String,
-  role: S.Option(S.Literal("a", "b")),
-  role22: S.Option(S.Literal("a", "b")),
-  role2: S.Array(S.Literal("a", "b")),
+const s = Schema.Struct({
+  number: Schema.Number,
+  string: Schema.String,
+  boolean: Schema.Boolean,
+  nested: Schema.Struct({
+    number: Schema.Number,
+    string: Schema.String,
+    boolean: Schema.Boolean,
+  }),
 });
+
+const parse = Schema.decodeUnknownEither(s);
+
+const res = parse({
+  number: 1,
+  string: "",
+  boolean: false,
+  nested: { number: 1, string: "", boolean: false },
+});
+
+console.log(res);

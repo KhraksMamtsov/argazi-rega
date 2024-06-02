@@ -6,43 +6,43 @@ import { type Json } from "./Schema.js";
 const encoded =
   <Encoded>() =>
   <X extends Schema.Any>(
-    schema: Schema.Encoded<X> extends Encoded
+    schema: [Schema.Encoded<X>] extends [Encoded]
       ? X
       : {
           expected: Simplify<Encoded>;
           received: Simplify<Schema.Encoded<X>>;
         }
-  ) =>
-    schema;
+  ): X =>
+    schema as X;
 
 encoded.json =
   <Encoded extends Json.Json>() =>
   <X extends Schema.Any>(
-    schema: Schema.Encoded<X> extends Encoded
+    schema: [Schema.Encoded<X>] extends [Encoded]
       ? X
       : {
           expected: Simplify<Encoded>;
           received: Simplify<Schema.Encoded<X>>;
         }
-  ) =>
-    schema;
+  ): X =>
+    schema as X;
 
 const type =
   <Type>() =>
   <X extends Schema.Any>(
-    schema: Schema.Type<X> extends Type
+    schema: Type extends Schema.Type<X>
       ? X
       : {
           expected: Simplify<Type>;
           received: Simplify<Schema.Type<X>>;
         }
   ) =>
-    schema;
+    schema as X;
 
 type.json =
   <Type extends Json.Json>() =>
   <X extends Schema.Any>(
-    schema: Schema.Type<X> extends Type
+    schema: [Type] extends [Schema.Type<X>]
       ? X
       : {
           expected: Simplify<Type>;

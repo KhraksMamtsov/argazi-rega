@@ -1,5 +1,5 @@
 import { Effect, Secret, pipe } from "effect";
-import { ServerError } from "effect-http";
+import { HttpError } from "effect-http";
 
 import type { IdUser } from "@argazi/domain";
 
@@ -20,7 +20,7 @@ export const BearerAuthGuard =
           type: "accessToken",
         }),
         Effect.mapError((verifyError) =>
-          ServerError.unauthorizedError(verifyError)
+          HttpError.unauthorizedError(verifyError)
         )
       );
 

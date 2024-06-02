@@ -1,5 +1,5 @@
 import { Config, Effect, Option, Secret } from "effect";
-import { ServerError } from "effect-http";
+import { HttpError } from "effect-http";
 
 import { GetUserUseCase, RegisterUserUseCase } from "@argazi/application";
 import { IdDwbn, IdTelegramChat } from "@argazi/domain";
@@ -64,7 +64,7 @@ export const LoginBasicHandler = (args: {
       });
 
       if (Option.isNone(registeredAdminOption)) {
-        return ServerError.notFoundError("Wrong secret");
+        return HttpError.notFoundError("Wrong secret");
       }
 
       return yield* JwtServiceTag.sign({
@@ -72,5 +72,5 @@ export const LoginBasicHandler = (args: {
         sub: registeredAdminOption.value.id,
       });
     }
-    return ServerError.unauthorizedError("Wrong secret");
+    return HttpError.unauthorizedError("Wrong secret");
   });

@@ -6,6 +6,14 @@
     ".": {
       "import": "./dist/src/index.js",
       "types": "./dist/src/index.d.ts"
+    },
+    "./SchemaSatisfy": {
+      "import": "./dist/src/SchemaSatisfy.js",
+      "types": "./dist/src/SchemaSatisfy.d.ts"
+    },
+    "./Schema": {
+      "import": "./dist/src/Schema.js",
+      "types": "./dist/src/Schema.d.ts"
     }
   },
   "scripts": {

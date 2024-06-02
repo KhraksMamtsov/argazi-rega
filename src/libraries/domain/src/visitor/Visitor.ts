@@ -31,6 +31,8 @@ export const _Visitor = VisitorData.pipe(
 );
 
 export type VisitorContext = Schema.Schema.Context<typeof _Visitor>;
+export interface VisitorEncoded
+  extends Schema.Schema.Encoded<typeof _Visitor> {}
 export interface Visitor extends Schema.Schema.Type<typeof _Visitor> {}
 
 export const Visitor: Schema.Schema<Visitor> = Schema.typeSchema(_Visitor);
