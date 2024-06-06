@@ -1,4 +1,4 @@
-import { absurd, Effect, Secret } from "effect";
+import { absurd, Effect, Redacted } from "effect";
 import { Client } from "effect-http";
 
 import type { AccessToken } from "@argazi/rest-api";
@@ -31,7 +31,7 @@ export const CallbackQueryHandler = (args: {
               idTicket: callbackQuery.id,
             },
           },
-          Client.setBearer(Secret.value(args.accessToken))
+          Client.setBearer(Redacted.value(args.accessToken))
         );
       } else if (callbackQuery.action === "create") {
         return yield* restApiService.bookMyTicket(
@@ -41,7 +41,7 @@ export const CallbackQueryHandler = (args: {
             },
           },
 
-          Client.setBearer(Secret.value(args.accessToken))
+          Client.setBearer(Redacted.value(args.accessToken))
         );
       }
     } else if (callbackQuery.type === "Subscription") {
@@ -50,7 +50,7 @@ export const CallbackQueryHandler = (args: {
           {
             path: { idSubscription: callbackQuery.id },
           },
-          Client.setBearer(Secret.value(args.accessToken))
+          Client.setBearer(Redacted.value(args.accessToken))
         );
       }
       if (callbackQuery.action === "create") {
@@ -58,7 +58,7 @@ export const CallbackQueryHandler = (args: {
           {
             body: { idPlace: callbackQuery.id },
           },
-          Client.setBearer(Secret.value(args.accessToken))
+          Client.setBearer(Redacted.value(args.accessToken))
         );
       }
     }
@@ -90,8 +90,8 @@ export const CallbackQueryHandler = (args: {
         );
 
         const locationMessage = yield* args.callbackQueryPayload.sendLocation(
-          Number(Secret.value(geoPoint.latitude)),
-          Number(Secret.value(geoPoint.longitude)),
+          Number(Redacted.value(geoPoint.latitude)),
+          Number(Redacted.value(geoPoint.longitude)),
           {
             horizontal_accuracy: 1500,
             protect_content: true,
@@ -110,7 +110,7 @@ export const CallbackQueryHandler = (args: {
           {
             path: { idVisitor: callbackQuery.id },
           },
-          Client.setBearer(Secret.value(args.accessToken))
+          Client.setBearer(Redacted.value(args.accessToken))
         );
       }
     }

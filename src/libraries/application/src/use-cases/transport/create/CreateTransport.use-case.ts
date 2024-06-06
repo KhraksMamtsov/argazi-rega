@@ -1,4 +1,4 @@
-import { Effect, Option, Secret } from "effect";
+import { Effect, Option, Redacted } from "effect";
 
 import { PrismaServiceTag, TransportDbToDomain } from "@argazi/database";
 
@@ -21,10 +21,10 @@ export const CreateTransportUseCase = BaseCausedUseCaseFor(
             idUserCreator: initiator.id,
             idUserUpdater: initiator.id,
             model: payload.model.pipe(
-              Option.map(Secret.value),
+              Option.map(Redacted.value),
               Option.getOrNull
             ),
-            number: Secret.value(payload.number),
+            number: Redacted.value(payload.number),
           },
         })
     );

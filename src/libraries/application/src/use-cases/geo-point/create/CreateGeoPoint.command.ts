@@ -16,7 +16,7 @@ export const CreateGeoPointCommandPayload = Schema.Struct({
   idUser: IdUser,
   latitude: Schema.Number,
   longitude: Schema.Number,
-  name: Schema.OptionFromNullOr(Schema.Secret),
+  name: Schema.OptionFromNullOr(Schema.Redacted(Schema.String)),
 }).pipe(
   _SS.satisfies.encoded.json<CreateGeoPointCommandPayloadFrom>(),
   Schema.identifier("CreateGeoPointCommandPayload")

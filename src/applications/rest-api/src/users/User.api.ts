@@ -8,14 +8,14 @@ import type { UserBase } from "@argazi/domain";
 import { _SS } from "@argazi/shared";
 
 export const _UserApi = Schema.Struct({
-  email: Schema.Secret,
-  firstName: Schema.Secret,
+  email: Schema.Redacted(Schema.String),
+  firstName: Schema.Redacted(Schema.String),
   id: IdUser,
   idDwbn: IdDwbn,
   idTelegramChat: IdTelegramChat,
   isAdmin: Schema.Boolean,
-  lastName: Schema.OptionFromNullOr(Schema.Secret),
-  phone: Schema.OptionFromNullOr(Schema.Secret),
+  lastName: Schema.OptionFromNullOr(Schema.Redacted(Schema.String)),
+  phone: Schema.OptionFromNullOr(Schema.Redacted(Schema.String)),
   type: UserTypeSchema,
 }).pipe(
   _SS.satisfies.encoded.json(),

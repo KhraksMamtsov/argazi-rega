@@ -1,4 +1,4 @@
-import { Effect, flow, Layer, Option, Secret, Struct } from "effect";
+import { Effect, flow, Layer, Option, Redacted, Struct } from "effect";
 
 import { CacheServiceTag } from "@argazi/cache";
 import type { IdTelegramChat } from "@argazi/domain";
@@ -20,8 +20,8 @@ export const makeLive = () =>
       create: (idTelegramChat: IdTelegramChat, credentials: UserCredentials) =>
         cacheService
           .hSet(idTelegramChat.toString(), {
-            accessToken: Secret.value(credentials.accessToken),
-            refreshToken: Secret.value(credentials.refreshToken),
+            accessToken: Redacted.value(credentials.accessToken),
+            refreshToken: Redacted.value(credentials.refreshToken),
           })
           .pipe(
             Effect.tapBoth({

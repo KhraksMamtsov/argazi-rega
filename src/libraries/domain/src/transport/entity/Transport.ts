@@ -9,9 +9,9 @@ export const TransportBase = Schema.Struct({
   color: Schema.String.pipe(Schema.trimmed(), Schema.nonEmpty()),
   id: IdTransport,
   idUser: IdUser,
-  model: Schema.SecretFromSelf.pipe(Schema.OptionFromSelf),
+  model: Schema.RedactedFromSelf(Schema.String).pipe(Schema.OptionFromSelf),
   //
-  number: Schema.SecretFromSelf,
+  number: Schema.RedactedFromSelf(Schema.String),
   seatsNumber: Schema.Int.pipe(Schema.positive()),
 }).pipe(Schema.typeSchema, Schema.identifier("TransportBase"));
 

@@ -7,7 +7,7 @@ import {
   Either,
   Layer,
   Schedule,
-  Secret,
+  Redacted,
   SynchronizedRef,
   pipe,
 } from "effect";
@@ -37,11 +37,11 @@ export class RefreshTokenExpired extends Data.TaggedError(
 
 export const makeLive = () =>
   Effect.gen(function* () {
-    const apiUrl = yield* Config.secret("API_URL");
-    const apiPort = yield* Config.secret("API_PORT");
+    const apiUrl = yield* Config.redacted("API_URL");
+    const apiPort = yield* Config.redacted("API_PORT");
 
     const restApiClient = Client.make(RestApiSpec, {
-      baseUrl: new URL(`${Secret.value(apiUrl)}:${Secret.value(apiPort)}`)
+      baseUrl: new URL(`${Redacted.value(apiUrl)}:${Redacted.value(apiPort)}`)
         .origin,
     });
 
@@ -65,7 +65,9 @@ export const makeLive = () =>
           const requestResult = yield* _(
             apiMethod(
               input,
-              Client.setBearer(Secret.value(actualUserCredentials.accessToken))
+              Client.setBearer(
+                Redacted.value(actualUserCredentials.accessToken)
+              )
             ).pipe(Effect.either)
           );
 
@@ -113,7 +115,7 @@ export const makeLive = () =>
 
           return yield* apiMethod(
             input,
-            Client.setBearer(Secret.value(refreshedCredentials.accessToken))
+            Client.setBearer(Redacted.value(refreshedCredentials.accessToken))
           );
         });
 

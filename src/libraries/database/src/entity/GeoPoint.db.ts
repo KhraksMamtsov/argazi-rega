@@ -21,14 +21,14 @@ const _GeoPointDb = Schema.Struct({
   id: IdGeoPoint,
   idUser: IdUser,
   latitude: _S.StringFromNumber.pipe(
-    Schema.compose(Schema.Secret),
+    Schema.compose(Schema.Redacted(Schema.String)),
     Schema.compose(Latitude)
   ),
   longitude: _S.StringFromNumber.pipe(
-    Schema.compose(Schema.Secret),
+    Schema.compose(Schema.Redacted(Schema.String)),
     Schema.compose(Longitude)
   ),
-  name: Schema.OptionFromNullOr(Schema.Secret),
+  name: Schema.OptionFromNullOr(Schema.Redacted(Schema.String)),
 }).pipe(
   Schema.extend(BaseDb),
   Schema.identifier("GeoPointDb"),

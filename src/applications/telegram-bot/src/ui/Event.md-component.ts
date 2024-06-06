@@ -1,4 +1,4 @@
-import { Secret, Effect } from "effect";
+import { Redacted, Effect } from "effect";
 
 import type { Event } from "@argazi/domain";
 
@@ -12,7 +12,7 @@ export const EventMdComponent = (props: { event: Event }) =>
 
     const headline = MD.line(
       "📅 Событие: ",
-      MD.pipe(Secret.value(event.name), MD.escape, MD.bold)
+      MD.pipe(Redacted.value(event.name), MD.escape, MD.bold)
     );
 
     return yield* MD.document(

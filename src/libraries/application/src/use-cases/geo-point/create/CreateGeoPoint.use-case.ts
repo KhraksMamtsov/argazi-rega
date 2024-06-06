@@ -1,4 +1,4 @@
-import { Effect, Option, Secret } from "effect";
+import { Effect, Option, Redacted } from "effect";
 
 import { GeoPointDbToDomain, PrismaServiceTag } from "@argazi/database";
 import { notification, NotificationServiceTag } from "@argazi/domain";
@@ -22,7 +22,10 @@ export const CreateGeoPointUseCase = BaseCausedUseCaseFor(
             ...payload,
             idUserCreator: initiator.id,
             idUserUpdater: initiator.id,
-            name: payload.name.pipe(Option.map(Secret.value), Option.getOrNull),
+            name: payload.name.pipe(
+              Option.map(Redacted.value),
+              Option.getOrNull
+            ),
           },
         })
     );

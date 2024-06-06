@@ -72,7 +72,7 @@ const TelegrafHandlerLive = TelegrafTag.Launch.pipe(
   Layer.provide(NotificationsHandlerLive),
   Layer.provide(
     TelegrafOptionsTag.layerConfig({
-      token: Config.secret("TELEGRAM_BOT_TOKEN"),
+      token: Config.redacted("TELEGRAM_BOT_TOKEN"),
     })
   )
 );

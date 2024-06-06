@@ -7,7 +7,7 @@ import {
   Layer,
   Scope,
   Option,
-  Secret,
+  Redacted,
   Stream,
   flow,
 } from "effect";
@@ -70,9 +70,7 @@ const makeClient = (client: RedisClient) => {
         catch: (cause) => new CacheSetError({ cause }),
         try: () => client.hGet(...args),
       })
-        .pipe(
-          Effect.map(flow(Option.fromNullable, Option.map(Secret.fromString)))
-        )
+        .pipe(Effect.map(flow(Option.fromNullable, Option.map(Redacted.make))))
         .pipe(
           Effect.tapBoth({
             onFailure: Effect.logError,
@@ -139,12 +137,12 @@ export class CacheServiceTag extends Context.Tag("CacheService")<
     Layer.effect(
       this,
       Effect.gen(function* (_) {
-        const password = yield* Config.secret("REDIS_PASSWORD");
-        const port = yield* Config.secret("REDIS_PORT");
-        const host = yield* Config.secret("REDIS_HOST");
+        const password = yield* Config.redacted("REDIS_PASSWORD");
+        const port = yield* Config.redacted("REDIS_PORT");
+        const host = yield* Config.redacted("REDIS_HOST");
 
         const redisURL = new URL(
-          `redis://:${Secret.value(password)}@${Secret.value(host)}:${Secret.value(port)}`
+          `redis://:${Redacted.value(password)}@${Redacted.value(host)}:${Redacted.value(port)}`
         );
 
         const initResult = yield* initialize({

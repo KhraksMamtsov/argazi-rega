@@ -1,5 +1,5 @@
 import { Schema, ParseResult } from "@effect/schema";
-import { Config, Effect, Layer, Record, Secret, Data, pipe } from "effect";
+import { Config, Effect, Layer, Record, Redacted, Data, pipe } from "effect";
 
 import { IdUser } from "@argazi/domain";
 import { _SS, _JWT } from "@argazi/shared";
@@ -47,12 +47,12 @@ const makeLive = () =>
   Effect.gen(function* (_) {
     const jwtConfig = yield* pipe(
       Effect.all({
-        accessTokenSecret: Config.secret("JWT_ACCESS_TOKEN_SECRET"),
-        accessTokenTtl: Config.secret("JWT_ACCESS_TOKEN_TTL"),
-        refreshTokenSecret: Config.secret("JWT_REFRESH_TOKEN_SECRET"),
-        refreshTokenTtl: Config.secret("JWT_REFRESH_TOKEN_TTL"),
+        accessTokenSecret: Config.redacted("JWT_ACCESS_TOKEN_SECRET"),
+        accessTokenTtl: Config.redacted("JWT_ACCESS_TOKEN_TTL"),
+        refreshTokenSecret: Config.redacted("JWT_REFRESH_TOKEN_SECRET"),
+        refreshTokenTtl: Config.redacted("JWT_REFRESH_TOKEN_TTL"),
       }),
-      Effect.map(Record.map(Secret.value))
+      Effect.map(Record.map(Redacted.value))
     );
 
     return {
@@ -63,35 +63,29 @@ const makeLive = () =>
               accessToken: _JWT
                 .sign({
                   expiresIn: jwtConfig.accessTokenTtl,
-                  key: jwtConfig.accessTokenSecret,
+                  key: jwtConfig.refreshTokenSecret,
                   payload: encodedPayload,
                 })
-                .pipe(
-                  Effect.map(Secret.fromString),
-                  Effect.map(AccessToken.make)
-                ),
+                .pipe(Effect.map(Redacted.make), Effect.map(AccessToken.make)),
               refreshToken: _JWT
                 .sign({
                   expiresIn: jwtConfig.refreshTokenTtl,
                   key: jwtConfig.refreshTokenSecret,
                   payload: encodedPayload,
                 })
-                .pipe(
-                  Effect.map(Secret.fromString),
-                  Effect.map(RefreshToken.make)
-                ),
+                .pipe(Effect.map(Redacted.make), Effect.map(RefreshToken.make)),
             })
           ),
           Effect.mapError((cause) => new JWRServiceSignError({ cause }))
         ),
       verifyAndDecode: (args: {
-        readonly token: Secret.Secret;
+        readonly token: Redacted.Redacted;
         readonly type: "accessToken" | "refreshToken";
       }) =>
         _JWT
           .verifyAndDecode({
             key: jwtConfig[`${args.type}Secret`],
-            token: Secret.value(args.token),
+            token: Redacted.value(args.token),
           })
           .pipe(
             Effect.flatMap(decodeJWT),

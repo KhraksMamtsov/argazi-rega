@@ -1,4 +1,4 @@
-import { Effect, Option, Secret } from "effect";
+import { Effect, Option, Redacted } from "effect";
 
 import { PrismaServiceTag, UserDbToDomain } from "@argazi/database";
 import { NotificationServiceTag, notification } from "@argazi/domain";
@@ -17,14 +17,14 @@ export const RegisterUserUseCase = BaseUseCaseFor(RegisterUserCommand)(
         p.user.create({
           data: {
             ...payload,
-            email: Secret.value(payload.email),
-            firstName: Secret.value(payload.firstName),
+            email: Redacted.value(payload.email),
+            firstName: Redacted.value(payload.firstName),
             idUserCreator: payload.id,
             idUserUpdater: payload.id,
-            lastName: Option.map(payload.lastName, Secret.value).pipe(
+            lastName: Option.map(payload.lastName, Redacted.value).pipe(
               Option.getOrNull
             ),
-            phone: Option.map(payload.phone, Secret.value).pipe(
+            phone: Option.map(payload.phone, Redacted.value).pipe(
               Option.getOrNull
             ),
           },

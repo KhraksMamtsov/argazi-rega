@@ -1,4 +1,4 @@
-import { Effect, Secret, Option, pipe } from "effect";
+import { Effect, Redacted, Option, pipe } from "effect";
 
 import type { User } from "@argazi/domain";
 
@@ -18,7 +18,7 @@ export const UserMdComponent = (props: { user: User }) =>
           pipe(
             //
             user.firstName,
-            Secret.value,
+            Redacted.value,
             MD.escape,
             MD.bold
           ),
@@ -29,20 +29,20 @@ export const UserMdComponent = (props: { user: User }) =>
             user.lastName,
             Option.match({
               onNone: () => EmptyMdComponent({ length: 4 }),
-              onSome: Secret.value,
+              onSome: Redacted.value,
             }),
             MD.escape,
             MD.bold
           ),
         ],
-        ["Email", pipe(user.email, Secret.value, MD.escape, MD.bold)],
+        ["Email", pipe(user.email, Redacted.value, MD.escape, MD.bold)],
         [
           "Телефон",
           pipe(
             user.phone,
             Option.match({
               onNone: () => EmptyMdComponent({ length: 4 }),
-              onSome: Secret.value,
+              onSome: Redacted.value,
             }),
             MD.escape,
             MD.bold

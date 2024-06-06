@@ -15,7 +15,7 @@ export const EventDb = Schema.Struct({
   dateStart: Schema.ValidDateFromSelf,
   id: IdEvent,
   idPlace: IdPlace,
-  name: Schema.Secret,
+  name: Schema.Redacted(Schema.String),
   priceDay: Schema.compose(BigDecimalFromPrismaDecimal, Price),
   priceEvent: Schema.compose(BigDecimalFromPrismaDecimal, Price),
   description: Schema.String,

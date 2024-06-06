@@ -12,7 +12,7 @@ export const GeoPointBase = Schema.Struct({
   idUser: IdUser,
   latitude: Latitude,
   longitude: Longitude,
-  name: Schema.OptionFromSelf(Schema.SecretFromSelf),
+  name: Schema.OptionFromSelf(Schema.RedactedFromSelf(Schema.String)),
 }).pipe(Schema.typeSchema, Schema.identifier("GeoPointBase"));
 
 export interface GeoPointBase extends Schema.Schema.Type<typeof GeoPointBase> {}

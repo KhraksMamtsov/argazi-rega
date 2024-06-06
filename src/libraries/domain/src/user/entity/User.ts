@@ -9,14 +9,14 @@ import { Base } from "../../entities/common/Base.js";
 
 export const UserBase = Schema.Struct({
   //
-  email: Schema.SecretFromSelf,
-  firstName: Schema.SecretFromSelf,
+  email: Schema.RedactedFromSelf(Schema.String),
+  firstName: Schema.RedactedFromSelf(Schema.String),
   id: IdUser,
   idDwbn: IdDwbn,
   idTelegramChat: IdTelegramChat,
   isAdmin: Schema.Boolean,
-  lastName: Schema.OptionFromSelf(Schema.SecretFromSelf),
-  phone: Schema.OptionFromSelf(Schema.SecretFromSelf),
+  lastName: Schema.OptionFromSelf(Schema.RedactedFromSelf(Schema.String)),
+  phone: Schema.OptionFromSelf(Schema.RedactedFromSelf(Schema.String)),
   type: UserTypeSchema,
 }).pipe(Schema.identifier("UserBase"));
 

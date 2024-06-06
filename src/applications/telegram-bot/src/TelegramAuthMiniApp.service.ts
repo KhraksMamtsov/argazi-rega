@@ -1,12 +1,12 @@
-import { Config, Record, Secret } from "effect";
+import { Config, Record, Redacted } from "effect";
 
 export const TelegramAuthMiniAppURL = Config.all({
-  authURI: Config.secret("DWBN_SSO_AUTHORIZE_URL"),
-  clientId: Config.secret("DWBN_SSO_CLIENT_ID"),
-  redirectURI: Config.secret("DWBN_SSO_REDIRECT_URL"),
-  scope: Config.secret("DWBN_SSO_SCOPE"),
+  authURI: Config.redacted("DWBN_SSO_AUTHORIZE_URL"),
+  clientId: Config.redacted("DWBN_SSO_CLIENT_ID"),
+  redirectURI: Config.redacted("DWBN_SSO_REDIRECT_URL"),
+  scope: Config.redacted("DWBN_SSO_SCOPE"),
 }).pipe(
-  Config.map(Record.map(Secret.value)),
+  Config.map(Record.map(Redacted.value)),
   Config.map((x) => {
     const resultURL = new URL(x.authURI);
 

@@ -8,7 +8,7 @@ import {
   LogLevel,
   Option,
   pipe,
-  Secret,
+  Redacted,
 } from "effect";
 import { RouterBuilder, HttpError } from "effect-http";
 import { NodeServer } from "effect-http-node";
@@ -77,8 +77,8 @@ const app = pipe(
     RouterBuilder.handle("loginBasic", (_, { pass, user }) =>
       Effect.gen(function* (_) {
         const loginResult = yield* LoginBasicHandler({
-          login: Secret.fromString(user),
-          password: Secret.fromString(pass),
+          login: Redacted.make(user),
+          password: Redacted.make(pass),
         });
 
         if (HttpError.isHttpError(loginResult)) {

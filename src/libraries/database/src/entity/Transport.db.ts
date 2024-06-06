@@ -14,8 +14,8 @@ const _TransportDb = Schema.Struct({
   color: Schema.Trim.pipe(Schema.nonEmpty()),
   id: IdTransport,
   idUser: IdUser,
-  model: Schema.OptionFromNullOr(Schema.Secret),
-  number: Schema.Secret,
+  model: Schema.OptionFromNullOr(Schema.Redacted(Schema.String)),
+  number: Schema.Redacted(Schema.String),
   seatsNumber: Schema.Int.pipe(Schema.positive()),
 }).pipe(
   Schema.extend(BaseDb),

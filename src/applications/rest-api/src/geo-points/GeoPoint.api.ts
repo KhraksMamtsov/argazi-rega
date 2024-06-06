@@ -10,11 +10,14 @@ import { _SS } from "@argazi/shared";
 export const _GeoPointApi = Schema.Struct({
   id: IdGeoPoint,
   idUser: IdUser,
-  latitude: Schema.compose(Schema.Secret, Latitude),
-  longitude: Schema.compose(Schema.Secret, Longitude),
+  latitude: Schema.compose(Schema.Redacted(Schema.String), Latitude),
+  longitude: Schema.compose(Schema.Redacted(Schema.String), Longitude),
   //
   name: Schema.OptionFromNullOr(
-    Schema.compose(Schema.compose(Schema.Trim, Schema.NonEmpty), Schema.Secret)
+    Schema.compose(
+      Schema.compose(Schema.Trim, Schema.NonEmpty),
+      Schema.Redacted(Schema.String)
+    )
   ),
 }).pipe(_SS.satisfies.type<GeoPointBase>(), Schema.identifier("GeoPointApi"));
 

@@ -10,8 +10,8 @@ const _TransportApi = Schema.Struct({
   color: Schema.NonEmpty.pipe(Schema.trimmed()),
   id: IdTransport,
   idUser: IdUser,
-  model: Schema.OptionFromNullOr(Schema.Secret),
-  number: Schema.Secret,
+  model: Schema.OptionFromNullOr(Schema.Redacted(Schema.String)),
+  number: Schema.Redacted(Schema.String),
   seatsNumber: Schema.Int.pipe(Schema.positive()),
 }).pipe(
   _SS.satisfies.type<TransportBase>(),

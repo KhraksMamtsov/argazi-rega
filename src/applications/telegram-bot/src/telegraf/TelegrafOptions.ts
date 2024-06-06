@@ -1,10 +1,10 @@
-import { Config, Effect, Layer, Secret } from "effect";
+import { Config, Effect, Layer, Redacted } from "effect";
 // import * as Tg from "telegraf";
 
 export interface TelegrafOptions {
   // readonly client: Partial<Tg.Telegraf.Options<Tg.Context>>;
   // readonly launch: Tg.Telegraf.LaunchOptions;
-  readonly token: Secret.Secret;
+  readonly token: Redacted.Redacted;
 }
 
 export class TelegrafOptionsTag extends Effect.Tag("TelegrafOptionsTag")<

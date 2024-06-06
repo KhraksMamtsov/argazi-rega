@@ -3,7 +3,7 @@ import {
   Layer,
   Stream,
   Effect,
-  Secret,
+  Redacted,
   Config,
   Record,
   Chunk,
@@ -35,12 +35,12 @@ import {
 const RabbitMQService = Effect.gen(function* (_) {
   const config = yield* pipe(
     Effect.all({
-      hostname: Config.secret("RABBITMQ_HOSTNAME"),
-      password: Config.secret("RABBITMQ_DEFAULT_PASS"),
-      port: Config.secret("RABBITMQ_PORT"),
-      username: Config.secret("RABBITMQ_DEFAULT_USER"),
+      hostname: Config.redacted("RABBITMQ_HOSTNAME"),
+      password: Config.redacted("RABBITMQ_DEFAULT_PASS"),
+      port: Config.redacted("RABBITMQ_PORT"),
+      username: Config.redacted("RABBITMQ_DEFAULT_USER"),
     }),
-    Effect.map(Record.map(Secret.value))
+    Effect.map(Record.map(Redacted.value))
   );
 
   const connection = yield* Effect.acquireRelease(

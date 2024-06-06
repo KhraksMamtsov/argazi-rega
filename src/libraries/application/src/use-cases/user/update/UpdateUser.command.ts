@@ -25,11 +25,11 @@ export type UpdateUserCommandPayloadFrom = {
 };
 
 export const UpdateUserCommandPayload = Schema.Struct({
-  email: Schema.optional(Schema.Secret, {
+  email: Schema.optional(Schema.Redacted(Schema.String), {
     as: "Option",
     exact: true,
   }),
-  firstName: Schema.optional(Schema.Secret, {
+  firstName: Schema.optional(Schema.Redacted(Schema.String), {
     as: "Option",
     exact: true,
   }),
@@ -45,12 +45,12 @@ export const UpdateUserCommandPayload = Schema.Struct({
     as: "Option",
     exact: true,
   }),
-  lastName: Schema.optional(Schema.Secret, {
+  lastName: Schema.optional(Schema.Redacted(Schema.String), {
     as: "Option",
     exact: true,
     nullable: true,
   }),
-  phone: Schema.optional(Schema.Secret, {
+  phone: Schema.optional(Schema.Redacted(Schema.String), {
     as: "Option",
     exact: true,
     nullable: true,

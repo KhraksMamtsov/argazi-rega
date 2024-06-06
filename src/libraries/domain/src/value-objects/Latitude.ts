@@ -1,6 +1,6 @@
 import { Schema } from "@effect/schema";
 
-export const Latitude = Schema.SecretFromSelf.pipe(
+export const Latitude = Schema.RedactedFromSelf(Schema.String).pipe(
   Schema.identifier("Latitude"),
   Schema.brand("Latitude")
 );

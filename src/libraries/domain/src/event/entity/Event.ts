@@ -13,7 +13,7 @@ export const EventBase = Schema.Struct({
   dateStart: Schema.ValidDateFromSelf,
   id: IdEvent,
   idPlace: IdPlace,
-  name: Schema.SecretFromSelf,
+  name: Schema.RedactedFromSelf(Schema.String),
   priceDay: Price,
   priceEvent: Price,
   description: Schema.String,

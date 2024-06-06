@@ -1,6 +1,6 @@
 import { Schema, ParseResult } from "@effect/schema";
 import { PrismaClient } from "@prisma/client";
-import { Config, Data, Effect, Layer, pipe, Secret } from "effect";
+import { Config, Data, Effect, Layer, pipe, Redacted } from "effect";
 
 export class PrismaDecodeError extends Data.TaggedError("PrismaDecodeError")<{
   readonly cause: ParseResult.ParseError;
@@ -11,13 +11,13 @@ export class PrismaQueryError extends Data.TaggedError("PrismaQueryError")<{
 
 const makeLive = Effect.gen(function* (_) {
   const credentials = yield* Config.all({
-    datasourceUrl: Config.secret("PRISMA_DB_URL"),
+    datasourceUrl: Config.redacted("PRISMA_DB_URL"),
   });
 
   const prismaClient = yield* Effect.sync(
     () =>
       new PrismaClient({
-        datasourceUrl: Secret.value(credentials.datasourceUrl),
+        datasourceUrl: Redacted.value(credentials.datasourceUrl),
       })
   );
 

@@ -1,4 +1,4 @@
-import { Effect, Layer, Secret } from "effect";
+import { Effect, Layer, Redacted } from "effect";
 import { Data } from "effect";
 import * as Tg from "telegraf";
 import { useNewReplies } from "telegraf/future";
@@ -21,7 +21,7 @@ export class TelegrafCtxSendMessageError extends Data.TaggedError(
 const make = Effect.gen(function* (_) {
   const config = yield* TelegrafOptionsTag;
 
-  const client = new Tg.Telegraf(Secret.value(config.token)); //, config.client);
+  const client = new Tg.Telegraf(Redacted.value(config.token)); //, config.client);
 
   yield* Effect.promise(() =>
     client.telegram.setMyCommands(TelegramCommands).catch((e) => {

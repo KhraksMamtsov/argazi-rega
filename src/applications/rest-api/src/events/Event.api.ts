@@ -13,7 +13,7 @@ export const _EventApi = Schema.Struct({
   dateStart: Schema.compose(Schema.DateFromString, Schema.ValidDateFromSelf),
   id: IdEvent,
   idPlace: IdPlace,
-  name: Schema.Secret,
+  name: Schema.Redacted(Schema.String),
   priceDay: Schema.compose(Schema.BigDecimalFromNumber, Price),
   priceEvent: Schema.compose(Schema.BigDecimalFromNumber, Price),
   description: Schema.String,

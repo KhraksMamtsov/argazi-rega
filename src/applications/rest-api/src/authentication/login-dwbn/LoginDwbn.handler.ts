@@ -1,4 +1,4 @@
-import { Config, Effect, Option, pipe, Secret } from "effect";
+import { Config, Effect, Option, pipe, Redacted } from "effect";
 
 import { webcrypto } from "node:crypto";
 
@@ -17,7 +17,7 @@ import type { LoginDwbnRequestBody } from "./LoginDwbn.endpoint.js";
 
 export const LoginDwbnHandler = (body: LoginDwbnRequestBody) =>
   Effect.gen(function* (_) {
-    const idDwbnAdmin = yield* Config.secret("DWBN_ID_ADMIN");
+    const idDwbnAdmin = yield* Config.redacted("DWBN_ID_ADMIN");
     const notificationService = yield* NotificationServiceTag;
     const dwbnOAuth2Service = yield* DwbnOAuth2Service;
 
@@ -33,7 +33,7 @@ export const LoginDwbnHandler = (body: LoginDwbnRequestBody) =>
     });
 
     if (Option.isNone(registeredUserOption)) {
-      const isAdmin = Secret.value(idDwbnAdmin) === idTokenPayload.sub;
+      const isAdmin = Redacted.value(idDwbnAdmin) === idTokenPayload.sub;
       const idNewUser = IdUser.make(isAdmin ? IdAdmin : webcrypto.randomUUID());
 
       const newlyRegisteredUser = yield* RegisterUserUseCase({

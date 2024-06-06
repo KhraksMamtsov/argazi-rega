@@ -3,7 +3,7 @@ import { Schema } from "@effect/schema";
 export const RefreshTokenSymbol: unique symbol =
   Symbol.for("RefreshTokenSymbol");
 
-export const RefreshToken = Schema.Secret.pipe(
+export const RefreshToken = Schema.Redacted(Schema.String).pipe(
   Schema.identifier("RefreshToken"),
   Schema.brand(RefreshTokenSymbol)
 );
