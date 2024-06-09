@@ -34,7 +34,7 @@ importers:
         version: 5.15.0(prisma@5.15.0)
       '@vitejs/plugin-vue':
         specifier: ^5.0.5
-        version: 5.0.5(vite@5.2.12(@types/node@20.14.2))(vue@3.4.27(typescript@5.5.0-beta))
+        version: 5.0.5(vite@5.2.13(@types/node@20.14.2))(vue@3.4.27(typescript@5.5.0-beta))
       amqplib:
         specifier: ^0.10.4
         version: 0.10.4
@@ -42,14 +42,14 @@ importers:
         specifier: ^3.3.0
         version: 3.3.0
       effect-http:
-        specifier: ^0.67.2
-        version: 0.67.2(@effect/platform@0.56.0(@effect/schema@0.67.21(effect@3.3.0))(effect@3.3.0))(@effect/schema@0.67.21(effect@3.3.0))(effect@3.3.0)
+        specifier: ^0.68.0
+        version: 0.68.0(@effect/platform@0.56.0(@effect/schema@0.67.21(effect@3.3.0))(effect@3.3.0))(@effect/schema@0.67.21(effect@3.3.0))(effect@3.3.0)
       effect-http-node:
-        specifier: ^0.13.3
-        version: 0.13.3(@effect/platform-node@0.51.8(@effect/platform@0.56.0(@effect/schema@0.67.21(effect@3.3.0))(effect@3.3.0))(effect@3.3.0))(@effect/platform@0.56.0(@effect/schema@0.67.21(effect@3.3.0))(effect@3.3.0))(@effect/schema@0.67.21(effect@3.3.0))(effect-http@0.67.2(@effect/platform@0.56.0(@effect/schema@0.67.21(effect@3.3.0))(effect@3.3.0))(@effect/schema@0.67.21(effect@3.3.0))(effect@3.3.0))(effect@3.3.0)
+        specifier: ^0.13.5
+        version: 0.13.5(@effect/platform-node@0.51.8(@effect/platform@0.56.0(@effect/schema@0.67.21(effect@3.3.0))(effect@3.3.0))(effect@3.3.0))(@effect/platform@0.56.0(@effect/schema@0.67.21(effect@3.3.0))(effect@3.3.0))(@effect/schema@0.67.21(effect@3.3.0))(effect-http@0.68.0(@effect/platform@0.56.0(@effect/schema@0.67.21(effect@3.3.0))(effect@3.3.0))(@effect/schema@0.67.21(effect@3.3.0))(effect@3.3.0))(effect@3.3.0)
       effect-log:
-        specifier: ^0.31.3
-        version: 0.31.3(effect@3.3.0)
+        specifier: ^0.31.4
+        version: 0.31.4(effect@3.3.0)
       jsonwebtoken:
         specifier: ^9.0.2
         version: 9.0.2
@@ -63,8 +63,8 @@ importers:
         specifier: ^4.6.14
         version: 4.6.14
       schema-openapi:
-        specifier: ^0.38.2
-        version: 0.38.2(@effect/schema@0.67.21(effect@3.3.0))(effect@3.3.0)
+        specifier: ^0.38.3
+        version: 0.38.3(@effect/schema@0.67.21(effect@3.3.0))(effect@3.3.0)
       telegraf:
         specifier: ^4.16.3
         version: 4.16.3
@@ -78,8 +78,8 @@ importers:
         specifier: '4'
         version: 4.3.2(vue@3.4.27(typescript@5.5.0-beta))
       vue-tsc:
-        specifier: ^2.0.19
-        version: 2.0.19(typescript@5.5.0-beta)
+        specifier: ^2.0.21
+        version: 2.0.21(typescript@5.5.0-beta)
     devDependencies:
       '@tsconfig/node20':
         specifier: ^20.1.4
@@ -131,7 +131,7 @@ importers:
         version: 5.5.0-beta
       vite-plugin-dts:
         specifier: ^3.9.1
-        version: 3.9.1(@types/node@20.14.2)(rollup@4.18.0)(typescript@5.5.0-beta)(vite@5.2.12(@types/node@20.14.2))
+        version: 3.9.1(@types/node@20.14.2)(rollup@4.18.0)(typescript@5.5.0-beta)(vite@5.2.13(@types/node@20.14.2))
 
   src/applications/postgres: {}
 
@@ -1038,20 +1038,20 @@ packages:
   '@volar/language-core@1.11.1':
     resolution: {integrity: sha512-dOcNn3i9GgZAcJt43wuaEykSluAuOkQgzni1cuxLxTV0nJKanQztp7FxyswdRILaKH+P2XZMPRp2S4MV/pElCw==}
 
-  '@volar/language-core@2.2.4':
-    resolution: {integrity: sha512-7As47GndxGxsqqYnbreLrfB5NDUeQioPM2LJKUuB4/34c0NpEJ2byVl3c9KYdjIdiEstWZ9JLtLKNTaPWb5jtA==}
+  '@volar/language-core@2.3.0':
+    resolution: {integrity: sha512-pvhL24WUh3VDnv7Yw5N1sjhPtdx7q9g+Wl3tggmnkMcyK8GcCNElF2zHiKznryn0DiUGk+eez/p2qQhz+puuHw==}
 
   '@volar/source-map@1.11.1':
     resolution: {integrity: sha512-hJnOnwZ4+WT5iupLRnuzbULZ42L7BWWPMmruzwtLhJfpDVoZLjNBxHDi2sY2bgZXCKlpU5XcsMFoYrsQmPhfZg==}
 
-  '@volar/source-map@2.2.4':
-    resolution: {integrity: sha512-m92FLpR9vB1YEZfiZ+bfgpLrToL/DNkOrorWVep3pffHrwwI4Tx2oIQN+sqHJfKkiT5N3J1owC+8crhAEinfjg==}
+  '@volar/source-map@2.3.0':
+    resolution: {integrity: sha512-G/228aZjAOGhDjhlyZ++nDbKrS9uk+5DMaEstjvzglaAw7nqtDyhnQAsYzUg6BMP9BtwZ59RIw5HGePrutn00Q==}
 
   '@volar/typescript@1.11.1':
     resolution: {integrity: sha512-iU+t2mas/4lYierSnoFOeRFQUhAEMgsFuQxoxvwn5EdQopw43j+J27a4lt9LMInx1gLJBC6qL14WYGlgymaSMQ==}
 
-  '@volar/typescript@2.2.4':
-    resolution: {integrity: sha512-uAQC53tgEbHO62G8NXMfmBrJAlP2QJ9WxVEEQqqK3I6VSy8frL5LbH3hAWODxiwMWixv74wJLWlKbWXOgdIoRQ==}
+  '@volar/typescript@2.3.0':
+    resolution: {integrity: sha512-PtUwMM87WsKVeLJN33GSTUjBexlKfKgouWlOUIv7pjrOnTwhXHZNSmpc312xgXdTjQPpToK6KXSIcKu9sBQ5LQ==}
 
   '@vue/compiler-core@3.4.26':
     resolution: {integrity: sha512-N9Vil6Hvw7NaiyFUFBPXrAyETIGlQ8KcFMkyk6hW1Cl6NvoqvP+Y8p1Eqvx+UdqsnrnI9+HMUEJegzia3mhXmQ==}
@@ -1082,8 +1082,8 @@ packages:
       typescript:
         optional: true
 
-  '@vue/language-core@2.0.19':
-    resolution: {integrity: sha512-A9EGOnvb51jOvnCYoRLnMP+CcoPlbZVxI9gZXE/y2GksRWM6j/PrLEIC++pnosWTN08tFpJgxhSS//E9v/Sg+Q==}
+  '@vue/language-core@2.0.21':
+    resolution: {integrity: sha512-vjs6KwnCK++kIXT+eI63BGpJHfHNVJcUCr3RnvJsccT3vbJnZV5IhHR2puEkoOkIbDdp0Gqi1wEnv3hEd3WsxQ==}
     peerDependencies:
       typescript: '*'
     peerDependenciesMeta:
@@ -1357,41 +1357,41 @@ packages:
   ecdsa-sig-formatter@1.0.11:
     resolution: {integrity: sha512-nagl3RYrbNv6kQkeJIpt6NJZy8twLB/2vtz6yN9Z4vRKHN4/QZJIEbqohALSgwKdnksuY3k5Addp5lg8sVoVcQ==}
 
-  effect-http-error@0.1.2:
-    resolution: {integrity: sha512-dfR2qsZ+FBuyFiRl0kcUa/0whrnMf8OW41TfxOM8SEdGfo4cgsSpbzLmji8y8dGrieoWs3zC91eSI9RbzPmx7g==}
+  effect-http-error@0.1.3:
+    resolution: {integrity: sha512-uVrMYLOd3FCkLpl3CE8HhXKRR2nVKOJc2uj30mISgYwFC8RjAMLLQseqA35rzUzNgj8KQcxyiubYdqUycpICww==}
     peerDependencies:
-      '@effect/platform': ^0.55.0
+      '@effect/platform': ^0.56.0
       '@effect/schema': ^0.67.0
-      effect: ^3.2.0
+      effect: ^3.3.0
 
-  effect-http-node@0.13.3:
-    resolution: {integrity: sha512-aEUW9k8SqpzzS+AuRKDulRVOmFDmF6j8BqgaJKCYkSFq5TWqbapbsl8LiuxhGTslr9XqbJQP+S8Qb3bMRx3adw==}
+  effect-http-node@0.13.5:
+    resolution: {integrity: sha512-F2GJ1wlD7D0QPEzkn9B6saXe3CDUer764dVncQCjcWm/3bMB/BFPnIOVbtfzvvigG/gAnq+4xB1eZronHRIOsQ==}
     peerDependencies:
-      '@effect/platform': ^0.55.0
+      '@effect/platform': ^0.56.0
       '@effect/platform-node': ^0.51.0
       '@effect/schema': ^0.67.0
-      effect: ^3.2.0
-      effect-http: ^0.67.2
+      effect: ^3.3.0
+      effect-http: ^0.68.0
 
-  effect-http-security@0.1.2:
-    resolution: {integrity: sha512-Bq5DFzhdyjrtwnl9tn+thO0A8L22K/8ypZZyhtea8w9sEttIjCfxT0lbmPQGrYWf7QlwAI4Kab7RGnnzw8KdLw==}
+  effect-http-security@0.1.3:
+    resolution: {integrity: sha512-qlGfay/j3IF1TBxrk5wr+1cGZffLuZNZL6lUr1l4P8Le9peFXL5Si/5T35rPBKQkbX28ApGePXPHdB1oGpXsqQ==}
     peerDependencies:
-      '@effect/platform': ^0.55.0
+      '@effect/platform': ^0.56.0
       '@effect/schema': ^0.67.0
-      effect: ^3.2.0
-      effect-http-error: ^0.1.2
+      effect: ^3.3.0
+      effect-http-error: ^0.1.3
 
-  effect-http@0.67.2:
-    resolution: {integrity: sha512-/5/MjXiaXeuU5Zyc8rRX25XSAFWT7dbsuRuojCkp8ZuRpUa8Oo3vePGBCLvFF03nhVW+n9nkbzYQGPLGEbnWkA==}
+  effect-http@0.68.0:
+    resolution: {integrity: sha512-mqwc1JAFl74YK3ORVzpiIVsbnKckMLt/vgpKMk5heKEYba3VLJ2lRM+145uBkSU3tGeSTzWYfZUElunLQMCBFQ==}
     peerDependencies:
-      '@effect/platform': ^0.55.0
+      '@effect/platform': ^0.56.0
       '@effect/schema': ^0.67.0
-      effect: ^3.2.0
+      effect: ^3.3.0
 
-  effect-log@0.31.3:
-    resolution: {integrity: sha512-d+L23pYslt9k7BAD0nmWSl1Fjo8F71y04VfWMk+S4CPFpsGImpmlrzEqJZ+CF7SVptEtroaxgyqehC+s0Ygu4g==}
+  effect-log@0.31.4:
+    resolution: {integrity: sha512-ka28Pb59mQ4fk+f7iTTlHfrq+UMqmOuPGXw1qDuMTfazkoy4estE3dfVFmID3fgLR9dmccYmCIPqd/WyUj9TRw==}
     peerDependencies:
-      effect: ^3.2.0
+      effect: ^3.3.0
 
   effect@3.3.0:
     resolution: {integrity: sha512-EH1tbk+H5uMTU38uqAXVy0+2g5QqTY68C3Imo5WSWIcyjCiPS96nBh9Ms2kjKn/i14Rn1dBNoHfsR6Nfne4L3w==}
@@ -2196,11 +2196,11 @@ packages:
     resolution: {integrity: sha512-jLYV0DORrzY3xaz/S9ydJL6Iz7essZeAfnAavsJ+zsJGZ1MOnsS52yRjU3uF3pJa/lla7+wisp//fxOwOH8SKQ==}
     engines: {node: '>= 0.10'}
 
-  schema-openapi@0.38.2:
-    resolution: {integrity: sha512-desbJOOzMHgEh22NqqKzNI7s0QNktZUSi78BSj/gNlSNvYeG2yLeC3M1wygMhX13a0Xueau62v2ffUG3b25luQ==}
+  schema-openapi@0.38.3:
+    resolution: {integrity: sha512-5TCqvEYHYjKmMQ5I44KZ83Uv6Tyvc2CPPHzEFh9k130Ra36SyEHNRdTQvHf6WwiGS7P0d+zGnvNXqLNSxlaM2A==}
     peerDependencies:
       '@effect/schema': ^0.67.0
-      effect: ^3.2.0
+      effect: ^3.3.0
 
   semver@6.3.1:
     resolution: {integrity: sha512-BR7VvDCVHO+q2xBEWskxS6DJE1qRnb7DxzUrogb71CWoSficBxYsiAGd+Kl0mmq/MprG9yArRkyrQxTO6XjMzA==}
@@ -2298,8 +2298,8 @@ packages:
     resolution: {integrity: sha512-ot0WnXS9fgdkgIcePe6RHNk1WA8+muPa6cSjeR3V8K27q9BB1rTE3R1p7Hv0z1ZyAc8s6Vvv8DIyWf681MAt0w==}
     engines: {node: '>= 0.4'}
 
-  swagger-ui-dist@5.17.12:
-    resolution: {integrity: sha512-gHzs6CYQjgm0rpnFJGsjvWLua6znq+nipi89RDcu0a8R8JPXuVQrybVRBoOFmZ8mVTo9uPJDWgEYqnJRl4dHCQ==}
+  swagger-ui-dist@5.17.14:
+    resolution: {integrity: sha512-CVbSfaLpstV65OnSjbXfVd6Sta3q3F7Cj/yYuvHMp1P90LztOLs6PfUnKEVAeiIVQt9u2SaPwv0LiH/OyMjHRw==}
 
   synckit@0.8.8:
     resolution: {integrity: sha512-HwOKAP7Wc5aRGYdKH+dw0PRRpbO841v2DENBtjnR5HFWoiNByAl7vrx3p0G/rCyYXQsrxqtX48TImFtPcIHSpQ==}
@@ -2466,8 +2466,8 @@ packages:
       terser:
         optional: true
 
-  vite@5.2.12:
-    resolution: {integrity: sha512-/gC8GxzxMK5ntBwb48pR32GGhENnjtY30G4A0jemunsBkiEZFw60s8InGpN8gkhHEkjnRK1aSAxeQgwvFhUHAA==}
+  vite@5.2.13:
+    resolution: {integrity: sha512-SSq1noJfY9pR3I1TUENL3rQYDQCFqgD+lM6fTRAM8Nv6Lsg5hDLaXkjETVeBt+7vZBCMoibD+6IWnT2mJ+Zb/A==}
     engines: {node: ^18.0.0 || >=20.0.0}
     hasBin: true
     peerDependencies:
@@ -2494,6 +2494,9 @@ packages:
       terser:
         optional: true
 
+  vscode-uri@3.0.8:
+    resolution: {integrity: sha512-AyFQ0EVmsOZOlAnxoFOGOq1SQDWAB7C6aqMGS23svWAllfOaxbuFvcT8D1i8z3Gyn8fraVeZNNmN6e9bxxXkKw==}
+
   vue-eslint-parser@9.4.2:
     resolution: {integrity: sha512-Ry9oiGmCAK91HrKMtCrKFWmSFWvYkpGglCeFAIqDdr9zdXmMMpJOmUJS7WWsW7fX81h6mwHmUZCQQ1E0PkSwYQ==}
     engines: {node: ^14.17.0 || >=16.0.0}
@@ -2514,8 +2517,8 @@ packages:
     peerDependencies:
       typescript: '*'
 
-  vue-tsc@2.0.19:
-    resolution: {integrity: sha512-JWay5Zt2/871iodGF72cELIbcAoPyhJxq56mPPh+M2K7IwI688FMrFKc/+DvB05wDWEuCPexQJ6L10zSwzzapg==}
+  vue-tsc@2.0.21:
+    resolution: {integrity: sha512-E6x1p1HaHES6Doy8pqtm7kQern79zRtIewkf9fiv7Y43Zo4AFDS5hKi+iHi2RwEhqRmuiwliB1LCEFEGwvxQnw==}
     hasBin: true
     peerDependencies:
       typescript: '*'
@@ -3299,24 +3302,24 @@ snapshots:
       '@typescript-eslint/types': 7.8.0
       eslint-visitor-keys: 3.4.3
 
-  '@vitejs/plugin-vue@5.0.5(vite@5.2.12(@types/node@20.14.2))(vue@3.4.27(typescript@5.5.0-beta))':
+  '@vitejs/plugin-vue@5.0.5(vite@5.2.13(@types/node@20.14.2))(vue@3.4.27(typescript@5.5.0-beta))':
     dependencies:
-      vite: 5.2.12(@types/node@20.14.2)
+      vite: 5.2.13(@types/node@20.14.2)
       vue: 3.4.27(typescript@5.5.0-beta)
 
   '@volar/language-core@1.11.1':
     dependencies:
       '@volar/source-map': 1.11.1
 
-  '@volar/language-core@2.2.4':
+  '@volar/language-core@2.3.0':
     dependencies:
-      '@volar/source-map': 2.2.4
+      '@volar/source-map': 2.3.0
 
   '@volar/source-map@1.11.1':
     dependencies:
       muggle-string: 0.3.1
 
-  '@volar/source-map@2.2.4':
+  '@volar/source-map@2.3.0':
     dependencies:
       muggle-string: 0.4.1
 
@@ -3325,10 +3328,11 @@ snapshots:
       '@volar/language-core': 1.11.1
       path-browserify: 1.0.1
 
-  '@volar/typescript@2.2.4':
+  '@volar/typescript@2.3.0':
     dependencies:
-      '@volar/language-core': 2.2.4
+      '@volar/language-core': 2.3.0
       path-browserify: 1.0.1
+      vscode-uri: 3.0.8
 
   '@vue/compiler-core@3.4.26':
     dependencies:
@@ -3389,9 +3393,9 @@ snapshots:
     optionalDependencies:
       typescript: 5.5.0-beta
 
-  '@vue/language-core@2.0.19(typescript@5.5.0-beta)':
+  '@vue/language-core@2.0.21(typescript@5.5.0-beta)':
     dependencies:
-      '@volar/language-core': 2.2.4
+      '@volar/language-core': 2.3.0
       '@vue/compiler-dom': 3.4.27
       '@vue/shared': 3.4.27
       computeds: 0.0.1
@@ -3675,38 +3679,38 @@ snapshots:
     dependencies:
       safe-buffer: 5.2.1
 
-  effect-http-error@0.1.2(@effect/platform@0.56.0(@effect/schema@0.67.21(effect@3.3.0))(effect@3.3.0))(@effect/schema@0.67.21(effect@3.3.0))(effect@3.3.0):
+  effect-http-error@0.1.3(@effect/platform@0.56.0(@effect/schema@0.67.21(effect@3.3.0))(effect@3.3.0))(@effect/schema@0.67.21(effect@3.3.0))(effect@3.3.0):
     dependencies:
       '@effect/platform': 0.56.0(@effect/schema@0.67.21(effect@3.3.0))(effect@3.3.0)
       '@effect/schema': 0.67.21(effect@3.3.0)
       effect: 3.3.0
 
-  effect-http-node@0.13.3(@effect/platform-node@0.51.8(@effect/platform@0.56.0(@effect/schema@0.67.21(effect@3.3.0))(effect@3.3.0))(effect@3.3.0))(@effect/platform@0.56.0(@effect/schema@0.67.21(effect@3.3.0))(effect@3.3.0))(@effect/schema@0.67.21(effect@3.3.0))(effect-http@0.67.2(@effect/platform@0.56.0(@effect/schema@0.67.21(effect@3.3.0))(effect@3.3.0))(@effect/schema@0.67.21(effect@3.3.0))(effect@3.3.0))(effect@3.3.0):
+  effect-http-node@0.13.5(@effect/platform-node@0.51.8(@effect/platform@0.56.0(@effect/schema@0.67.21(effect@3.3.0))(effect@3.3.0))(effect@3.3.0))(@effect/platform@0.56.0(@effect/schema@0.67.21(effect@3.3.0))(effect@3.3.0))(@effect/schema@0.67.21(effect@3.3.0))(effect-http@0.68.0(@effect/platform@0.56.0(@effect/schema@0.67.21(effect@3.3.0))(effect@3.3.0))(@effect/schema@0.67.21(effect@3.3.0))(effect@3.3.0))(effect@3.3.0):
     dependencies:
       '@effect/platform': 0.56.0(@effect/schema@0.67.21(effect@3.3.0))(effect@3.3.0)
       '@effect/platform-node': 0.51.8(@effect/platform@0.56.0(@effect/schema@0.67.21(effect@3.3.0))(effect@3.3.0))(effect@3.3.0)
       '@effect/schema': 0.67.21(effect@3.3.0)
       effect: 3.3.0
-      effect-http: 0.67.2(@effect/platform@0.56.0(@effect/schema@0.67.21(effect@3.3.0))(effect@3.3.0))(@effect/schema@0.67.21(effect@3.3.0))(effect@3.3.0)
-      swagger-ui-dist: 5.17.12
+      effect-http: 0.68.0(@effect/platform@0.56.0(@effect/schema@0.67.21(effect@3.3.0))(effect@3.3.0))(@effect/schema@0.67.21(effect@3.3.0))(effect@3.3.0)
+      swagger-ui-dist: 5.17.14
 
-  effect-http-security@0.1.2(@effect/platform@0.56.0(@effect/schema@0.67.21(effect@3.3.0))(effect@3.3.0))(@effect/schema@0.67.21(effect@3.3.0))(effect-http-error@0.1.2(@effect/platform@0.56.0(@effect/schema@0.67.21(effect@3.3.0))(effect@3.3.0))(@effect/schema@0.67.21(effect@3.3.0))(effect@3.3.0))(effect@3.3.0):
+  effect-http-security@0.1.3(@effect/platform@0.56.0(@effect/schema@0.67.21(effect@3.3.0))(effect@3.3.0))(@effect/schema@0.67.21(effect@3.3.0))(effect-http-error@0.1.3(@effect/platform@0.56.0(@effect/schema@0.67.21(effect@3.3.0))(effect@3.3.0))(@effect/schema@0.67.21(effect@3.3.0))(effect@3.3.0))(effect@3.3.0):
     dependencies:
       '@effect/platform': 0.56.0(@effect/schema@0.67.21(effect@3.3.0))(effect@3.3.0)
       '@effect/schema': 0.67.21(effect@3.3.0)
       effect: 3.3.0
-      effect-http-error: 0.1.2(@effect/platform@0.56.0(@effect/schema@0.67.21(effect@3.3.0))(effect@3.3.0))(@effect/schema@0.67.21(effect@3.3.0))(effect@3.3.0)
+      effect-http-error: 0.1.3(@effect/platform@0.56.0(@effect/schema@0.67.21(effect@3.3.0))(effect@3.3.0))(@effect/schema@0.67.21(effect@3.3.0))(effect@3.3.0)
 
-  effect-http@0.67.2(@effect/platform@0.56.0(@effect/schema@0.67.21(effect@3.3.0))(effect@3.3.0))(@effect/schema@0.67.21(effect@3.3.0))(effect@3.3.0):
+  effect-http@0.68.0(@effect/platform@0.56.0(@effect/schema@0.67.21(effect@3.3.0))(effect@3.3.0))(@effect/schema@0.67.21(effect@3.3.0))(effect@3.3.0):
     dependencies:
       '@effect/platform': 0.56.0(@effect/schema@0.67.21(effect@3.3.0))(effect@3.3.0)
       '@effect/schema': 0.67.21(effect@3.3.0)
       effect: 3.3.0
-      effect-http-error: 0.1.2(@effect/platform@0.56.0(@effect/schema@0.67.21(effect@3.3.0))(effect@3.3.0))(@effect/schema@0.67.21(effect@3.3.0))(effect@3.3.0)
-      effect-http-security: 0.1.2(@effect/platform@0.56.0(@effect/schema@0.67.21(effect@3.3.0))(effect@3.3.0))(@effect/schema@0.67.21(effect@3.3.0))(effect-http-error@0.1.2(@effect/platform@0.56.0(@effect/schema@0.67.21(effect@3.3.0))(effect@3.3.0))(@effect/schema@0.67.21(effect@3.3.0))(effect@3.3.0))(effect@3.3.0)
-      schema-openapi: 0.38.2(@effect/schema@0.67.21(effect@3.3.0))(effect@3.3.0)
+      effect-http-error: 0.1.3(@effect/platform@0.56.0(@effect/schema@0.67.21(effect@3.3.0))(effect@3.3.0))(@effect/schema@0.67.21(effect@3.3.0))(effect@3.3.0)
+      effect-http-security: 0.1.3(@effect/platform@0.56.0(@effect/schema@0.67.21(effect@3.3.0))(effect@3.3.0))(@effect/schema@0.67.21(effect@3.3.0))(effect-http-error@0.1.3(@effect/platform@0.56.0(@effect/schema@0.67.21(effect@3.3.0))(effect@3.3.0))(@effect/schema@0.67.21(effect@3.3.0))(effect@3.3.0))(effect@3.3.0)
+      schema-openapi: 0.38.3(@effect/schema@0.67.21(effect@3.3.0))(effect@3.3.0)
 
-  effect-log@0.31.3(effect@3.3.0):
+  effect-log@0.31.4(effect@3.3.0):
     dependencies:
       effect: 3.3.0
 
@@ -4634,7 +4638,7 @@ snapshots:
 
   sandwich-stream@2.0.2: {}
 
-  schema-openapi@0.38.2(@effect/schema@0.67.21(effect@3.3.0))(effect@3.3.0):
+  schema-openapi@0.38.3(@effect/schema@0.67.21(effect@3.3.0))(effect@3.3.0):
     dependencies:
       '@effect/schema': 0.67.21(effect@3.3.0)
       effect: 3.3.0
@@ -4729,7 +4733,7 @@ snapshots:
 
   supports-preserve-symlinks-flag@1.0.0: {}
 
-  swagger-ui-dist@5.17.12: {}
+  swagger-ui-dist@5.17.14: {}
 
   synckit@0.8.8:
     dependencies:
@@ -4873,7 +4877,7 @@ snapshots:
 
   validator@13.11.0: {}
 
-  vite-plugin-dts@3.9.1(@types/node@20.14.2)(rollup@4.18.0)(typescript@5.5.0-beta)(vite@5.2.12(@types/node@20.14.2)):
+  vite-plugin-dts@3.9.1(@types/node@20.14.2)(rollup@4.18.0)(typescript@5.5.0-beta)(vite@5.2.13(@types/node@20.14.2)):
     dependencies:
       '@microsoft/api-extractor': 7.43.0(@types/node@20.14.2)
       '@rollup/pluginutils': 5.1.0(rollup@4.18.0)
@@ -4884,7 +4888,7 @@ snapshots:
       typescript: 5.5.0-beta
       vue-tsc: 1.8.27(typescript@5.5.0-beta)
     optionalDependencies:
-      vite: 5.2.12(@types/node@20.14.2)
+      vite: 5.2.13(@types/node@20.14.2)
     transitivePeerDependencies:
       - '@types/node'
       - rollup
@@ -4899,7 +4903,7 @@ snapshots:
       '@types/node': 20.14.2
       fsevents: 2.3.3
 
-  vite@5.2.12(@types/node@20.14.2):
+  vite@5.2.13(@types/node@20.14.2):
     dependencies:
       esbuild: 0.20.2
       postcss: 8.4.38
@@ -4907,6 +4911,8 @@ snapshots:
     optionalDependencies:
       '@types/node': 20.14.2
       fsevents: 2.3.3
+
+  vscode-uri@3.0.8: {}
 
   vue-eslint-parser@9.4.2(eslint@9.4.0):
     dependencies:
@@ -4938,10 +4944,10 @@ snapshots:
       semver: 7.6.0
       typescript: 5.5.0-beta
 
-  vue-tsc@2.0.19(typescript@5.5.0-beta):
+  vue-tsc@2.0.21(typescript@5.5.0-beta):
     dependencies:
-      '@volar/typescript': 2.2.4
-      '@vue/language-core': 2.0.19(typescript@5.5.0-beta)
+      '@volar/typescript': 2.3.0
+      '@vue/language-core': 2.0.21(typescript@5.5.0-beta)
       semver: 7.6.2
       typescript: 5.5.0-beta
 
