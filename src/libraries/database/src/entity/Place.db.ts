@@ -19,7 +19,7 @@ const _PlaceDb = Schema.Struct({
 }).pipe(
   _SS.satisfies.type<PlaceBase>(),
   Schema.extend(BaseDb),
-  Schema.identifier("PlaceDb"),
+  Schema.annotations({ identifier: "PlaceDb" }),
   _SS.satisfies.encoded<_Place>()
 );
 

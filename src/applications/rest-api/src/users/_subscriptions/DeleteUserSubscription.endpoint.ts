@@ -9,7 +9,7 @@ import { SubscriptionApi } from "../../subscriptions/Subscription.api.js";
 
 // #region DeleteUserSubscriptionResponseBody
 const _DeleteUserSubscriptionResponseBody = SubscriptionApi.pipe(
-  Schema.identifier("_DeleteUserSubscriptionResponseBody"),
+  Schema.annotations({ identifier: "_DeleteUserSubscriptionResponseBody" }),
   BaseResponseFor
 );
 
@@ -31,7 +31,9 @@ export const DeleteUserSubscriptionResponseBody: Schema.Schema<
 const _DeleteUserSubscriptionRequestParams = Schema.Struct({
   idSubscription: IdSubscription,
   idUser: IdUser,
-}).pipe(Schema.identifier("DeleteUserSubscriptionRequestParams"));
+}).pipe(
+  Schema.annotations({ identifier: "DeleteUserSubscriptionRequestParams" })
+);
 
 export type DeleteUserSubscriptionRequestParamsContext = Schema.Schema.Context<
   typeof _DeleteUserSubscriptionRequestParams

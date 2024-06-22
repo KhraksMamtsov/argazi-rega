@@ -3,7 +3,7 @@ import { Schema } from "@effect/schema";
 export const MoneySymbol: unique symbol = Symbol.for("Money");
 
 export const _Money = Schema.BigDecimalFromSelf.pipe(
-  Schema.identifier("Money"),
+  Schema.annotations({ identifier: "Money" }),
   Schema.brand(MoneySymbol)
 );
 

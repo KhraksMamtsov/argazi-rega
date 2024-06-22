@@ -8,14 +8,14 @@ import { BearerAuth } from "../../BearerAuth.security-scheme.js";
 import { VisitorApi } from "../../visitors/Visitor.api.js";
 
 export const CreateMyVisitorResponseBody = VisitorApi.pipe(
-  Schema.identifier("CreateMyVisitorResponseBody"),
+  Schema.annotations({ identifier: "CreateMyVisitorResponseBody" }),
   BaseResponseFor
 );
 
 // #region CreateMyVisitorRequestBody
 const _CreateMyVisitorRequestBody = _CreateUsersVisitorCommandPayload.pipe(
   Schema.omit("idUser"),
-  Schema.identifier("CreateMyVisitorRequestBody")
+  Schema.annotations({ identifier: "CreateMyVisitorRequestBody" })
 );
 
 export type CreateMyVisitorRequestBodyContext = Schema.Schema.Context<
@@ -34,11 +34,15 @@ export const CreateMyVisitorRequestBody: Schema.Schema<
 
 export const CreateMyVisitorResponse = [
   {
-    content: CreateMyVisitorResponseBody.pipe(Schema.description("My visitor")),
+    content: CreateMyVisitorResponseBody.pipe(
+      Schema.annotations({ description: "My visitor" })
+    ),
     status: 200 as const,
   },
   {
-    content: Schema.String.pipe(Schema.description("User not found")),
+    content: Schema.String.pipe(
+      Schema.annotations({ description: "User not found" })
+    ),
     status: 404 as const,
   },
 ] as const;
@@ -54,7 +58,9 @@ export const CreateMyVisitorEndpoint = ApiEndpoint.post(
   ApiEndpoint.setResponse(
     ApiResponse.make(
       200,
-      CreateMyVisitorResponseBody.pipe(Schema.description("My visitor"))
+      CreateMyVisitorResponseBody.pipe(
+        Schema.annotations({ description: "My visitor" })
+      )
     )
   ),
   ApiEndpoint.setSecurity(BearerAuth)

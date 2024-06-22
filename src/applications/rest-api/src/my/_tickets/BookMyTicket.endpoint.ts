@@ -8,14 +8,14 @@ import { BearerAuth } from "../../BearerAuth.security-scheme.js";
 import { TicketApi } from "../../tickets/Ticket.api.js";
 
 export const BookMyTicketResponseBody = TicketApi.pipe(
-  Schema.identifier("BookMyTicketResponseBody"),
+  Schema.annotations({ identifier: "BookMyTicketResponseBody" }),
   BaseResponseFor
 );
 
 // #region BookMyTicketRequestBody
 const _BookMyTicketRequestBody = Schema.Struct({
   idEvent: IdEvent,
-}).pipe(Schema.identifier("BookMyTicketRequestBody"));
+}).pipe(Schema.annotations({ identifier: "BookMyTicketRequestBody" }));
 
 export type BookMyTicketRequestBodyContext = Schema.Schema.Context<
   typeof _BookMyTicketRequestBody
@@ -33,11 +33,15 @@ export const BookMyTicketRequestBody: Schema.Schema<
 
 export const BookMyTicketResponse = [
   {
-    content: BookMyTicketResponseBody.pipe(Schema.description("My ticket")),
+    content: BookMyTicketResponseBody.pipe(
+      Schema.annotations({ description: "My ticket" })
+    ),
     status: 200 as const,
   },
   {
-    content: Schema.String.pipe(Schema.description("Event not found")),
+    content: Schema.String.pipe(
+      Schema.annotations({ description: "Event not found" })
+    ),
     status: 404 as const,
   },
 ] as const;

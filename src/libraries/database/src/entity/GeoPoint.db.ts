@@ -31,7 +31,7 @@ const _GeoPointDb = Schema.Struct({
   name: Schema.OptionFromNullOr(Schema.Redacted(Schema.String)),
 }).pipe(
   Schema.extend(BaseDb),
-  Schema.identifier("GeoPointDb"),
+  Schema.annotations({ identifier: "GeoPointDb" }),
   _SS.satisfies.encoded<GeoPointDbFrom>()
 );
 

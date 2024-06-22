@@ -8,9 +8,9 @@ import { BaseCausedCommandFor } from "../../../common/Base.command.js";
 export const DeleteUsersVisitorCommandPayload = VisitorData.pipe(
   Schema.pick("id", "idUser"),
   _SS.satisfies.encoded.json(),
-  Schema.identifier("DeleteUsersVisitorCommandPayload")
+  Schema.annotations({ identifier: "DeleteUsersVisitorCommandPayload" })
 );
 
 export const DeleteUsersVisitorCommand = BaseCausedCommandFor(
   DeleteUsersVisitorCommandPayload
-).pipe(Schema.identifier("DeleteUsersVisitorCommand"));
+).pipe(Schema.annotations({ identifier: "DeleteUsersVisitorCommand" }));

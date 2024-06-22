@@ -15,7 +15,7 @@ const _Visa = Schema.Struct({
   idVisitor: IdVisitor,
   //
   totalPrice: Price,
-}).pipe(Schema.extend(Base), Schema.identifier("Visa"));
+}).pipe(Schema.extend(Base), Schema.annotations({ identifier: "Visa" }));
 
 export type VisaFrom = Schema.Schema.Encoded<typeof _Visa>;
 export type Visa = Schema.Schema.Type<typeof _Visa>;

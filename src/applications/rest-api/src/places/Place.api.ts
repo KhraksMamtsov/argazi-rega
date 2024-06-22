@@ -13,7 +13,7 @@ export const _PlaceApi = Schema.Struct({
 }).pipe(
   _SS.satisfies.encoded.json(),
   _SS.satisfies.type<PlaceBase>(),
-  Schema.identifier("PlaceApi")
+  Schema.annotations({ identifier: "PlaceApi" })
 );
 
 export interface PlaceApiFrom extends Schema.Schema.Encoded<typeof _PlaceApi> {}

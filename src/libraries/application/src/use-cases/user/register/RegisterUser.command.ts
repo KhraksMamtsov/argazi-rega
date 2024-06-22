@@ -28,9 +28,9 @@ export const RegisterUserCommandPayload = Schema.Struct({
 }).pipe(
   _SS.satisfies.encoded.json(),
   _SS.satisfies.type<UserBase>(),
-  Schema.identifier("RegisterUserCommandPayload")
+  Schema.annotations({ identifier: "RegisterUserCommandPayload" })
 );
 
 export const RegisterUserCommand = BaseCommandFor(
   RegisterUserCommandPayload
-).pipe(Schema.identifier("RegisterUserCommand"));
+).pipe(Schema.annotations({ identifier: "RegisterUserCommand" }));

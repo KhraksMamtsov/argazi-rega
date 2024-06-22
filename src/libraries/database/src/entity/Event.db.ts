@@ -21,7 +21,7 @@ export const EventDb = Schema.Struct({
   description: Schema.String,
 }).pipe(
   Schema.extend(BaseDb),
-  Schema.identifier("EventDb"),
+  Schema.annotations({ identifier: "EventDb" }),
   _SS.satisfies.encoded<_Event>()
 );
 

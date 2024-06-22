@@ -8,12 +8,12 @@ import { BaseCausedCommandFor } from "../../../common/Base.command.js";
 export const BookTicketCommandPayload = TicketBase.pipe(
   Schema.pick("idUser", "idEvent"),
   _SS.satisfies.encoded.json(),
-  Schema.identifier("BookTicketCommandPayload")
+  Schema.annotations({ identifier: "BookTicketCommandPayload" })
 );
 
 // #region BookTicketCommand
 const _BookTicketCommand = BaseCausedCommandFor(BookTicketCommandPayload).pipe(
-  Schema.identifier("BookTicketCommand")
+  Schema.annotations({ identifier: "BookTicketCommand" })
 );
 
 export type BookTicketCommandContext = Schema.Schema.Context<

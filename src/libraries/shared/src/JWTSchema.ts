@@ -13,7 +13,7 @@ export const JWTStruct = Schema.transformOrFail(
     Schema.filter(
       (x): x is readonly [string, string, string] => x.length === 3
     ),
-    Schema.identifier("JWTLike")
+    Schema.annotations({ identifier: "JWTLike" })
   ),
   Schema.Tuple(Schema.String, Schema.String, Schema.String),
   {
@@ -47,4 +47,4 @@ export const JWTStruct = Schema.transformOrFail(
         sign,
       ] as const),
   }
-).pipe(Schema.identifier("JWTStruct"));
+).pipe(Schema.annotations({ identifier: "JWTStruct" }));

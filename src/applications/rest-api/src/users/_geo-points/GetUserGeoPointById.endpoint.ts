@@ -9,7 +9,7 @@ import { GeoPointApi } from "../../geo-points/GeoPoint.api.js";
 
 // #region GetUserGeoPointByIdResponseBody
 const _GetUserGeoPointByIdResponseBody = GeoPointApi.pipe(
-  Schema.identifier("GetUserGeoPointByIdResponseBody"),
+  Schema.annotations({ identifier: "GetUserGeoPointByIdResponseBody" }),
   BaseResponseFor
 );
 
@@ -31,7 +31,7 @@ export const GetUserGeoPointByIdResponseBody: Schema.Schema<
 const _GetUserGeoPointByIdRequestParams = Schema.Struct({
   idGeoPoint: IdGeoPoint,
   idUser: IdUser,
-}).pipe(Schema.identifier("GetUserGeoPointByIdRequestParams"));
+}).pipe(Schema.annotations({ identifier: "GetUserGeoPointByIdRequestParams" }));
 
 export type GetUserGeoPointByIdRequestParamsContext = Schema.Schema.Context<
   typeof _GetUserGeoPointByIdRequestParams

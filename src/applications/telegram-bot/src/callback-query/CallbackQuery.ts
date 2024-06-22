@@ -114,7 +114,7 @@ export const CallbackQueryEntity = Schema.transformOrFail(
         action: decodeMinifiedAction(_action),
         type: decodeMinifiedType(_type),
       }).pipe(
-        Effect.mapError((x) => x.error),
+        Effect.mapError((x) => x.issue),
         Effect.map(
           (x) =>
             ({
@@ -129,7 +129,7 @@ export const CallbackQueryEntity = Schema.transformOrFail(
         action: encodeMinifiedAction(data.action),
         type: encodeMinifiedType(data.type),
       }).pipe(
-        Effect.mapError((x) => x.error),
+        Effect.mapError((x) => x.issue),
         Effect.map((x) => [x.action, x.type, data.id].join("|"))
       ),
   }

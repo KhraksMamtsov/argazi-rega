@@ -11,7 +11,7 @@ import { UserApi } from "../User.api.js";
 // #region UpdateUserRequestParams
 const _UpdateUserRequestParams = Schema.Struct({
   id: IdUser,
-}).pipe(Schema.identifier("UpdateUserRequestParams"));
+}).pipe(Schema.annotations({ identifier: "UpdateUserRequestParams" }));
 
 export type UpdateUserRequestParamsContext = Schema.Schema.Context<
   typeof _UpdateUserRequestParams
@@ -30,7 +30,7 @@ export const UpdateUserRequestParams: Schema.Schema<
 // #region UpdateUserRequestBody
 const _UpdateUserRequestBody = UpdateUserCommandPayload.pipe(
   Schema.omit("id")
-).pipe(Schema.identifier("UpdateUserRequestBody"));
+).pipe(Schema.annotations({ identifier: "UpdateUserRequestBody" }));
 
 export type UpdateUserRequestBodyContext = Schema.Schema.Context<
   typeof _UpdateUserRequestBody
@@ -48,7 +48,7 @@ export const UpdateUserRequestBody: Schema.Schema<
 
 // #region UpdateUserResponseBody
 const _UpdateUserResponseBody = UserApi.pipe(
-  Schema.identifier("_UpdateUserResponseBody"),
+  Schema.annotations({ identifier: "_UpdateUserResponseBody" }),
   BaseResponseFor
 );
 

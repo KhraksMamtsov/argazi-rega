@@ -5,7 +5,7 @@ import { _S } from "@argazi/shared";
 
 export const PrismaDecimalFromSelf: Schema.Schema<Decimal> = Schema.declare(
   Decimal.isDecimal.bind(Decimal)
-).pipe(Schema.identifier("PrismaDecimalFromSelf"));
+).pipe(Schema.annotations({ identifier: "PrismaDecimalFromSelf" }));
 
 export const PrismaDecimal = Schema.transformOrFail(
   Schema.String,
@@ -18,9 +18,9 @@ export const PrismaDecimal = Schema.transformOrFail(
       }),
     encode: (val) => ParseResult.succeed(val.valueOf()),
   }
-).pipe(Schema.identifier("PrismaDecimal"));
+).pipe(Schema.annotations({ identifier: "PrismaDecimal" }));
 
 export const BigDecimalFromPrismaDecimal = Schema.compose(
   _S.reverse(PrismaDecimal),
   Schema.BigDecimal
-).pipe(Schema.identifier("BigDecimalFromPrismaDecimal"));
+).pipe(Schema.annotations({ identifier: "BigDecimalFromPrismaDecimal" }));

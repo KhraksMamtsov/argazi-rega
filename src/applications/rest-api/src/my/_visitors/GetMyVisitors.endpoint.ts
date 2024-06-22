@@ -7,7 +7,7 @@ import { VisitorApi } from "../../visitors/Visitor.api.js";
 
 // #region GetMyVisitorsResponseBody
 export const _GetMyVisitorsResponseBody = VisitorApi.pipe(
-  Schema.identifier("GetMyVisitorsResponse"),
+  Schema.annotations({ identifier: "GetMyVisitorsResponse" }),
   BaseResponseManyFor
 );
 

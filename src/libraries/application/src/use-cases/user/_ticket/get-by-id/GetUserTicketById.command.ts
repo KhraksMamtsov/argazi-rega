@@ -10,7 +10,7 @@ export const GetUserTicketByIdCommandPayload = Schema.Struct({
   idUser: IdUser,
 }).pipe(
   _SS.satisfies.encoded.json(),
-  Schema.identifier("GetUserTicketByIdCommandPayload")
+  Schema.annotations({ identifier: "GetUserTicketByIdCommandPayload" })
 );
 
 export type GetUserTicketByIdCommandPayloadFrom = Schema.Schema.Encoded<
@@ -19,4 +19,4 @@ export type GetUserTicketByIdCommandPayloadFrom = Schema.Schema.Encoded<
 
 export const GetUserTicketByIdCommand = BaseCausedCommandFor(
   GetUserTicketByIdCommandPayload
-).pipe(Schema.identifier("GetUserTicketByIdCommand"));
+).pipe(Schema.annotations({ identifier: "GetUserTicketByIdCommand" }));

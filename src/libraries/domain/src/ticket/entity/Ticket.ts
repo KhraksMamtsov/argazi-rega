@@ -16,14 +16,14 @@ export const TicketBase = Schema.Struct({
   idUser: IdUser,
   //
   role: TicketRoleSchema,
-}).pipe(Schema.identifier("TicketBase"));
+}).pipe(Schema.annotations({ identifier: "TicketBase" }));
 
 export interface TicketBase extends Schema.Schema.Type<typeof TicketBase> {}
 
 export const _Ticket = TicketBase.pipe(
   Schema.typeSchema,
   Schema.extend(Base),
-  Schema.identifier("Ticket")
+  Schema.annotations({ identifier: "Ticket" })
 );
 
 export interface TicketFrom extends Schema.Schema.Encoded<typeof _Ticket> {}

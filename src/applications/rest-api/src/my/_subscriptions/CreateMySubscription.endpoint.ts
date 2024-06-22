@@ -10,7 +10,7 @@ import { SubscriptionApi } from "../../subscriptions/Subscription.api.js";
 // #region CreateMySubscriptionRequestBody
 const _CreateMySubscriptionRequestBody = Schema.Struct({
   idPlace: IdPlace,
-}).pipe(Schema.identifier("CreateMySubscriptionRequestBody"));
+}).pipe(Schema.annotations({ identifier: "CreateMySubscriptionRequestBody" }));
 
 export type CreateMySubscriptionRequestBodyContext = Schema.Schema.Context<
   typeof _CreateMySubscriptionRequestBody
@@ -27,13 +27,13 @@ export const CreateMySubscriptionRequestBody: Schema.Schema<
 // #endregion CreateMySubscriptionRequestBody
 
 export const CreateMySubscriptionResponse = SubscriptionApi.pipe(
-  Schema.identifier("CreateMySubscriptionResponse"),
+  Schema.annotations({ identifier: "CreateMySubscriptionResponse" }),
   BaseResponseFor
 );
 
 // #region CreateMySubscriptionResponseBody
 const _CreateMySubscriptionResponseBody = SubscriptionApi.pipe(
-  Schema.identifier("_CreateMySubscriptionResponseBody"),
+  Schema.annotations({ identifier: "_CreateMySubscriptionResponseBody" }),
   BaseResponseFor
 );
 

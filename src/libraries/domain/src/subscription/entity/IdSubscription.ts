@@ -5,7 +5,7 @@ export const IdSubscriptionSymbol: unique symbol = Symbol.for(
 );
 
 export const IdSubscription = Schema.UUID.pipe(
-  Schema.identifier("IdSubscription"),
+  Schema.annotations({ identifier: "IdSubscription" }),
   Schema.brand(IdSubscriptionSymbol)
 );
 

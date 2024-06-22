@@ -1,7 +1,7 @@
 import { Schema } from "@effect/schema";
 
 export const Latitude = Schema.RedactedFromSelf(Schema.String).pipe(
-  Schema.identifier("Latitude"),
+  Schema.annotations({ identifier: "Latitude" }),
   Schema.brand("Latitude")
 );
 

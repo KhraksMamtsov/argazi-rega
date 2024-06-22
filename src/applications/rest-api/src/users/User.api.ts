@@ -20,7 +20,7 @@ export const _UserApi = Schema.Struct({
 }).pipe(
   _SS.satisfies.encoded.json(),
   _SS.satisfies.type<UserBase>(),
-  Schema.identifier("UserApi")
+  Schema.annotations({ identifier: "UserApi" })
 );
 
 export interface UserApiFrom extends Schema.Schema.Encoded<typeof _UserApi> {}

@@ -10,7 +10,7 @@ const _TicketMeal = Schema.Struct({
   id: IdTicketMeal,
   idMeal: IdMeal,
   idTicket: IdTicket,
-}).pipe(Schema.extend(Base), Schema.identifier("TicketMeal"));
+}).pipe(Schema.extend(Base), Schema.annotations({ identifier: "TicketMeal" }));
 
 export type TicketMealFrom = Schema.Schema.Encoded<typeof _TicketMeal>;
 export type TicketMeal = Schema.Schema.Type<typeof _TicketMeal>;

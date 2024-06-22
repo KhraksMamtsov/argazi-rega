@@ -9,7 +9,7 @@ import { UserApi } from "../User.api.js";
 
 // #region CreateUserRequestBody
 const _CreateUserRequestBody = CreateUserCommandPayload.pipe(
-  Schema.identifier("CreateUserRequestBody")
+  Schema.annotations({ identifier: "CreateUserRequestBody" })
 );
 
 export type CreateUserRequestBodyContext = Schema.Schema.Context<
@@ -28,7 +28,7 @@ export const CreateUserRequestBody: Schema.Schema<
 
 // #region CreateUserResponseBody
 const _CreateUserResponseBody = UserApi.pipe(
-  Schema.identifier("CreateUserResponseBody"),
+  Schema.annotations({ identifier: "CreateUserResponseBody" }),
   BaseResponseFor
 );
 

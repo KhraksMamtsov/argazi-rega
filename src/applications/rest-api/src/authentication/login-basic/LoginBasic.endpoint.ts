@@ -7,7 +7,7 @@ import { TokensResponse, CredentialsApi } from "../Tokens.response.js";
 
 export const LoginBasicResponseBody = CredentialsApi.pipe(
   _SS.satisfies.encoded.json(),
-  Schema.identifier("LoginBasicResponseBody")
+  Schema.annotations({ identifier: "LoginBasicResponseBody" })
 );
 
 export const LoginBasicEndpoint = ApiEndpoint.post(

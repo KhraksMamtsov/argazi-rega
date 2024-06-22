@@ -8,7 +8,7 @@ import { SubscriptionApi } from "../../subscriptions/Subscription.api.js";
 
 // #region GetUserSubscriptionsResponseBody
 const _GetUserSubscriptionsResponseBody = SubscriptionApi.pipe(
-  Schema.identifier("GetUserSubscriptionsResponseBody"),
+  Schema.annotations({ identifier: "GetUserSubscriptionsResponseBody" }),
   BaseResponseManyFor
 );
 
@@ -29,7 +29,9 @@ export const GetUserSubscriptionsResponseBody: Schema.Schema<
 // #region GetUserSubscriptionsRequestParams
 const _GetUserSubscriptionsRequestParams = Schema.Struct({
   idUser: IdUser,
-}).pipe(Schema.identifier("GetUserSubscriptionsRequestParams"));
+}).pipe(
+  Schema.annotations({ identifier: "GetUserSubscriptionsRequestParams" })
+);
 
 export type GetUserSubscriptionsRequestParamsContext = Schema.Schema.Context<
   typeof _GetUserSubscriptionsRequestParams

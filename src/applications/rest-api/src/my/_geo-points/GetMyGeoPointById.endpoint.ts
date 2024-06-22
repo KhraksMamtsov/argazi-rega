@@ -8,7 +8,7 @@ import { BaseResponseFor } from "../../BaseResponseFor.js";
 import { GeoPointApi } from "../../geo-points/GeoPoint.api.js";
 
 export const GetMyGeoPointByIdApi = GeoPointApi.pipe(
-  Schema.identifier("GetMyGeoPointByIdApi"),
+  Schema.annotations({ identifier: "GetMyGeoPointByIdApi" }),
   BaseResponseFor
 );
 
@@ -19,7 +19,7 @@ export const GetMyGeoPointByIdRequest = {
 };
 
 export const GetMyGeoPointByIdResponse = GetMyGeoPointByIdApi.pipe(
-  Schema.description("GetMyGeoPointByIdResponse")
+  Schema.annotations({ description: "GetMyGeoPointByIdResponse" })
 );
 
 // export const GetMyGeoPointByIdEndpoint = ApiEndpoint.get(

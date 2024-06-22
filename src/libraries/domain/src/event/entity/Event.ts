@@ -17,14 +17,14 @@ export const EventBase = Schema.Struct({
   priceDay: Price,
   priceEvent: Price,
   description: Schema.String,
-}).pipe(Schema.identifier("EventBase"));
+}).pipe(Schema.annotations({ identifier: "EventBase" }));
 
 export type EventBase = Schema.Schema.Type<typeof EventBase>;
 
 const _Event = EventBase.pipe(
   //
   Schema.extend(Base),
-  Schema.identifier("Event")
+  Schema.annotations({ identifier: "Event" })
 );
 
 export interface Event extends Schema.Schema.Type<typeof _Event> {}

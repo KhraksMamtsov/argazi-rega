@@ -10,14 +10,14 @@ export const PlaceBase = Schema.Struct({
   idGeoPoint: IdGeoPoint,
   name: Schema.compose(Schema.Trimmed, Schema.NonEmpty),
   description: Schema.compose(Schema.Trimmed, Schema.NonEmpty),
-}).pipe(Schema.typeSchema, Schema.identifier("PlaceBase"));
+}).pipe(Schema.typeSchema, Schema.annotations({ identifier: "PlaceBase" }));
 
 export interface PlaceBase extends Schema.Schema.Type<typeof PlaceBase> {}
 
 const _Place = PlaceBase.pipe(
   //
   Schema.extend(Base),
-  Schema.identifier("Place")
+  Schema.annotations({ identifier: "Place" })
 );
 
 export interface Place extends Schema.Schema.Type<typeof _Place> {}

@@ -16,7 +16,7 @@ export const MealBase = Schema.Struct({
   price: Price,
   type: MealTypeSchema,
   description: Schema.compose(Schema.Trimmed, Schema.NonEmpty),
-}).pipe(Schema.identifier("MealBase"));
+}).pipe(Schema.annotations({ identifier: "MealBase" }));
 
 export type MealBase = Schema.Schema.Type<typeof MealBase>;
 
@@ -24,7 +24,7 @@ export const Meal = MealBase.pipe(
   //
   Schema.extend(Base),
   Schema.typeSchema,
-  Schema.identifier("Meal")
+  Schema.annotations({ identifier: "Meal" })
 );
 
 export interface MealFrom extends Schema.Schema.Encoded<typeof Meal> {}

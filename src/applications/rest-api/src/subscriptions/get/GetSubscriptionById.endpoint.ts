@@ -8,7 +8,7 @@ import { SubscriptionApi } from "../Subscription.api.js";
 
 // #region GetSubscriptionByIdResponseBody
 const _GetSubscriptionByIdResponseBody = SubscriptionApi.pipe(
-  Schema.identifier("GetSubscriptionByIdResponseBody"),
+  Schema.annotations({ identifier: "GetSubscriptionByIdResponseBody" }),
   BaseResponseFor
 );
 
@@ -29,7 +29,7 @@ export const GetSubscriptionByIdResponseBody: Schema.Schema<
 // #region GetSubscriptionByIdRequestParams
 const _GetSubscriptionByIdRequestParams = Schema.Struct({
   idSubscription: IdSubscription,
-}).pipe(Schema.identifier("GetSubscriptionByIdRequestParams"));
+}).pipe(Schema.annotations({ identifier: "GetSubscriptionByIdRequestParams" }));
 
 export type GetSubscriptionByIdRequestParamsContext = Schema.Schema.Context<
   typeof _GetSubscriptionByIdRequestParams
@@ -57,7 +57,9 @@ export const GetSubscriptionByIdEndpoint = ApiEndpoint.get(
   ApiEndpoint.addResponse(
     ApiResponse.make(
       400,
-      Schema.String.pipe(Schema.description("Subscription not found"))
+      Schema.String.pipe(
+        Schema.annotations({ description: "Subscription not found" })
+      )
     )
   )
 );

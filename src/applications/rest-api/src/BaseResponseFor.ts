@@ -20,11 +20,14 @@ export const ApiBase = Schema.Struct({
     idUserCreator: IdUser,
     idUserDeleter: Schema.OptionFromNullOr(IdUser),
     idUserUpdater: IdUser,
-  }).pipe(_SS.satisfies.encoded.json(), Schema.identifier("ApiMeta")),
+  }).pipe(
+    _SS.satisfies.encoded.json(),
+    Schema.annotations({ identifier: "ApiMeta" })
+  ),
 }).pipe(
   _SS.satisfies.encoded.json(),
   _SS.satisfies.type<Base>(),
-  Schema.identifier("ApiBase")
+  Schema.annotations({ identifier: "ApiBase" })
 );
 
 export const _BaseResponseFor = <R, I extends _S.Json.Json, A, R1, I1, A1>(
@@ -43,7 +46,7 @@ export const _BaseResponseFor = <R, I extends _S.Json.Json, A, R1, I1, A1>(
     Schema.Struct({ data: Schema.encodedSchema(extendedData) }),
     extendedData,
     { decode: (from) => from.data, encode: (to) => ({ data: to }) }
-  ).pipe(Schema.identifier(baseAnnotation));
+  ).pipe(Schema.annotations({ identifier: baseAnnotation }));
 };
 
 export const BaseResponseFor = <A, I extends _S.Json.Json, R>(

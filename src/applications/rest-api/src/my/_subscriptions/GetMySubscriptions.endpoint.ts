@@ -6,7 +6,7 @@ import { BearerAuth } from "../../BearerAuth.security-scheme.js";
 import { SubscriptionApi } from "../../subscriptions/Subscription.api.js";
 
 export const _GetMySubscriptionsResponseBody = SubscriptionApi.pipe(
-  Schema.identifier("GetMySubscriptionsResponse"),
+  Schema.annotations({ identifier: "GetMySubscriptionsResponse" }),
   BaseResponseManyFor
 );
 
@@ -19,7 +19,7 @@ export const GetMySubscriptionsResponse: Schema.Schema<
   GetMySubscriptionsResponse,
   GetMySubscriptionsResponseFrom
 > = _GetMySubscriptionsResponseBody.pipe(
-  Schema.description("UserSubscriptions")
+  Schema.annotations({ description: "UserSubscriptions" })
 );
 
 export const GetMySubscriptionsEndpoint = ApiEndpoint.get(

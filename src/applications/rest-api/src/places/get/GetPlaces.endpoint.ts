@@ -6,7 +6,7 @@ import { BearerAuth } from "../../BearerAuth.security-scheme.js";
 import { PlaceApi } from "../Place.api.js";
 
 export const _GetPlacesResponseBody = PlaceApi.pipe(
-  Schema.identifier("GetPlacesResponse"),
+  Schema.annotations({ identifier: "GetPlacesResponse" }),
   BaseResponseManyFor
 );
 export interface GetPlacesResponseBodyFrom
@@ -17,7 +17,7 @@ export interface GetPlacesResponseBody
 export const GetPlacesResponseBody: Schema.Schema<
   GetPlacesResponseBody,
   GetPlacesResponseBodyFrom
-> = _GetPlacesResponseBody.pipe(Schema.description("Place"));
+> = _GetPlacesResponseBody.pipe(Schema.annotations({ description: "Place" }));
 
 export const GetPlacesEndpoint = ApiEndpoint.get(
   "getPlaces",

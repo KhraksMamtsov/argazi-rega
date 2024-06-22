@@ -13,14 +13,14 @@ export const TransportBase = Schema.Struct({
   //
   number: Schema.RedactedFromSelf(Schema.String),
   seatsNumber: Schema.Int.pipe(Schema.positive()),
-}).pipe(Schema.typeSchema, Schema.identifier("TransportBase"));
+}).pipe(Schema.typeSchema, Schema.annotations({ identifier: "TransportBase" }));
 
 export interface TransportBase
   extends Schema.Schema.Type<typeof TransportBase> {}
 
 export const _Transport = TransportBase.pipe(
   Schema.extend(Base),
-  Schema.identifier("Transport")
+  Schema.annotations({ identifier: "Transport" })
 );
 
 export interface Transport extends Schema.Schema.Type<typeof _Transport> {}

@@ -18,7 +18,7 @@ import { RestApiSpec } from "@argazi/rest-api";
 
 import { SessionServiceTag, type UserCredentials } from "./Session.service.js";
 
-import type { ClientRequest } from "@effect/platform/Http/ClientRequest";
+import { HttpClientRequest } from "@effect/platform";
 
 export interface RestApiService
   extends Effect.Effect.Success<ReturnType<typeof makeLive>> {}
@@ -53,7 +53,9 @@ export const makeLive = () =>
       <A, E, R, I>(
         apiMethod: (
           input: I,
-          map: (request: ClientRequest) => ClientRequest
+          map: (
+            request: HttpClientRequest.HttpClientRequest
+          ) => HttpClientRequest.HttpClientRequest
         ) => Effect.Effect<A, E, R>
       ) =>
       (input: I) =>

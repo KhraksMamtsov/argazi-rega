@@ -7,7 +7,7 @@ import { BaseResponseFor } from "../../BaseResponseFor.js";
 import { EventApi } from "../Event.api.js";
 
 export const _GetEventResponseBody = EventApi.pipe(
-  Schema.identifier("GetEventResponse"),
+  Schema.annotations({ identifier: "GetEventResponse" }),
   BaseResponseFor
 );
 

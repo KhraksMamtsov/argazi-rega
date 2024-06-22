@@ -21,9 +21,9 @@ export const GetPlaceByIdRequest: Schema.Schema<
 > = _GetPlaceByIdRequest;
 
 export const _GetPlaceByIdResponseBody = PlaceApi.pipe(
-  Schema.identifier("GetPlaceByIdResponse"),
+  Schema.annotations({ identifier: "GetPlaceByIdResponse" }),
   BaseResponseFor
-).pipe(Schema.description("Place"));
+).pipe(Schema.annotations({ description: "Place" }));
 
 export interface GetPlaceByIdResponseBodyEncoded
   extends Schema.Schema.Encoded<typeof _GetPlaceByIdResponseBody> {}

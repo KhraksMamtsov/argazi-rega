@@ -7,7 +7,7 @@ import { BaseResponseFor } from "../../BaseResponseFor.js";
 import { GeoPointApi } from "../../geo-points/GeoPoint.api.js";
 
 const _GetPlaceGeoPointResponseBody = GeoPointApi.pipe(BaseResponseFor).pipe(
-  Schema.identifier("GetPlaceGeoPointResponseBody")
+  Schema.annotations({ identifier: "GetPlaceGeoPointResponseBody" })
 );
 
 export interface GetPlaceGeoPointResponseBodyEncoded
@@ -23,7 +23,7 @@ export const GetPlaceGeoPointResponseBody: Schema.Schema<
 // #region GetPlaceGeoPointRequestParams
 const _GetPlaceGeoPointRequestParams = Schema.Struct({
   idPlace: IdPlace,
-}).pipe(Schema.identifier("GetPlaceGeoPointRequestParams"));
+}).pipe(Schema.annotations({ identifier: "GetPlaceGeoPointRequestParams" }));
 
 export interface GetPlaceGeoPointRequestParamsEncoded
   extends Schema.Schema.Encoded<typeof _GetPlaceGeoPointRequestParams> {}

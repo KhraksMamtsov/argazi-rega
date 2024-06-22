@@ -5,5 +5,5 @@ export const IdTicketPaymentSymbol: unique symbol = Symbol.for(
 );
 export const IdTicketPayment = Schema.UUID.pipe(
   Schema.brand(IdTicketPaymentSymbol),
-  Schema.identifier("IdTicketPayment")
+  Schema.annotations({ identifier: "IdTicketPayment" })
 );

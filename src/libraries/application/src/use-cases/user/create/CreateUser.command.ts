@@ -25,9 +25,9 @@ export const CreateUserCommandPayload = Schema.Struct({
   type: Schema.Literal("ADULT", "STUDENT", "PENSIONER"),
 }).pipe(
   _SS.satisfies.encoded.json<CreateUserCommandPayloadFrom>(),
-  Schema.identifier("CreateUserCommandPayload")
+  Schema.annotations({ identifier: "CreateUserCommandPayload" })
 );
 
 export const CreateUserCommand = BaseCausedCommandFor(
   CreateUserCommandPayload
-).pipe(Schema.identifier("CreateUserCommand"));
+).pipe(Schema.annotations({ identifier: "CreateUserCommand" }));

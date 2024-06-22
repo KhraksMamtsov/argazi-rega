@@ -18,11 +18,14 @@ export const UserBase = Schema.Struct({
   lastName: Schema.OptionFromSelf(Schema.RedactedFromSelf(Schema.String)),
   phone: Schema.OptionFromSelf(Schema.RedactedFromSelf(Schema.String)),
   type: UserTypeSchema,
-}).pipe(Schema.identifier("UserBase"));
+}).pipe(Schema.annotations({ identifier: "UserBase" }));
 
 export interface UserBase extends Schema.Schema.Type<typeof UserBase> {}
 
-const _User = UserBase.pipe(Schema.extend(Base), Schema.identifier("User"));
+const _User = UserBase.pipe(
+  Schema.extend(Base),
+  Schema.annotations({ identifier: "User" })
+);
 
 export interface User extends Schema.Schema.Type<typeof _User> {}
 

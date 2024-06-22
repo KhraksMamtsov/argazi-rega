@@ -24,7 +24,7 @@ const _UserDb = Schema.Struct({
   ),
 }).pipe(
   Schema.extend(BaseDb),
-  Schema.identifier("UserDb"),
+  Schema.annotations({ identifier: "UserDb" }),
   _SS.satisfies.encoded<_User>()
 );
 

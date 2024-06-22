@@ -13,7 +13,7 @@ const _VisaPayment = Schema.Struct({
   idVisa: IdVisa,
   //
   payed: Price,
-}).pipe(Schema.extend(Base), Schema.identifier("VisaPayment"));
+}).pipe(Schema.extend(Base), Schema.annotations({ identifier: "VisaPayment" }));
 
 export type VisaPaymentFrom = Schema.Schema.Encoded<typeof _VisaPayment>;
 export type VisaPayment = Schema.Schema.Type<typeof _VisaPayment>;

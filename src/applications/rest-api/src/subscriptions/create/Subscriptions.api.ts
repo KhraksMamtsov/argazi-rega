@@ -7,11 +7,11 @@ import { SubscriptionApi } from "../Subscription.api.js";
 
 export const CreateSubscriptionRequest = {
   body: CreateSubscriptionCommandPayload.pipe(
-    Schema.identifier("CreateSubscriptionRequestBody")
+    Schema.annotations({ identifier: "CreateSubscriptionRequestBody" })
   ),
 };
 
 export const CreateSubscriptionResponse = SubscriptionApi.pipe(
-  Schema.identifier("CreateSubscriptionResponse"),
+  Schema.annotations({ identifier: "CreateSubscriptionResponse" }),
   BaseResponseFor
 );

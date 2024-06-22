@@ -8,9 +8,9 @@ import { UserApi } from "../User.api.js";
 
 // #region GetUserResponseBody
 const _GetUserResponseBody = UserApi.pipe(
-  Schema.identifier("GetUserResponse"),
+  Schema.annotations({ identifier: "GetUserResponse" }),
   BaseResponseFor
-).pipe(Schema.identifier("GetUserResponseBody"));
+).pipe(Schema.annotations({ identifier: "GetUserResponseBody" }));
 
 export type GetUserResponseBodyContext = Schema.Schema.Context<
   typeof _GetUserResponseBody
@@ -29,7 +29,7 @@ export const GetUserResponseBody: Schema.Schema<
 // #region GetUserRequestParams
 const _GetUserRequestParams = Schema.Struct({
   idUser: IdUser,
-}).pipe(Schema.identifier("GetUserRequestParams"));
+}).pipe(Schema.annotations({ identifier: "GetUserRequestParams" }));
 
 export type GetUserRequestParamsContext = Schema.Schema.Context<
   typeof _GetUserRequestParams

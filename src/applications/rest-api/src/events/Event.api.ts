@@ -20,7 +20,7 @@ export const _EventApi = Schema.Struct({
 }).pipe(
   _SS.satisfies.encoded.json(),
   _SS.satisfies.type<EventBase>(),
-  Schema.identifier("EventApi")
+  Schema.annotations({ identifier: "EventApi" })
 );
 
 export interface EventApiEncoded

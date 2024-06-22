@@ -28,7 +28,7 @@ export const _MealDb = Schema.Struct({
 }).pipe(
   _SS.satisfies.type<MealBase>(),
   Schema.extend(BaseDb),
-  Schema.identifier("MealDb"),
+  Schema.annotations({ identifier: "MealDb" }),
   _SS.satisfies.encoded<_Meal>()
 );
 

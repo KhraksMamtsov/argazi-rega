@@ -9,9 +9,9 @@ export const GetPlaceActualEventsCommandPayload = Schema.Struct({
   idPlace: IdPlace,
 }).pipe(
   _SS.satisfies.encoded.json(),
-  Schema.identifier("GetPlaceActualEventsCommandPayload")
+  Schema.annotations({ identifier: "GetPlaceActualEventsCommandPayload" })
 );
 
 export const GetPlaceActualEventsCommand = BaseCausedCommandFor(
   GetPlaceActualEventsCommandPayload
-).pipe(Schema.identifier("GetPlaceActualEventsCommand"));
+).pipe(Schema.annotations({ identifier: "GetPlaceActualEventsCommand" }));

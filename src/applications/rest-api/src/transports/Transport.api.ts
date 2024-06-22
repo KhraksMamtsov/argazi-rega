@@ -16,7 +16,7 @@ const _TransportApi = Schema.Struct({
 }).pipe(
   _SS.satisfies.type<TransportBase>(),
   _SS.satisfies.encoded.json(),
-  Schema.identifier("_TransportApi")
+  Schema.annotations({ identifier: "_TransportApi" })
 );
 
 export type TransportApiContext = Schema.Schema.Context<typeof _TransportApi>;

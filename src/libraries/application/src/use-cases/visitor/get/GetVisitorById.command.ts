@@ -13,9 +13,9 @@ export const GetVisitorByIdCommandPayload = Schema.Struct({
   idVisitor: IdVisitor,
 }).pipe(
   _SS.satisfies.encoded.json<GetVisitorByIdCommandPayloadFrom>(),
-  Schema.identifier("GetVisitorByIdCommandPayload")
+  Schema.annotations({ identifier: "GetVisitorByIdCommandPayload" })
 );
 
 export const GetVisitorByIdCommand = BaseCausedCommandFor(
   GetVisitorByIdCommandPayload
-).pipe(Schema.identifier("GetVisitorByIdCommand"));
+).pipe(Schema.annotations({ identifier: "GetVisitorByIdCommand" }));

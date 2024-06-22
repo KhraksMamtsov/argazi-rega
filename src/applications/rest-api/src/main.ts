@@ -1,5 +1,5 @@
 import { HttpClient } from "@effect/platform";
-import { runMain } from "@effect/platform-node/NodeRuntime";
+import { NodeRuntime } from "@effect/platform-node";
 import {
   Effect,
   flow,
@@ -698,8 +698,8 @@ pipe(
   Effect.provide(debugLogger),
   Effect.provide(PrismaServiceTag.Live()),
   Effect.provide(NotificationServiceLive),
-  Effect.provide(HttpClient.client.layer),
+  Effect.provide(HttpClient.layer),
   Effect.provide(JwtServiceTag.Live),
   Effect.scoped,
-  runMain
+  NodeRuntime.runMain
 );

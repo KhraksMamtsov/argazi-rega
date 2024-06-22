@@ -8,7 +8,7 @@ import { EventApi } from "../../events/Event.api.js";
 
 // #region Schema for GetPlaceActualEventsResponseBody
 const _GetPlaceActualEventsResponseBody = EventApi.pipe(
-  Schema.identifier("GetPlaceActualEventsResponse"),
+  Schema.annotations({ identifier: "GetPlaceActualEventsResponse" }),
   BaseResponseManyFor
 );
 
@@ -29,7 +29,9 @@ export const GetPlaceActualEventsResponseBody: Schema.Schema<
 // #region GetPlaceActualEventsRequestParams
 const _GetPlaceActualEventsRequestParams = Schema.Struct({
   idPlace: IdPlace,
-}).pipe(Schema.identifier("GetPlaceActualEventsRequestParams"));
+}).pipe(
+  Schema.annotations({ identifier: "GetPlaceActualEventsRequestParams" })
+);
 
 export type GetPlaceActualEventsRequestParamsContext = Schema.Schema.Context<
   typeof _GetPlaceActualEventsRequestParams

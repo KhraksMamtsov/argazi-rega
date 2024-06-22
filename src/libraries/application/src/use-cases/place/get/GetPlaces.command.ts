@@ -6,9 +6,9 @@ import { BaseCausedCommandFor } from "../../common/Base.command.js";
 
 export const GetPlacesCommandPayload = Schema.Struct({}).pipe(
   _SS.satisfies.encoded.json(),
-  Schema.identifier("GetPlacesCommandPayload")
+  Schema.annotations({ identifier: "GetPlacesCommandPayload" })
 );
 
 export const GetPlacesCommand = BaseCausedCommandFor(
   GetPlacesCommandPayload
-).pipe(Schema.identifier("GetPlacesCommand"));
+).pipe(Schema.annotations({ identifier: "GetPlacesCommand" }));

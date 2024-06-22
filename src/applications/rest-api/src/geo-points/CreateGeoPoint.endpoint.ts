@@ -9,7 +9,7 @@ import { BaseResponseFor } from "../BaseResponseFor.js";
 import { BearerAuth } from "../BearerAuth.security-scheme.js";
 
 export const _CreateGeoPointRequestBody = CreateGeoPointCommandPayload.pipe(
-  Schema.identifier("CreateGeoPointRequestBody")
+  Schema.annotations({ identifier: "CreateGeoPointRequestBody" })
 );
 
 export interface CreateGeoPointRequestBodyEncoded
@@ -24,7 +24,7 @@ export const CreateGeoPointRequestBody: Schema.Schema<
 > = _CreateGeoPointRequestBody;
 
 const _CreateGeoPointResponseBody = GeoPointApi.pipe(
-  Schema.identifier("CreateGeoPointResponseBody"),
+  Schema.annotations({ identifier: "CreateGeoPointResponseBody" }),
   BaseResponseFor
 );
 

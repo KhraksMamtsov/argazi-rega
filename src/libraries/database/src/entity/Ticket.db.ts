@@ -25,14 +25,14 @@ export const TicketDbBase = Schema.Struct({
     ["NONE", TicketRole.NONE],
     ["CHIEF", TicketRole.CHIEF]
   ),
-}).pipe(Schema.identifier("TicketDbBase"));
+}).pipe(Schema.annotations({ identifier: "TicketDbBase" }));
 
 // #region TicketDb
 const _TicketDb = TicketDbBase.pipe(
   _SS.satisfies.type<TicketBase>(),
   Schema.extend(BaseDb),
   _SS.satisfies.encoded<_Ticket>(),
-  Schema.identifier("_TicketDb")
+  Schema.annotations({ identifier: "_TicketDb" })
 );
 
 export type TicketDbContext = Schema.Schema.Context<typeof _TicketDb>;

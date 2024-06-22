@@ -6,7 +6,7 @@ import { BearerAuth } from "../BearerAuth.security-scheme.js";
 import { UserApi } from "../users/User.api.js";
 
 export const _GetMyIdentityResponse = UserApi.pipe(
-  Schema.identifier("GetMyIdentityResponse"),
+  Schema.annotations({ identifier: "GetMyIdentityResponse" }),
   BaseResponseFor
 );
 

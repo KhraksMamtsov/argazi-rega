@@ -9,7 +9,7 @@ import { BaseResponseFor } from "../BaseResponseFor.js";
 
 // #region CreateTransportRequestBody
 const _CreateTransportRequestBody = CreateTransportCommandPayload.pipe(
-  Schema.identifier("CreateTransportRequestBody")
+  Schema.annotations({ identifier: "CreateTransportRequestBody" })
 );
 
 export type CreateTransportRequestBodyContext = Schema.Schema.Context<
@@ -28,7 +28,7 @@ export const CreateTransportRequestBody: Schema.Schema<
 
 // #region CreateTransportResponse
 const _CreateTransportResponse = TransportApi.pipe(
-  Schema.identifier("CreateTransportResponse"),
+  Schema.annotations({ identifier: "CreateTransportResponse" }),
   BaseResponseFor
 );
 

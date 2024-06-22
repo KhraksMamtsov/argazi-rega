@@ -4,7 +4,7 @@ export const IdLectureSymbol: unique symbol = Symbol.for("IdLectureSymbol");
 
 export const IdLecture = Schema.UUID.pipe(
   Schema.brand(IdLectureSymbol),
-  Schema.identifier("IdLecture")
+  Schema.annotations({ identifier: "IdLecture" })
 );
 
 export type IdLecture = Schema.Schema.Type<typeof IdLecture>;

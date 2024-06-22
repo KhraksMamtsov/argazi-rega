@@ -8,9 +8,9 @@ import { VisitorApi } from "../Visitor.api.js";
 
 // #region GetVisitorResponseBody
 const _GetVisitorResponseBody = VisitorApi.pipe(
-  Schema.identifier("GetVisitorResponse"),
+  Schema.annotations({ identifier: "GetVisitorResponse" }),
   BaseResponseFor
-).pipe(Schema.identifier("GetVisitorResponseBody"));
+).pipe(Schema.annotations({ identifier: "GetVisitorResponseBody" }));
 
 export type GetVisitorResponseBodyContext = Schema.Schema.Context<
   typeof _GetVisitorResponseBody
@@ -29,7 +29,7 @@ export const GetVisitorResponseBody: Schema.Schema<
 // #region GetVisitorRequestParams
 const _GetVisitorRequestParams = Schema.Struct({
   idVisitor: IdVisitor,
-}).pipe(Schema.identifier("GetVisitorRequestParams"));
+}).pipe(Schema.annotations({ identifier: "GetVisitorRequestParams" }));
 
 export type GetVisitorRequestParamsContext = Schema.Schema.Context<
   typeof _GetVisitorRequestParams

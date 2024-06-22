@@ -5,7 +5,7 @@ export const IdPlaceAdminSymbol: unique symbol =
 
 export const IdPlaceAdmin = Schema.UUID.pipe(
   Schema.brand(IdPlaceAdminSymbol),
-  Schema.identifier("IdPlaceAdmin")
+  Schema.annotations({ identifier: "IdPlaceAdmin" })
 );
 
 export type IdPlaceAdmin = Schema.Schema.Type<typeof IdPlaceAdmin>;

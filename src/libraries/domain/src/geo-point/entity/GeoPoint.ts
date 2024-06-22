@@ -13,13 +13,13 @@ export const GeoPointBase = Schema.Struct({
   latitude: Latitude,
   longitude: Longitude,
   name: Schema.OptionFromSelf(Schema.RedactedFromSelf(Schema.String)),
-}).pipe(Schema.typeSchema, Schema.identifier("GeoPointBase"));
+}).pipe(Schema.typeSchema, Schema.annotations({ identifier: "GeoPointBase" }));
 
 export interface GeoPointBase extends Schema.Schema.Type<typeof GeoPointBase> {}
 
 export const GeoPoint = GeoPointBase.pipe(
   Schema.extend(Base),
-  Schema.identifier("GeoPoint")
+  Schema.annotations({ identifier: "GeoPoint" })
 );
 
 export interface GeoPoint extends Schema.Schema.Type<typeof GeoPoint> {}

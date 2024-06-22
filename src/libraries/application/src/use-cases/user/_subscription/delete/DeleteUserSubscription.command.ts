@@ -10,7 +10,7 @@ export const DeleteUserSubscriptionCommandPayload = Schema.Struct({
   idUser: IdUser,
 }).pipe(
   _SS.satisfies.encoded.json(),
-  Schema.identifier("DeleteUserSubscriptionCommandPayload")
+  Schema.annotations({ identifier: "DeleteUserSubscriptionCommandPayload" })
 );
 
 export type DeleteUserSubscriptionCommandPayloadFrom = Schema.Schema.Encoded<
@@ -19,4 +19,4 @@ export type DeleteUserSubscriptionCommandPayloadFrom = Schema.Schema.Encoded<
 
 export const DeleteUserSubscriptionCommand = BaseCausedCommandFor(
   DeleteUserSubscriptionCommandPayload
-).pipe(Schema.identifier("DeleteUserSubscriptionCommand"));
+).pipe(Schema.annotations({ identifier: "DeleteUserSubscriptionCommand" }));

@@ -7,6 +7,6 @@ export const Entity = <R, I extends string, A extends Branded<string, symbol>>(
 ) =>
   Schema.Struct({
     id: idSchema,
-  }).pipe(Schema.typeSchema, Schema.identifier("Entity"));
+  }).pipe(Schema.typeSchema, Schema.annotations({ identifier: "Entity" }));
 
 export type Entity = Schema.Schema.Type<ReturnType<typeof Entity>>;

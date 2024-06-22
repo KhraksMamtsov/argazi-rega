@@ -14,7 +14,10 @@ const _RouteFromEvent = Schema.Struct({
   idTransportOnEvent: IdTransportOnEvent,
   //
   name: Schema.Option(Schema.Trim.pipe(Schema.nonEmpty())),
-}).pipe(Schema.extend(Base), Schema.identifier("RouteFromEvent"));
+}).pipe(
+  Schema.extend(Base),
+  Schema.annotations({ identifier: "RouteFromEvent" })
+);
 
 export interface RouteFromEventFrom
   extends Schema.Schema.Encoded<typeof _RouteFromEvent> {}

@@ -14,11 +14,11 @@ export const GetManyUsersCommandPayload = Schema.Union(
     idsDwbn: Schema.Array(IdDwbn),
     type: Schema.Literal("idDwbn"),
   }).pipe(_SS.satisfies.encoded.json())
-).pipe(Schema.identifier("GetManyUsersCommandPayload"));
+).pipe(Schema.annotations({ identifier: "GetManyUsersCommandPayload" }));
 
 export const GetManyUsersCommand = BaseCommandFor(
   GetManyUsersCommandPayload
-).pipe(Schema.identifier("GetManyUsersCommand"));
+).pipe(Schema.annotations({ identifier: "GetManyUsersCommand" }));
 
 export type GetManyUsersCommand = Schema.Schema.Type<
   typeof GetManyUsersCommand

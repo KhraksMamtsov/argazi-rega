@@ -7,11 +7,11 @@ import { BaseResponseFor } from "../../BaseResponseFor.js";
 import { EventApi } from "../Event.api.js";
 
 export const CreateEventRequestBody = CreateEventCommandPayload.pipe(
-  Schema.identifier("CreateEventRequestBody")
+  Schema.annotations({ identifier: "CreateEventRequestBody" })
 );
 
 const _CreateEventResponse = EventApi.pipe(
-  Schema.identifier("CreateEventResponse"),
+  Schema.annotations({ identifier: "CreateEventResponse" }),
   BaseResponseFor
 );
 

@@ -14,7 +14,7 @@ const _Meta = Schema.Struct({
   idUserCreator: IdUser,
   idUserDeleter: Schema.OptionFromSelf(IdUser),
   idUserUpdater: IdUser,
-}).pipe(Schema.typeSchema, Schema.identifier("Meta"));
+}).pipe(Schema.typeSchema, Schema.annotations({ identifier: "Meta" }));
 
 export type MetaContext = Schema.Schema.Context<typeof _Meta>;
 export interface MetaEncoded extends Schema.Schema.Encoded<typeof _Meta> {}

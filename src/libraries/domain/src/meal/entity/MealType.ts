@@ -6,5 +6,5 @@ export enum MealType {
 }
 
 export const MealTypeSchema = Schema.Enums(MealType).pipe(
-  Schema.identifier("MealType")
+  Schema.annotations({ identifier: "MealType" })
 );

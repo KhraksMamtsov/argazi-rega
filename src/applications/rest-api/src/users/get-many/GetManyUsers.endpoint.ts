@@ -8,7 +8,7 @@ import { UserApi } from "../User.api.js";
 
 // #region GetManyUsersResponseBody
 const _GetManyUsersResponseBody = UserApi.pipe(
-  Schema.identifier("GetManyUsersResponseBody"),
+  Schema.annotations({ identifier: "GetManyUsersResponseBody" }),
   BaseResponseOptionManyFor
 );
 
@@ -29,7 +29,7 @@ export const GetManyUsersResponseBody: Schema.Schema<
 // #region GetManyUsersRequestParams
 const _GetManyUsersRequestParams = Schema.Struct({
   idsUser: Schema.Array(IdUser),
-}).pipe(Schema.identifier("GetManyUsersRequestParams"));
+}).pipe(Schema.annotations({ identifier: "GetManyUsersRequestParams" }));
 
 export type GetManyUsersRequestParamsContext = Schema.Schema.Context<
   typeof _GetManyUsersRequestParams

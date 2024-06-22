@@ -17,7 +17,7 @@ const _BaseDb = Schema.Struct({
   idUserCreator: Schema.UUID,
   idUserDeleter: Schema.NullOr(Schema.UUID),
   idUserUpdater: Schema.UUID,
-}).pipe(Schema.identifier("BaseDb"));
+}).pipe(Schema.annotations({ identifier: "BaseDb" }));
 
 export interface BaseDbFrom extends Schema.Schema.Encoded<typeof _BaseDb> {}
 export interface BaseDb extends Schema.Schema.Type<typeof _BaseDb> {}
@@ -86,7 +86,7 @@ export const transform = <
     decode: (b, options, ast) =>
       pipe(
         Effect.all([
-          toDomain(b, options).pipe(Effect.mapError((x) => x.error)),
+          toDomain(b, options).pipe(Effect.mapError((x) => x.issue)),
           decode(b, options, ast),
         ]),
         Effect.map(
@@ -100,7 +100,7 @@ export const transform = <
     encode: ({ meta, ...c }, options, ast) =>
       pipe(
         Effect.all([
-          fromDomain({ meta }, options).pipe(Effect.mapError((x) => x.error)),
+          fromDomain({ meta }, options).pipe(Effect.mapError((x) => x.issue)),
           encode(c, options, ast),
         ]),
         Effect.map(

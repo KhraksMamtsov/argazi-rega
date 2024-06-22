@@ -61,7 +61,7 @@ export const _Notification = Schema.parseJson(
     idInitiator: IdUser,
     issue: NotificationIssue,
   }).pipe(_SS.satisfies.encoded.json())
-).pipe(Schema.identifier("Notification"));
+).pipe(Schema.annotations({ identifier: "Notification" }));
 
 export type NotificationFrom = Schema.Schema.Encoded<typeof _Notification>;
 export interface Notification

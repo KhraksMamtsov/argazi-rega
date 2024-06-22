@@ -13,7 +13,7 @@ export const _JWTPayload = Schema.Struct({
   sub: IdUser,
 })
   .pipe(_SS.satisfies.encoded.json())
-  .pipe(Schema.identifier("JWTPayload"));
+  .pipe(Schema.annotations({ identifier: "JWTPayload" }));
 
 export type _JWTPayloadContext = Schema.Schema.Context<typeof _JWTPayload>;
 export interface JWTPayloadEncoded

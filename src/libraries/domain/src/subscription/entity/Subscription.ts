@@ -10,7 +10,7 @@ export const SubscriptionBase = Schema.Struct({
   id: IdSubscription,
   idPlace: IdPlace,
   idUser: IdUser,
-}).pipe(Schema.identifier("SubscriptionBase"));
+}).pipe(Schema.annotations({ identifier: "SubscriptionBase" }));
 
 export interface SubscriptionBase
   extends Schema.Schema.Type<typeof SubscriptionBase> {}
@@ -18,7 +18,7 @@ export interface SubscriptionBase
 const _Subscription = SubscriptionBase.pipe(
   //
   Schema.extend(Base),
-  Schema.identifier("Subscription")
+  Schema.annotations({ identifier: "Subscription" })
 );
 
 export interface Subscription

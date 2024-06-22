@@ -13,7 +13,7 @@ const _Lecture = Schema.Struct({
   name: Schema.Trim.pipe(Schema.nonEmpty()),
   priceDay: Price,
   priceLecture: Price,
-}).pipe(Schema.identifier("Lecture"));
+}).pipe(Schema.annotations({ identifier: "Lecture" }));
 
 export type LectureFrom = Schema.Schema.Encoded<typeof _Lecture>;
 export type Lecture = Schema.Schema.Type<typeof _Lecture>;

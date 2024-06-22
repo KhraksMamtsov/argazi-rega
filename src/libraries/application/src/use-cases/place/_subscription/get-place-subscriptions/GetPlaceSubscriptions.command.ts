@@ -13,9 +13,9 @@ export const GetPlaceSubscriptionsCommandPayload = Schema.Struct({
   idPlace: IdPlace,
 }).pipe(
   _SS.satisfies.encoded.json<GetPlaceSubscriptionsCommandPayloadFrom>(),
-  Schema.identifier("GetPlaceSubscriptionsCommandPayload")
+  Schema.annotations({ identifier: "GetPlaceSubscriptionsCommandPayload" })
 );
 
 export const GetPlaceSubscriptionsCommand = BaseCausedCommandFor(
   GetPlaceSubscriptionsCommandPayload
-).pipe(Schema.identifier("GetPlaceSubscriptionsCommand"));
+).pipe(Schema.annotations({ identifier: "GetPlaceSubscriptionsCommand" }));

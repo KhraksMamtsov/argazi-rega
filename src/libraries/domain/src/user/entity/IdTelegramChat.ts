@@ -4,7 +4,7 @@ export const IdTelegramChatSymbol: unique symbol = Symbol.for(
   "IdTelegramChatSymbol"
 );
 export const IdTelegramChat = Schema.Number.pipe(
-  Schema.identifier("IdTelegramChat"),
+  Schema.annotations({ identifier: "IdTelegramChat" }),
   Schema.brand(IdTelegramChatSymbol)
 );
 

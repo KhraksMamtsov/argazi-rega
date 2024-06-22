@@ -19,7 +19,7 @@ const _TransportDb = Schema.Struct({
   seatsNumber: Schema.Int.pipe(Schema.positive()),
 }).pipe(
   Schema.extend(BaseDb),
-  Schema.identifier("_TransportDb"),
+  Schema.annotations({ identifier: "_TransportDb" }),
   _SS.satisfies.encoded<TransportDbFrom>()
 );
 

@@ -16,12 +16,12 @@ export const CreatePlaceCommandPayload = Schema.Struct({
   description: Schema.compose(Schema.Trim, Schema.NonEmpty),
 }).pipe(
   _SS.satisfies.encoded.json<CreatePlaceCommandPayloadFrom>(),
-  Schema.identifier("CreatePlaceCommandPayload")
+  Schema.annotations({ identifier: "CreatePlaceCommandPayload" })
 );
 
 export const _CreatePlaceCommand = BaseCausedCommandFor(
   CreatePlaceCommandPayload
-).pipe(Schema.identifier("CreatePlaceCommand"));
+).pipe(Schema.annotations({ identifier: "CreatePlaceCommand" }));
 
 export interface CreatePlaceCommandFrom
   extends Schema.Schema.Encoded<typeof _CreatePlaceCommand> {}

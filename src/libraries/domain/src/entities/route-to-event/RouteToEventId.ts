@@ -5,5 +5,5 @@ export const IdRouteToEventSymbol: unique symbol = Symbol.for(
 );
 export const IdRouteToEvent = Schema.UUID.pipe(
   Schema.brand(IdRouteToEventSymbol),
-  Schema.identifier("IdRouteToEvent")
+  Schema.annotations({ identifier: "IdRouteToEvent" })
 );

@@ -19,7 +19,10 @@ export const _GeoPointApi = Schema.Struct({
       Schema.Redacted(Schema.String)
     )
   ),
-}).pipe(_SS.satisfies.type<GeoPointBase>(), Schema.identifier("GeoPointApi"));
+}).pipe(
+  _SS.satisfies.type<GeoPointBase>(),
+  Schema.annotations({ identifier: "GeoPointApi" })
+);
 
 export interface GeoPointApiEncoded
   extends Schema.Schema.Encoded<typeof _GeoPointApi> {}

@@ -9,7 +9,7 @@ import { TicketApi } from "../../tickets/Ticket.api.js";
 
 // #region BookTicketResponseBody
 const _BookTicketResponseBody = TicketApi.pipe(
-  Schema.identifier("BookTicketResponseBody"),
+  Schema.annotations({ identifier: "BookTicketResponseBody" }),
   BaseResponseFor
 );
 
@@ -30,7 +30,7 @@ export const BookTicketResponseBody: Schema.Schema<
 // #region BookTicketRequestBody
 const _BookTicketRequestBody = Schema.Struct({
   idEvent: IdEvent,
-}).pipe(Schema.identifier("BookTicketRequestBody"));
+}).pipe(Schema.annotations({ identifier: "BookTicketRequestBody" }));
 
 export type BookTicketRequestBodyContext = Schema.Schema.Context<
   typeof _BookTicketRequestBody
@@ -49,7 +49,7 @@ export const BookTicketRequestBody: Schema.Schema<
 // #region BookTicketRequestParams
 const _BookTicketRequestParams = Schema.Struct({
   idUser: IdUser,
-}).pipe(Schema.identifier("BookTicketRequestParams"));
+}).pipe(Schema.annotations({ identifier: "BookTicketRequestParams" }));
 
 export type BookTicketRequestParamsContext = Schema.Schema.Context<
   typeof _BookTicketRequestParams
@@ -78,7 +78,9 @@ export const BookTicketEndpoint = ApiEndpoint.post(
   ApiEndpoint.addResponse(
     ApiResponse.make(
       400,
-      Schema.String.pipe(Schema.description("UserSubscriptions not found"))
+      Schema.String.pipe(
+        Schema.annotations({ description: "UserSubscriptions not found" })
+      )
     )
   )
 );

@@ -9,7 +9,7 @@ import { CredentialsApi } from "../Tokens.response.js";
 export const _LoginDwbnRequestBody = Schema.Struct({
   code: Schema.compose(Schema.Trim, Schema.NonEmpty),
   idTelegramChat: IdTelegramChat,
-}).pipe(Schema.identifier("LoginDwbnRequestBody"));
+}).pipe(Schema.annotations({ identifier: "LoginDwbnRequestBody" }));
 
 export interface LoginDwbnRequestBodyEncoded
   extends Schema.Schema.Encoded<typeof _LoginDwbnRequestBody> {}
@@ -24,7 +24,7 @@ export const LoginDwbnRequestBody: Schema.Schema<
 export const _LoginDwbnResponseBody = Schema.Struct({
   credentials: CredentialsApi,
   idUser: IdUser,
-}).pipe(Schema.identifier("LoginDwbnResponseBody"));
+}).pipe(Schema.annotations({ identifier: "LoginDwbnResponseBody" }));
 
 export interface LoginDwbnResponseBodyEncoded
   extends Schema.Schema.Encoded<typeof _LoginDwbnResponseBody> {}

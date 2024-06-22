@@ -25,7 +25,7 @@ const _TicketApi = Schema.Struct({
 }).pipe(
   _SS.satisfies.encoded.json(),
   _SS.satisfies.type<TicketBase>(),
-  Schema.identifier("TicketApi")
+  Schema.annotations({ identifier: "TicketApi" })
 );
 
 export type TicketApiContext = Schema.Schema.Context<typeof _TicketApi>;

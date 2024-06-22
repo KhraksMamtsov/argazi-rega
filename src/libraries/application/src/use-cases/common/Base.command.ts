@@ -15,7 +15,7 @@ export const BaseCommandFor = <R, I extends _S.Json.Json, A>(
 
   return Schema.Struct({
     payload,
-  }).pipe(Schema.identifier(baseAnnotation));
+  }).pipe(Schema.annotations({identifier:baseAnnotation}));
 };
 
 export type BaseCommand = Schema.Schema.Type<ReturnType<typeof BaseCommandFor>>;
@@ -32,7 +32,7 @@ export const BaseCausedCommandFor = <R, I extends _S.Json.Json, A>(
   return Schema.Struct({
     idInitiator: IdUser,
     payload,
-  }).pipe(Schema.identifier(baseAnnotation));
+  }).pipe(Schema.annotations({identifier:baseAnnotation}));
 };
 
 export type BaseCausedCommand = Schema.Schema.Type<

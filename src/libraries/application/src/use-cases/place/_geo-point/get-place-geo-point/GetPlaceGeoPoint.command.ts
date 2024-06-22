@@ -9,9 +9,9 @@ export const GetPlaceGeoPointCommandPayload = Schema.Struct({
   idPlace: IdPlace,
 }).pipe(
   _SS.satisfies.encoded.json(),
-  Schema.identifier("GetPlaceGeoPointCommandPayload")
+  Schema.annotations({ identifier: "GetPlaceGeoPointCommandPayload" })
 );
 
 export const GetPlaceGeoPointCommand = BaseCausedCommandFor(
   GetPlaceGeoPointCommandPayload
-).pipe(Schema.identifier("GetPlaceGeoPointCommand"));
+).pipe(Schema.annotations({ identifier: "GetPlaceGeoPointCommand" }));

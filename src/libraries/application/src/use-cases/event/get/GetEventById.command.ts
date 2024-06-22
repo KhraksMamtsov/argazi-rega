@@ -13,9 +13,9 @@ export const GetEventByIdCommandPayload = Schema.Struct({
   id: IdEvent,
 }).pipe(
   _SS.satisfies.encoded.json<GetEventByIdCommandPayloadFrom>(),
-  Schema.identifier("GetEventByIdCommandPayload")
+  Schema.annotations({ identifier: "GetEventByIdCommandPayload" })
 );
 
 export const GetEventByIdCommand = BaseCausedCommandFor(
   GetEventByIdCommandPayload
-).pipe(Schema.identifier("GetEventByIdCommand"));
+).pipe(Schema.annotations({ identifier: "GetEventByIdCommand" }));

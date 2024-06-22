@@ -1,5 +1,9 @@
-import { HttpClient } from "@effect/platform";
-import * as UrlParams from "@effect/platform/Http/UrlParams";
+import {
+  HttpClient,
+  HttpClientRequest,
+  HttpClientResponse,
+  UrlParams,
+} from "@effect/platform";
 import { Schema } from "@effect/schema";
 import { Config, Effect, Record, Redacted, pipe } from "effect";
 
@@ -16,12 +20,10 @@ export const DwbnOAuth2Service = Effect.gen(function* (_) {
     Effect.map(Record.map(Redacted.value))
   );
 
-  const defaultClient = yield* HttpClient.client.Client;
+  const defaultClient = yield* HttpClient.HttpClient;
   const clientWithBaseUrl = defaultClient.pipe(
     // HttpClient.client.filterStatusOk,
-    HttpClient.client.mapRequest(
-      HttpClient.request.prependUrl(config.dwbnOauth2URL)
-    )
+    HttpClient.mapRequest(HttpClientRequest.prependUrl(config.dwbnOauth2URL))
   );
 
   return {
@@ -33,11 +35,11 @@ export const DwbnOAuth2Service = Effect.gen(function* (_) {
         redirect_uri: config.redirectURL,
       });
 
-      return HttpClient.request.post("token/").pipe(
-        HttpClient.request.urlParamsBody(urlParams),
+      return HttpClientRequest.post("token/").pipe(
+        HttpClientRequest.urlParamsBody(urlParams),
         clientWithBaseUrl,
         Effect.flatMap(
-          HttpClient.response.schemaBodyJson(
+          HttpClientResponse.schemaBodyJson(
             Schema.Struct({
               id_token: Schema.compose(
                 _JWTSchema.JWTStruct,

@@ -19,12 +19,12 @@ export const CreateGeoPointCommandPayload = Schema.Struct({
   name: Schema.OptionFromNullOr(Schema.Redacted(Schema.String)),
 }).pipe(
   _SS.satisfies.encoded.json<CreateGeoPointCommandPayloadFrom>(),
-  Schema.identifier("CreateGeoPointCommandPayload")
+  Schema.annotations({ identifier: "CreateGeoPointCommandPayload" })
 );
 
 export const _CreateGeoPointCommand = BaseCausedCommandFor(
   CreateGeoPointCommandPayload
-).pipe(Schema.identifier("CreateGeoPointCommand"));
+).pipe(Schema.annotations({ identifier: "CreateGeoPointCommand" }));
 
 export interface CreateGeoPointCommandFrom
   extends Schema.Schema.Encoded<typeof _CreateGeoPointCommand> {}

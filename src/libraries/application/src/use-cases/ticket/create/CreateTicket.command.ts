@@ -13,9 +13,9 @@ export const CreateTicketCommandPayload = TicketDbBase.pipe(
     })
   ),
   _SS.satisfies.encoded.json(),
-  Schema.identifier("CreateTicketCommandPayload")
+  Schema.annotations({ identifier: "CreateTicketCommandPayload" })
 );
 
 export const CreateTicketCommand = BaseCausedCommandFor(
   CreateTicketCommandPayload
-).pipe(Schema.identifier("CreateTicketCommand"));
+).pipe(Schema.annotations({ identifier: "CreateTicketCommand" }));

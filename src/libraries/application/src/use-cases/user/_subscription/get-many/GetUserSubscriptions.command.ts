@@ -9,7 +9,7 @@ export const GetUserSubscriptionsCommandPayload = Schema.Struct({
   idUser: IdUser,
 }).pipe(
   _SS.satisfies.encoded.json(),
-  Schema.identifier("GetUserSubscriptionsCommandPayload")
+  Schema.annotations({ identifier: "GetUserSubscriptionsCommandPayload" })
 );
 
 export type GetUserSubscriptionsCommandPayloadFrom = Schema.Schema.Encoded<
@@ -18,4 +18,4 @@ export type GetUserSubscriptionsCommandPayloadFrom = Schema.Schema.Encoded<
 
 export const GetUserSubscriptionsCommand = BaseCausedCommandFor(
   GetUserSubscriptionsCommandPayload
-).pipe(Schema.identifier("GetUserSubscriptionsCommand"));
+).pipe(Schema.annotations({ identifier: "GetUserSubscriptionsCommand" }));

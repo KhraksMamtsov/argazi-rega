@@ -14,7 +14,10 @@ const _TransportOnEvent = Schema.Struct({
   //
   price: Price,
   seatsNumber: Schema.Int.pipe(Schema.positive()),
-}).pipe(Schema.extend(Base), Schema.identifier("TransportOnEvent"));
+}).pipe(
+  Schema.extend(Base),
+  Schema.annotations({ identifier: "TransportOnEvent" })
+);
 
 export type TransportOnEventFrom = Schema.Schema.Encoded<
   typeof _TransportOnEvent

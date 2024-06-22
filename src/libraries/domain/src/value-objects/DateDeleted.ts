@@ -2,7 +2,7 @@ import { Schema } from "@effect/schema";
 
 export const DateDeletedSymbol: unique symbol = Symbol.for("DateDeleted");
 export const DateDeleted = Schema.ValidDateFromSelf.pipe(
-  Schema.identifier("DateDeleted"),
+  Schema.annotations({ identifier: "DateDeleted" }),
   Schema.brand(DateDeletedSymbol)
 );
 

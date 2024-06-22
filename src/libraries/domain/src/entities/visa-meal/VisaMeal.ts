@@ -10,7 +10,7 @@ const _VisaMeal = Schema.Struct({
   id: IdVisaMeal,
   idMeal: IdMeal,
   idVisa: IdVisa,
-}).pipe(Schema.extend(Base), Schema.identifier("VisaMeal"));
+}).pipe(Schema.extend(Base), Schema.annotations({ identifier: "VisaMeal" }));
 
 export type VisaMealFrom = Schema.Schema.Encoded<typeof _VisaMeal>;
 export type VisaMealMeal = Schema.Schema.Type<typeof _VisaMeal>;

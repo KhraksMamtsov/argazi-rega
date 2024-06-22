@@ -5,5 +5,5 @@ export const IdVisaPaymentSymbol: unique symbol = Symbol.for(
 );
 export const IdVisaPayment = Schema.UUID.pipe(
   Schema.brand(IdVisaPaymentSymbol),
-  Schema.identifier("IdVisaPayment")
+  Schema.annotations({ identifier: "IdVisaPayment" })
 );

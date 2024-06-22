@@ -10,7 +10,7 @@ import { VisitorApi } from "../../visitors/Visitor.api.js";
 
 // #region CreateUsersVisitorResponseBody
 const _CreateUsersVisitorResponseBody = VisitorApi.pipe(
-  Schema.identifier("CreateUsersVisitorResponseBody"),
+  Schema.annotations({ identifier: "CreateUsersVisitorResponseBody" }),
   BaseResponseFor
 );
 
@@ -31,7 +31,7 @@ export const CreateUsersVisitorResponseBody: Schema.Schema<
 // #region CreateUsersVisitorRequestBody
 const _CreateUsersVisitorRequestBody = CreateUsersVisitorCommandPayload.pipe(
   Schema.omit("idUser"),
-  Schema.identifier("CreateUsersVisitorRequestBody")
+  Schema.annotations({ identifier: "CreateUsersVisitorRequestBody" })
 );
 
 export type CreateUsersVisitorRequestBodyContext = Schema.Schema.Context<
@@ -50,7 +50,7 @@ export const CreateUsersVisitorRequestBody: Schema.Schema<
 // #region CreateUsersVisitorRequestParams
 const _CreateUsersVisitorRequestParams = Schema.Struct({
   idUser: IdUser,
-}).pipe(Schema.identifier("CreateUsersVisitorRequestParams"));
+}).pipe(Schema.annotations({ identifier: "CreateUsersVisitorRequestParams" }));
 
 export type CreateUsersVisitorRequestParamsContext = Schema.Schema.Context<
   typeof _CreateUsersVisitorRequestParams

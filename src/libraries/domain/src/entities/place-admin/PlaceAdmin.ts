@@ -13,7 +13,7 @@ const _PlaceAdmin = Schema.Struct({
 }).pipe(
   //
   Schema.extend(Base),
-  Schema.identifier("PlaceAdmin")
+  Schema.annotations({ identifier: "PlaceAdmin" })
 );
 
 export type PlaceAdminFrom = Schema.Schema.Encoded<typeof _PlaceAdmin>;

@@ -19,7 +19,7 @@ const _CreateEventCommandPayload = Schema.Struct({
   description: Schema.String,
 }).pipe(
   _SS.satisfies.encoded.json(),
-  Schema.identifier("CreateEventCommandPayload")
+  Schema.annotations({ identifier: "CreateEventCommandPayload" })
 );
 
 export interface CreateEventCommandPayloadEncoded
@@ -34,7 +34,7 @@ export const CreateEventCommandPayload: Schema.Schema<
 
 export const _CreateEventCommand = BaseCausedCommandFor(
   CreateEventCommandPayload
-).pipe(Schema.identifier("CreateEventCommand"));
+).pipe(Schema.annotations({ identifier: "CreateEventCommand" }));
 
 export interface CreateEventCommandFrom
   extends Schema.Schema.Encoded<typeof _CreateEventCommand> {}

@@ -9,7 +9,10 @@ import { RefreshToken } from "./RefreshToken.js";
 export const _CredentialsApi = Schema.Struct({
   accessToken: AccessToken,
   refreshToken: RefreshToken,
-}).pipe(_SS.satisfies.encoded.json(), Schema.identifier("TokensResponse"));
+}).pipe(
+  _SS.satisfies.encoded.json(),
+  Schema.annotations({ identifier: "TokensResponse" })
+);
 
 export interface CredentialsApiEncoded
   extends Schema.Schema.Encoded<typeof _CredentialsApi> {}

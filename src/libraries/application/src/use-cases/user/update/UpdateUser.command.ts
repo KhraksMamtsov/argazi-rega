@@ -65,7 +65,7 @@ export const UpdateUserCommandPayload = Schema.Struct({
       id: IdUser,
     })
   ),
-  Schema.identifier("UpdateUserCommandPayload"),
+  Schema.annotations({ identifier: "UpdateUserCommandPayload" }),
   _SS.satisfies.encoded.json<UpdateUserCommandPayloadFrom>(),
   _SS.satisfies.type<
     _EH.Optionize<Omit<UserBase, "id" | "phone" | "lastName">> &
@@ -75,7 +75,7 @@ export const UpdateUserCommandPayload = Schema.Struct({
 
 export const _UpdateUserCommand = BaseCausedCommandFor(
   UpdateUserCommandPayload
-).pipe(Schema.identifier("UpdateUserCommand"));
+).pipe(Schema.annotations({ identifier: "UpdateUserCommand" }));
 
 export interface UpdateUserCommandFrom
   extends Schema.Schema.Encoded<typeof _UpdateUserCommand> {}

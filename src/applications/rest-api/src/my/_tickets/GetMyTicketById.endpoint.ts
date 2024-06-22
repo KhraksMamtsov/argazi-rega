@@ -9,7 +9,7 @@ import { TicketApi } from "../../tickets/Ticket.api.js";
 
 // #region GetMyTicketByIdResponseBody
 const _GetMyTicketByIdResponseBody = TicketApi.pipe(
-  Schema.identifier("GetMyTicketByIdResponse"),
+  Schema.annotations({ identifier: "GetMyTicketByIdResponse" }),
   BaseResponseFor
 );
 
@@ -30,7 +30,7 @@ export const GetMyTicketByIdResponseBody: Schema.Schema<
 // #region GetMyTicketByIdRequestParams
 const _GetMyTicketByIdRequestParams = Schema.Struct({
   idTicket: IdTicket,
-}).pipe(Schema.identifier("GetMyTicketByIdRequestParams"));
+}).pipe(Schema.annotations({ identifier: "GetMyTicketByIdRequestParams" }));
 
 export type GetMyTicketByIdRequestParamsContext = Schema.Schema.Context<
   typeof _GetMyTicketByIdRequestParams

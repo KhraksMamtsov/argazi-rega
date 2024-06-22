@@ -11,7 +11,7 @@ import { BaseResponseFor } from "../../BaseResponseFor.js";
 
 // #region CreatePlaceRequestBody
 const _CreatePlaceRequestBody = CreatePlaceCommandPayload.pipe(
-  Schema.identifier("CreatePlaceRequestBody")
+  Schema.annotations({ identifier: "CreatePlaceRequestBody" })
 );
 
 export type CreatePlaceRequestBodyContext = Schema.Schema.Context<
@@ -37,7 +37,7 @@ const _CreatePlaceResponse = Schema.Struct({
 }).pipe(
   _SS.satisfies.type<PlaceBase>(),
   _SS.satisfies.encoded.json(),
-  Schema.identifier("CreatePlaceResponse"),
+  Schema.annotations({ identifier: "CreatePlaceResponse" }),
   BaseResponseFor
 );
 

@@ -7,14 +7,14 @@ import { BaseResponseManyFor } from "../../BaseResponseFor.js";
 import { SubscriptionApi } from "../../subscriptions/Subscription.api.js";
 
 export const GetPlaceSubscriptionsResponse = SubscriptionApi.pipe(
-  Schema.identifier("GetPlaceSubscriptionsResponse"),
+  Schema.annotations({ identifier: "GetPlaceSubscriptionsResponse" }),
   BaseResponseManyFor
 );
 
 // #region GetPlaceSubscriptionsRequestPath
 const _GetPlaceSubscriptionsRequestPath = Schema.Struct({
   idPlace: IdPlace,
-}).pipe(Schema.identifier("GetPlaceSubscriptionsRequestPath"));
+}).pipe(Schema.annotations({ identifier: "GetPlaceSubscriptionsRequestPath" }));
 
 export type GetPlaceSubscriptionsRequestPathContext = Schema.Schema.Context<
   typeof _GetPlaceSubscriptionsRequestPath
@@ -40,7 +40,9 @@ export const GetPlaceSubscriptionsEndpoint = ApiEndpoint.get(
   ApiEndpoint.addResponse(
     ApiResponse.make(
       404,
-      Schema.String.pipe(Schema.description("PlaceSubscriptions not found"))
+      Schema.String.pipe(
+        Schema.annotations({ description: "PlaceSubscriptions not found" })
+      )
     )
   )
 );

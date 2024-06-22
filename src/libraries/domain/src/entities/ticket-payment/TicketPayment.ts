@@ -12,7 +12,10 @@ const _TicketPayment = Schema.Struct({
   idTicket: IdTicket,
   //
   payed: Price,
-}).pipe(Schema.extend(Base), Schema.identifier("TicketPayment"));
+}).pipe(
+  Schema.extend(Base),
+  Schema.annotations({ identifier: "TicketPayment" })
+);
 
 export type TicketPaymentFrom = Schema.Schema.Encoded<typeof _TicketPayment>;
 export type TicketPayment = Schema.Schema.Type<typeof _TicketPayment>;

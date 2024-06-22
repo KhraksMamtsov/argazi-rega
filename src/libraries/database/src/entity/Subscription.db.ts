@@ -17,7 +17,7 @@ export const _SubscriptionDb = Schema.Struct({
   idUser: IdUser,
 }).pipe(
   Schema.extend(BaseDb),
-  Schema.identifier("SubscriptionDb"),
+  Schema.annotations({ identifier: "SubscriptionDb" }),
   _SS.satisfies.encoded<_Subscription>()
 );
 

@@ -8,7 +8,7 @@ import { TicketApi } from "./Ticket.api.js";
 import { BaseResponseFor } from "../BaseResponseFor.js";
 
 export const CreateTicketApi = TicketApi.pipe(
-  Schema.identifier("CreateTicketResponse"),
+  Schema.annotations({ identifier: "CreateTicketResponse" }),
   BaseResponseFor
 );
 

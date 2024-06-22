@@ -8,7 +8,10 @@ import { TokensResponse } from "../Tokens.response.js";
 
 export const _RefreshTokenRequestBody = Schema.Struct({
   refreshToken: RefreshToken,
-}).pipe(_SS.satisfies.encoded.json(), Schema.identifier("RefreshTokenRequest"));
+}).pipe(
+  _SS.satisfies.encoded.json(),
+  Schema.annotations({ identifier: "RefreshTokenRequest" })
+);
 
 export type RefreshTokenRequestBodyContext = Schema.Schema.Context<
   typeof _RefreshTokenRequestBody

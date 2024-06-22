@@ -19,7 +19,7 @@ export const _VisitorDbBase = Schema.Struct({
     ["CHILD", VisitorType.CHILD],
     ["PENSIONER", VisitorType.PENSIONER]
   ),
-}).pipe(Schema.identifier("VisitorDbBase"));
+}).pipe(Schema.annotations({ identifier: "VisitorDbBase" }));
 
 export type VisitorDbBaseContext = Schema.Schema.Context<typeof _VisitorDbBase>;
 export interface VisitorDbBaseEncoded
@@ -34,7 +34,7 @@ export const VisitorDbBase: Schema.Schema<VisitorDbBase, VisitorDbBaseEncoded> =
 // #region VisitorDb
 const _VisitorDb = VisitorDbBase.pipe(
   Schema.extend(BaseDb),
-  Schema.identifier("VisitorDb"),
+  Schema.annotations({ identifier: "VisitorDb" }),
   _SS.satisfies.encoded<_Visitor>()
 );
 

@@ -9,7 +9,7 @@ import { VisitorApi } from "../../visitors/Visitor.api.js";
 
 // #region DeleteMyVisitorResponseBody
 const _DeleteMyVisitorResponseBody = VisitorApi.pipe(
-  Schema.identifier("_DeleteMyVisitorResponseBody"),
+  Schema.annotations({ identifier: "_DeleteMyVisitorResponseBody" }),
   BaseResponseFor
 );
 
@@ -30,7 +30,7 @@ export const DeleteMyVisitorResponseBody: Schema.Schema<
 // #region DeleteMyVisitorRequestParams
 const _DeleteMyVisitorRequestParams = Schema.Struct({
   idVisitor: IdVisitor,
-}).pipe(Schema.identifier("DeleteMyVisitorRequestParams"));
+}).pipe(Schema.annotations({ identifier: "DeleteMyVisitorRequestParams" }));
 
 export type DeleteMyVisitorRequestParamsContext = Schema.Schema.Context<
   typeof _DeleteMyVisitorRequestParams

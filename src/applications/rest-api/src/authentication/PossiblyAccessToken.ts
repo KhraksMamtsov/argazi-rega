@@ -4,7 +4,7 @@ export const PossiblyAccessTokenSymbol: unique symbol = Symbol.for(
   "PossiblyAccessTokenSymbol"
 );
 export const PossiblyAccessToken = Schema.String.pipe(
-  Schema.identifier("PossiblyAccessToken"),
+  Schema.annotations({ identifier: "PossiblyAccessToken" }),
   Schema.brand(PossiblyAccessTokenSymbol)
 );
 

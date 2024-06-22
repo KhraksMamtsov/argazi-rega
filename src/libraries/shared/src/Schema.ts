@@ -50,14 +50,14 @@ export const reverse = <R, I, A>(schema: Schema.Schema<A, I, R>) => {
     {
       decode: flow(
         encode,
-        Effect.mapError((x) => x.error)
+        Effect.mapError((x) => x.issue)
       ),
       encode: flow(
         decode,
-        Effect.mapError((x) => x.error)
+        Effect.mapError((x) => x.issue)
       ),
     }
-  ).pipe(Schema.identifier(reverseAnnotation));
+  ).pipe(Schema.annotations({ identifier: reverseAnnotation }));
 };
 
 export const StringFromNumber = reverse(Schema.NumberFromString);

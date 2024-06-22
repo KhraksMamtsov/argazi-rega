@@ -24,10 +24,10 @@ export const GetUserCommandPayload = Schema.Union(
     idDwbn: IdDwbn,
     type: Schema.Literal("idDwbn"),
   }).pipe(_SS.satisfies.encoded.json())
-).pipe(Schema.identifier("GetUserCommandPayload"));
+).pipe(Schema.annotations({ identifier: "GetUserCommandPayload" }));
 
 export const _GetUserCommand = BaseCommandFor(GetUserCommandPayload).pipe(
-  Schema.identifier("GetUserCommand")
+  Schema.annotations({ identifier: "GetUserCommand" })
 );
 
 export type GetUserCommandFrom = Schema.Schema.Encoded<typeof _GetUserCommand>;

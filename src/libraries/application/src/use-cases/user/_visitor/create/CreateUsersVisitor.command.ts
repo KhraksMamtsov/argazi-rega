@@ -8,7 +8,7 @@ import { BaseCausedCommandFor } from "../../../common/Base.command.js";
 // #region CreateUsersVisitorCommandPayload
 export const _CreateUsersVisitorCommandPayload = VisitorDbBase.pipe(
   Schema.omit("id"),
-  Schema.identifier("CreateUsersVisitorCommandPayload"),
+  Schema.annotations({ identifier: "CreateUsersVisitorCommandPayload" }),
   _SS.satisfies.encoded.json()
 );
 
@@ -29,7 +29,7 @@ export const CreateUsersVisitorCommandPayload: Schema.Schema<
 // #region CreateUsersVisitorCommand
 export const _CreateUsersVisitorCommand = BaseCausedCommandFor(
   CreateUsersVisitorCommandPayload
-).pipe(Schema.identifier("CreateUsersVisitorCommand"));
+).pipe(Schema.annotations({ identifier: "CreateUsersVisitorCommand" }));
 
 export type CreateUsersVisitorCommandContext = Schema.Schema.Context<
   typeof _CreateUsersVisitorCommand

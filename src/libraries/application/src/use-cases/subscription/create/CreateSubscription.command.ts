@@ -10,9 +10,9 @@ export const CreateSubscriptionCommandPayload = Schema.Struct({
   idUser: IdUser,
 }).pipe(
   _SS.satisfies.encoded.json(),
-  Schema.identifier("CreateSubscriptionCommandPayload")
+  Schema.annotations({ identifier: "CreateSubscriptionCommandPayload" })
 );
 
 export const CreateSubscriptionCommand = BaseCausedCommandFor(
   CreateSubscriptionCommandPayload
-).pipe(Schema.identifier("CreateSubscriptionCommand"));
+).pipe(Schema.annotations({ identifier: "CreateSubscriptionCommand" }));

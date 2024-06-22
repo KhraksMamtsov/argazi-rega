@@ -8,7 +8,7 @@ import { BaseCausedCommandFor } from "../../common/Base.command.js";
 // #region CreateTransportCommandPayload
 const _CreateTransportCommandPayload = TransportDb.pipe(
   Schema.pick("idUser", "number", "model", "color", "seatsNumber"),
-  Schema.identifier("CreateTransportCommandPayload")
+  Schema.annotations({ identifier: "CreateTransportCommandPayload" })
 ).pipe(_SS.satisfies.encoded.json());
 
 export type CreateTransportCommandPayloadContext = Schema.Schema.Context<
@@ -28,7 +28,7 @@ export const CreateTransportCommandPayload: Schema.Schema<
 // #region CreateTransportCommand
 const _CreateTransportCommand = BaseCausedCommandFor(
   CreateTransportCommandPayload
-).pipe(Schema.identifier("CreateTransportCommand"));
+).pipe(Schema.annotations({ identifier: "CreateTransportCommand" }));
 
 export type CreateTransportCommandContext = Schema.Schema.Context<
   typeof _CreateTransportCommand

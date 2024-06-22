@@ -7,7 +7,7 @@ import { TicketApi } from "../../tickets/Ticket.api.js";
 
 // #region GetMyTicketsResponseBody
 const _GetMyTicketsResponseBody = TicketApi.pipe(
-  Schema.identifier("GetMyTicketsResponse"),
+  Schema.annotations({ identifier: "GetMyTicketsResponse" }),
   BaseResponseManyFor
 );
 

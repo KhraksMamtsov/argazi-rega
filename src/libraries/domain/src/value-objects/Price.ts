@@ -5,7 +5,7 @@ import { Money } from "./Money.js";
 export const PriceSymbol: unique symbol = Symbol.for("Price");
 export const Price = Money.pipe(
   Schema.nonNegativeBigDecimal(),
-  Schema.identifier("Price"),
+  Schema.annotations({ identifier: "Price" }),
   Schema.brand(PriceSymbol)
 );
 

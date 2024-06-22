@@ -13,7 +13,7 @@ export const _VisitorData = Schema.Struct({
   idUser: IdUser,
   name: Schema.Trim.pipe(Schema.nonEmpty()),
   type: VisitorTypeSchema,
-}).pipe(Schema.identifier("VisitorData"));
+}).pipe(Schema.annotations({ identifier: "VisitorData" }));
 
 export type VisitorDataContext = Schema.Schema.Context<typeof _VisitorData>;
 export interface VisitorDataEncoded
@@ -27,7 +27,7 @@ export const VisitorData: Schema.Schema<VisitorData, VisitorDataEncoded> =
 // #region Visitor
 export const _Visitor = VisitorData.pipe(
   Schema.extend(Base),
-  Schema.identifier("Visitor")
+  Schema.annotations({ identifier: "Visitor" })
 );
 
 export type VisitorContext = Schema.Schema.Context<typeof _Visitor>;

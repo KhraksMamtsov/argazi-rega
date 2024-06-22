@@ -2,7 +2,7 @@ import { Schema } from "@effect/schema";
 
 export const IdVisitorSymbol: unique symbol = Symbol.for("IdVisitorSymbol");
 export const IdVisitor = Schema.UUID.pipe(
-  Schema.identifier("IdVisitor"),
+  Schema.annotations({ identifier: "IdVisitor" }),
   Schema.brand(IdVisitorSymbol)
 );
 
