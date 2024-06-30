@@ -45,7 +45,11 @@ export const _BaseResponseFor = <R, I extends _S.Json.Json, A, R1, I1, A1>(
   return Schema.transform(
     Schema.Struct({ data: Schema.encodedSchema(extendedData) }),
     extendedData,
-    { decode: (from) => from.data, encode: (to) => ({ data: to }) }
+    {
+      strict: true,
+      decode: (from) => from.data,
+      encode: (to) => ({ data: to }),
+    }
   ).pipe(Schema.annotations({ identifier: baseAnnotation }));
 };
 

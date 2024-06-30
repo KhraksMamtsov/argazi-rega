@@ -24,6 +24,7 @@ export interface BaseDb extends Schema.Schema.Type<typeof _BaseDb> {}
 export const BaseDb: Schema.Schema<BaseDb, BaseDbFrom> = _BaseDb;
 
 export const ToDomainBase = Schema.transform(BaseDb, Base, {
+  strict: true,
   decode: (x) => ({
     meta: {
       dateCreated: DateCreated.make(x.dateCreated),
@@ -83,6 +84,7 @@ export const transform = <
   >
 ) =>
   Schema.transformOrFail(from, to, {
+    strict: true,
     decode: (b, options, ast) =>
       pipe(
         Effect.all([

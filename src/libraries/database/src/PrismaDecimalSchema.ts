@@ -11,6 +11,7 @@ export const PrismaDecimal = Schema.transformOrFail(
   Schema.String,
   PrismaDecimalFromSelf,
   {
+    strict: true,
     decode: (num, _, ast) =>
       ParseResult.try({
         catch: () => new ParseResult.Type(ast, num),

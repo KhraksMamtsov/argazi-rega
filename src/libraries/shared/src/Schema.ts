@@ -45,6 +45,7 @@ export const reverse = <R, I, A>(schema: Schema.Schema<A, I, R>) => {
     Schema.typeSchema(schema),
     Schema.encodedSchema(schema),
     {
+      strict: true,
       decode: ParseResult.encode(schema),
       encode: ParseResult.decode(schema),
     }
@@ -58,6 +59,7 @@ export const OptionNonEmptyArray = <R, I, A>(item: Schema.Schema<A, I, R>) =>
     Schema.Array(item),
     Schema.OptionFromSelf(Schema.NonEmptyArray(Schema.typeSchema(item))),
     {
+      strict: true,
       decode: (ss) =>
         Array.match(ss, {
           onEmpty: () => Option.none(),
@@ -70,6 +72,7 @@ export const OptionNonEmptyArray = <R, I, A>(item: Schema.Schema<A, I, R>) =>
 export const URLFromSelf = Schema.declare((x) => x instanceof URL);
 
 const _URLFromString = Schema.transformOrFail(Schema.String, URLFromSelf, {
+  strict: true,
   decode: (encoded, _, ast) =>
     ParseResult.try({
       try: () => new URL(encoded),

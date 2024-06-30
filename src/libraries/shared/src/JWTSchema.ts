@@ -17,6 +17,7 @@ export const JWTStruct = Schema.transformOrFail(
   ),
   Schema.Tuple(Schema.String, Schema.String, Schema.String),
   {
+    strict: true,
     decode: ([head, payload, sign], _, ast) =>
       Either.all([
         Either.try({

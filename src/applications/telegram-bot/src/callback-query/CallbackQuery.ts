@@ -86,6 +86,7 @@ export const CallbackQueryEntity = Schema.transformOrFail(
   Schema.String,
   _CallbackQueryEntity,
   {
+    strict: true,
     decode: (x, _, ast) => {
       const splitten = x.split("|");
       if (splitten.length !== 3) {
