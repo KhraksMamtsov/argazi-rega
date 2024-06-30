@@ -1,23 +1,28 @@
-import { Schema } from "@effect/schema";
+import { Data, Effect, Match } from "effect";
 
-const s = Schema.Struct({
-  number: Schema.Number,
-  string: Schema.String,
-  boolean: Schema.Boolean,
-  nested: Schema.Struct({
-    number: Schema.Number,
-    string: Schema.String,
-    boolean: Schema.Boolean,
-  }),
-});
+export type StreamEvent = Data.TaggedEnum<{
+  ContentStart: { readonly content: string };
+  Content: { readonly content: string };
+  Message: { readonly message: "AssistantMessage" };
+  InvalidFunctionCall: {
+    readonly id: string;
+    readonly name: string;
+    readonly arguments: string;
+  };
+  FunctionCallStart: { readonly id: string; readonly name: string };
+  FunctionCall: {
+    readonly id: string;
+    readonly name: string;
+    readonly arguments: string;
+  };
+}>;
+export const StreamEvent = Data.taggedEnum<StreamEvent>();
 
-const parse = Schema.decodeUnknownEither(s);
+const handleFunctionCall = (
+  event: Data.TaggedEnum.Value<StreamEvent, "FunctionCall">
+) => Effect.succeed("event" as const);
 
-const res = parse({
-  number: 1,
-  string: "",
-  boolean: false,
-  nested: { number: 1, string: "", boolean: false },
-});
-
-console.log(res);
+const onStreamEvent = Match.type<StreamEvent>().pipe(
+  Match.tag("FunctionCall", (x) => handleFunctionCall(x)),
+  Match.orElse((event) => Effect.succeed("event" as const))
+);

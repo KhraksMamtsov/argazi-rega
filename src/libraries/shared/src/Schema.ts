@@ -1,5 +1,5 @@
 import { AST, ParseResult, Schema } from "@effect/schema";
-import { Effect, flow, identity, Option, pipe, Array } from "effect";
+import { identity, Option, pipe, Array } from "effect";
 
 // eslint-disable-next-line @typescript-eslint/no-namespace
 export namespace Json {
@@ -34,9 +34,6 @@ export namespace Json {
 }
 
 export const reverse = <R, I, A>(schema: Schema.Schema<A, I, R>) => {
-  const encode = Schema.encode(schema);
-  const decode = Schema.decode(schema);
-
   const reverseAnnotation = pipe(
     schema.ast,
     AST.getIdentifierAnnotation,
@@ -48,14 +45,8 @@ export const reverse = <R, I, A>(schema: Schema.Schema<A, I, R>) => {
     Schema.typeSchema(schema),
     Schema.encodedSchema(schema),
     {
-      decode: flow(
-        encode,
-        Effect.mapError((x) => x.issue)
-      ),
-      encode: flow(
-        decode,
-        Effect.mapError((x) => x.issue)
-      ),
+      decode: ParseResult.encode(schema),
+      encode: ParseResult.decode(schema),
     }
   ).pipe(Schema.annotations({ identifier: reverseAnnotation }));
 };
