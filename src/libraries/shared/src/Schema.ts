@@ -69,7 +69,7 @@ export const OptionNonEmptyArray = <R, I, A>(item: Schema.Schema<A, I, R>) =>
     }
   );
 
-export const URLFromSelf = Schema.declare((x) => x instanceof URL);
+export const URLFromSelf = Schema.instanceOf(URL);
 
 const _URLFromString = Schema.transformOrFail(Schema.String, URLFromSelf, {
   strict: true,

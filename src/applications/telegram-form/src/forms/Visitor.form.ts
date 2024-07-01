@@ -18,7 +18,7 @@ export const NameForm = Schema.NonEmpty.pipe(Schema.trimmed()).annotations({
 });
 
 export const optionalForm = <A, I, R>(schema: Schema.Schema<A, I, R>) =>
-  Schema.optional(schema, { as: "Option", exact: true });
+  schema.pipe(Schema.optional({ as: "Option", exact: true }));
 
 export const VisitorForm = Schema.Struct({
   email: optionalForm(EmailForm),
