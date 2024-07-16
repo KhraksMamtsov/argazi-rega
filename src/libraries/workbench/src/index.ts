@@ -1,28 +1,39 @@
-import { Data, Effect, Match } from "effect";
+import { Config, Console, Effect, Redacted, Logger } from "effect";
 
-export type StreamEvent = Data.TaggedEnum<{
-  ContentStart: { readonly content: string };
-  Content: { readonly content: string };
-  Message: { readonly message: "AssistantMessage" };
-  InvalidFunctionCall: {
-    readonly id: string;
-    readonly name: string;
-    readonly arguments: string;
-  };
-  FunctionCallStart: { readonly id: string; readonly name: string };
-  FunctionCall: {
-    readonly id: string;
-    readonly name: string;
-    readonly arguments: string;
-  };
-}>;
-export const StreamEvent = Data.taggedEnum<StreamEvent>();
+const getJson = ({ url }: { url: string }) =>
+  Effect.tryPromise(() =>
+    fetch(url).then((res) => {
+      if (!res.ok) {
+        console.log("error");
+        throw new Error(res.statusText);
+      }
+      console.log("ok");
+      return res.json() as unknown;
+    })
+  ).pipe(
+    Effect.tapErrorCause(Effect.log),
+    Effect.retry({ times: 2 }),
+    Effect.timeout("41 seconds"),
+    Effect.catchAll(Console.error)
+  );
 
-const handleFunctionCall = (
-  event: Data.TaggedEnum.Value<StreamEvent, "FunctionCall">
-) => Effect.succeed("event" as const);
+const program = Effect.gen(function* () {
+  const host = "https://dummyjson.com/auth/products/1?delay=1000";
 
-const onStreamEvent = Match.type<StreamEvent>().pipe(
-  Match.tag("FunctionCall", (x) => handleFunctionCall(x)),
-  Match.orElse((event) => Effect.succeed("event" as const))
+  const unknownResponse = yield* getJson({
+    url: host,
+  });
+
+  console.log(unknownResponse);
+}).pipe(
+  Effect.provide(
+    Logger.replace(
+      Logger.defaultLogger,
+      Logger.prettyLogger({
+        colors: true,
+      })
+    )
+  )
 );
+
+Effect.runPromise(program);
