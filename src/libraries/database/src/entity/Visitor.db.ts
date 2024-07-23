@@ -9,7 +9,7 @@ import { BaseDb, transform } from "../Base.db.js";
 
 // #region VisitorDbBase
 export const _VisitorDbBase = Schema.Struct({
-  email: Schema.OptionFromNullOr(Schema.Trim.pipe(Schema.nonEmpty())),
+  email: Schema.OptionFromNullOr(Schema.Trim.pipe(Schema.nonEmptyString())),
   id: IdVisitor,
   idUser: IdUser,
   name: Schema.String,

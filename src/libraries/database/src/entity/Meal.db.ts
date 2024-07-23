@@ -18,7 +18,7 @@ export const _MealDb = Schema.Struct({
   dateStart: Schema.ValidDateFromSelf,
   id: IdMeal,
   idEvent: IdEvent,
-  name: Schema.Trim.pipe(Schema.nonEmpty()),
+  name: Schema.Trim.pipe(Schema.nonEmptyString()),
   price: Schema.compose(BigDecimalFromPrismaDecimal, Price),
   type: Schema.transformLiterals(
     ["REGULAR", MealType.REGULAR],

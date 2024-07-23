@@ -19,9 +19,7 @@ export const BearerAuthGuard =
           token: Redacted.make(security),
           type: "accessToken",
         }),
-        Effect.mapError((verifyError) =>
-          HttpError.unauthorizedError(verifyError)
-        )
+        Effect.mapError((verifyError) => HttpError.unauthorized(verifyError))
       );
 
       return yield* handler(parameters, { idInitiator: sub });

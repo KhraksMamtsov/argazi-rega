@@ -32,8 +32,8 @@ export const CreatePlaceRequestBody: Schema.Schema<
 const _CreatePlaceResponse = Schema.Struct({
   id: IdPlace,
   idGeoPoint: IdGeoPoint,
-  name: Schema.compose(Schema.Trim, Schema.NonEmpty),
-  description: Schema.compose(Schema.Trim, Schema.NonEmpty),
+  name: Schema.compose(Schema.Trim, Schema.NonEmptyString),
+  description: Schema.compose(Schema.Trim, Schema.NonEmptyString),
 }).pipe(
   _SS.satisfies.type<PlaceBase>(),
   _SS.satisfies.encoded.json(),

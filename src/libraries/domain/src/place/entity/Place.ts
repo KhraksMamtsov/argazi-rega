@@ -8,8 +8,8 @@ import { IdGeoPoint } from "../../geo-point/entity/IdGeoPoint.js";
 export const PlaceBase = Schema.Struct({
   id: IdPlace,
   idGeoPoint: IdGeoPoint,
-  name: Schema.compose(Schema.Trimmed, Schema.NonEmpty),
-  description: Schema.compose(Schema.Trimmed, Schema.NonEmpty),
+  name: Schema.compose(Schema.Trimmed, Schema.NonEmptyString),
+  description: Schema.compose(Schema.Trimmed, Schema.NonEmptyString),
 }).pipe(Schema.typeSchema, Schema.annotations({ identifier: "PlaceBase" }));
 
 export interface PlaceBase extends Schema.Schema.Type<typeof PlaceBase> {}

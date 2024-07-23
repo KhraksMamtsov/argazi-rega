@@ -9,10 +9,10 @@ import {
 import { _SS } from "@argazi/shared";
 
 export const _VisitorApi = Schema.Struct({
-  email: Schema.OptionFromNullOr(Schema.Trimmed.pipe(Schema.nonEmpty())),
+  email: Schema.OptionFromNullOr(Schema.Trimmed.pipe(Schema.nonEmptyString())),
   id: IdVisitor,
   idUser: IdUser,
-  name: Schema.Trimmed.pipe(Schema.nonEmpty()),
+  name: Schema.Trimmed.pipe(Schema.nonEmptyString()),
   type: VisitorTypeSchema,
 }).pipe(
   _SS.satisfies.encoded.json(),

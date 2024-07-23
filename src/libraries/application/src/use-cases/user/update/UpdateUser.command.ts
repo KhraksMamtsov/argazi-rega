@@ -25,37 +25,37 @@ export type UpdateUserCommandPayloadFrom = {
 };
 
 export const UpdateUserCommandPayload = Schema.Struct({
-  email: Schema.optional(Schema.Redacted(Schema.String), {
+  email: Schema.optionalWith(Schema.Redacted(Schema.String), {
     as: "Option",
     exact: true,
   }),
-  firstName: Schema.optional(Schema.Redacted(Schema.String), {
+  firstName: Schema.optionalWith(Schema.Redacted(Schema.String), {
     as: "Option",
     exact: true,
   }),
-  idDwbn: Schema.optional(IdDwbn, {
+  idDwbn: Schema.optionalWith(IdDwbn, {
     as: "Option",
     exact: true,
   }),
-  idTelegramChat: Schema.optional(IdTelegramChat, {
+  idTelegramChat: Schema.optionalWith(IdTelegramChat, {
     as: "Option",
     exact: true,
   }),
-  isAdmin: Schema.optional(Schema.Boolean, {
+  isAdmin: Schema.optionalWith(Schema.Boolean, {
     as: "Option",
     exact: true,
   }),
-  lastName: Schema.optional(Schema.Redacted(Schema.String), {
-    as: "Option",
-    exact: true,
-    nullable: true,
-  }),
-  phone: Schema.optional(Schema.Redacted(Schema.String), {
+  lastName: Schema.optionalWith(Schema.Redacted(Schema.String), {
     as: "Option",
     exact: true,
     nullable: true,
   }),
-  type: Schema.optional(UserTypeSchema, {
+  phone: Schema.optionalWith(Schema.Redacted(Schema.String), {
+    as: "Option",
+    exact: true,
+    nullable: true,
+  }),
+  type: Schema.optionalWith(UserTypeSchema, {
     as: "Option",
     exact: true,
   }),

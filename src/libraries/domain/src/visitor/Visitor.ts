@@ -8,10 +8,10 @@ import { IdUser } from "../user/entity/IdUser.js";
 
 // #region VisitorData
 export const _VisitorData = Schema.Struct({
-  email: Schema.OptionFromSelf(Schema.Trim.pipe(Schema.nonEmpty())),
+  email: Schema.OptionFromSelf(Schema.Trim.pipe(Schema.nonEmptyString())),
   id: IdVisitor,
   idUser: IdUser,
-  name: Schema.Trim.pipe(Schema.nonEmpty()),
+  name: Schema.Trim.pipe(Schema.nonEmptyString()),
   type: VisitorTypeSchema,
 }).pipe(Schema.annotations({ identifier: "VisitorData" }));
 

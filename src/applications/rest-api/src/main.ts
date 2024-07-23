@@ -98,7 +98,7 @@ const app = pipe(
         const loginResult = yield* RefreshTokenHandler(body);
 
         if (Option.isNone(loginResult)) {
-          return yield* HttpError.unauthorizedError({
+          return yield* HttpError.unauthorized({
             content: "User not found",
           });
         }
@@ -175,7 +175,7 @@ const app = pipe(
             payload: { id: path.idUser, type: "id" },
           }),
           Effect.flatten,
-          Effect.mapError(() => HttpError.notFoundError("NotFound1"))
+          Effect.mapError(() => HttpError.notFound("NotFound1"))
         );
 
         return newUser;
@@ -308,7 +308,7 @@ const app = pipe(
           }),
           Effect.flatten,
           Effect.tapError(Effect.logError),
-          Effect.mapError(() => HttpError.notFoundError("NotFound2"))
+          Effect.mapError(() => HttpError.notFound("NotFound2"))
         );
 
         return ticket;
@@ -362,7 +362,7 @@ const app = pipe(
           payload: { id: path.idEvent },
         }),
         Effect.flatten,
-        Effect.mapError(() => HttpError.notFoundError("NotFound3"))
+        Effect.mapError(() => HttpError.notFound("NotFound3"))
       );
 
       return newEventOption;
@@ -399,7 +399,7 @@ const app = pipe(
             payload: { id: path.idPlace },
           }),
           Effect.flatten,
-          Effect.mapError(() => HttpError.notFoundError("NotFound4"))
+          Effect.mapError(() => HttpError.notFound("NotFound4"))
         );
 
         return newPlace;
@@ -418,7 +418,7 @@ const app = pipe(
             payload: { idPlace: path.idPlace },
           }),
           Effect.flatten,
-          Effect.mapError(() => HttpError.notFoundError("NotFound4"))
+          Effect.mapError(() => HttpError.notFound("NotFound4"))
         );
 
         return geoPoint;
@@ -493,7 +493,7 @@ const app = pipe(
 
       return yield* subscriptionOption.pipe(
         Option.match({
-          onNone: () => HttpError.notFoundError("Not Found"),
+          onNone: () => HttpError.notFound("Not Found"),
           onSome: (subscription) => Effect.succeed(subscription),
         })
       );
@@ -533,7 +533,7 @@ const app = pipe(
           },
         }).pipe(
           Effect.flatten,
-          Effect.mapError(() => HttpError.notFoundError("NotFound2"))
+          Effect.mapError(() => HttpError.notFound("NotFound2"))
         );
 
         return user;
@@ -586,7 +586,7 @@ const app = pipe(
         }).pipe(
           Effect.flatten,
           Effect.tapError(Effect.logError),
-          Effect.mapError(() => HttpError.notFoundError("NotFound2"))
+          Effect.mapError(() => HttpError.notFound("NotFound2"))
         )
       )
     ),
@@ -680,7 +680,7 @@ const app = pipe(
         },
       }).pipe(
         Effect.flatten,
-        Effect.mapError(() => HttpError.notFoundError("NotFound1"))
+        Effect.mapError(() => HttpError.notFound("NotFound1"))
       )
     )
   ),

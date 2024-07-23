@@ -12,10 +12,10 @@ export const MealBase = Schema.Struct({
   dateStart: Schema.ValidDateFromSelf,
   id: IdMeal,
   idEvent: IdEvent,
-  name: Schema.Trim.pipe(Schema.nonEmpty()),
+  name: Schema.Trim.pipe(Schema.nonEmptyString()),
   price: Price,
   type: MealTypeSchema,
-  description: Schema.compose(Schema.Trimmed, Schema.NonEmpty),
+  description: Schema.compose(Schema.Trimmed, Schema.NonEmptyString),
 }).pipe(Schema.annotations({ identifier: "MealBase" }));
 
 export type MealBase = Schema.Schema.Type<typeof MealBase>;

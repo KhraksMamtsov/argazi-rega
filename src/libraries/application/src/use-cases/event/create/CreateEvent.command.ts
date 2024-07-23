@@ -13,7 +13,7 @@ const _CreateEventCommandPayload = Schema.Struct({
   dateFinish: Schema.compose(Schema.DateFromString, Schema.ValidDateFromSelf),
   dateStart: Schema.compose(Schema.DateFromString, Schema.ValidDateFromSelf),
   idPlace: Schema.UUID,
-  name: Schema.compose(Schema.Trim, Schema.NonEmpty),
+  name: Schema.compose(Schema.Trim, Schema.NonEmptyString),
   priceDay: Schema.JsonNumber,
   priceEvent: Schema.JsonNumber,
   description: Schema.String,

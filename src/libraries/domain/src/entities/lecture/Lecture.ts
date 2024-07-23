@@ -10,7 +10,7 @@ const _Lecture = Schema.Struct({
   dateStart: Schema.Date,
   id: IdLecture,
   idEvent: IdEvent,
-  name: Schema.Trim.pipe(Schema.nonEmpty()),
+  name: Schema.Trim.pipe(Schema.nonEmptyString()),
   priceDay: Price,
   priceLecture: Price,
 }).pipe(Schema.annotations({ identifier: "Lecture" }));

@@ -6,7 +6,7 @@ import { Base } from "../../entities/common/Base.js";
 import { IdUser } from "../../user/entity/IdUser.js";
 
 export const TransportBase = Schema.Struct({
-  color: Schema.String.pipe(Schema.trimmed(), Schema.nonEmpty()),
+  color: Schema.String.pipe(Schema.trimmed(), Schema.nonEmptyString()),
   id: IdTransport,
   idUser: IdUser,
   model: Schema.RedactedFromSelf(Schema.String).pipe(Schema.OptionFromSelf),

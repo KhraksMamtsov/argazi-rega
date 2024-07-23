@@ -13,7 +13,7 @@ const _RouteFromEvent = Schema.Struct({
   idGeoPoint: IdGeoPoint,
   idTransportOnEvent: IdTransportOnEvent,
   //
-  name: Schema.Option(Schema.Trim.pipe(Schema.nonEmpty())),
+  name: Schema.Option(Schema.Trim.pipe(Schema.nonEmptyString())),
 }).pipe(
   Schema.extend(Base),
   Schema.annotations({ identifier: "RouteFromEvent" })

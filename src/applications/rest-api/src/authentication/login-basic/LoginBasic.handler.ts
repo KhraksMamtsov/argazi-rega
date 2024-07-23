@@ -65,7 +65,7 @@ export const LoginBasicHandler = (args: {
       });
 
       if (Option.isNone(registeredAdminOption)) {
-        return HttpError.notFoundError("Wrong secret");
+        return HttpError.notFound("Wrong secret");
       }
 
       return yield* JwtServiceTag.sign({
@@ -73,5 +73,5 @@ export const LoginBasicHandler = (args: {
         sub: registeredAdminOption.value.id,
       });
     }
-    return HttpError.unauthorizedError("Wrong secret");
+    return HttpError.unauthorized("Wrong secret");
   });

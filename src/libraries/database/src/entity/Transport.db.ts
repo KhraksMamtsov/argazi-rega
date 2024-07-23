@@ -11,7 +11,7 @@ export type TransportDbFrom = Readonly<_Transport>;
 
 // #region TransportDb
 const _TransportDb = Schema.Struct({
-  color: Schema.Trim.pipe(Schema.nonEmpty()),
+  color: Schema.Trim.pipe(Schema.nonEmptyString()),
   id: IdTransport,
   idUser: IdUser,
   model: Schema.OptionFromNullOr(Schema.Redacted(Schema.String)),

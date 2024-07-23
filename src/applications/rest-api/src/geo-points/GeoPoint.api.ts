@@ -15,7 +15,7 @@ export const _GeoPointApi = Schema.Struct({
   //
   name: Schema.OptionFromNullOr(
     Schema.compose(
-      Schema.compose(Schema.Trim, Schema.NonEmpty),
+      Schema.compose(Schema.Trim, Schema.NonEmptyString),
       Schema.Redacted(Schema.String)
     )
   ),

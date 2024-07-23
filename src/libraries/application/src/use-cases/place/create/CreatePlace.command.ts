@@ -12,8 +12,8 @@ export type CreatePlaceCommandPayloadFrom = {
 
 export const CreatePlaceCommandPayload = Schema.Struct({
   idGeoPoint: Schema.UUID,
-  name: Schema.compose(Schema.Trim, Schema.NonEmpty),
-  description: Schema.compose(Schema.Trim, Schema.NonEmpty),
+  name: Schema.compose(Schema.Trim, Schema.NonEmptyString),
+  description: Schema.compose(Schema.Trim, Schema.NonEmptyString),
 }).pipe(
   _SS.satisfies.encoded.json<CreatePlaceCommandPayloadFrom>(),
   Schema.annotations({ identifier: "CreatePlaceCommandPayload" })

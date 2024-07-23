@@ -8,8 +8,8 @@ import { _SS } from "@argazi/shared";
 export const _PlaceApi = Schema.Struct({
   id: IdPlace,
   idGeoPoint: IdGeoPoint,
-  name: Schema.compose(Schema.Trimmed, Schema.NonEmpty),
-  description: Schema.compose(Schema.Trimmed, Schema.NonEmpty),
+  name: Schema.compose(Schema.Trimmed, Schema.NonEmptyString),
+  description: Schema.compose(Schema.Trimmed, Schema.NonEmptyString),
 }).pipe(
   _SS.satisfies.encoded.json(),
   _SS.satisfies.type<PlaceBase>(),

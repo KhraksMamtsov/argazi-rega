@@ -7,7 +7,7 @@ import { IdUser } from "@argazi/domain";
 import { CredentialsApi } from "../Tokens.response.js";
 
 export const _LoginDwbnRequestBody = Schema.Struct({
-  code: Schema.compose(Schema.Trim, Schema.NonEmpty),
+  code: Schema.compose(Schema.Trim, Schema.NonEmptyString),
   idTelegramChat: IdTelegramChat,
 }).pipe(Schema.annotations({ identifier: "LoginDwbnRequestBody" }));
 

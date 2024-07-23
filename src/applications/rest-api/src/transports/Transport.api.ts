@@ -7,7 +7,7 @@ import { _SS } from "@argazi/shared";
 
 // #region TransportApi
 const _TransportApi = Schema.Struct({
-  color: Schema.NonEmpty.pipe(Schema.trimmed()),
+  color: Schema.NonEmptyString.pipe(Schema.trimmed()),
   id: IdTransport,
   idUser: IdUser,
   model: Schema.OptionFromNullOr(Schema.Redacted(Schema.String)),

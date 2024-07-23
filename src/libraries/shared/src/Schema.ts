@@ -16,10 +16,10 @@ export namespace Json {
     Schema.suspend(() => JsonRecord)
   );
 
-  export const JsonRecord: Schema.Schema<JsonRecord> = Schema.Record(
-    Schema.String,
-    Schema.suspend(() => Json)
-  );
+  export const JsonRecord: Schema.Schema<JsonRecord> = Schema.Record({
+    key: Schema.String,
+    value: Schema.suspend(() => Json),
+  });
 
   export const JsonArray: Schema.Schema<JsonArray> = Schema.Array(
     Schema.suspend(() => Json)
