@@ -10,6 +10,7 @@ import { NotificationServiceLive } from "@argazi/message-broker";
 import { AuthenticationHandler } from "./Authentication.handler.js";
 import { CallbackQueryHandler } from "./callback-query/CallbackQuery.handler.js";
 import { CommandsHandlerLive } from "./command/CommandsHandler.js";
+import { TextHandlerLive } from "./command/TextHandler.js";
 import { NotificationsHandlerLive } from "./notifications/NotificationsHandlerLive.js";
 import { RestApiServiceTag } from "./RestApiService.js";
 import { SessionServiceTag } from "./Session.service.js";
@@ -37,15 +38,14 @@ const CallbackQueryHandlerLive = Layer.scopedDiscard(
         context.idTelegramChat
       );
 
-      const text = yield* MD.document(
-        ArgazipaSayMdComponent({
-          emotion: "🤨",
-          phrase: "Не узнаю тебя, путник",
-        }),
-        "/login"
-      );
-
       if (Option.isNone(credentialsOption)) {
+        const text = yield* MD.document(
+          ArgazipaSayMdComponent({
+            emotion: "🤨",
+            phrase: "Не узнаю тебя, путник",
+          }),
+          "/login"
+        );
         return yield* context.replyWithMarkdown(text, {});
       }
 
@@ -56,7 +56,6 @@ const CallbackQueryHandlerLive = Layer.scopedDiscard(
     })
   )
 ).pipe(Layer.provide(TelegrafTag.Live));
-
 const WebAppHandlerLive = Layer.scopedDiscard(
   TgBot.webAppData((context) =>
     Effect.gen(function* (_) {
@@ -67,6 +66,7 @@ const WebAppHandlerLive = Layer.scopedDiscard(
 
 const TelegrafHandlerLive = TelegrafTag.Launch.pipe(
   Layer.provide(CommandsHandlerLive),
+  Layer.provide(TextHandlerLive),
   Layer.provide(CallbackQueryHandlerLive),
   Layer.provide(WebAppHandlerLive),
   Layer.provide(NotificationsHandlerLive),

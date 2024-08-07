@@ -1,5 +1,5 @@
 import { Schema, ParseResult } from "@effect/schema";
-import { Config, Effect, Layer, Record, Redacted, Data, pipe } from "effect";
+import { Config, Effect, Layer, Record, Redacted, Data } from "effect";
 
 import { IdUser } from "@argazi/domain";
 import { _SS, _JWT } from "@argazi/shared";
@@ -45,15 +45,12 @@ export class JWRServiceVerifyError extends Data.TaggedError(
 
 const makeLive = () =>
   Effect.gen(function* (_) {
-    const jwtConfig = yield* pipe(
-      Effect.all({
-        accessTokenSecret: Config.redacted("JWT_ACCESS_TOKEN_SECRET"),
-        accessTokenTtl: Config.redacted("JWT_ACCESS_TOKEN_TTL"),
-        refreshTokenSecret: Config.redacted("JWT_REFRESH_TOKEN_SECRET"),
-        refreshTokenTtl: Config.redacted("JWT_REFRESH_TOKEN_TTL"),
-      }),
-      Effect.map(Record.map(Redacted.value))
-    );
+    const jwtConfig = yield* Config.all({
+      accessTokenSecret: Config.redacted("JWT_ACCESS_TOKEN_SECRET"),
+      accessTokenTtl: Config.redacted("JWT_ACCESS_TOKEN_TTL"),
+      refreshTokenSecret: Config.redacted("JWT_REFRESH_TOKEN_SECRET"),
+      refreshTokenTtl: Config.redacted("JWT_REFRESH_TOKEN_TTL"),
+    }).pipe(Config.map(Record.map(Redacted.value)));
 
     return {
       sign: (payload: JWTPayload) =>
@@ -63,7 +60,7 @@ const makeLive = () =>
               accessToken: _JWT
                 .sign({
                   expiresIn: jwtConfig.accessTokenTtl,
-                  key: jwtConfig.refreshTokenSecret,
+                  key: jwtConfig.accessTokenSecret,
                   payload: encodedPayload,
                 })
                 .pipe(Effect.map(Redacted.make), Effect.map(AccessToken.make)),
@@ -93,7 +90,10 @@ const makeLive = () =>
               onFailure: Effect.logError,
               onSuccess: Effect.logDebug,
             }),
-            Effect.mapError((cause) => new JWRServiceVerifyError({ cause }))
+            Effect.mapError((cause) => {
+              console.dir(cause, { depth: 20 });
+              return new JWRServiceVerifyError({ cause });
+            })
           ),
     };
   });

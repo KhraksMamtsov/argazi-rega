@@ -16,7 +16,7 @@ import type { WebAppDataPayload } from "./telegraf/bot/TelegramPayload.js";
 export const decode = Schema.decode(TelegramAuthMiniAppData);
 
 export const AuthenticationHandler = (webAppDataPayload: WebAppDataPayload) =>
-  Effect.gen(function* (_) {
+  Effect.gen(function* () {
     const restApiService = yield* RestApiServiceTag;
 
     const authenticationData = yield* decode(
@@ -36,8 +36,8 @@ export const AuthenticationHandler = (webAppDataPayload: WebAppDataPayload) =>
       }),
       Effect.either
     );
+
     if (Either.isLeft(authenticationResult)) {
-      console.log(authenticationResult);
       constVoid(); // TODO: error
       return;
     }
@@ -50,7 +50,9 @@ export const AuthenticationHandler = (webAppDataPayload: WebAppDataPayload) =>
     const restApiUserClient =
       yield* restApiService.__new.getUserApiClientFor(idTelegramChat);
 
-    const myIdentity = yield* restApiUserClient.getMyIdentity({});
+    const myIdentity = yield* restApiUserClient
+      .getMyIdentity({})
+      .pipe(Effect.tapError(Effect.logError));
 
     const answerText = yield* MD.document(
       ArgazipaSayMdComponent({ emotion: "🙏", phrase: "Добро пожаловать" }),

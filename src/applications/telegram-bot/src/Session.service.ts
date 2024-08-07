@@ -32,11 +32,11 @@ export const makeLive = () =>
             Effect.catchAll((_) => Effect.void)
           )
           .pipe(
-            Effect.withLogSpan("SessionService.set"),
+            Effect.withLogSpan("SessionService.create"),
             Effect.annotateLogs({ credentials, idTelegramChat })
           ),
-      drop: (idTelegramChat: IdTelegramChat) => {
-        return cacheService
+      drop: (idTelegramChat: IdTelegramChat) =>
+        cacheService
           .hDel(idTelegramChat.toString(), [
             ACCESS_TOKEN_FIELD,
             REFRESH_TOKEN_FIELD,
@@ -50,10 +50,9 @@ export const makeLive = () =>
             Effect.catchAll((_) => Effect.void)
           )
           .pipe(
-            Effect.withLogSpan("SessionService.logout"),
+            Effect.withLogSpan("SessionService.drop"),
             Effect.annotateLogs({ idTelegramChat })
-          );
-      },
+          ),
       get: (idTelegramChat: IdTelegramChat) =>
         Effect.all(
           {
@@ -87,7 +86,7 @@ export const makeLive = () =>
             Effect.catchAll((_) => Effect.succeed(Option.none()))
           )
           .pipe(
-            Effect.withLogSpan("SessionService.accessToken"),
+            Effect.withLogSpan("SessionService.get"),
             Effect.annotateLogs({ idTelegramChat })
           ),
     } as const;

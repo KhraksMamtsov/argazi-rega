@@ -56,15 +56,15 @@ export const CommandsHandlerLive = Layer.scopedDiscard(
           context.idTelegramChat
         );
 
-        const text = yield* MD.document(
-          ArgazipaSayMdComponent({
-            emotion: "🤨",
-            phrase: "Не узнаю тебя, путник",
-          }),
-          "/login"
-        );
-
         if (Option.isNone(credentialsOption)) {
+          const text = yield* MD.document(
+            ArgazipaSayMdComponent({
+              emotion: "🤨",
+              phrase: "Не узнаю тебя, путник",
+            }),
+            "/login"
+          );
+
           return yield* context.replyWithMarkdown(text, {});
         }
 

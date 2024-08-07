@@ -77,8 +77,6 @@ export const makeLive = () =>
             return requestResult.right;
           }
 
-          console.log("TOKEN REFRESHING");
-
           // TODO: check accessToken expired
           const refreshedCredentials =
             yield* SynchronizedRef.updateAndGetEffect(
@@ -93,8 +91,9 @@ export const makeLive = () =>
                     Effect.retry({
                       schedule: Schedule.exponential(Duration.millis(100), 2),
                       times: 5,
-                      while: (error) =>
-                        error.side === "server" && error.status === 401,
+                      while: (error) => {
+                        return error.side === "server" && error.status === 401;
+                      },
                     }),
                     Effect.either
                   );
@@ -129,7 +128,6 @@ export const makeLive = () =>
           SessionServiceTag.get(args.idTelegramChat),
           Effect.flatten
         );
-
         const userCredentialsSyncRef = yield* SynchronizedRef.make(credentials);
 
         const wrapMethod = autoRefreshSynchronized({

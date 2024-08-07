@@ -9,7 +9,7 @@ export const _PlaceApi = Schema.Struct({
   id: IdPlace,
   idGeoPoint: IdGeoPoint,
   name: Schema.compose(Schema.Trimmed, Schema.NonEmptyString),
-  description: Schema.compose(Schema.Trimmed, Schema.NonEmptyString),
+  description: Schema.OptionFromNonEmptyTrimmedString,
 }).pipe(
   _SS.satisfies.encoded.json(),
   _SS.satisfies.type<PlaceBase>(),

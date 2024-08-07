@@ -9,7 +9,7 @@ export const PlaceBase = Schema.Struct({
   id: IdPlace,
   idGeoPoint: IdGeoPoint,
   name: Schema.compose(Schema.Trimmed, Schema.NonEmptyString),
-  description: Schema.compose(Schema.Trimmed, Schema.NonEmptyString),
+  description: Schema.OptionFromNonEmptyTrimmedString,
 }).pipe(Schema.typeSchema, Schema.annotations({ identifier: "PlaceBase" }));
 
 export interface PlaceBase extends Schema.Schema.Type<typeof PlaceBase> {}

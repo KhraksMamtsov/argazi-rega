@@ -15,7 +15,7 @@ const _PlaceDb = Schema.Struct({
   id: IdPlace,
   idGeoPoint: IdGeoPoint,
   name: Schema.String,
-  description: Schema.String,
+  description: Schema.OptionFromNonEmptyTrimmedString,
 }).pipe(
   _SS.satisfies.type<PlaceBase>(),
   Schema.extend(BaseDb),

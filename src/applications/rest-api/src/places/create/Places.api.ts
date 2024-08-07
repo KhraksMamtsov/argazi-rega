@@ -33,7 +33,7 @@ const _CreatePlaceResponse = Schema.Struct({
   id: IdPlace,
   idGeoPoint: IdGeoPoint,
   name: Schema.compose(Schema.Trim, Schema.NonEmptyString),
-  description: Schema.compose(Schema.Trim, Schema.NonEmptyString),
+  description: Schema.OptionFromNonEmptyTrimmedString,
 }).pipe(
   _SS.satisfies.type<PlaceBase>(),
   _SS.satisfies.encoded.json(),
