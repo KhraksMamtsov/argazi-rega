@@ -43,7 +43,7 @@ const RabbitMQService = Effect.gen(function* () {
     Effect.map(Record.map(Redacted.value))
   );
 
-  const connection = yield* Effect.acquireRelease(
+  const connect = Effect.acquireRelease(
     Effect.tryPromise({
       catch: (cause) => {
         return new ConnectError({ cause, config });
@@ -58,6 +58,8 @@ const RabbitMQService = Effect.gen(function* () {
     }),
     (connection, _exit) => Effect.promise(() => connection.close())
   );
+
+  const connection = yield* connect;
 
   const channel = yield* Effect.acquireRelease(
     Effect.tryPromise({
@@ -103,11 +105,7 @@ const RabbitMQService = Effect.gen(function* () {
       }
     );
 
-  return {
-    ack,
-    consume,
-    sendToQueue,
-  };
+  return { connect, ack, consume, sendToQueue };
 });
 
 export const live = Effect.gen(function* () {
@@ -115,7 +113,10 @@ export const live = Effect.gen(function* () {
   const queue = "notifications";
 
   return {
-    ping: () => {},
+    healthCheck: rabbitMQService.connect.pipe(
+      Effect.zipRight(Effect.void),
+      Effect.scoped
+    ),
     queue: (notification: Notification) =>
       Effect.gen(function* () {
         const encodedNotification = yield* pipe(

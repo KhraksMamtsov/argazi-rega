@@ -47,6 +47,17 @@ const makeLive = Effect.gen(function* () {
       })
     );
 
+  const queryRaw = (...args: Parameters<(typeof prismaClient)["$queryRaw"]>) =>
+    Effect.tryPromise({
+      catch: (cause) => new PrismaQueryError({ cause }),
+      try: () => prismaClient.$queryRaw.apply(prismaClient, args),
+    }).pipe(
+      Effect.tapError((x) => {
+        console.dir(x.cause, { depth: 100 });
+        return Effect.logError(x.cause);
+      })
+    );
+
   const withService = <T>(query: (prisma: typeof prismaClient) => Promise<T>) =>
     Effect.tryPromise({
       catch: (cause) => new PrismaQueryError({ cause }),
@@ -102,6 +113,7 @@ const makeLive = Effect.gen(function* () {
   };
 
   return {
+    queryRaw,
     executeRaw,
     query: _query,
     queryDecode,
@@ -119,5 +131,5 @@ export interface PrismaService extends Effect.Effect.Success<typeof makeLive> {}
 export class PrismaServiceTag extends Effect.Tag(
   "@argazi/infrastructure/PrismaService"
 )<PrismaServiceTag, PrismaService>() {
-  public static readonly Live = () => Layer.effect(this, makeLive);
+  public static readonly Live = Layer.effect(this, makeLive);
 }

@@ -9,6 +9,7 @@ export interface NotificationService {
     notification: Notification.Notification
   ) => Effect.Effect<boolean>;
   readonly stream$: Stream.Stream<NotificationMessage>;
+  readonly healthCheck: Effect.Effect<void, unknown, never>;
 }
 
 export class NotificationServiceTag extends Effect.Tag(

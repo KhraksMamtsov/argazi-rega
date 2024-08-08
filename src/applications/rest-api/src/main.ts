@@ -1,7 +1,7 @@
 import { HttpClient } from "@effect/platform";
 import { NodeRuntime } from "@effect/platform-node";
 import { Effect, flow, Layer, Logger, LogLevel, pipe } from "effect";
-import { RouterBuilder } from "effect-http";
+import { HttpError, RouterBuilder } from "effect-http";
 import { NodeServer } from "effect-http-node";
 import { PrettyLogger } from "effect-log";
 
@@ -47,6 +47,7 @@ import { GetMyTicketByIdHandler } from "./my/_tickets/GetMyTicketById.handler.js
 import { GetMySubscriptionsHandler } from "./my/_subscriptions/GetMySubscriptions.handler.js";
 import { DeleteMySubscriptionHandler } from "./my/_subscriptions/DeleteMySubscription.handler.js";
 import { CreateMySubscriptionHandler } from "./my/_subscriptions/CreateMySubscription.handler.js";
+import { NotificationServiceTag } from "@argazi/domain";
 
 export const debugLogger = pipe(
   PrettyLogger.layer(),
@@ -129,7 +130,17 @@ const app = pipe(
   // #endregion
   // #region Healthcheck handlers
   RouterBuilder.handle("healthCheckPing", (x) =>
-    Effect.succeed(x.query.echo ?? "pong").pipe(Effect.tap(Effect.logDebug))
+    Effect.gen(function* () {
+      const result = x.query.echo ?? "pong";
+
+      yield* Effect.all([
+        //
+        NotificationServiceTag.healthCheck,
+        PrismaServiceTag.queryRaw`SELECT 1`,
+      ]);
+
+      return result;
+    }).pipe(Effect.tap(Effect.logDebug))
   )
   // #endregion
 );
@@ -138,7 +149,7 @@ pipe(
   RouterBuilder.build(app),
   NodeServer.listen({ port: 80 }),
   Effect.provide(debugLogger),
-  Effect.provide(PrismaServiceTag.Live()),
+  Effect.provide(PrismaServiceTag.Live),
   Effect.provide(NotificationServiceLive),
   Effect.provide(HttpClient.layer),
   Effect.provide(JwtServiceTag.Live),

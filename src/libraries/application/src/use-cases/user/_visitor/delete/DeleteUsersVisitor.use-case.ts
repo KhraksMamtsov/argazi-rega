@@ -26,8 +26,9 @@ export const DeleteUsersVisitorUseCase = BaseCausedUseCaseFor(
 
     const deletedTicket = yield* prismaClient.queryDecode(
       VisitorDbToDomain,
-      (p) =>
-        p.visitor.update({
+      (p) => {
+        p.user.count({});
+        return p.visitor.update({
           data: {
             dateDeleted: new Date(),
             idUserDeleter: initiator.id,
@@ -36,7 +37,8 @@ export const DeleteUsersVisitorUseCase = BaseCausedUseCaseFor(
             id: payload.id,
             idUser: payload.idUser,
           },
-        })
+        });
+      }
     );
 
     Effect.runFork(
