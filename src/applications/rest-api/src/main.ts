@@ -13,10 +13,7 @@ import {
   GetUserTicketByIdUseCase,
   GetUserTicketsUseCase,
   ReturnTicketUseCase,
-  CreateUserUseCase,
   GetUserUseCase,
-  GetManyUsersUseCase,
-  UpdateUserUseCase,
   CreateUsersVisitorUseCase,
   GetUsersVisitorsUseCase,
   DeleteUsersVisitorUseCase,
@@ -24,7 +21,6 @@ import {
 import { PrismaServiceTag } from "@argazi/database";
 import { NotificationServiceLive } from "@argazi/message-broker";
 
-import { IdAdmin } from "./authentication/constants.js";
 import { JwtServiceTag } from "./authentication/Jwt.service.js";
 import { LoginBasicHandler } from "./authentication/login-basic/LoginBasic.handler.js";
 import { LoginDwbnHandler } from "./authentication/login-dwbn/LoginDwbn.handler.js";
@@ -44,6 +40,16 @@ import { GetPlaceGeoPointHandler } from "./places/_geo-points/GetPlaceGeoPoint.h
 import { GetPlacesHandler } from "./places/get/GetPlaces.handler.js";
 import { GetPlaceSubscriptionsHandler } from "./places/_subscriptions/GetPlaceSubscriptions.handler.js";
 import { GetPlaceActualEventsHandler } from "./places/_subscriptions/GetPlaceActualEvents.handler.js";
+import { CreateUserHandler } from "./users/create/CreateUser.handler.js";
+import { UpdateUserHandler } from "./users/update/UpdateUser.handler.js";
+import { GetUserHandler } from "./users/get/GetUser.handler.js";
+import { GetUserSubscriptionsHandler } from "./users/_subscriptions/GetUserSubscriptions.handler.js";
+import { CreateUserSubscriptionHandler } from "./users/_subscriptions/CreateUserSubscription.handler.js";
+import { DeleteUserSubscriptionHandler } from "./users/_subscriptions/DeleteUserSubscription.handler.js";
+import { GetManyUsersHandler } from "./users/get-many/GetManyUsers.handler.js";
+import { BookTicketHandler } from "./users/_tickets/BookTicket.handler.js";
+import { ReturnTicketHandler } from "./users/_tickets/ReturnTicketOnEvent.handler.js";
+import { GetUserTicketByIdHandler } from "./users/_tickets/GetUserTicketById.handler.js";
 
 export const debugLogger = pipe(
   PrettyLogger.layer(),
@@ -62,187 +68,18 @@ const app = pipe(
   // #region Users handlers
   flow(
     RouterBuilder.handle(CreateUsersVisitorHandler),
-    RouterBuilder.handle("createUser", ({ body }) =>
-      Effect.gen(function* () {
-        const newUser = yield* CreateUserUseCase({
-          idInitiator: IdAdmin,
-          payload: body,
-        });
-
-        return newUser;
-      }).pipe(
-        Effect.tapBoth({
-          onFailure: Effect.logError,
-          onSuccess: Effect.logInfo,
-        })
-      )
-    ),
-    RouterBuilder.handle("updateUser", ({ body, path }) =>
-      Effect.gen(function* () {
-        const newUser = yield* UpdateUserUseCase({
-          idInitiator: IdAdmin,
-          payload: { id: path.id, ...body },
-        });
-
-        return newUser;
-      }).pipe(
-        Effect.tapBoth({
-          onFailure: Effect.logError,
-          onSuccess: Effect.logInfo,
-        })
-      )
-    ),
-    RouterBuilder.handle("getUser", ({ path }) =>
-      Effect.gen(function* () {
-        const newUser = yield* pipe(
-          GetUserUseCase({
-            payload: { id: path.idUser, type: "id" },
-          }),
-          Effect.flatten,
-          Effect.mapError(() => HttpError.notFound("NotFound1"))
-        );
-
-        return newUser;
-      }).pipe(
-        Effect.tapBoth({
-          onFailure: Effect.logError,
-          onSuccess: Effect.logInfo,
-        })
-      )
-    ),
-    RouterBuilder.handle("getManyUsers", ({ body }) =>
-      Effect.gen(function* () {
-        if (body.idsUser === undefined) {
-          return [];
-        }
-
-        const newUserOption = yield* GetManyUsersUseCase({
-          payload: { idsUser: body.idsUser, type: "id" },
-        });
-
-        return newUserOption;
-      }).pipe(
-        Effect.tapBoth({
-          onFailure: Effect.logError,
-          onSuccess: Effect.logInfo,
-        })
-      )
-    ),
-
-    RouterBuilder.handle("getUserSubscriptions", ({ path }) =>
-      Effect.gen(function* () {
-        const content = yield* GetUserSubscriptionsUseCase({
-          idInitiator: path.idUser, // Todo: take from security
-          payload: {
-            idUser: path.idUser,
-          },
-        });
-
-        return content;
-      }).pipe(
-        Effect.tapBoth({
-          onFailure: Effect.logError,
-          onSuccess: Effect.logInfo,
-        })
-      )
-    ),
-    RouterBuilder.handle("createUserSubscription", ({ path, body }) =>
-      Effect.gen(function* () {
-        const content = yield* CreateSubscriptionUseCase({
-          idInitiator: path.idUser, // Todo: take from security
-          payload: {
-            idPlace: body.idPlace,
-            idUser: path.idUser,
-          },
-        });
-
-        return content;
-      }).pipe(
-        Effect.tapBoth({
-          onFailure: Effect.logError,
-          onSuccess: Effect.logInfo,
-        })
-      )
-    ),
-    RouterBuilder.handle("deleteUserSubscription", ({ path }) =>
-      Effect.gen(function* () {
-        const content = yield* DeleteUserSubscriptionUseCase({
-          idInitiator: path.idUser, // Todo: take from security
-          payload: {
-            idSubscription: path.idSubscription,
-            idUser: path.idUser,
-          },
-        });
-
-        return content;
-      }).pipe(
-        Effect.tapBoth({
-          onFailure: Effect.logError,
-          onSuccess: Effect.logInfo,
-        })
-      )
-    )
+    RouterBuilder.handle(CreateUserHandler),
+    RouterBuilder.handle(UpdateUserHandler),
+    RouterBuilder.handle(GetUserHandler),
+    RouterBuilder.handle(GetUserSubscriptionsHandler),
+    RouterBuilder.handle(CreateUserSubscriptionHandler),
+    RouterBuilder.handle(DeleteUserSubscriptionHandler),
+    RouterBuilder.handle(GetManyUsersHandler)
   ),
   flow(
-    RouterBuilder.handle("bookTicket", ({ path, body }) =>
-      Effect.gen(function* () {
-        const result = yield* BookTicketUseCase({
-          idInitiator: path.idUser, // Todo: take from security
-          payload: {
-            idEvent: body.idEvent,
-            idUser: path.idUser,
-          },
-        });
-
-        return result;
-      }).pipe(
-        Effect.tapBoth({
-          onFailure: Effect.logError,
-          onSuccess: Effect.logInfo,
-        })
-      )
-    ),
-    RouterBuilder.handle("returnTicket", ({ path }) =>
-      Effect.gen(function* () {
-        const content = yield* ReturnTicketUseCase({
-          idInitiator: path.idUser, // Todo: take from security
-          payload: {
-            id: path.idTicket,
-            idUser: path.idUser,
-          },
-        });
-
-        return content;
-      }).pipe(
-        Effect.tapBoth({
-          onFailure: Effect.logError,
-          onSuccess: Effect.logInfo,
-        })
-      )
-    ),
-    RouterBuilder.handle("getUserTicketById", ({ path }) =>
-      Effect.gen(function* () {
-        const ticket = yield* pipe(
-          GetUserTicketByIdUseCase({
-            idInitiator: path.idUser, // Todo: take from security
-            payload: {
-              idTicket: path.idTicket,
-              idUser: path.idUser,
-            },
-          }),
-          Effect.flatten,
-          Effect.tapError(Effect.logError),
-          Effect.mapError(() => HttpError.notFound("NotFound2"))
-        );
-
-        return ticket;
-      }).pipe(
-        Effect.tapBoth({
-          onFailure: Effect.logError,
-          onSuccess: Effect.logInfo,
-        })
-      )
-    )
+    RouterBuilder.handle(BookTicketHandler),
+    RouterBuilder.handle(ReturnTicketHandler),
+    RouterBuilder.handle(GetUserTicketByIdHandler)
   ),
   // #endregion
   // #region Transport handlers

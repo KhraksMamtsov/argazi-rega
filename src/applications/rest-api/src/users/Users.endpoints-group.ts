@@ -4,7 +4,7 @@ import { ApiGroup } from "effect-http";
 import { CreateUserSubscriptionEndpoint } from "./_subscriptions/CreateUserSubscription.endpoint.js";
 import { DeleteUserSubscriptionEndpoint } from "./_subscriptions/DeleteUserSubscription.endpoint.js";
 import { GetUserSubscriptionsEndpoint } from "./_subscriptions/GetUserSubscriptions.endpoint.js";
-import { BookTicketEndpoint } from "./_tickets/BookTicketOnEvent.endpoint.js";
+import { BookTicketEndpoint } from "./_tickets/BookTicket.endpoint.js";
 import { GetUserTicketByIdEndpoint } from "./_tickets/GetUserTicketById.endpoint.js";
 import { ReturnTicketEndpoint } from "./_tickets/ReturnTicketOnEvent.endpoint.js";
 import { CreateUsersVisitorEndpoint } from "./_visitors/CreateUsersVisitor.endpoint.js";
