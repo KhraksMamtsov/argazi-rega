@@ -21,16 +21,16 @@ export const sign = (args: {
   readonly key: string;
   readonly payload: Json.JsonRecord;
 }) =>
-  Effect.async<string, JwtSignError>((_) => {
+  Effect.async<string, JwtSignError>((cont) => {
     JWT.sign(
       args.payload,
       args.key,
       { algorithm: "HS256", expiresIn: args.expiresIn },
       (cause, jwt) => {
         cause !== null
-          ? _(Effect.fail(new JwtSignError({ cause })))
+          ? cont(Effect.fail(new JwtSignError({ cause })))
           : // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-            _(Effect.succeed(jwt!));
+            cont(Effect.succeed(jwt!));
       }
     );
   });
@@ -39,7 +39,7 @@ export const verifyAndDecode = (args: {
   readonly key: string;
   readonly token: string;
 }) =>
-  Effect.async<JWT.JwtPayload, JwtVerifyError>((_) => {
+  Effect.async<JWT.JwtPayload, JwtVerifyError>((cont) => {
     JWT.verify(
       args.token,
       args.key,
@@ -49,8 +49,8 @@ export const verifyAndDecode = (args: {
       },
       (cause, jwt) => {
         cause !== null
-          ? _(Effect.fail(new JwtVerifyError({ cause })))
-          : _(Effect.succeed(jwt as JWT.JwtPayload));
+          ? cont(Effect.fail(new JwtVerifyError({ cause })))
+          : cont(Effect.succeed(jwt as JWT.JwtPayload));
       }
     );
   });

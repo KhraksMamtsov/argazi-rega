@@ -7,7 +7,7 @@ import { MD } from "./Markdown.js";
 import { UserTypeMdComponent } from "./UserType.md-component.js";
 
 export const UserMdComponent = (props: { user: User }) =>
-  Effect.gen(function* (_) {
+  Effect.gen(function* () {
     const { user } = props;
 
     return yield* MD.document(

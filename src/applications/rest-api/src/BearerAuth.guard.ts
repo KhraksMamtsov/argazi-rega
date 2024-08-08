@@ -13,7 +13,7 @@ export const BearerAuthGuard =
     ) => Effect.Effect<A, E, R>
   ) =>
   (parameters: P, security: string) =>
-    Effect.gen(function* (_) {
+    Effect.gen(function* () {
       const { sub } = yield* pipe(
         JwtServiceTag.verifyAndDecode({
           token: Redacted.make(security),

@@ -22,7 +22,7 @@ import { MD } from "../ui/Markdown.js";
 export const CommandsHandlerLive = Layer.scopedDiscard(
   TgB.command({
     handler: (context) =>
-      Effect.gen(function* (_) {
+      Effect.gen(function* () {
         if (
           CommandPayload.isOfCommand(TgCommand.Login.command)(context) ||
           CommandPayload.isOfCommand(TgCommand.Start.command)(context)

@@ -136,7 +136,7 @@ export class CacheServiceTag extends Context.Tag("CacheService")<
   public static Live = (options?: RedisOptions) =>
     Layer.effect(
       this,
-      Effect.gen(function* (_) {
+      Effect.gen(function* () {
         const password = yield* Config.redacted("REDIS_PASSWORD");
         const port = yield* Config.redacted("REDIS_PORT");
         const host = yield* Config.redacted("REDIS_HOST");

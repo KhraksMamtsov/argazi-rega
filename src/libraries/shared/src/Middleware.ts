@@ -84,7 +84,7 @@
 // const asd =
 //     (income: number) =>
 //   (next: (x: number) => Effect.Effect<never, never, 3>) =>
-//     Effect.gen(function* (_) {
+//     Effect.gen(function* () {
 //       if (income > 3) {
 //         const fromNext = yield* pipe(next(income));
 //
@@ -101,7 +101,7 @@
 //   contraMap((_s: 3) => 2 as const),
 //   // map((x) => `${x}`),
 //   // flatMap((x) =>
-//   //   Effect.gen(function* (_) {
+//   //   Effect.gen(function* () {
 //   //     yield* pipe(asd22);
 //   //     const randomNumber = yield* pipe(
 //   //       Random.next,
@@ -116,7 +116,7 @@
 //   // ),
 //   // effect,
 //   // (x) => (next: (s: any) => Effect.Effect<any, any, any>) =>
-//   //   Effect.gen(function* (_) {
+//   //   Effect.gen(function* () {
 //   //     if(x)
 //   //   }),
 // );

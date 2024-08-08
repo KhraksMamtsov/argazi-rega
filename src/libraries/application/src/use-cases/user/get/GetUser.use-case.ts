@@ -6,7 +6,7 @@ import { PrismaServiceTag, UserDbToDomain } from "@argazi/database";
 import { type GetUserCommand } from "./GetUser.command.js";
 
 export const GetUserUseCase = ({ payload }: GetUserCommand) =>
-  Effect.gen(function* (_) {
+  Effect.gen(function* () {
     const prismaClient = yield* PrismaServiceTag;
 
     const where =

@@ -7,7 +7,7 @@ import { MD } from "./Markdown.js";
 import { VisitorTypeMdComponent } from "./VisitorType.md-component.js";
 
 export const VisitorMdComponent = (props: { visitor: Visitor }) =>
-  Effect.gen(function* (_) {
+  Effect.gen(function* () {
     const { visitor } = props;
 
     const headline = MD.line(

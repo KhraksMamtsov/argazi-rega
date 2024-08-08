@@ -17,7 +17,7 @@ export const CallbackQueryHandler = (args: {
   readonly accessToken: AccessToken;
   readonly callbackQueryPayload: CallbackQueryPayload;
 }) =>
-  Effect.gen(function* (_) {
+  Effect.gen(function* () {
     const restApiService = yield* RestApiServiceTag;
     const callbackQuery = yield* decode(
       args.callbackQueryPayload.callback_query.data

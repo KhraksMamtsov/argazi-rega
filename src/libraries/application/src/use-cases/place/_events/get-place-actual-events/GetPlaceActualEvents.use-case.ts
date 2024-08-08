@@ -11,7 +11,7 @@ import { BaseGetCausedUseCaseFor } from "../../../common/Base.use-case.js";
 export const GetPlaceActualEventsUseCase = BaseGetCausedUseCaseFor(
   GetPlaceActualEventsCommand
 )(({ payload }, { includeDeleted }) =>
-  Effect.gen(function* (_) {
+  Effect.gen(function* () {
     const prismaClient = yield* PrismaServiceTag;
 
     return yield* prismaClient.queryDecode(Schema.Array(EventDbToDomain), (p) =>

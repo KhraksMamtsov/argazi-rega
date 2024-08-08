@@ -7,7 +7,7 @@ import { MD } from "./Markdown.js";
 import { TicketRoleMdComponent } from "./TicketRole.md-component.js";
 
 export const TicketMdComponent = (props: { ticket: Ticket }) =>
-  Effect.gen(function* (_) {
+  Effect.gen(function* () {
     const { ticket } = props;
 
     return yield* MD.document(

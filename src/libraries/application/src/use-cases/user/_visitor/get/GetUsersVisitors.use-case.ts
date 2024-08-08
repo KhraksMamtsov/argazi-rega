@@ -11,7 +11,7 @@ import { BaseGetCausedUseCaseFor } from "../../../common/Base.use-case.js";
 export const GetUsersVisitorsUseCase = BaseGetCausedUseCaseFor(
   GetUsersVisitorsCommand
 )(({ payload, initiator }, { includeDeleted }) =>
-  Effect.gen(function* (_) {
+  Effect.gen(function* () {
     if (!initiator.isAdmin && initiator.id !== payload.idUser) {
       yield* new GetEntityAuthorizationError({
         entity: ["User", "Visitor"],

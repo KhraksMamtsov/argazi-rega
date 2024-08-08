@@ -42,7 +42,7 @@ const esc = <E = never, R = never>(
   stringsForEscape: TemplateStringsArray,
   ...values: Array<string | Effect.Effect<string, E, R>>
 ) =>
-  Effect.gen(function* (_) {
+  Effect.gen(function* () {
     let result = "";
     for (let i = 0; i < stringsForEscape.length; i++) {
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion

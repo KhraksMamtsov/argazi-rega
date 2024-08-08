@@ -21,7 +21,7 @@ const tickerRoleToEmoji: Record.ReadonlyRecord<TicketRole, string> = {
 };
 
 export const TicketRoleMdComponent = (props: { ticketRole: TicketRole }) =>
-  Effect.gen(function* (_) {
+  Effect.gen(function* () {
     const { ticketRole } = props;
 
     return MD.escape(

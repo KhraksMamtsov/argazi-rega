@@ -14,7 +14,7 @@ import type { CommandPayload } from "../telegraf/bot/TelegramPayload.js";
 export const PlacesCommandHandler = (args: {
   readonly command: CommandPayload<typeof Places.command>;
 }) =>
-  Effect.gen(function* (_) {
+  Effect.gen(function* () {
     const restApiService = yield* RestApiServiceTag;
     const restApiUserClient = yield* restApiService.__new.getUserApiClientFor(
       args.command.idTelegramChat

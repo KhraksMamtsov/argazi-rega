@@ -15,7 +15,7 @@ export const TicketReturnedMdComponent = (props: {
   place: Place;
   ticket: Ticket;
 }) =>
-  Effect.gen(function* (_) {
+  Effect.gen(function* () {
     const { place, event, ticket } = props;
 
     return yield* MD.document(

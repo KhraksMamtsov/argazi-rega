@@ -17,7 +17,7 @@ import { RestApiServiceTag } from "../RestApiService.js";
 export const NotificationsHandler = (args: {
   readonly notificationMessage: NotificationMessage;
 }) =>
-  Effect.gen(function* (_) {
+  Effect.gen(function* () {
     const restApiClient = yield* RestApiServiceTag;
     const { notification } = args.notificationMessage;
 
@@ -50,7 +50,7 @@ export const NotificationsHandler = (args: {
       });
 
       if (notification.issue === "created") {
-        return yield* EventCreatedNotificationHandler({
+        yield* EventCreatedNotificationHandler({
           createdEvent: affectedEvent,
           initiator: initiator,
         });

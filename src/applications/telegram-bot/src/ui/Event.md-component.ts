@@ -7,7 +7,7 @@ import { MD } from "./Markdown.js";
 import { MoneyMdComponent } from "./Money.md-component.js";
 
 export const EventMdComponent = (props: { event: Event }) =>
-  Effect.gen(function* (_) {
+  Effect.gen(function* () {
     const { event } = props;
 
     const headline = MD.line(

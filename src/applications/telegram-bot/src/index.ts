@@ -32,7 +32,7 @@ export const debugLogger = pipe(
 
 const CallbackQueryHandlerLive = Layer.scopedDiscard(
   TgBot.callBackQuery((context) =>
-    Effect.gen(function* (_) {
+    Effect.gen(function* () {
       const sessionService = yield* SessionServiceTag;
       const credentialsOption = yield* sessionService.get(
         context.idTelegramChat
@@ -58,7 +58,7 @@ const CallbackQueryHandlerLive = Layer.scopedDiscard(
 ).pipe(Layer.provide(TelegrafTag.Live));
 const WebAppHandlerLive = Layer.scopedDiscard(
   TgBot.webAppData((context) =>
-    Effect.gen(function* (_) {
+    Effect.gen(function* () {
       return yield* AuthenticationHandler(context);
     })
   )

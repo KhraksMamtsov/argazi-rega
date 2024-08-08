@@ -5,7 +5,7 @@ import { PlaceDbToDomain, PrismaServiceTag } from "@argazi/database";
 import type { CreatePlaceCommand } from "./CreatePlace.command.js";
 
 export const CreatePlaceUseCase = (command: CreatePlaceCommand) =>
-  Effect.gen(function* (_) {
+  Effect.gen(function* () {
     const prismaClient = yield* PrismaServiceTag;
 
     // create user using domain userService produced new User? + events about its creation???

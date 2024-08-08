@@ -12,7 +12,7 @@ const visitorTypeToString: Record.ReadonlyRecord<VisitorType, string> = {
 };
 
 export const VisitorTypeMdComponent = (props: { visitorType: VisitorType }) =>
-  Effect.gen(function* (_) {
+  Effect.gen(function* () {
     const { visitorType } = props;
 
     return MD.escape(visitorTypeToString[visitorType]);

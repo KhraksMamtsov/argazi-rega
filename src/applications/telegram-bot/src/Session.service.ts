@@ -13,7 +13,7 @@ const ACCESS_TOKEN_FIELD = "accessToken" satisfies keyof UserCredentials;
 const REFRESH_TOKEN_FIELD = "refreshToken" satisfies keyof UserCredentials;
 
 export const makeLive = () =>
-  Effect.gen(function* (_) {
+  Effect.gen(function* () {
     const cacheService = yield* CacheServiceTag;
 
     return {

@@ -7,7 +7,7 @@ import { NotificationsHandler } from "./NotificationsHandler.js";
 import { TelegrafTag } from "../telegraf/Telegraf.js";
 
 export const NotificationsHandlerLive = Layer.scopedDiscard(
-  Effect.gen(function* (_) {
+  Effect.gen(function* () {
     const notificationsStream = yield* NotificationServiceTag.stream$;
 
     yield* pipe(

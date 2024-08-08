@@ -10,7 +10,7 @@ import { BaseCausedUseCaseFor } from "../../common/Base.use-case.js";
 export const GetSubscriptionByIdUseCase = BaseCausedUseCaseFor(
   GetSubscriptionByIdCommand
 )(({ payload }) =>
-  Effect.gen(function* (_) {
+  Effect.gen(function* () {
     const prismaClient = yield* PrismaServiceTag;
 
     return yield* prismaClient.queryDecode(

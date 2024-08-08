@@ -1,32 +1,12 @@
 import { HttpClient } from "@effect/platform";
 import { NodeRuntime } from "@effect/platform-node";
-import {
-  Effect,
-  flow,
-  Layer,
-  Logger,
-  LogLevel,
-  Option,
-  pipe,
-  Redacted,
-} from "effect";
+import { Effect, flow, Layer, Logger, LogLevel, pipe } from "effect";
 import { RouterBuilder, HttpError } from "effect-http";
 import { NodeServer } from "effect-http-node";
 import { PrettyLogger } from "effect-log";
 
 import {
-  CreateEventUseCase,
-  GetEventByIdUseCase,
-  CreateGeoPointUseCase,
-  GetPlaceGeoPointUseCase,
-  GetPlaceActualEventsUseCase,
-  GetPlaceSubscriptionsUseCase,
-  CreatePlaceUseCase,
-  GetPlaceByIdUseCase,
-  GetPlacesUseCase,
   CreateSubscriptionUseCase,
-  GetSubscriptionByIdUseCase,
-  CreateTransportUseCase,
   DeleteUserSubscriptionUseCase,
   GetUserSubscriptionsUseCase,
   BookTicketUseCase,
@@ -40,7 +20,6 @@ import {
   CreateUsersVisitorUseCase,
   GetUsersVisitorsUseCase,
   DeleteUsersVisitorUseCase,
-  GetVisitorByIdUseCase,
 } from "@argazi/application";
 import { PrismaServiceTag } from "@argazi/database";
 import { NotificationServiceLive } from "@argazi/message-broker";
@@ -52,6 +31,19 @@ import { LoginDwbnHandler } from "./authentication/login-dwbn/LoginDwbn.handler.
 import { RefreshTokenHandler } from "./authentication/refresh-token/RefreshToken.handler.js";
 import { BearerAuthGuard } from "./BearerAuth.guard.js";
 import { RestApiSpec } from "./RestApiSpec.js";
+import { CreateTransportHandler } from "./transports/CreateTransport.handler.js";
+import { GetVisitorHandler } from "./visitors/get/GetVisitor.handler.js";
+import { CreateEventHandler } from "./events/create/CreateEvent.handler.js";
+import { GetEventHandler } from "./events/get/GetEvent.handler.js";
+import { GetSubscriptionByIdHandler } from "./subscriptions/get/GetSubscriptionById.handler.js";
+import { CreateGeoPointHandler } from "./geo-points/CreateGeoPoint.handler.js";
+import { CreateUsersVisitorHandler } from "./users/_visitors/CreateUsersVisitor.handler.js";
+import { CreatePlaceHandler } from "./places/create/CreatePlace.handler.js";
+import { GetPlaceByIdHandler } from "./places/get/GetPlacesById.handler.js";
+import { GetPlaceGeoPointHandler } from "./places/_geo-points/GetPlaceGeoPoint.handler.js";
+import { GetPlacesHandler } from "./places/get/GetPlaces.handler.js";
+import { GetPlaceSubscriptionsHandler } from "./places/_subscriptions/GetPlaceSubscriptions.handler.js";
+import { GetPlaceActualEventsHandler } from "./places/_subscriptions/GetPlaceActualEvents.handler.js";
 
 export const debugLogger = pipe(
   PrettyLogger.layer(),
@@ -60,86 +52,18 @@ export const debugLogger = pipe(
 
 const app = pipe(
   RouterBuilder.make(RestApiSpec, { parseOptions: { errors: "all" } }),
-  // region Authentications handlers
+  // #region Authentications handlers
   flow(
-    RouterBuilder.handle("loginDwbn", ({ body }) =>
-      Effect.gen(function* (_) {
-        const loginResult = yield* LoginDwbnHandler(body);
-
-        return loginResult;
-      }).pipe(
-        Effect.tapBoth({
-          onFailure: Effect.logError,
-          onSuccess: Effect.logInfo,
-        })
-      )
-    ),
-    RouterBuilder.handle("loginBasic", (_, { pass, user }) =>
-      Effect.gen(function* (_) {
-        const loginResult = yield* LoginBasicHandler({
-          login: Redacted.make(user),
-          password: Redacted.make(pass),
-        });
-
-        if (HttpError.isHttpError(loginResult)) {
-          return yield* loginResult;
-        }
-
-        return loginResult;
-      }).pipe(
-        Effect.tapBoth({
-          onFailure: Effect.logError,
-          onSuccess: Effect.logInfo,
-        })
-      )
-    ),
-    RouterBuilder.handle("refreshToken", ({ body }) =>
-      Effect.gen(function* (_) {
-        const loginResult = yield* RefreshTokenHandler(body);
-
-        if (Option.isNone(loginResult)) {
-          return yield* HttpError.unauthorized({
-            content: "User not found",
-          });
-        }
-
-        return loginResult.value;
-      }).pipe(
-        Effect.tapBoth({
-          onFailure: Effect.logError,
-          onSuccess: Effect.logInfo,
-        })
-      )
-    )
+    RouterBuilder.handle(LoginDwbnHandler),
+    RouterBuilder.handle(LoginBasicHandler),
+    RouterBuilder.handle(RefreshTokenHandler)
   ),
-  // endregion
+  // #endregion
+  // #region Users handlers
   flow(
-    RouterBuilder.handle(
-      "createUsersVisitor",
-      BearerAuthGuard(({ body, path }, { idInitiator }) =>
-        Effect.gen(function* (_) {
-          const newVisitor = yield* CreateUsersVisitorUseCase({
-            idInitiator,
-            payload: {
-              ...body,
-              idUser: path.idUser,
-            },
-          });
-
-          return newVisitor;
-        }).pipe(
-          Effect.tapBoth({
-            onFailure: Effect.logError,
-            onSuccess: Effect.logInfo,
-          })
-        )
-      )
-    )
-  ),
-  // region Users handlers
-  flow(
+    RouterBuilder.handle(CreateUsersVisitorHandler),
     RouterBuilder.handle("createUser", ({ body }) =>
-      Effect.gen(function* (_) {
+      Effect.gen(function* () {
         const newUser = yield* CreateUserUseCase({
           idInitiator: IdAdmin,
           payload: body,
@@ -154,7 +78,7 @@ const app = pipe(
       )
     ),
     RouterBuilder.handle("updateUser", ({ body, path }) =>
-      Effect.gen(function* (_) {
+      Effect.gen(function* () {
         const newUser = yield* UpdateUserUseCase({
           idInitiator: IdAdmin,
           payload: { id: path.id, ...body },
@@ -169,7 +93,7 @@ const app = pipe(
       )
     ),
     RouterBuilder.handle("getUser", ({ path }) =>
-      Effect.gen(function* (_) {
+      Effect.gen(function* () {
         const newUser = yield* pipe(
           GetUserUseCase({
             payload: { id: path.idUser, type: "id" },
@@ -187,7 +111,7 @@ const app = pipe(
       )
     ),
     RouterBuilder.handle("getManyUsers", ({ body }) =>
-      Effect.gen(function* (_) {
+      Effect.gen(function* () {
         if (body.idsUser === undefined) {
           return [];
         }
@@ -206,7 +130,7 @@ const app = pipe(
     ),
 
     RouterBuilder.handle("getUserSubscriptions", ({ path }) =>
-      Effect.gen(function* (_) {
+      Effect.gen(function* () {
         const content = yield* GetUserSubscriptionsUseCase({
           idInitiator: path.idUser, // Todo: take from security
           payload: {
@@ -223,7 +147,7 @@ const app = pipe(
       )
     ),
     RouterBuilder.handle("createUserSubscription", ({ path, body }) =>
-      Effect.gen(function* (_) {
+      Effect.gen(function* () {
         const content = yield* CreateSubscriptionUseCase({
           idInitiator: path.idUser, // Todo: take from security
           payload: {
@@ -241,7 +165,7 @@ const app = pipe(
       )
     ),
     RouterBuilder.handle("deleteUserSubscription", ({ path }) =>
-      Effect.gen(function* (_) {
+      Effect.gen(function* () {
         const content = yield* DeleteUserSubscriptionUseCase({
           idInitiator: path.idUser, // Todo: take from security
           payload: {
@@ -261,7 +185,7 @@ const app = pipe(
   ),
   flow(
     RouterBuilder.handle("bookTicket", ({ path, body }) =>
-      Effect.gen(function* (_) {
+      Effect.gen(function* () {
         const result = yield* BookTicketUseCase({
           idInitiator: path.idUser, // Todo: take from security
           payload: {
@@ -279,7 +203,7 @@ const app = pipe(
       )
     ),
     RouterBuilder.handle("returnTicket", ({ path }) =>
-      Effect.gen(function* (_) {
+      Effect.gen(function* () {
         const content = yield* ReturnTicketUseCase({
           idInitiator: path.idUser, // Todo: take from security
           payload: {
@@ -297,7 +221,7 @@ const app = pipe(
       )
     ),
     RouterBuilder.handle("getUserTicketById", ({ path }) =>
-      Effect.gen(function* (_) {
+      Effect.gen(function* () {
         const ticket = yield* pipe(
           GetUserTicketByIdUseCase({
             idInitiator: path.idUser, // Todo: take from security
@@ -320,208 +244,34 @@ const app = pipe(
       )
     )
   ),
-  // endregion
-  // region Transport handlers
-  RouterBuilder.handle("createTransport", ({ body }) =>
-    Effect.gen(function* (_) {
-      const newTransport = yield* CreateTransportUseCase({
-        idInitiator: IdAdmin,
-        payload: body,
-      });
+  // #endregion
+  // #region Transport handlers
+  RouterBuilder.handle(CreateTransportHandler),
+  // #endregion
 
-      return newTransport;
-    }).pipe(
-      Effect.tapBoth({
-        onFailure: Effect.logError,
-        onSuccess: Effect.logInfo,
-      })
-    )
-  ),
-  // endregion
-  // region Event handlers
-  RouterBuilder.handle("createEvent", ({ body }) =>
-    Effect.gen(function* (_) {
-      const newEvent = yield* CreateEventUseCase({
-        idInitiator: IdAdmin,
-        payload: body,
-      });
+  // #region Event
+  RouterBuilder.handle(CreateEventHandler),
+  RouterBuilder.handle(GetEventHandler),
+  // #endregion
 
-      return newEvent;
-    }).pipe(
-      Effect.tapBoth({
-        onFailure: Effect.logError,
-        onSuccess: Effect.logInfo,
-      })
-    )
-  ),
-  RouterBuilder.handle("getEvent", ({ path }) =>
-    Effect.gen(function* (_) {
-      const newEventOption = yield* pipe(
-        GetEventByIdUseCase({
-          idInitiator: IdAdmin,
-          payload: { id: path.idEvent },
-        }),
-        Effect.flatten,
-        Effect.mapError(() => HttpError.notFound("NotFound3"))
-      );
-
-      return newEventOption;
-    }).pipe(
-      Effect.tapBoth({
-        onFailure: Effect.logError,
-        onSuccess: Effect.logInfo,
-      })
-    )
-  ),
-  // endregion
-  // region Place handlers
+  // #region Place
   flow(
-    RouterBuilder.handle("createPlace", ({ body }) =>
-      Effect.gen(function* (_) {
-        const newPlace = yield* CreatePlaceUseCase({
-          idInitiator: IdAdmin,
-          payload: body,
-        });
-
-        return newPlace;
-      }).pipe(
-        Effect.tapBoth({
-          onFailure: Effect.logError,
-          onSuccess: Effect.logInfo,
-        })
-      )
-    ),
-    RouterBuilder.handle("getPlaceById", ({ path }) =>
-      Effect.gen(function* (_) {
-        const newPlace = yield* pipe(
-          GetPlaceByIdUseCase({
-            idInitiator: IdAdmin,
-            payload: { id: path.idPlace },
-          }),
-          Effect.flatten,
-          Effect.mapError(() => HttpError.notFound("NotFound4"))
-        );
-
-        return newPlace;
-      }).pipe(
-        Effect.tapBoth({
-          onFailure: Effect.logError,
-          onSuccess: Effect.logInfo,
-        })
-      )
-    ),
-    RouterBuilder.handle("getPlaceGeoPoint", ({ path }) =>
-      Effect.gen(function* (_) {
-        const geoPoint = yield* pipe(
-          GetPlaceGeoPointUseCase({
-            idInitiator: IdAdmin,
-            payload: { idPlace: path.idPlace },
-          }),
-          Effect.flatten,
-          Effect.mapError(() => HttpError.notFound("NotFound4"))
-        );
-
-        return geoPoint;
-      }).pipe(
-        Effect.tapBoth({
-          onFailure: Effect.logError,
-          onSuccess: Effect.logInfo,
-        })
-      )
-    ),
-    RouterBuilder.handle("getPlaces", () =>
-      Effect.gen(function* (_) {
-        const places = yield* GetPlacesUseCase({
-          idInitiator: IdAdmin,
-          payload: {},
-        });
-
-        return places;
-      }).pipe(
-        Effect.tapBoth({
-          onFailure: Effect.logError,
-          onSuccess: Effect.logInfo,
-        })
-      )
-    ),
-    RouterBuilder.handle("getPlaceSubscriptions", ({ path }) =>
-      Effect.gen(function* (_) {
-        const placeSubscriptions = yield* GetPlaceSubscriptionsUseCase({
-          idInitiator: IdAdmin,
-          payload: { idPlace: path.idPlace },
-        });
-
-        return placeSubscriptions;
-      }).pipe(
-        Effect.tapBoth({
-          onFailure: Effect.logError,
-          onSuccess: Effect.logInfo,
-        })
-      )
-    ),
-
-    RouterBuilder.handle("getPlaceActualEvents", ({ path }) =>
-      Effect.gen(function* (_) {
-        const placeActualEvents = yield* GetPlaceActualEventsUseCase(
-          {
-            idInitiator: IdAdmin,
-            payload: { idPlace: path.idPlace },
-          },
-          { includeDeleted: false }
-        );
-
-        return placeActualEvents;
-      }).pipe(
-        Effect.tapBoth({
-          onFailure: Effect.logError,
-          onSuccess: Effect.logInfo,
-        })
-      )
-    )
+    RouterBuilder.handle(CreatePlaceHandler),
+    RouterBuilder.handle(GetPlaceByIdHandler),
+    RouterBuilder.handle(GetPlaceGeoPointHandler),
+    RouterBuilder.handle(GetPlacesHandler),
+    RouterBuilder.handle(GetPlaceSubscriptionsHandler),
+    RouterBuilder.handle(GetPlaceActualEventsHandler)
   ),
-  // endregion
-  // region Subscriptions handlers
-  RouterBuilder.handle("getSubscription", ({ path }) =>
-    Effect.gen(function* (_) {
-      const subscriptionOption = yield* pipe(
-        GetSubscriptionByIdUseCase({
-          idInitiator: IdAdmin,
-          payload: { idSubscription: path.idSubscription },
-        }),
-        Effect.tapError((x) => Effect.logError(x))
-      );
+  // #endregion
 
-      return yield* subscriptionOption.pipe(
-        Option.match({
-          onNone: () => HttpError.notFound("Not Found"),
-          onSome: (subscription) => Effect.succeed(subscription),
-        })
-      );
-    }).pipe(
-      Effect.tapBoth({
-        onFailure: Effect.logError,
-        onSuccess: Effect.logInfo,
-      })
-    )
-  ),
-  // endregion
-  // region GeoPoints handlers
-  RouterBuilder.handle(
-    "createGeoPoint",
-    BearerAuthGuard(({ body }, { idInitiator }) =>
-      Effect.gen(function* (_) {
-        const qwe = yield* //  ^?
-        CreateGeoPointUseCase({
-          idInitiator,
-          payload: body,
-        });
-
-        return qwe;
-      })
-    )
-  ),
-  // endregion
-  // region My handlers
+  // #region Subscriptions handlers
+  RouterBuilder.handle(GetSubscriptionByIdHandler),
+  // #endregion
+  // #region GeoPoints handlers
+  RouterBuilder.handle(CreateGeoPointHandler),
+  // #endregion
+  // #region My handlers
   flow(
     RouterBuilder.handle(
       "getMyIdentity",
@@ -669,27 +419,15 @@ const app = pipe(
       )
     )
   ),
-  // endregion
-  // region Visitor
-  flow(
-    RouterBuilder.handle("getVisitor", ({ path }) =>
-      GetVisitorByIdUseCase({
-        idInitiator: IdAdmin,
-        payload: {
-          idVisitor: path.idVisitor,
-        },
-      }).pipe(
-        Effect.flatten,
-        Effect.mapError(() => HttpError.notFound("NotFound1"))
-      )
-    )
-  ),
-  // endregion
-  // region Healthcheck handlers
+  // #endregion
+  // #region Visitor
+  flow(RouterBuilder.handle(GetVisitorHandler)),
+  // #endregion
+  // #region Healthcheck handlers
   RouterBuilder.handle("healthCheckPing", (x) =>
     Effect.succeed(x.query.echo ?? "pong").pipe(Effect.tap(Effect.logDebug))
   )
-  // endregion
+  // #endregion
 );
 
 pipe(

@@ -9,7 +9,7 @@ export class PrismaQueryError extends Data.TaggedError("PrismaQueryError")<{
   readonly cause: unknown;
 }> {}
 
-const makeLive = Effect.gen(function* (_) {
+const makeLive = Effect.gen(function* () {
   const credentials = yield* Config.all({
     datasourceUrl: Config.redacted("PRISMA_DB_URL"),
   });
@@ -66,7 +66,7 @@ const makeLive = Effect.gen(function* (_) {
   ) => {
     const decode = Schema.decode(schema);
 
-    return Effect.gen(function* (_) {
+    return Effect.gen(function* () {
       const queryResult = yield* _query(query);
 
       return yield* pipe(

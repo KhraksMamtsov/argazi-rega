@@ -14,7 +14,7 @@ export const EventCreatedNotificationHandler = (args: {
   readonly createdEvent: Event;
   readonly initiator: User;
 }) =>
-  Effect.gen(function* (_) {
+  Effect.gen(function* () {
     const telegraf = yield* TelegrafTag;
 
     // let subscribers: Array<Option.Option<User>> = [];

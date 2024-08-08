@@ -46,7 +46,7 @@ export const on =
   ) =>
   <NewContext>(mapContext: (context: T) => NewContext) =>
   <A, E, R>(handler: (context: NewContext) => Effect.Effect<A, E, R>) =>
-    Effect.gen(function* (_) {
+    Effect.gen(function* () {
       const { telegrafClient } = yield* TelegrafTag;
       const runFork =
         yield* FiberSet.makeRuntime<Exclude<R, TelegrafContext>>();
@@ -126,7 +126,7 @@ export const command = <A, E, R>(options: {
     context: TgP.CommandPayload<string>
   ) => Effect.Effect<A, E, R>;
 }) =>
-  Effect.gen(function* (_) {
+  Effect.gen(function* () {
     const { telegrafClient } = yield* TelegrafTag;
     const runFork = yield* FiberSet.makeRuntime<Exclude<R, TelegrafContext>>();
 

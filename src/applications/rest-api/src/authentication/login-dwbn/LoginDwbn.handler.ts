@@ -13,10 +13,11 @@ import { DwbnOAuth2Service } from "./DwbnOAuth2.service.js";
 import { IdAdmin } from "../constants.js";
 import { JwtServiceTag } from "../Jwt.service.js";
 
-import type { LoginDwbnRequestBody } from "./LoginDwbn.endpoint.js";
+import { LoginDwbnEndpoint } from "./LoginDwbn.endpoint.js";
+import { Handler } from "effect-http";
 
-export const LoginDwbnHandler = (body: LoginDwbnRequestBody) =>
-  Effect.gen(function* (_) {
+export const LoginDwbnHandler = Handler.make(LoginDwbnEndpoint, ({ body }) =>
+  Effect.gen(function* () {
     const idDwbnAdmin = yield* Config.redacted("DWBN_ID_ADMIN");
     const notificationService = yield* NotificationServiceTag;
     const dwbnOAuth2Service = yield* DwbnOAuth2Service;
@@ -81,4 +82,10 @@ export const LoginDwbnHandler = (body: LoginDwbnRequestBody) =>
         }))
       );
     }
-  });
+  }).pipe(
+    Effect.tapBoth({
+      onFailure: Effect.logError,
+      onSuccess: Effect.logInfo,
+    })
+  )
+);

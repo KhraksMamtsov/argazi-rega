@@ -13,7 +13,7 @@ const schema = Schema.Array(TicketDbToDomain);
 export const GetUserTicketsUseCase = BaseGetCausedUseCaseFor(
   GetUserTicketsCommand
 )(({ payload, initiator }, { includeDeleted }) =>
-  Effect.gen(function* (_) {
+  Effect.gen(function* () {
     if (!initiator.isAdmin && initiator.id !== payload.idUser) {
       yield* new GetEntityAuthorizationError({
         entity: ["User", "Ticket"],

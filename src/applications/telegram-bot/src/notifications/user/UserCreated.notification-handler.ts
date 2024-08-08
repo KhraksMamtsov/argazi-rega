@@ -11,7 +11,7 @@ export const UserCreatedNotificationHandler = (args: {
   readonly createdUser: User;
   readonly initiator: User;
 }) =>
-  Effect.gen(function* (_) {
+  Effect.gen(function* () {
     const bot = yield* TelegrafTag;
 
     return yield* pipe(

@@ -1,17 +1,39 @@
 import { Config, Effect, Option, Redacted } from "effect";
-import { HttpError } from "effect-http";
+import { Handler, HttpError } from "effect-http";
 
 import { GetUserUseCase, RegisterUserUseCase } from "@argazi/application";
 import { IdDwbn, IdTelegramChat } from "@argazi/domain";
 
 import { IdAdmin, IdArgazipaBot } from "../constants.js";
 import { JwtServiceTag } from "../Jwt.service.js";
+import { LoginBasicEndpoint } from "./LoginBasic.endpoint.js";
 
-export const LoginBasicHandler = (args: {
+export const LoginBasicHandler = Handler.make(
+  LoginBasicEndpoint,
+  (_, { pass, user }) =>
+    Effect.gen(function* () {
+      const loginResult = yield* _LoginBasicHandler({
+        login: Redacted.make(user),
+        password: Redacted.make(pass),
+      });
+
+      if (HttpError.isHttpError(loginResult)) {
+        return yield* loginResult;
+      }
+
+      return loginResult;
+    }).pipe(
+      Effect.tapBoth({
+        onFailure: Effect.logError,
+        onSuccess: Effect.logInfo,
+      })
+    )
+);
+export const _LoginBasicHandler = (args: {
   readonly login: Redacted.Redacted;
   readonly password: Redacted.Redacted;
 }) =>
-  Effect.gen(function* (_) {
+  Effect.gen(function* () {
     const basicAuthSecrets = yield* Effect.all({
       adminLogin: Config.redacted("BASIC_AUTH_ADMIN_LOGIN_SECRET"),
       adminPassword: Config.redacted("BASIC_AUTH_ADMIN_PASSWORD_SECRET"),

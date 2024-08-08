@@ -10,7 +10,7 @@ import { Config, Effect, Record, Redacted, pipe } from "effect";
 import { IdDwbn } from "@argazi/domain";
 import { _JWTSchema } from "@argazi/shared";
 
-export const DwbnOAuth2Service = Effect.gen(function* (_) {
+export const DwbnOAuth2Service = Effect.gen(function* () {
   const config = yield* pipe(
     Effect.all({
       clientId: Config.redacted("DWBN_SSO_CLIENT_ID"),

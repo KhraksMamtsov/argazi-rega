@@ -11,7 +11,7 @@ import { BaseCausedUseCaseFor } from "../../../common/Base.use-case.js";
 export const DeleteUserSubscriptionUseCase = BaseCausedUseCaseFor(
   DeleteUserSubscriptionCommand
 )(({ payload, initiator }) =>
-  Effect.gen(function* (_) {
+  Effect.gen(function* () {
     if (!initiator.isAdmin && initiator.id !== payload.idUser) {
       yield* new DeleteEntityAuthorizationError({
         entity: "Subscription",

@@ -11,7 +11,7 @@ const userTypToString: Record.ReadonlyRecord<UserType, string> = {
 };
 
 export const UserTypeMdComponent = (props: { userType: UserType }) =>
-  Effect.gen(function* (_) {
+  Effect.gen(function* () {
     const { userType } = props;
 
     return MD.escape(userTypToString[userType]);

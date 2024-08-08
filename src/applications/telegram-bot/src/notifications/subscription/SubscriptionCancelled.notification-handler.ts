@@ -15,7 +15,7 @@ export const SubscriptionCancelledNotificationHandler = (args: {
   readonly initiator: User;
   readonly user: User;
 }) =>
-  Effect.gen(function* (_) {
+  Effect.gen(function* () {
     const telegraf = yield* TelegrafTag;
     const restApiClient = yield* RestApiServiceTag;
 

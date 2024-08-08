@@ -44,7 +44,7 @@ export class JWRServiceVerifyError extends Data.TaggedError(
 }> {}
 
 const makeLive = () =>
-  Effect.gen(function* (_) {
+  Effect.gen(function* () {
     const jwtConfig = yield* Config.all({
       accessTokenSecret: Config.redacted("JWT_ACCESS_TOKEN_SECRET"),
       accessTokenTtl: Config.redacted("JWT_ACCESS_TOKEN_TTL"),

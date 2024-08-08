@@ -5,7 +5,7 @@ import type { GeoPoint } from "@argazi/domain";
 import { MD } from "./Markdown.js";
 
 export const GeoPointMdComponent = (props: { geoPoint: GeoPoint }) =>
-  Effect.gen(function* (_) {
+  Effect.gen(function* () {
     const { geoPoint } = props;
     const headline = Option.match(geoPoint.name, {
       onNone: () => "📍 Геоточка",

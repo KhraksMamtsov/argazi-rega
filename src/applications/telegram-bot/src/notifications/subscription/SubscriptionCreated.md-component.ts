@@ -7,7 +7,7 @@ import { MD } from "../../ui/Markdown.js";
 import { PlaceMdComponent } from "../../ui/Place.md-component.js";
 
 export const SubscriptionCreatedMdComponent = (props: { place: Place }) =>
-  Effect.gen(function* (_) {
+  Effect.gen(function* () {
     const { place } = props;
 
     return yield* MD.document(

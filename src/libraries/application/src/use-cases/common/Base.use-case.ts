@@ -28,7 +28,7 @@ export const BaseCausedUseCaseFor =
     }) => Effect.Effect<A, E, R>
   ) =>
   (command: T) =>
-    Effect.gen(function* (_) {
+    Effect.gen(function* () {
       const prismaService = yield* PrismaServiceTag;
 
       const initiator = yield* pipe(
@@ -70,7 +70,7 @@ export const BaseGetCausedUseCaseFor =
       readonly includeDeleted: boolean;
     }
   ) =>
-    Effect.gen(function* (_) {
+    Effect.gen(function* () {
       const prismaService = yield* PrismaServiceTag;
 
       const initiator = yield* pipe(
@@ -98,7 +98,7 @@ export const BaseUseCaseFor =
   <SR, I, T extends BaseCommand>(commandSchema: Schema.Schema<T, I, SR>) =>
   <R, E, A>(cb: (args: T) => Effect.Effect<A, E, R>) =>
   (command: I) =>
-    Effect.gen(function* (_) {
+    Effect.gen(function* () {
       const args = yield* Schema.decode(commandSchema)(command);
       return yield* cb(args);
     });

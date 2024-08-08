@@ -26,7 +26,7 @@ export interface DateMdComponentProps {
 }
 
 export const DateMdComponent = (props: DateMdComponentProps) =>
-  Effect.gen(function* (_) {
+  Effect.gen(function* () {
     const { date, options } = props;
     // const clockFace = dateToClockFace(date);
 

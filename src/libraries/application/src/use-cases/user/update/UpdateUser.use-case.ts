@@ -11,7 +11,7 @@ import {
 const encodePayload = Schema.encode(UpdateUserCommandPayload);
 
 export const UpdateUserUseCase = (command: UpdateUserCommand) =>
-  Effect.gen(function* (_) {
+  Effect.gen(function* () {
     const prismaClient = yield* PrismaServiceTag;
 
     const { id, ...rest } = yield* encodePayload(command.payload);

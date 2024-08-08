@@ -34,7 +34,7 @@ export const accentify = (str: string) => {
       }
 
       return Math.random() > 0.75
-        ? analogue[Math.floor(Math.random() * analogue.length)] ?? char
+        ? (analogue[Math.floor(Math.random() * analogue.length)] ?? char)
         : char;
     })
     .join("");
@@ -50,7 +50,7 @@ export const ArgazipaSayMdComponent = (props: {
   emotion: string;
   phrase: string | Array<string>;
 }) =>
-  Effect.gen(function* (_) {
+  Effect.gen(function* () {
     return yield* MD.codeBlock(["🤖", props.emotion].join(NBSP))(
       ([] as Array<string>)
         .concat(props.phrase)

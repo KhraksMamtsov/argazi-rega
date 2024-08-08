@@ -12,7 +12,7 @@ export const VisitorDeletedNotificationHandler = (args: {
   readonly initiator: User;
   readonly visitorsUser: User;
 }) =>
-  Effect.gen(function* (_) {
+  Effect.gen(function* () {
     const bot = yield* TelegrafTag;
 
     return yield* pipe(

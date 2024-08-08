@@ -59,19 +59,15 @@ export const makeLive = () =>
         ) => Effect.Effect<A, E, R>
       ) =>
       (input: I) =>
-        Effect.gen(function* (_) {
-          const actualUserCredentials = yield* _(
-            SynchronizedRef.get(args.userCredentialsSyncRef)
+        Effect.gen(function* () {
+          const actualUserCredentials = yield* SynchronizedRef.get(
+            args.userCredentialsSyncRef
           );
 
-          const requestResult = yield* _(
-            apiMethod(
-              input,
-              Client.setBearer(
-                Redacted.value(actualUserCredentials.accessToken)
-              )
-            ).pipe(Effect.either)
-          );
+          const requestResult = yield* apiMethod(
+            input,
+            Client.setBearer(Redacted.value(actualUserCredentials.accessToken))
+          ).pipe(Effect.either);
 
           if (Either.isRight(requestResult)) {
             return requestResult.right;
@@ -82,7 +78,7 @@ export const makeLive = () =>
             yield* SynchronizedRef.updateAndGetEffect(
               args.userCredentialsSyncRef,
               ({ refreshToken }) =>
-                Effect.gen(function* (_) {
+                Effect.gen(function* () {
                   const refreshAuthResult = yield* pipe(
                     restApiClient.refreshToken({
                       body: { refreshToken },
@@ -123,11 +119,10 @@ export const makeLive = () =>
     const createUserApiClient = (args: {
       readonly idTelegramChat: IdTelegramChat;
     }) =>
-      Effect.gen(function* (_) {
-        const credentials = yield* _(
-          SessionServiceTag.get(args.idTelegramChat),
-          Effect.flatten
-        );
+      Effect.gen(function* () {
+        const credentials = yield* SessionServiceTag.get(
+          args.idTelegramChat
+        ).pipe(Effect.flatten);
         const userCredentialsSyncRef = yield* SynchronizedRef.make(credentials);
 
         const wrapMethod = autoRefreshSynchronized({

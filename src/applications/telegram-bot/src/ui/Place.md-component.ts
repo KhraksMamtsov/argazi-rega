@@ -6,7 +6,7 @@ import { MD } from "./Markdown.js";
 import { EmptyMdComponent } from "./Empty.md-component.js";
 
 export const PlaceMdComponent = (props: { place: Place }) =>
-  Effect.gen(function* (_) {
+  Effect.gen(function* () {
     const { place } = props;
 
     return yield* MD.document(

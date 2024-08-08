@@ -13,7 +13,7 @@ export class RestApiClientTag extends Context.Tag(
 }
 
 export const makeLive = () =>
-  Effect.gen(function* (_) {
+  Effect.gen(function* () {
     const apiUrl = yield* Config.redacted("API_URL");
     const apiPort = yield* Config.redacted("API_PORT");
     // const basicAuthSecret = yield* pipe(Config.redacted("BASIC_AUTH_BOT_SECRET"));
@@ -37,7 +37,7 @@ export const makeLive = () =>
     //     );
     //
     // const wrapRequest = <R, E, A>(request: Effect.Effect<R, E, A>) =>
-    //   Effect.gen(function* (_) {
+    //   Effect.gen(function* () {
     //     const actualCred = yield* pipe(SynchronizedRef.get(botCredentials));
     //
     //     actualCred!;

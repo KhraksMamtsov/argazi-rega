@@ -10,7 +10,7 @@ import type { CommandPayload } from "../telegraf/bot/TelegramPayload.js";
 export const LogoutCommandHandler = (args: {
   readonly command: CommandPayload<typeof Logout.command>;
 }) =>
-  Effect.gen(function* (_) {
+  Effect.gen(function* () {
     const sessionService = yield* SessionServiceTag;
 
     yield* sessionService.drop(args.command.idTelegramChat);

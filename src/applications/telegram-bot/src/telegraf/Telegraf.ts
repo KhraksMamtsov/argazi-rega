@@ -18,7 +18,7 @@ export class TelegrafCtxSendMessageError extends Data.TaggedError(
   readonly error: unknown;
 }> {} //
 
-const make = Effect.gen(function* (_) {
+const make = Effect.gen(function* () {
   const config = yield* TelegrafOptionsTag;
 
   const client = new Tg.Telegraf(Redacted.value(config.token)); //, config.client);
@@ -57,7 +57,7 @@ export class TelegrafTag extends Effect.Tag("Telegraf")<
   static Live = Layer.effect(this, make);
 
   static Launch = Layer.scopedDiscard(
-    Effect.gen(function* (_) {
+    Effect.gen(function* () {
       // const launchOptions = yield* pipe(TelegrafOptionsTag.launch);
       const { telegrafClient } = yield* TelegrafTag;
 

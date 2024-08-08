@@ -8,7 +8,7 @@ import { GetPlacesCommand } from "./GetPlaces.command.js";
 import { BaseCausedUseCaseFor } from "../../common/Base.use-case.js";
 
 export const GetPlacesUseCase = BaseCausedUseCaseFor(GetPlacesCommand)(() =>
-  Effect.gen(function* (_) {
+  Effect.gen(function* () {
     const prismaClient = yield* PrismaServiceTag;
 
     return yield* prismaClient.queryDecode(Schema.Array(PlaceDbToDomain), (p) =>

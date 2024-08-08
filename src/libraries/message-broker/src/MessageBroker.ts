@@ -32,7 +32,7 @@ import {
   SendToQueueError,
 } from "./MessageBroker.error.js";
 
-const RabbitMQService = Effect.gen(function* (_) {
+const RabbitMQService = Effect.gen(function* () {
   const config = yield* pipe(
     Effect.all({
       hostname: Config.redacted("RABBITMQ_HOSTNAME"),
@@ -110,13 +110,13 @@ const RabbitMQService = Effect.gen(function* (_) {
   };
 });
 
-export const live = Effect.gen(function* (_) {
+export const live = Effect.gen(function* () {
   const rabbitMQService = yield* RabbitMQService;
   const queue = "notifications";
 
   return {
     queue: (notification: Notification) =>
-      Effect.gen(function* (_) {
+      Effect.gen(function* () {
         const encodedNotification = yield* pipe(
           encodeNotification(notification),
           Effect.orDie

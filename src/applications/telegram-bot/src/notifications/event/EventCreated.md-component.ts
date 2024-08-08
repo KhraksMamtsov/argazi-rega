@@ -12,7 +12,7 @@ export const EventCreatedMdComponent = (props: {
   event: Event;
   place: Place;
 }) =>
-  Effect.gen(function* (_) {
+  Effect.gen(function* () {
     const { place, event } = props;
 
     return yield* MD.document(

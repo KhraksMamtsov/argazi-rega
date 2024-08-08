@@ -9,7 +9,7 @@ import { BaseUseCaseFor } from "../../common/Base.use-case.js";
 
 export const RegisterUserUseCase = BaseUseCaseFor(RegisterUserCommand)(
   ({ payload }) =>
-    Effect.gen(function* (_) {
+    Effect.gen(function* () {
       const prismaClient = yield* PrismaServiceTag;
       const notificationService = yield* NotificationServiceTag;
 

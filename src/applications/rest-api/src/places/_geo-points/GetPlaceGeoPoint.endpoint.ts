@@ -36,7 +36,7 @@ export const GetPlaceGeoPointRequestParams: Schema.Schema<
 > = _GetPlaceGeoPointRequestParams;
 // #endregion GetPlaceGeoPointRequestParams
 
-export const GetPlaceGeoPoint = ApiEndpoint.get(
+export const GetPlaceGeoPointEndpoint = ApiEndpoint.get(
   "getPlaceGeoPoint",
   "/places/:idPlace/geo-point",
   {}
