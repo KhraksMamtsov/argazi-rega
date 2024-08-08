@@ -115,6 +115,7 @@ export const live = Effect.gen(function* () {
   const queue = "notifications";
 
   return {
+    ping: () => {},
     queue: (notification: Notification) =>
       Effect.gen(function* () {
         const encodedNotification = yield* pipe(

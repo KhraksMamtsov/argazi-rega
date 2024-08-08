@@ -7,11 +7,11 @@ import { GetMySubscriptionsEndpoint } from "./_subscriptions/GetMySubscriptions.
 import { BookMyTicketEndpoint } from "./_tickets/BookMyTicket.endpoint.js";
 import { GetMyTicketByIdEndpoint } from "./_tickets/GetMyTicketById.endpoint.js";
 import { GetMyTicketsEndpoint } from "./_tickets/GetMyTickets.endpoint.js";
-import { ReturnMyTicketEndpoint } from "./_tickets/ReturnTicketOnEvent.endpoint.js";
+import { ReturnMyTicketEndpoint } from "./_tickets/ReturnMyTicket.endpoint.js";
 import { CreateMyVisitorEndpoint } from "./_visitors/CreateMyVisitor.endpoint.js";
 import { DeleteMyVisitorEndpoint } from "./_visitors/DeleteMyVisitor.endpoint.js";
 import { GetMyVisitorsEndpoint } from "./_visitors/GetMyVisitors.endpoint.js";
-import { GetMyIdentityEndpoint } from "./Identity.endpoint.js";
+import { GetMyIdentityEndpoint } from "./GetMyIdentity.endpoint.js";
 
 export const MyEndpointsGroup = ApiGroup.make("My").pipe(
   ApiGroup.addEndpoint(GetMyIdentityEndpoint),

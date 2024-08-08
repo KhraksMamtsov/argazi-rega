@@ -1,23 +1,10 @@
 import { HttpClient } from "@effect/platform";
 import { NodeRuntime } from "@effect/platform-node";
 import { Effect, flow, Layer, Logger, LogLevel, pipe } from "effect";
-import { RouterBuilder, HttpError } from "effect-http";
+import { RouterBuilder } from "effect-http";
 import { NodeServer } from "effect-http-node";
 import { PrettyLogger } from "effect-log";
 
-import {
-  CreateSubscriptionUseCase,
-  DeleteUserSubscriptionUseCase,
-  GetUserSubscriptionsUseCase,
-  BookTicketUseCase,
-  GetUserTicketByIdUseCase,
-  GetUserTicketsUseCase,
-  ReturnTicketUseCase,
-  GetUserUseCase,
-  CreateUsersVisitorUseCase,
-  GetUsersVisitorsUseCase,
-  DeleteUsersVisitorUseCase,
-} from "@argazi/application";
 import { PrismaServiceTag } from "@argazi/database";
 import { NotificationServiceLive } from "@argazi/message-broker";
 
@@ -25,7 +12,6 @@ import { JwtServiceTag } from "./authentication/Jwt.service.js";
 import { LoginBasicHandler } from "./authentication/login-basic/LoginBasic.handler.js";
 import { LoginDwbnHandler } from "./authentication/login-dwbn/LoginDwbn.handler.js";
 import { RefreshTokenHandler } from "./authentication/refresh-token/RefreshToken.handler.js";
-import { BearerAuthGuard } from "./BearerAuth.guard.js";
 import { RestApiSpec } from "./RestApiSpec.js";
 import { CreateTransportHandler } from "./transports/CreateTransport.handler.js";
 import { GetVisitorHandler } from "./visitors/get/GetVisitor.handler.js";
@@ -50,6 +36,17 @@ import { GetManyUsersHandler } from "./users/get-many/GetManyUsers.handler.js";
 import { BookTicketHandler } from "./users/_tickets/BookTicket.handler.js";
 import { ReturnTicketHandler } from "./users/_tickets/ReturnTicketOnEvent.handler.js";
 import { GetUserTicketByIdHandler } from "./users/_tickets/GetUserTicketById.handler.js";
+import { GetMyIdentityHandler } from "./my/GetMyIdentity.handler.js";
+import { CreateMyVisitorHandler } from "./my/_visitors/CreateMyVisitor.handler.js";
+import { GetMyVisitorsHandler } from "./my/_visitors/GetMyVisitors.handler.js";
+import { DeleteMyVisitorHandler } from "./my/_visitors/DeleteMyVisitor.handler.js";
+import { ReturnMyTicketHandler } from "./my/_tickets/ReturnMyTicket.handler.js";
+import { GetMyTicketsHandler } from "./my/_tickets/GetMyTickets.handler.js";
+import { BookMyTicketHandler } from "./my/_tickets/BookMyTicket.handler.js";
+import { GetMyTicketByIdHandler } from "./my/_tickets/GetMyTicketById.handler.js";
+import { GetMySubscriptionsHandler } from "./my/_subscriptions/GetMySubscriptions.handler.js";
+import { DeleteMySubscriptionHandler } from "./my/_subscriptions/DeleteMySubscription.handler.js";
+import { CreateMySubscriptionHandler } from "./my/_subscriptions/CreateMySubscription.handler.js";
 
 export const debugLogger = pipe(
   PrettyLogger.layer(),
@@ -87,8 +84,10 @@ const app = pipe(
   // #endregion
 
   // #region Event
-  RouterBuilder.handle(CreateEventHandler),
-  RouterBuilder.handle(GetEventHandler),
+  flow(
+    RouterBuilder.handle(CreateEventHandler),
+    RouterBuilder.handle(GetEventHandler)
+  ),
   // #endregion
 
   // #region Place
@@ -110,150 +109,18 @@ const app = pipe(
   // #endregion
   // #region My handlers
   flow(
-    RouterBuilder.handle(
-      "getMyIdentity",
-      BearerAuthGuard((_, { idInitiator }) => {
-        const user = GetUserUseCase({
-          payload: {
-            id: idInitiator,
-            type: "id",
-          },
-        }).pipe(
-          Effect.flatten,
-          Effect.mapError(() => HttpError.notFound("NotFound2"))
-        );
-
-        return user;
-      })
-    ),
-    RouterBuilder.handle(
-      "getMySubscriptions",
-      BearerAuthGuard((_, { idInitiator }) =>
-        GetUserSubscriptionsUseCase({
-          idInitiator,
-          payload: {
-            idUser: idInitiator,
-          },
-        })
-      )
-    ),
-    RouterBuilder.handle(
-      "deleteMySubscription",
-      BearerAuthGuard(({ path }, { idInitiator }) =>
-        DeleteUserSubscriptionUseCase({
-          idInitiator,
-          payload: {
-            idSubscription: path.idSubscription,
-            idUser: idInitiator,
-          },
-        })
-      )
-    ),
-    RouterBuilder.handle(
-      "createMySubscription",
-      BearerAuthGuard((input, { idInitiator }) =>
-        CreateSubscriptionUseCase({
-          idInitiator,
-          payload: {
-            idPlace: input.body.idPlace,
-            idUser: idInitiator,
-          },
-        })
-      )
-    ),
-    RouterBuilder.handle(
-      "getMyTicketById",
-      BearerAuthGuard((input, { idInitiator }) =>
-        GetUserTicketByIdUseCase({
-          idInitiator,
-          payload: {
-            idTicket: input.path.idTicket,
-            idUser: idInitiator,
-          },
-        }).pipe(
-          Effect.flatten,
-          Effect.tapError(Effect.logError),
-          Effect.mapError(() => HttpError.notFound("NotFound2"))
-        )
-      )
-    ),
-    RouterBuilder.handle(
-      "returnMyTicket",
-      BearerAuthGuard((input, { idInitiator }) =>
-        ReturnTicketUseCase({
-          idInitiator,
-          payload: {
-            id: input.path.idTicket,
-            idUser: idInitiator,
-          },
-        })
-      )
-    ),
-    RouterBuilder.handle(
-      "getMyTickets",
-      BearerAuthGuard((_, { idInitiator }) =>
-        GetUserTicketsUseCase(
-          {
-            idInitiator,
-            payload: { idUser: idInitiator },
-          },
-          { includeDeleted: false }
-        )
-      )
-    ),
-    RouterBuilder.handle(
-      "bookMyTicket",
-      BearerAuthGuard((input, { idInitiator }) =>
-        BookTicketUseCase({
-          idInitiator,
-          payload: {
-            idEvent: input.body.idEvent,
-            idUser: idInitiator,
-          },
-        })
-      )
-    ),
+    RouterBuilder.handle(GetMyIdentityHandler),
+    RouterBuilder.handle(GetMySubscriptionsHandler),
+    RouterBuilder.handle(DeleteMySubscriptionHandler),
+    RouterBuilder.handle(CreateMySubscriptionHandler),
+    RouterBuilder.handle(GetMyTicketByIdHandler),
+    RouterBuilder.handle(ReturnMyTicketHandler),
+    RouterBuilder.handle(GetMyTicketsHandler),
+    RouterBuilder.handle(BookMyTicketHandler),
     flow(
-      RouterBuilder.handle(
-        "createMyVisitor",
-        BearerAuthGuard(({ body }, { idInitiator }) =>
-          CreateUsersVisitorUseCase({
-            idInitiator,
-            payload: {
-              email: body.email,
-              idUser: idInitiator,
-              name: body.name,
-              type: body.type,
-            },
-          })
-        )
-      ),
-      RouterBuilder.handle(
-        "getMyVisitors",
-        BearerAuthGuard((_, { idInitiator }) =>
-          GetUsersVisitorsUseCase(
-            {
-              idInitiator,
-              payload: {
-                idUser: idInitiator,
-              },
-            },
-            { includeDeleted: false }
-          )
-        )
-      ),
-      RouterBuilder.handle(
-        "deleteMyVisitor",
-        BearerAuthGuard(({ path }, { idInitiator }) =>
-          DeleteUsersVisitorUseCase({
-            idInitiator,
-            payload: {
-              id: path.idVisitor,
-              idUser: idInitiator,
-            },
-          })
-        )
-      )
+      RouterBuilder.handle(CreateMyVisitorHandler),
+      RouterBuilder.handle(GetMyVisitorsHandler),
+      RouterBuilder.handle(DeleteMyVisitorHandler)
     )
   ),
   // #endregion
