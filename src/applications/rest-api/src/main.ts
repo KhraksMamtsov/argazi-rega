@@ -1,7 +1,7 @@
 import { HttpClient } from "@effect/platform";
 import { NodeRuntime } from "@effect/platform-node";
 import { Effect, flow, Layer, Logger, LogLevel, pipe } from "effect";
-import { HttpError, RouterBuilder } from "effect-http";
+import { RouterBuilder } from "effect-http";
 import { NodeServer } from "effect-http-node";
 import { PrettyLogger } from "effect-log";
 
