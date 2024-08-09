@@ -28,10 +28,10 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@effect/platform": "^0.61.4",
-    "@effect/platform-node": "^0.56.4",
-    "@effect/schema": "^0.70.2",
-    "@effect/typeclass": "^0.25.1",
+    "@effect/platform": "^0.61.6",
+    "@effect/platform-node": "^0.56.7",
+    "@effect/schema": "^0.70.3",
+    "@effect/typeclass": "^0.25.2",
     "@js-temporal/polyfill": "^0.4.4",
     "@jsonforms/core": "^3.3.0",
     "@jsonforms/vue": "^3.3.0",
@@ -39,7 +39,7 @@
     "@prisma/client": "^5.18.0",
     "@vitejs/plugin-vue": "^5.1.2",
     "amqplib": "^0.10.4",
-    "effect": "^3.6.1",
+    "effect": "^3.6.2",
     "effect-http": "^0.77.3",
     "effect-http-node": "^0.17.6",
     "effect-log": "^0.31.8",
@@ -49,7 +49,7 @@
     "redis": "^4.7.0",
     "telegraf": "^4.16.3",
     "ts-node": "^10.9.2",
-    "vue": "^3.4.36",
+    "vue": "^3.4.37",
     "vue-router": "^4.4.3",
     "vue-tsc": "^2.0.29"
   },
@@ -70,6 +70,6 @@
     "eslint-plugin-vue": "^9.27.0",
     "prettier": "^3.3.3",
     "typescript": "5.5.4",
-    "vite-plugin-dts": "4.0.1"
+    "vite-plugin-dts": "4.0.2"
   }
 }
