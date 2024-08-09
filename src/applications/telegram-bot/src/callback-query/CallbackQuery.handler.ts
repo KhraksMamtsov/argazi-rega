@@ -1,7 +1,7 @@
 import { absurd, Effect, Redacted } from "effect";
 import { Client } from "effect-http";
 
-import type { AccessToken } from "@argazi/rest-api";
+import type { AccessToken } from "@argazi/rest-api-spec";
 
 import { decode } from "./CallbackQuery.js";
 

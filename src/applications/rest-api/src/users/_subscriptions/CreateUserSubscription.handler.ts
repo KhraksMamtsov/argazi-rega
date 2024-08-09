@@ -1,7 +1,7 @@
 import { CreateSubscriptionUseCase } from "@argazi/application";
+import { CreateUserSubscriptionEndpoint } from "@argazi/rest-api-spec";
 import { Effect } from "effect";
 import { Handler } from "effect-http";
-import { CreateUserSubscriptionEndpoint } from "./CreateUserSubscription.endpoint.js";
 
 export const CreateUserSubscriptionHandler = Handler.make(
   CreateUserSubscriptionEndpoint,

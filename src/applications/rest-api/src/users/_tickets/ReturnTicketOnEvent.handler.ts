@@ -1,7 +1,7 @@
 import { ReturnTicketUseCase } from "@argazi/application";
+import { ReturnTicketEndpoint } from "@argazi/rest-api-spec";
 import { Effect } from "effect";
 import { Handler } from "effect-http";
-import { ReturnTicketEndpoint } from "./ReturnTicketOnEvent.endpoint.js";
 
 export const ReturnTicketHandler = Handler.make(
   ReturnTicketEndpoint,

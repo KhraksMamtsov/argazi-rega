@@ -2,7 +2,7 @@ import { GetPlaceByIdUseCase } from "@argazi/application";
 import { Effect } from "effect";
 import { Handler, HttpError } from "effect-http";
 import { IdAdmin } from "../../authentication/constants.js";
-import { GetPlaceByIdEndpoint } from "./GetPlacesById.endpoint.js";
+import { GetPlaceByIdEndpoint } from "@argazi/rest-api-spec";
 
 export const GetPlaceByIdHandler = Handler.make(
   GetPlaceByIdEndpoint,

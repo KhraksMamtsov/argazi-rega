@@ -1,7 +1,7 @@
 import { GetManyUsersUseCase } from "@argazi/application";
+import { GetManyUsersEndpoint } from "@argazi/rest-api-spec";
 import { Effect } from "effect";
 import { Handler } from "effect-http";
-import { GetManyUsersEndpoint } from "./GetManyUsers.endpoint.js";
 
 export const GetManyUsersHandler = Handler.make(
   GetManyUsersEndpoint,

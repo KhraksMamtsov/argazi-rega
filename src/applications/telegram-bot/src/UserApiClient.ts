@@ -1,7 +1,7 @@
 import { Config, Effect, Layer, Redacted, Context } from "effect";
 import { Client } from "effect-http";
 
-import { RestApiSpec } from "@argazi/rest-api";
+import { RestApiSpec } from "@argazi/rest-api-spec";
 
 export interface _RestApiClient
   extends Effect.Effect.Success<ReturnType<typeof makeLive>> {}

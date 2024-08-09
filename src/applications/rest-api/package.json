@@ -23,6 +23,7 @@
     "@argazi/shared": "workspace:*",
     "@argazi/database": "workspace:*",
     "@argazi/application": "workspace:*",
-    "@argazi/message-broker": "workspace:*"
+    "@argazi/message-broker": "workspace:*",
+    "@argazi/rest-api-spec": "workspace:*"
   }
 }

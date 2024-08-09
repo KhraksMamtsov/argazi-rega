@@ -2,7 +2,7 @@ import { CreateUserUseCase } from "@argazi/application";
 import { Effect } from "effect";
 import { Handler } from "effect-http";
 import { IdAdmin } from "../../authentication/constants.js";
-import { CreateUserEndpoint } from "./CreateUser.endpoint.js";
+import { CreateUserEndpoint } from "@argazi/rest-api-spec";
 
 export const CreateUserHandler = Handler.make(CreateUserEndpoint, ({ body }) =>
   Effect.gen(function* () {

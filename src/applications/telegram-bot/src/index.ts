@@ -1,6 +1,5 @@
 import { runMain } from "@effect/platform-node/NodeRuntime";
-import { Effect, Config, Layer, Logger, LogLevel, Option, pipe } from "effect";
-import { PrettyLogger } from "effect-log";
+import { Effect, Config, Layer, Logger, Option, pipe, LogLevel } from "effect";
 
 import * as http from "node:http";
 
@@ -20,13 +19,7 @@ import { TelegrafOptionsTag } from "./telegraf/TelegrafOptions.js";
 import { ArgazipaSayMdComponent } from "./ui/ArgazipaSay.md-component.js";
 import { MD } from "./ui/Markdown.js";
 
-export const debugLogger = pipe(
-  PrettyLogger.layer({
-    enableColors: true,
-    showFiberId: true,
-    showSpans: true,
-    showTime: true,
-  }),
+export const debugLogger = Logger.pretty.pipe(
   Layer.merge(Logger.minimumLogLevel(LogLevel.All))
 );
 

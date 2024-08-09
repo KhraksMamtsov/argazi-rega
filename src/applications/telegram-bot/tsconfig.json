@@ -10,7 +10,7 @@
   },
   "include": ["src"],
   "references": [{
-    "path": "../rest-api" 
+    "path": "../rest-api"
   },{
     "path": "../../libraries/shared" 
   },{
@@ -19,6 +19,8 @@
     "path": "../../libraries/cache"
   },{
     "path": "../../libraries/application"
+  },{
+    "path": "../../libraries/rest-api-spec"
   },{
     "path": "../../libraries/message-broker"
   }]

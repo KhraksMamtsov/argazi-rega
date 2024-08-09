@@ -18,5 +18,7 @@
     "path": "../../libraries/message-broker"
   },{
     "path": "../../libraries/application"
+  },{
+    "path": "../../libraries/rest-api-spec"
   }]
 }

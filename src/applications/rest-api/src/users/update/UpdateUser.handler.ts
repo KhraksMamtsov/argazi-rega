@@ -2,7 +2,7 @@ import { UpdateUserUseCase } from "@argazi/application";
 import { Effect } from "effect";
 import { Handler } from "effect-http";
 import { IdAdmin } from "../../authentication/constants.js";
-import { UpdateUserEndpoint } from "./UpdateUser.endpoint.js";
+import { UpdateUserEndpoint } from "@argazi/rest-api-spec";
 
 export const UpdateUserHandler = Handler.make(
   UpdateUserEndpoint,

@@ -2,7 +2,7 @@ import { GetUserUseCase } from "@argazi/application";
 import { Effect } from "effect";
 import { Handler, HttpError } from "effect-http";
 import { BearerAuthGuard } from "../BearerAuth.guard.js";
-import { GetMyIdentityEndpoint } from "./GetMyIdentity.endpoint.js";
+import { GetMyIdentityEndpoint } from "@argazi/rest-api-spec";
 
 export const GetMyIdentityHandler = Handler.make(
   GetMyIdentityEndpoint,

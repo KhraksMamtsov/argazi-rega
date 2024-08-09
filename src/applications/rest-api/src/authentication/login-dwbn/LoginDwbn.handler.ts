@@ -13,8 +13,8 @@ import { DwbnOAuth2Service } from "./DwbnOAuth2.service.js";
 import { IdAdmin } from "../constants.js";
 import { JwtServiceTag } from "../Jwt.service.js";
 
-import { LoginDwbnEndpoint } from "./LoginDwbn.endpoint.js";
 import { Handler } from "effect-http";
+import { LoginDwbnEndpoint } from "@argazi/rest-api-spec";
 
 export const LoginDwbnHandler = Handler.make(LoginDwbnEndpoint, ({ body }) =>
   Effect.gen(function* () {

@@ -14,7 +14,7 @@ import {
 import { Client, ClientError } from "effect-http";
 
 import type { IdTelegramChat } from "@argazi/domain";
-import { RestApiSpec } from "@argazi/rest-api";
+import { RestApiSpec } from "@argazi/rest-api-spec";
 
 import { SessionServiceTag, type UserCredentials } from "./Session.service.js";
 

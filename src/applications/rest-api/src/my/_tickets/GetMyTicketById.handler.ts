@@ -2,7 +2,7 @@ import { GetUserTicketByIdUseCase } from "@argazi/application";
 import { Effect } from "effect";
 import { Handler, HttpError } from "effect-http";
 import { BearerAuthGuard } from "../../BearerAuth.guard.js";
-import { GetMyTicketByIdEndpoint } from "./GetMyTicketById.endpoint.js";
+import { GetMyTicketByIdEndpoint } from "@argazi/rest-api-spec";
 
 export const GetMyTicketByIdHandler = Handler.make(
   GetMyTicketByIdEndpoint,

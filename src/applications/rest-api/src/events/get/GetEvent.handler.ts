@@ -1,8 +1,8 @@
 import { Handler, HttpError } from "effect-http";
-import { GetEventEndpoint } from "./GetEvent.endpoint.js";
 import { GetEventByIdUseCase } from "@argazi/application";
 import { Effect } from "effect";
 import { IdAdmin } from "../../authentication/constants.js";
+import { GetEventEndpoint } from "@argazi/rest-api-spec";
 
 export const GetEventHandler = Handler.make(GetEventEndpoint, ({ path }) =>
   Effect.gen(function* () {

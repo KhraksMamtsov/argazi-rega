@@ -2,7 +2,7 @@ import { GetSubscriptionByIdUseCase } from "@argazi/application";
 import { Effect, pipe, Option } from "effect";
 import { Handler, HttpError } from "effect-http";
 import { IdAdmin } from "../../authentication/constants.js";
-import { GetSubscriptionByIdEndpoint } from "./GetSubscriptionById.endpoint.js";
+import { GetSubscriptionByIdEndpoint } from "@argazi/rest-api-spec";
 
 export const GetSubscriptionByIdHandler = Handler.make(
   GetSubscriptionByIdEndpoint,

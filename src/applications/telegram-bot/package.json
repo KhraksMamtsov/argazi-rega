@@ -13,6 +13,7 @@
     "@argazi/domain": "workspace:*",
     "@argazi/message-broker": "workspace:*",
     "@argazi/rest-api": "workspace:*",
+    "@argazi/rest-api-spec": "workspace:*",
     "@argazi/shared": "workspace:*"
   }
 }

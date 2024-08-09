@@ -2,7 +2,7 @@ import { GetPlaceActualEventsUseCase } from "@argazi/application";
 import { Effect } from "effect";
 import { Handler } from "effect-http";
 import { IdAdmin } from "../../authentication/constants.js";
-import { GetPlaceActualEventsEndpoint } from "./GetPlaceActualEvents.endpoint.js";
+import { GetPlaceActualEventsEndpoint } from "@argazi/rest-api-spec";
 
 export const GetPlaceActualEventsHandler = Handler.make(
   GetPlaceActualEventsEndpoint,

@@ -1,8 +1,8 @@
 import { CreateUsersVisitorUseCase } from "@argazi/application";
 import { Effect } from "effect";
 import { BearerAuthGuard } from "../../BearerAuth.guard.js";
-import { CreateUsersVisitorEndpoint } from "./CreateUsersVisitor.endpoint.js";
 import { Handler } from "effect-http";
+import { CreateUsersVisitorEndpoint } from "@argazi/rest-api-spec";
 
 export const CreateUsersVisitorHandler = Handler.make(
   CreateUsersVisitorEndpoint,

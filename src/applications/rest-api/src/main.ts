@@ -1,9 +1,8 @@
 import { HttpClient } from "@effect/platform";
 import { NodeRuntime } from "@effect/platform-node";
 import { Effect, flow, Layer, Logger, LogLevel, pipe } from "effect";
-import { RouterBuilder } from "effect-http";
+import { Middlewares, RouterBuilder } from "effect-http";
 import { NodeServer } from "effect-http-node";
-import { PrettyLogger } from "effect-log";
 
 import { PrismaServiceTag } from "@argazi/database";
 import { NotificationServiceLive } from "@argazi/message-broker";
@@ -12,7 +11,6 @@ import { JwtServiceTag } from "./authentication/Jwt.service.js";
 import { LoginBasicHandler } from "./authentication/login-basic/LoginBasic.handler.js";
 import { LoginDwbnHandler } from "./authentication/login-dwbn/LoginDwbn.handler.js";
 import { RefreshTokenHandler } from "./authentication/refresh-token/RefreshToken.handler.js";
-import { RestApiSpec } from "./RestApiSpec.js";
 import { CreateTransportHandler } from "./transports/CreateTransport.handler.js";
 import { GetVisitorHandler } from "./visitors/get/GetVisitor.handler.js";
 import { CreateEventHandler } from "./events/create/CreateEvent.handler.js";
@@ -48,9 +46,10 @@ import { GetMySubscriptionsHandler } from "./my/_subscriptions/GetMySubscription
 import { DeleteMySubscriptionHandler } from "./my/_subscriptions/DeleteMySubscription.handler.js";
 import { CreateMySubscriptionHandler } from "./my/_subscriptions/CreateMySubscription.handler.js";
 import { NotificationServiceTag } from "@argazi/domain";
+import { RestApiSpec } from "@argazi/rest-api-spec";
 
 export const debugLogger = pipe(
-  PrettyLogger.layer(),
+  Logger.pretty,
   Layer.merge(Logger.minimumLogLevel(LogLevel.All))
 );
 
@@ -147,6 +146,8 @@ const app = pipe(
 
 pipe(
   RouterBuilder.build(app),
+  Middlewares.accessLog(LogLevel.All),
+  Middlewares.errorLog,
   NodeServer.listen({ port: 80 }),
   Effect.provide(debugLogger),
   Effect.provide(PrismaServiceTag.Live),

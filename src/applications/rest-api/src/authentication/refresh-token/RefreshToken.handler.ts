@@ -4,11 +4,11 @@ import { GetUserUseCase } from "@argazi/application";
 
 import { JwtServiceTag } from "../Jwt.service.js";
 
+import { Handler, HttpError } from "effect-http";
 import {
   RefreshTokenEndpoint,
-  type RefreshTokenRequestBody,
-} from "./RefreshToken.endpoint.js";
-import { Handler, HttpError } from "effect-http";
+  RefreshTokenRequestBody,
+} from "@argazi/rest-api-spec";
 
 export const RefreshTokenHandler = Handler.make(
   RefreshTokenEndpoint,

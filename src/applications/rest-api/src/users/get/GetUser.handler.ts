@@ -1,7 +1,7 @@
 import { GetUserUseCase } from "@argazi/application";
+import { GetUserEndpoint } from "@argazi/rest-api-spec";
 import { Effect } from "effect";
 import { Handler, HttpError } from "effect-http";
-import { GetUserEndpoint } from "./GetUser.endpoint.js";
 
 export const GetUserHandler = Handler.make(GetUserEndpoint, ({ path }) =>
   Effect.gen(function* () {

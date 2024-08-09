@@ -1,7 +1,7 @@
 import { DeleteUserSubscriptionUseCase } from "@argazi/application";
+import { DeleteUserSubscriptionEndpoint } from "@argazi/rest-api-spec";
 import { Effect } from "effect";
 import { Handler } from "effect-http";
-import { DeleteUserSubscriptionEndpoint } from "./DeleteUserSubscription.endpoint.js";
 
 export const DeleteUserSubscriptionHandler = Handler.make(
   DeleteUserSubscriptionEndpoint,

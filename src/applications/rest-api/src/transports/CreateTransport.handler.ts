@@ -2,7 +2,7 @@ import { Handler } from "effect-http";
 import { Effect } from "effect";
 import { CreateTransportUseCase } from "@argazi/application";
 import { IdAdmin } from "../authentication/constants.js";
-import { CreateTransportEndpoint } from "./CreateTransport.endpoint.js";
+import { CreateTransportEndpoint } from "@argazi/rest-api-spec";
 
 export const CreateTransportHandler = Handler.make(
   CreateTransportEndpoint,

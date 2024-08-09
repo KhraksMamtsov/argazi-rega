@@ -3,9 +3,7 @@ import { Config, Effect, Layer, Record, Redacted, Data } from "effect";
 
 import { IdUser } from "@argazi/domain";
 import { _SS, _JWT } from "@argazi/shared";
-
-import { AccessToken } from "./AccessToken.js";
-import { RefreshToken } from "./RefreshToken.js";
+import { AccessToken, RefreshToken } from "@argazi/rest-api-spec";
 
 // #region JWTPayload
 export const _JWTPayload = Schema.Struct({

@@ -111,7 +111,9 @@ export const webAppData = on(TF.message("web_app_data"))(Option.some)(
     })
 );
 
-export const text = on(TF.message("text"))(Option.some)(
+export const text = on(TF.message("text"))(
+  Option.liftPredicate((x) => !x.message.text.startsWith("/"))
+)(
   (context) =>
     new TgP.TextPayload({
       editMessageText: TgP.editMessageText(context),

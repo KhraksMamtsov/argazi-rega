@@ -6,7 +6,7 @@ import { IdDwbn, IdTelegramChat } from "@argazi/domain";
 
 import { IdAdmin, IdArgazipaBot } from "../constants.js";
 import { JwtServiceTag } from "../Jwt.service.js";
-import { LoginBasicEndpoint } from "./LoginBasic.endpoint.js";
+import { LoginBasicEndpoint } from "@argazi/rest-api-spec";
 
 export const LoginBasicHandler = Handler.make(
   LoginBasicEndpoint,

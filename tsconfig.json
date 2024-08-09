@@ -5,6 +5,8 @@
   },
   "include": ["prisma"],
   "references": [{
+    "path": "./src/libraries/rest-api-spec",
+  },{
     "path": "./src/applications/rest-api",
   },{
     "path": "./src/applications/telegram-bot",

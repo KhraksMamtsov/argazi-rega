@@ -2,7 +2,7 @@ import { CreateEventUseCase } from "@argazi/application";
 import { Effect } from "effect";
 import { Handler } from "effect-http";
 import { IdAdmin } from "../../authentication/constants.js";
-import { CreateEventEndpoint } from "./CreateEvent.endpoint.js";
+import { CreateEventEndpoint } from "@argazi/rest-api-spec";
 
 export const CreateEventHandler = Handler.make(
   CreateEventEndpoint,

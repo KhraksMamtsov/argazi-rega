@@ -2,7 +2,7 @@ import { GetPlaceSubscriptionsUseCase } from "@argazi/application";
 import { Effect } from "effect";
 import { Handler } from "effect-http";
 import { IdAdmin } from "../../authentication/constants.js";
-import { GetPlaceSubscriptionsEndpoint } from "./GetPlaceSubscriptions.endpoint.js";
+import { GetPlaceSubscriptionsEndpoint } from "@argazi/rest-api-spec";
 
 export const GetPlaceSubscriptionsHandler = Handler.make(
   GetPlaceSubscriptionsEndpoint,

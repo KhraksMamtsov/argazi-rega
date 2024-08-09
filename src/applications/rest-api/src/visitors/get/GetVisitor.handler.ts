@@ -2,7 +2,7 @@ import { GetVisitorByIdUseCase } from "@argazi/application";
 import { Handler, HttpError } from "effect-http";
 import { IdAdmin } from "../../authentication/constants.js";
 import { Effect } from "effect";
-import { GetVisitorEndpoint } from "./GetVisitor.endpoint.js";
+import { GetVisitorEndpoint } from "@argazi/rest-api-spec";
 
 export const GetVisitorHandler = Handler.make(GetVisitorEndpoint, ({ path }) =>
   GetVisitorByIdUseCase({

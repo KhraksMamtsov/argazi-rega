@@ -1,7 +1,7 @@
 import { GetUserTicketByIdUseCase } from "@argazi/application";
+import { GetUserTicketByIdEndpoint } from "@argazi/rest-api-spec";
 import { Effect, pipe } from "effect";
 import { Handler, HttpError } from "effect-http";
-import { GetUserTicketByIdEndpoint } from "./GetUserTicketById.endpoint.js";
 
 export const GetUserTicketByIdHandler = Handler.make(
   GetUserTicketByIdEndpoint,

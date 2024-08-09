@@ -153,6 +153,9 @@ importers:
       '@argazi/message-broker':
         specifier: workspace:*
         version: link:../../libraries/message-broker
+      '@argazi/rest-api-spec':
+        specifier: workspace:*
+        version: link:../../libraries/rest-api-spec
       '@argazi/shared':
         specifier: workspace:*
         version: link:../../libraries/shared
@@ -171,6 +174,9 @@ importers:
       '@argazi/rest-api':
         specifier: workspace:*
         version: link:../rest-api
+      '@argazi/rest-api-spec':
+        specifier: workspace:*
+        version: link:../../libraries/rest-api-spec
       '@argazi/shared':
         specifier: workspace:*
         version: link:../../libraries/shared
@@ -235,6 +241,18 @@ importers:
         specifier: workspace:*
         version: link:../shared
 
+  src/libraries/rest-api-spec:
+    dependencies:
+      '@argazi/application':
+        specifier: workspace:*
+        version: link:../application
+      '@argazi/domain':
+        specifier: workspace:*
+        version: link:../domain
+      '@argazi/shared':
+        specifier: workspace:*
+        version: link:../shared
+
   src/libraries/shared: {}
 
   src/libraries/workbench:
@@ -245,7 +263,7 @@ importers:
     devDependencies:
       typescript:
         specifier: 5.5.0-beta
-        version: 5.5.4
+        version: 5.5.0-beta
 
 packages:
 
@@ -2352,6 +2370,11 @@ packages:
 
   typescript@5.4.2:
     resolution: {integrity: sha512-+2/g0Fds1ERlP6JsakQQDXjZdZMM+rqpamFZJEKh4kwTIn3iDkgKtby0CeNd5ATNZ4Ry1ax15TMx0W2V+miizQ==}
+    engines: {node: '>=14.17'}
+    hasBin: true
+
+  typescript@5.5.0-beta:
+    resolution: {integrity: sha512-FRg3e/aQg3olEG3ff8YjHOERsO4IM0m4qGrsE4UMvILaq4TdDZ6gQX4+2Rq9SjTpfSe/ebwiHcsjm/7FfWWQ6Q==}
     engines: {node: '>=14.17'}
     hasBin: true
 
@@ -4705,6 +4728,8 @@ snapshots:
       possible-typed-array-names: 1.0.0
 
   typescript@5.4.2: {}
+
+  typescript@5.5.0-beta: {}
 
   typescript@5.5.4: {}
 

@@ -1,0 +1,16 @@
+{
+  "extends":"../../../tsconfig.base.json",
+  "compilerOptions": {
+    "composite": true,
+    "outDir": "dist",
+    "declarationDir": "dist",
+    "declaration": true,
+    "declarationMap": true,
+  },
+  "include": ["src"],
+  "references": [{
+    "path": "../shared" 
+  },{
+    "path": "../domain"
+  }]
+}

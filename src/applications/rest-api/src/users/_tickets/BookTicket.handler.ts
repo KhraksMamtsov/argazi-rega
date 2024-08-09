@@ -1,7 +1,7 @@
 import { BookTicketUseCase } from "@argazi/application";
+import { BookTicketEndpoint } from "@argazi/rest-api-spec";
 import { Effect } from "effect";
 import { Handler } from "effect-http";
-import { BookTicketEndpoint } from "./BookTicket.endpoint.js";
 
 export const BookTicketHandler = Handler.make(
   BookTicketEndpoint,

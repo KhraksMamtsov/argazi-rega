@@ -2,7 +2,7 @@ import { GetPlaceGeoPointUseCase } from "@argazi/application";
 import { Effect, pipe } from "effect";
 import { Handler, HttpError } from "effect-http";
 import { IdAdmin } from "../../authentication/constants.js";
-import { GetPlaceGeoPointEndpoint } from "./GetPlaceGeoPoint.endpoint.js";
+import { GetPlaceGeoPointEndpoint } from "@argazi/rest-api-spec";
 
 export const GetPlaceGeoPointHandler = Handler.make(
   GetPlaceGeoPointEndpoint,

@@ -2,7 +2,7 @@ import { Effect, flow, Layer, Option, Redacted, Struct } from "effect";
 
 import { CacheServiceTag } from "@argazi/cache";
 import type { IdTelegramChat } from "@argazi/domain";
-import { AccessToken, RefreshToken } from "@argazi/rest-api";
+import { AccessToken, RefreshToken } from "@argazi/rest-api-spec";
 
 export interface UserCredentials {
   readonly accessToken: AccessToken;
