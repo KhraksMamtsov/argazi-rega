@@ -10,14 +10,9 @@
   },
   "scripts": {
     "build": "tsc -b",
-    "build:watch": "tsc -b --watch",
-    "start:watch": "node --watch dist/index.js",
-    "dex": "dexnode dist/src/index.js"
+    "start:watch": "node --watch --experimental-transform-types src/index.ts"
   },
   "dependencies": {
     "@argazi/domain": "workspace:*"
-  },
-  "devDependencies": {
-    "@types/node": "^22.3.0"
   }
 }

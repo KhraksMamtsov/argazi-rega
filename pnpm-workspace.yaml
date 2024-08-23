@@ -1,3 +1,12 @@
 packages:
   - "src/applications/*"
   - "src/libraries/*"
+
+catalog:
+  effect: ^3.6.5
+  effect-http: ^0.77.5
+  effect-http-node: ^0.17.8
+  "@effect/platform": ^0.62.2
+  "@effect/platform-node": ^0.57.2
+  "@effect/schema": ^0.71.1
+  "@effect/typeclass": ^0.25.5

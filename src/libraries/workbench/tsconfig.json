@@ -6,6 +6,8 @@
     "declarationDir": "dist",
     "declaration": true,
     "declarationMap": true,
+    "noEmit": true,
+    "allowImportingTsExtensions": true,
     "rootDir": "src"
   },
   "include": ["src"]

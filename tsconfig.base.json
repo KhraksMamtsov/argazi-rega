@@ -33,6 +33,8 @@
     "noImplicitReturns": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
+    "importHelpers": true,
+    "useUnknownInCatchVariables": true,
     "noFallthroughCasesInSwitch": true,
   },
   "watchOptions": {

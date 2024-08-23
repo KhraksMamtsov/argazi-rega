@@ -4,6 +4,9 @@
   "description": "",
   "main": "index.js",
   "type": "module",
+  "engines": {
+    "node": "22.7.0"
+  },
   "prisma": {
     "seed": "node --loader ts-node/esm --experimental-specifier-resolution=node ./prisma/seed.ts"
   },
@@ -28,10 +31,10 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@effect/platform": "^0.62.1",
-    "@effect/platform-node": "^0.57.1",
-    "@effect/schema": "^0.71.0",
-    "@effect/typeclass": "^0.25.4",
+    "@effect/platform": "catalog:",
+    "@effect/platform-node": "catalog:",
+    "@effect/schema": "catalog:",
+    "@effect/typeclass": "catalog:",
     "@js-temporal/polyfill": "^0.4.4",
     "@jsonforms/core": "^3.3.0",
     "@jsonforms/vue": "^3.3.0",
@@ -39,10 +42,9 @@
     "@prisma/client": "^5.18.0",
     "@vitejs/plugin-vue": "^5.1.2",
     "amqplib": "^0.10.4",
-    "effect": "^3.6.4",
-    "effect-http": "^0.77.5",
-    "effect-http-node": "^0.17.8",
-    "effect-log": "^0.31.8",
+    "effect": "catalog:",
+    "effect-http": "catalog:",
+    "effect-http-node": "catalog:",
     "jsonwebtoken": "^9.0.2",
     "lz-string": "^1.5.0",
     "prisma": "^5.18.0",
@@ -72,5 +74,6 @@
     "prettier": "^3.3.3",
     "typescript": "^5.5.4",
     "vite-plugin-dts": "4.0.3"
-  }
+  },
+  "packageManager": "pnpm@9.8.0"
 }
