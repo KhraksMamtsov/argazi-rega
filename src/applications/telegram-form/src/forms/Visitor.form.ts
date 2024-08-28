@@ -3,25 +3,22 @@ import { Schema, JSONSchema as JSONSchema_ } from "@effect/schema";
 import * as _SS from "@argazi/shared/SchemaSatisfy";
 import { mutateTransformationFromAnnotations } from "./Helpers";
 
-export const EmailForm = Schema.NonEmpty.pipe(
+export const EmailForm = Schema.NonEmptyTrimmedString.pipe(
   Schema.trimmed(),
   Schema.pattern(/^\S+@\S+\.\S{2,}$/i)
 ).annotations({
-  title: "Email",
+  title: "Email title",
   description: "email22",
   identifier: "EmailForm",
 });
 
-export const NameForm = Schema.NonEmpty.pipe(Schema.trimmed()).annotations({
+export const NameForm = Schema.NonEmptyTrimmedString.annotations({
   title: "Имя",
   identifier: "NameForm",
 });
 
-export const optionalForm = <A, I, R>(schema: Schema.Schema<A, I, R>) =>
-  schema.pipe(Schema.optional({ as: "Option", exact: true }));
-
 export const VisitorForm = Schema.Struct({
-  email: optionalForm(EmailForm),
+  email: EmailForm.pipe(Schema.optionalWith({ as: "Option", exact: true })),
   name: NameForm,
   type: Schema.transformLiterals(
     ["Взрослый", Visitor.VisitorType.ADULT],
@@ -34,7 +31,7 @@ export const VisitorForm = Schema.Struct({
   }),
 })
   .annotations({
-    title: "👤 Посетитель",
+    title: "👤 Посетитель1",
     description: "descr",
   })
   .pipe(

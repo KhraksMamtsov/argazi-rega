@@ -10,3 +10,4 @@ catalog:
   "@effect/platform-node": ^0.57.2
   "@effect/schema": ^0.71.1
   "@effect/typeclass": ^0.25.5
+  typescript: "^5.5.4"

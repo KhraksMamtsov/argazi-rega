@@ -7,7 +7,7 @@
     "build": "vue-tsc && vite build",
     "preview": "vite preview",
     "typecheck": "tsc --noEmit",
-    "typecheck:watch": "tsc --noEmit --watch"
+    "typecheck:watch": "vue-tsc --watch"
   },
   "dependencies": {
     "@argazi/domain": "workspace:*",
