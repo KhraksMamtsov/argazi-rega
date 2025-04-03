@@ -3,15 +3,15 @@ packages:
   - src/libraries/*
 catalog:
   effect: ^3.14.4
-  '@effect/platform': ^0.80.4
-  '@effect/platform-node': ^0.76.7
-  '@effect/typeclass': ^0.33.4
-  '@effect/cli': ^0.59.4
+  "@effect/platform": ^0.80.4
+  "@effect/platform-node": ^0.76.7
+  "@effect/typeclass": ^0.33.4
+  "@effect/cli": ^0.59.4
   typescript: ^5.8.2
 onlyBuiltDependencies:
-  - '@parcel/watcher'
-  - '@prisma/client'
-  - '@prisma/engines'
+  - "@parcel/watcher"
+  - "@prisma/client"
+  - "@prisma/engines"
   - esbuild
   - msgpackr-extract
   - prisma

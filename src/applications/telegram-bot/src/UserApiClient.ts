@@ -1,5 +1,5 @@
-import { Config, Effect, Layer, Redacted, Context } from "effect";
-import { HttpApiClient } from "@effect/platform";
+import { Config, Effect, Layer, Redacted, Context, pipe } from "effect";
+import { Url, HttpApiClient } from "@effect/platform";
 
 import { RestApiSpec } from "@argazi/rest-api-spec";
 
@@ -14,7 +14,7 @@ export class RestApiClientTag extends Context.Tag(
 
 export const makeLive = () =>
   Effect.gen(function* () {
-    const apiUrl = yield* Config.redacted("API_URL");
+    const apiUrl = yield* Config.redacted(Config.url("API_URL"));
     const apiPort = yield* Config.redacted("API_PORT");
     // const basicAuthSecret = yield* pipe(Config.redacted("BASIC_AUTH_BOT_SECRET"));
 
@@ -75,8 +75,10 @@ export const makeLive = () =>
     // };
 
     const userApiClient = yield* HttpApiClient.make(RestApiSpec, {
-      baseUrl: new URL(`${Redacted.value(apiUrl)}:${Redacted.value(apiPort)}`)
-        .origin,
+      baseUrl: pipe(
+        Redacted.value(apiUrl),
+        Url.setPort(Redacted.value(apiPort))
+      ).origin,
     });
 
     return userApiClient;

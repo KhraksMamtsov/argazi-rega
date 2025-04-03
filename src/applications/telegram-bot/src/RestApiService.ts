@@ -44,7 +44,7 @@ export const makeLive = () =>
 
     const restApiClient = yield* HttpApiClient.make(RestApiSpec, {
       // transformClient: () => {}
-      baseUrl: Url.setPort(apiUrl, apiPort.toString()).toString(),
+      baseUrl: Url.setPort(apiUrl, apiPort),
     });
 
     const autoRefreshSynchronized =
