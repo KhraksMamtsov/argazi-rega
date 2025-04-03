@@ -18,6 +18,7 @@
     "db:migrations:apply": "npx prisma migrate deploy",
     "db:migrations:apply:dev": "npx prisma migrate dev",
     "typecheck": "tsc -b",
+    "test": "vitest",
     "typecheck:watch": "tsc -b --watch",
     "all:build": "tsc -b tsconfig.json",
     "all:build:watch": "tsc -b tsconfig.json --watch",
@@ -36,13 +37,11 @@
     "@effect/platform": "catalog:",
     "@effect/platform-node": "catalog:",
     "@effect/typeclass": "catalog:",
-    "@effect/vitest": "^0.20.5",
     "@js-temporal/polyfill": "^0.5.1",
     "@jsonforms/core": "^3.5.1",
     "@jsonforms/vue": "^3.5.1",
     "@jsonforms/vue-vanilla": "^3.5.1",
     "@prisma/client": "^6.5.0",
-    "@vitejs/plugin-vue": "^5.2.3",
     "amqplib": "^0.10.7",
     "effect": "catalog:",
     "jsonwebtoken": "^9.0.2",
@@ -51,6 +50,7 @@
     "redis": "^4.7.0",
     "telegraf": "^4.16.3",
     "ts-node": "^10.9.2",
+    "vite": "^6.2.5",
     "vitest": "^3.1.1",
     "vue": "^3.5.13",
     "vue-router": "^4.5.0",
@@ -73,7 +73,6 @@
     "eslint-plugin-vue": "^10.0.0",
     "globals": "^16.0.0",
     "prettier": "^3.5.3",
-    "typescript": "catalog:",
-    "vite-plugin-dts": "4.5.3"
+    "typescript": "catalog:"
   }
 }

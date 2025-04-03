@@ -5,7 +5,6 @@ import {
   pipe,
   Either,
   Predicate,
-  Schema,
   HashMap,
   HashSet,
   Tuple,
@@ -19,14 +18,12 @@ import { Side } from "./Side.ts";
 import * as CellBorder from "./CellBorder.ts";
 import * as Coords from "./Coords.ts";
 import * as Bug from "./Bug.ts";
-import { BugDto } from "../api/Bug.dto.ts";
 import * as SwarmMember from "./SwarmMember.ts";
 import { dual } from "effect/Function";
 import { distributive } from "../shared/effect/Types.ts";
 import { QueenBeeState } from "./QueenBeeState.ts";
 import * as SwarmError from "./SwarmError.ts";
 import * as Move from "./Move.ts";
-import type { ChannelTypeId } from "effect/Channel";
 
 export interface Swarm extends Pipeable.Pipeable {}
 export class Swarm extends Data.Class<{

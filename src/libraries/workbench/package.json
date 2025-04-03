@@ -16,6 +16,6 @@
     "start": "node --watch --experimental-transform-types src/index.ts"
   },
   "dependencies": {
-    "@argazi/domain": "workspace:*"
+    "vitest": "^3.1.1"
   }
 }

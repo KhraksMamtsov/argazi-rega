@@ -96,11 +96,16 @@ export const emoji = Bug.$match({
   // 🦟 🐞 🪱
 });
 
+const one = "\u030A";
+const two = "\u0308";
+const three = two + one;
+const symbols_ = ["", one, two, three] as const;
+
 export const symbol = Bug.$match({
-  Ant: ({ number }) => (number === 3 ? "Ä" : number === 2 ? "Å" : "A"),
-  QueenBee: () => "🐝",
-  Beetle: () => "🪲",
-  Grasshopper: () => "🦗",
-  Spider: () => "🕷",
+  Ant: ({ number }) => "A" + symbols_[number],
+  QueenBee: () => "Q",
+  Beetle: ({ number }) => "B" + symbols_[number],
+  Grasshopper: ({ number }) => "G" + symbols_[number],
+  Spider: ({ number }) => "S" + symbols_[number],
   // 🦟 🐞 🪱
 });

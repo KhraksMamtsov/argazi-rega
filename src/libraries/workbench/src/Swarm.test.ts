@@ -12,7 +12,7 @@ import {
 } from "effect";
 import { SwarmMember } from "./game/SwarmMember.ts";
 import { Coords } from "./game/Coords.ts";
-import { test, describe, expect, assert } from "@effect/vitest";
+import { test, describe, expect, assert } from "vitest";
 import * as SwarmError from "./game/SwarmError.ts";
 import { Cell } from "./game/Cell.ts";
 

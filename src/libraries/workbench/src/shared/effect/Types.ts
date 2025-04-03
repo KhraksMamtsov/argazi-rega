@@ -9,11 +9,6 @@ export type Distributive<
       : never
   : Result;
 
-type asd = 1 | 2;
-type qwe = never;
-
-type asdw = Distributive<[asd, qwe, asd]>; //=>
-
 export const distributive = <const T extends ReadonlyArray<any>>(
   value: T
 ): Distributive<T> => {
