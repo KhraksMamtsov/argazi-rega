@@ -1,18 +1,10 @@
 import * as Bug from "./game/Bug.ts";
 import { Side } from "./game/Side.ts";
 import * as Swarm from "./game/Swarm.ts";
-import {
-  HashMap,
-  Option,
-  Array,
-  Equal,
-  Either,
-  Predicate,
-  HashSet,
-} from "effect";
+import { HashMap, Option, Equal, Either, Predicate, HashSet } from "effect";
 import * as SwarmMember from "./game/SwarmMember.ts";
 import { Coords } from "./game/Coords.ts";
-import { test, describe, expect, assert } from "vitest";
+import { test, describe, expect, assert } from "@effect/vitest";
 import * as SwarmError from "./game/SwarmError.ts";
 import { Cell } from "./game/Cell.ts";
 
@@ -216,24 +208,29 @@ describe("Swarm", () => {
         TestGrasshopper()
       );
       const actualCoords = actualEmptyCells.pipe(
-        Option.map(Array.map((x) => x.coords))
+        Option.map(HashSet.map((x) => x.coords))
       );
 
       assertRefinement(Option.isSome, actualEmptyCells);
-      assertRefinement(Array.every(Cell.$is("Empty")), actualEmptyCells.value);
+      assertRefinement(
+        HashSet.every(Cell.$is("Empty")),
+        actualEmptyCells.value
+      );
 
       console.log(
         Swarm.toString(swarm, {
-          highlightEmpty: HashSet.fromIterable(actualEmptyCells.value),
+          highlightEmpty: actualEmptyCells.value,
         })
       );
 
       expect(actualCoords).toEqual(
-        Option.some([
-          Coords.Init(1.5, 1),
-          Coords.Init(1.5, -3),
-          Coords.Init(-0.5, 1),
-        ])
+        Option.some(
+          HashSet.make(
+            Coords.Init(1.5, 1),
+            Coords.Init(1.5, -3),
+            Coords.Init(-0.5, 1)
+          )
+        )
       );
     });
 
@@ -261,20 +258,23 @@ describe("Swarm", () => {
 
       const actualEmptyCells = Swarm.getMovementCellsFor(swarm, TestQueenBee());
       const actualCoords = actualEmptyCells.pipe(
-        Option.map(Array.map((x) => x.coords))
+        Option.map(HashSet.map((x) => x.coords))
       );
 
       assertRefinement(Option.isSome, actualEmptyCells);
-      assertRefinement(Array.every(Cell.$is("Empty")), actualEmptyCells.value);
+      assertRefinement(
+        HashSet.every(Cell.$is("Empty")),
+        actualEmptyCells.value
+      );
 
       console.log(
         Swarm.toString(swarm, {
-          highlightEmpty: HashSet.fromIterable(actualEmptyCells.value),
+          highlightEmpty: actualEmptyCells.value,
         })
       );
 
       expect(actualCoords).toEqual(
-        Option.some([Coords.Init(0, -2), Coords.Init(-0.5, -1)])
+        Option.some(HashSet.make(Coords.Init(0, -2), Coords.Init(-0.5, -1)))
       );
     });
     test("Beetle", () => {
@@ -296,7 +296,7 @@ describe("Swarm", () => {
 
       const actualEmptyCells = Swarm.getMovementCellsFor(swarm, TestBug());
       const actualCoords = actualEmptyCells.pipe(
-        Option.map(Array.map((x) => x.coords))
+        Option.map(HashSet.map((x) => x.coords))
       );
 
       assertRefinement(Option.isSome, actualEmptyCells);
@@ -304,17 +304,19 @@ describe("Swarm", () => {
 
       console.log(
         Swarm.toString(swarm, {
-          highlightEmpty: HashSet.fromIterable(actualEmptyCells.value),
+          highlightEmpty: actualEmptyCells.value,
         })
       );
 
       expect(actualCoords).toEqual(
-        Option.some([
-          Coords.Init(1.5, -1),
-          Coords.Init(-0.5, -1),
-          Coords.Init(1, 0),
-          Coords.Zero,
-        ])
+        Option.some(
+          HashSet.make(
+            Coords.Init(1.5, -1),
+            Coords.Init(-0.5, -1),
+            Coords.Init(1, 0),
+            Coords.Zero
+          )
+        )
       );
     });
     test("Spider", () => {
@@ -346,20 +348,23 @@ describe("Swarm", () => {
 
       const actualEmptyCells = Swarm.getMovementCellsFor(swarm, TestBug());
       const actualCoords = actualEmptyCells.pipe(
-        Option.map(Array.map((x) => x.coords))
+        Option.map(HashSet.map((x) => x.coords))
       );
 
       assertRefinement(Option.isSome, actualEmptyCells);
-      assertRefinement(Array.every(Cell.$is("Empty")), actualEmptyCells.value);
+      assertRefinement(
+        HashSet.every(Cell.$is("Empty")),
+        actualEmptyCells.value
+      );
 
       console.log(
         Swarm.toString(swarm, {
-          highlightEmpty: HashSet.fromIterable(actualEmptyCells.value),
+          highlightEmpty: actualEmptyCells.value,
         })
       );
 
       expect(actualCoords).toEqual(
-        Option.some([Coords.Init(1, -4), Coords.Init(-0.5, 1)])
+        Option.some(HashSet.make(Coords.Init(1, -4), Coords.Init(-0.5, 1)))
       );
     });
     test("Ant", () => {
@@ -391,34 +396,39 @@ describe("Swarm", () => {
 
       const actualEmptyCells = Swarm.getMovementCellsFor(swarm, TestBug());
       const actualCoords = actualEmptyCells.pipe(
-        Option.map(Array.map((x) => x.coords))
+        Option.map(HashSet.map((x) => x.coords))
       );
 
       assertRefinement(Option.isSome, actualEmptyCells);
-      assertRefinement(Array.every(Cell.$is("Empty")), actualEmptyCells.value);
+      assertRefinement(
+        HashSet.every(Cell.$is("Empty")),
+        actualEmptyCells.value
+      );
 
       console.log(
         Swarm.toString(swarm, {
-          highlightEmpty: HashSet.fromIterable(actualEmptyCells.value),
+          highlightEmpty: actualEmptyCells.value,
         })
       );
 
       expect(actualCoords).toEqual(
-        Option.some([
-          Coords.Init(0, -2),
-          Coords.Init(-0.5, -1),
-          Coords.Init(0.5, -3),
-          Coords.Init(-1, 0),
-          Coords.Init(1.5, -3),
-          Coords.Init(-0.5, 1),
-          Coords.Init(2.5, -3),
-          Coords.Init(0.5, 1),
-          Coords.Init(3, -2),
-          Coords.Init(1.5, 1),
-          Coords.Init(2.5, -1),
-          Coords.Init(2, 0),
-          Coords.Init(1.5, -1),
-        ])
+        Option.some(
+          HashSet.make(
+            Coords.Init(0, -2),
+            Coords.Init(0.5, -3),
+            Coords.Init(-1, 0),
+            Coords.Init(1.5, -3),
+            Coords.Init(2.5, -1),
+            Coords.Init(-0.5, 1),
+            Coords.Init(2.5, -3),
+            Coords.Init(0.5, 1),
+            Coords.Init(3, -2),
+            Coords.Init(-0.5, -1),
+            Coords.Init(1.5, 1),
+            Coords.Init(2, 0),
+            Coords.Init(1.5, -1)
+          )
+        )
       );
     });
   });

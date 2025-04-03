@@ -24,6 +24,7 @@ import { distributive } from "../shared/effect/Types.ts";
 import { QueenBeeState } from "./QueenBeeState.ts";
 import * as SwarmError from "./SwarmError.ts";
 import * as Move from "./Move.ts";
+import { readonlyArray } from "effect/Differ";
 
 export interface Swarm extends Pipeable.Pipeable {}
 export class Swarm extends Data.Class<{
@@ -383,25 +384,24 @@ export const bugs = (swarm: Swarm) =>
   );
 
 const slideableNeighborsEmptyCellsStep = (
-  from: ReadonlyArray<Cell.Cell>,
-  prev: ReadonlyArray<Cell.Cell> = []
+  from: HashSet.HashSet<Cell.Cell>,
+  prev: HashSet.HashSet<Cell.Cell> = HashSet.empty()
 ) => {
-  const stepResult = pipe(
-    from,
-    Array.flatMap(Cell.slideableNeighborsEmptyCells)
+  return from.pipe(
+    HashSet.flatMap(Cell.slideableNeighborsEmptyCells),
+    HashSet.difference(prev)
   );
-  return stepResult.filter((x) => !prev.includes(x));
 };
 
 const movesStrategies = {
   Ant: (from) => {
-    let result: Array<Cell.Cell> = [];
-    let next: ReadonlyArray<Cell.Cell> = [from];
+    let result: HashSet.HashSet<Cell.Cell> = HashSet.empty();
+    let next: HashSet.HashSet<Cell.Cell> = HashSet.make(from);
 
-    while (next.length !== 0) {
+    while (HashSet.size(next) !== 0) {
       const stepResult = slideableNeighborsEmptyCellsStep(next, result);
       next = stepResult;
-      result.push(...stepResult);
+      result = HashSet.union(result, stepResult);
     }
 
     return result;
@@ -409,37 +409,40 @@ const movesStrategies = {
   Grasshopper: (from) =>
     pipe(
       Cell.bordersWithNeighborsOccupied(from),
-      Array.map(getEmptyByDiagonal(from))
+      Array.map(getEmptyByDiagonal(from)),
+      HashSet.fromIterable
     ),
-  Beetle: (from) => [
-    ...Cell.slideableNeighborsEmptyCells(from),
-    ...Array.filter(from.neighbors, Cell.Cell.$is("Occupied")),
-  ],
+  Beetle: (from) =>
+    HashSet.union<Cell.Cell>(
+      Cell.slideableNeighborsEmptyCells(from),
+      HashSet.fromIterable(
+        Array.filter(from.neighbors, Cell.Cell.$is("Occupied"))
+      )
+    ),
   Spider: (from) => {
     // TODO: Can ref itself ???
-    const stepOne = slideableNeighborsEmptyCellsStep([from]);
-    const stepTwo = slideableNeighborsEmptyCellsStep(stepOne, [from]);
+    const initOne = HashSet.make(from);
+    const stepOne = slideableNeighborsEmptyCellsStep(initOne, initOne);
+    const initTwo = HashSet.union(initOne, stepOne);
+    const stepTwo = slideableNeighborsEmptyCellsStep(stepOne, initTwo);
+    const initThree = HashSet.union(initTwo, stepTwo);
 
-    return slideableNeighborsEmptyCellsStep(stepTwo, [
-      from,
-      ...stepOne,
-      ...stepTwo,
-    ]);
+    return slideableNeighborsEmptyCellsStep(stepTwo, initThree);
   },
   QueenBee: (from) => Cell.slideableNeighborsEmptyCells(from),
 } as const satisfies Record<
   Bug.Bug["_tag"],
-  (from: Cell.Occupied) => ReadonlyArray<Cell.Cell>
+  (from: Cell.Occupied) => HashSet.HashSet<Cell.Cell>
 >;
 
 export const getMovementCellsFor: {
   <B extends Bug.Bug>(
     bug: B
-  ): (swarm: Swarm) => Option.Option<ReadonlyArray<Cell.Cell>>;
+  ): (swarm: Swarm) => Option.Option<HashSet.HashSet<Cell.Cell>>;
   <B extends Bug.Bug>(
     swarm: Swarm,
     bug: B
-  ): Option.Option<ReadonlyArray<Cell.Cell>>;
+  ): Option.Option<HashSet.HashSet<Cell.Cell>>;
 } = dual(2, <B extends Bug.Bug>(swarm: Swarm, bug: B) =>
   swarm.pipe(
     findFirstMap(

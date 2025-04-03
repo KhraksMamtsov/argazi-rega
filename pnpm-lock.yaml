@@ -93,6 +93,9 @@ importers:
         specifier: ^2.2.8
         version: 2.2.8(typescript@5.8.2)
     devDependencies:
+      '@effect/vitest':
+        specifier: ^0.20.5
+        version: 0.20.5(effect@3.14.5)(vitest@3.1.1(@types/node@22.14.0)(yaml@2.7.1))
       '@eslint/eslintrc':
         specifier: ^3.3.1
         version: 3.3.1
@@ -364,6 +367,12 @@ packages:
     resolution: {integrity: sha512-Jb97p2gb/juw8H0KByLh3ZfSAl3exjWQake3hDBnSL+OWgQ8cFHSqKXIo26XvvNaJdiCqDSNKuSXO3uwGI/shA==}
     peerDependencies:
       effect: ^3.14.5
+
+  '@effect/vitest@0.20.5':
+    resolution: {integrity: sha512-FTBznC4wvlRc9ljoRy0p4VWNkybsaOzcoXEVGacMrjRAZWVbB+HqLa+HggaThVFVLWf67J2eqfemXOOOlP1Hrw==}
+    peerDependencies:
+      effect: ^3.14.5
+      vitest: ^3.0.0
 
   '@esbuild/aix-ppc64@0.25.2':
     resolution: {integrity: sha512-wCIboOL2yXZym2cgm6mlA742s9QeJ8DjGVaL39dLN4rRwrOgOyYSnOaFPhKZGLb2ngj4EyfAFjsNJwPXZvseag==}
@@ -2171,6 +2180,11 @@ snapshots:
   '@effect/typeclass@0.33.5(effect@3.14.5)':
     dependencies:
       effect: 3.14.5
+
+  '@effect/vitest@0.20.5(effect@3.14.5)(vitest@3.1.1(@types/node@22.14.0)(yaml@2.7.1))':
+    dependencies:
+      effect: 3.14.5
+      vitest: 3.1.1(@types/node@22.14.0)(yaml@2.7.1)
 
   '@esbuild/aix-ppc64@0.25.2':
     optional: true

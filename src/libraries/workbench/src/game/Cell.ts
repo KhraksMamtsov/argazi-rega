@@ -7,6 +7,7 @@ import {
   Equivalence as _Equivalence,
   Tuple,
   Hash,
+  HashSet,
 } from "effect";
 import * as Bug from "./Bug.ts";
 import { dual, pipe } from "effect/Function";
@@ -259,7 +260,8 @@ export const slideableNeighborsEmptyCells = (
           });
         },
       });
-    })
+    }),
+    HashSet.fromIterable
   );
 
 export const isAccessibleFromBorder = (border: CellBorder.CellBorder) => {
