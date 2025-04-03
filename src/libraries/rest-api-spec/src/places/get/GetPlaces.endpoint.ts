@@ -1,9 +1,8 @@
-import * as Schema from "@effect/schema/Schema";
-import { ApiEndpoint } from "effect-http";
+import { Schema } from "effect";
 
 import { BaseResponseManyFor } from "../../BaseResponseFor.js";
-import { BearerAuth } from "../../BearerAuth.security-scheme.js";
 import { PlaceApi } from "../Place.api.js";
+import { HttpApiEndpoint } from "@effect/platform";
 
 export const _GetPlacesResponseBody = PlaceApi.pipe(
   Schema.annotations({ identifier: "GetPlacesResponse" }),
@@ -19,11 +18,7 @@ export const GetPlacesResponseBody: Schema.Schema<
   GetPlacesResponseBodyFrom
 > = _GetPlacesResponseBody.pipe(Schema.annotations({ description: "Place" }));
 
-export const GetPlacesEndpoint = ApiEndpoint.get(
+export const GetPlacesEndpoint = HttpApiEndpoint.get(
   "getPlaces",
-  "/places",
-  {}
-).pipe(
-  ApiEndpoint.setResponseBody(GetPlacesResponseBody),
-  ApiEndpoint.setSecurity(BearerAuth)
-);
+  "/places"
+).addSuccess(GetPlacesResponseBody);

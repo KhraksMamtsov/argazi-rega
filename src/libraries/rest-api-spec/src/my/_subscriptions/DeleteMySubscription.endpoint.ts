@@ -1,11 +1,10 @@
-import * as Schema from "@effect/schema/Schema";
-import { ApiEndpoint } from "effect-http";
+import { Schema } from "effect";
 
 import { IdSubscription } from "@argazi/domain";
 
 import { BaseResponseFor } from "../../BaseResponseFor.js";
-import { BearerAuth } from "../../BearerAuth.security-scheme.js";
 import { SubscriptionApi } from "../../subscriptions/Subscription.api.js";
+import { HttpApiEndpoint } from "@effect/platform";
 
 // #region DeleteMySubscriptionResponseBody
 const _DeleteMySubscriptionResponseBody = SubscriptionApi.pipe(
@@ -48,14 +47,9 @@ export const DeleteMySubscriptionRequestParams: Schema.Schema<
 > = _DeleteMySubscriptionRequestParams;
 // #endregion DeleteMySubscriptionRequestParams
 
-export const DeleteMySubscriptionEndpoint = ApiEndpoint.delete(
+export const DeleteMySubscriptionEndpoint = HttpApiEndpoint.del(
   "deleteMySubscription",
-  "/my/subscriptions/:idSubscription",
-  {
-    summary: "Unsubscribe user from events of some place",
-  }
-).pipe(
-  ApiEndpoint.setRequestPath(DeleteMySubscriptionRequestParams),
-  ApiEndpoint.setResponseBody(DeleteMySubscriptionResponseBody),
-  ApiEndpoint.setSecurity(BearerAuth)
-);
+  "/my/subscriptions/:idSubscription"
+)
+  .setPath(DeleteMySubscriptionRequestParams)
+  .addSuccess(DeleteMySubscriptionResponseBody);

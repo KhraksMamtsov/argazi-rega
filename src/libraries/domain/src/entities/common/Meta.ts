@@ -1,4 +1,4 @@
-import { Schema } from "@effect/schema";
+import { Schema } from "effect";
 
 import { IdUser } from "../../user/entity/IdUser.js";
 import { DateCreated } from "../../value-objects/DateCreated.js";

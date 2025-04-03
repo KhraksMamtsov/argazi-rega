@@ -1,25 +1,22 @@
 import { GetManyUsersUseCase } from "@argazi/application";
-import { GetManyUsersEndpoint } from "@argazi/rest-api-spec";
+import { RestApiSpec } from "@argazi/rest-api-spec";
 import { Effect } from "effect";
-import { Handler } from "effect-http";
+import { HttpApiBuilder } from "@effect/platform";
 
-export const GetManyUsersHandler = Handler.make(
-  GetManyUsersEndpoint,
-  ({ body }) =>
+export const GetManyUsersHandlerLive = HttpApiBuilder.handler(
+  RestApiSpec,
+  "User",
+  "getManyUsers",
+  ({ payload }) =>
     Effect.gen(function* () {
-      if (body.idsUser === undefined) {
+      if (payload.idsUser === undefined) {
         return [];
       }
 
       const newUserOption = yield* GetManyUsersUseCase({
-        payload: { idsUser: body.idsUser, type: "id" },
+        payload: { idsUser: payload.idsUser, type: "id" },
       });
 
       return newUserOption;
-    }).pipe(
-      Effect.tapBoth({
-        onFailure: Effect.logError,
-        onSuccess: Effect.logInfo,
-      })
-    )
+    }).pipe(Effect.orDie)
 );

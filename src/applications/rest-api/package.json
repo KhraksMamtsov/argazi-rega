@@ -13,10 +13,12 @@
     }
   },
   "scripts": {
-    "build": "tsc --build ",
+    "build": "tsc --build",
     "build:watch": "tsc --build --watch",
+    "build:watch:unsafe": "tsc --build --watch --noCheck",
     "typecheck": "tsc --noEmit",
-    "typecheck:watch": "tsc --noEmit --watch"
+    "typecheck:watch": "tsc --noEmit --watch",
+    "start:watch": "node --watch ./dist/src/main.js"
   },
   "dependencies": {
     "@argazi/domain": "workspace:*",

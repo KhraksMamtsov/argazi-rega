@@ -1,20 +1,28 @@
 import { Data } from "effect";
-import * as Cell from "./Cell.ts";
 import * as Bug from "./Bug.ts";
+import * as CellBorder from "./CellBorder.ts";
 
-export class IntroduceMove extends Data.TaggedClass("IntroduceMove")<{
-  to: Cell.Empty;
+export class BugMove extends Data.TaggedClass("BugMove")<{
+  bug: Bug.Bug;
+  neighbor: Bug.Bug;
+  cellBorder: CellBorder.CellBorder;
+}> {}
+
+export class BeetleMove extends Data.TaggedClass("BeetleMove")<{
+  bug: Bug.Beetle;
+  onto: Bug.Bug;
+}> {}
+
+export class InitialMove extends Data.TaggedClass("InitialMove")<{
   bug: Bug.Bug;
 }> {}
 
-export class MovingMove extends Data.TaggedClass("MovingMove")<{
-  to: Cell.Empty;
-  from: Cell.Cell;
-}> {}
+export type MovingMove = BugMove;
+export const MovingMove = Data.taggedEnum<MovingMove>();
 
-// export class BeetleMove extends Data.TaggedClass("BeetleMove")<{
-//   to: Cell.Cell;
-//   from: Cell.CellWithBug<Cell.CellBugsWithBeetle>;
-// }> {}
+export type Move = InitialMove | MovingMove;
+export const Move = Data.taggedEnum<Move>();
 
-export type Move = IntroduceMove | MovingMove;
+export const side = (move: Move) => move.bug.side;
+
+export const isNotQueenMove = (move: Move) => Bug.refineNotQueen(move.bug);

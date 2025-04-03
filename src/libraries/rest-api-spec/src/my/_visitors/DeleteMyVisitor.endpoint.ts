@@ -1,11 +1,10 @@
-import * as Schema from "@effect/schema/Schema";
-import { ApiEndpoint } from "effect-http";
+import { Schema } from "effect";
 
 import { IdVisitor } from "@argazi/domain";
 
 import { BaseResponseFor } from "../../BaseResponseFor.js";
-import { BearerAuth } from "../../BearerAuth.security-scheme.js";
 import { VisitorApi } from "../../visitors/Visitor.api.js";
+import { HttpApiEndpoint } from "@effect/platform";
 
 // #region DeleteMyVisitorResponseBody
 const _DeleteMyVisitorResponseBody = VisitorApi.pipe(
@@ -46,14 +45,9 @@ export const DeleteMyVisitorRequestParams: Schema.Schema<
 > = _DeleteMyVisitorRequestParams;
 // #endregion DeleteMyVisitorRequestParams
 
-export const DeleteMyVisitorEndpoint = ApiEndpoint.delete(
+export const DeleteMyVisitorEndpoint = HttpApiEndpoint.del(
   "deleteMyVisitor",
-  "/my/visitors/:idVisitor",
-  {
-    summary: "Deletes user's visitor",
-  }
-).pipe(
-  ApiEndpoint.setSecurity(BearerAuth),
-  ApiEndpoint.setRequestPath(DeleteMyVisitorRequestParams),
-  ApiEndpoint.setResponseBody(DeleteMyVisitorResponseBody)
-);
+  "/my/visitors/:idVisitor"
+)
+  .setPath(DeleteMyVisitorRequestParams)
+  .addSuccess(DeleteMyVisitorResponseBody);

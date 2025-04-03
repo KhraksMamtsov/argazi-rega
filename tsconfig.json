@@ -1,15 +1,11 @@
 { 
   "extends": "./tsconfig.base.json",
   "compilerOptions": {
-    "noEmit": true
+    "noEmit": true,
   },
   "include": ["prisma"],
   "references": [{
     "path": "./src/libraries/rest-api-spec",
-  },{
-    "path": "./src/applications/rest-api",
-  },{
-    "path": "./src/applications/telegram-bot",
   },{
     "path": "./src/libraries/shared" 
   },{
@@ -22,5 +18,9 @@
     "path": "./src/libraries/application"
   },{
     "path": "./src/libraries/cache"
+  },{
+    "path": "./src/applications/rest-api",
+  },{
+    "path": "./src/applications/telegram-bot",
   }]
 }

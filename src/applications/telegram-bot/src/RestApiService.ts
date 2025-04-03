@@ -10,15 +10,16 @@ import {
   Redacted,
   SynchronizedRef,
   pipe,
+  Schema,
 } from "effect";
-import { Client, ClientError } from "effect-http";
+import { HttpApiClient, Url } from "@effect/platform";
 
 import type { IdTelegramChat } from "@argazi/domain";
 import { RestApiSpec } from "@argazi/rest-api-spec";
 
 import { SessionServiceTag, type UserCredentials } from "./Session.service.js";
 
-import { HttpClientRequest } from "@effect/platform";
+import type { Simplify } from "effect/Types";
 
 export interface RestApiService
   extends Effect.Effect.Success<ReturnType<typeof makeLive>> {}
@@ -31,18 +32,19 @@ export class RestApiServiceTag extends Effect.Tag(
 
 export class RefreshTokenExpired extends Data.TaggedError(
   "RefreshTokenExpired"
-)<{
-  clientError: ClientError.ClientError;
-}> {}
+)<{ cause: unknown }> {}
 
 export const makeLive = () =>
   Effect.gen(function* () {
-    const apiUrl = yield* Config.redacted("API_URL");
-    const apiPort = yield* Config.redacted("API_PORT");
+    const apiUrl = yield* Config.url("API_URL");
+    const apiPort = yield* Schema.Config(
+      "API_PORT",
+      Schema.NumberFromString.pipe(Schema.int(), Schema.between(0, 65535))
+    );
 
-    const restApiClient = Client.make(RestApiSpec, {
-      baseUrl: new URL(`${Redacted.value(apiUrl)}:${Redacted.value(apiPort)}`)
-        .origin,
+    const restApiClient = yield* HttpApiClient.make(RestApiSpec, {
+      // transformClient: () => {}
+      baseUrl: Url.setPort(apiUrl, apiPort.toString()).toString(),
     });
 
     const autoRefreshSynchronized =
@@ -50,24 +52,36 @@ export const makeLive = () =>
         readonly idTelegramChat: IdTelegramChat;
         readonly userCredentialsSyncRef: SynchronizedRef.SynchronizedRef<UserCredentials>;
       }) =>
-      <A, E, R, I>(
-        apiMethod: (
-          input: I,
-          map: (
-            request: HttpClientRequest.HttpClientRequest
-          ) => HttpClientRequest.HttpClientRequest
-        ) => Effect.Effect<A, E, R>
+      <
+        A,
+        E,
+        R,
+        I extends {
+          readonly headers: {
+            readonly Authorization: string;
+          };
+        },
+      >(
+        apiMethod: (input: I) => Effect.Effect<A, E, R>
       ) =>
-      (input: I) =>
+      (
+        input: I
+        // Simplify<
+        //   Omit<I, "headers"> & { headers: Omit<I["headers"], "Authorization"> }
+        // >
+      ) =>
         Effect.gen(function* () {
           const actualUserCredentials = yield* SynchronizedRef.get(
             args.userCredentialsSyncRef
           );
 
-          const requestResult = yield* apiMethod(
-            input,
-            Client.setBearer(Redacted.value(actualUserCredentials.accessToken))
-          ).pipe(Effect.either);
+          const requestResult = yield* apiMethod({
+            ...input,
+            headers: {
+              ...input.headers,
+              Authorization: `Bearer ${Redacted.value(actualUserCredentials.accessToken)}`,
+            },
+          }).pipe(Effect.either);
 
           if (Either.isRight(requestResult)) {
             return requestResult.right;
@@ -80,16 +94,14 @@ export const makeLive = () =>
               ({ refreshToken }) =>
                 Effect.gen(function* () {
                   const refreshAuthResult = yield* pipe(
-                    restApiClient.refreshToken({
-                      body: { refreshToken },
+                    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+                    restApiClient.Authentication.refreshToken({
+                      payload: { refreshToken },
                     }),
                     // Effect.timeout(Duration.seconds(5)),
                     Effect.retry({
                       schedule: Schedule.exponential(Duration.millis(100), 2),
                       times: 5,
-                      while: (error) => {
-                        return error.side === "server" && error.status === 401;
-                      },
                     }),
                     Effect.either
                   );
@@ -97,7 +109,7 @@ export const makeLive = () =>
                   if (Either.isLeft(refreshAuthResult)) {
                     yield* SessionServiceTag.drop(args.idTelegramChat);
                     return yield* new RefreshTokenExpired({
-                      clientError: refreshAuthResult.left,
+                      cause: refreshAuthResult.left,
                     });
                   }
 
@@ -110,10 +122,13 @@ export const makeLive = () =>
                 })
             );
 
-          return yield* apiMethod(
-            input,
-            Client.setBearer(Redacted.value(refreshedCredentials.accessToken))
-          );
+          return yield* apiMethod({
+            ...input,
+            headers: {
+              ...input.headers,
+              Authorization: `Bearer ${Redacted.value(refreshedCredentials.accessToken)}`,
+            },
+          });
         });
 
     const createUserApiClient = (args: {
@@ -131,15 +146,17 @@ export const makeLive = () =>
         });
 
         return {
-          createMyVisitor: wrapMethod(restApiClient.createMyVisitor),
-          getEvent: wrapMethod(restApiClient.getEvent),
-          getMyIdentity: wrapMethod(restApiClient.getMyIdentity),
-          getMySubscriptions: wrapMethod(restApiClient.getMySubscriptions),
-          getMyTickets: wrapMethod(restApiClient.getMyTickets),
-          getMyVisitors: wrapMethod(restApiClient.getMyVisitors),
-          getPlaceActualEvents: wrapMethod(restApiClient.getPlaceActualEvents),
-          getPlaces: wrapMethod(restApiClient.getPlaces),
-          loginDwbn: restApiClient.loginDwbn,
+          createMyVisitor: wrapMethod(restApiClient.My.createMyVisitor),
+          getEvent: wrapMethod(restApiClient.Event.getEvent),
+          getMyIdentity: wrapMethod(restApiClient.My.getMyIdentity),
+          getMySubscriptions: wrapMethod(restApiClient.My.getMySubscriptions),
+          getMyTickets: wrapMethod(restApiClient.My.getMyTickets),
+          getMyVisitors: wrapMethod(restApiClient.My.getMyVisitors),
+          getPlaceActualEvents: wrapMethod(
+            restApiClient.Place.getPlaceActualEvents
+          ),
+          getPlaces: wrapMethod(restApiClient.Place.getPlaces),
+          loginDwbn: restApiClient.Authentication.loginDwbn,
         };
       });
 
@@ -151,22 +168,22 @@ export const makeLive = () =>
     });
 
     return {
-      bookTicket: restApiClient.bookTicket,
-      getUser: restApiClient.getUser,
-      getVisitor: restApiClient.getVisitor,
-      getPlaceById: restApiClient.getPlaceById,
-      getSubscription: restApiClient.getSubscription,
-      getUserTicketById: restApiClient.getUserTicketById,
-      getEvent: restApiClient.getEvent,
-      deleteMyVisitor: restApiClient.deleteMyVisitor,
-      getManyUsers: restApiClient.getManyUsers,
-      getPlaceSubscriptions: restApiClient.getPlaceSubscriptions,
-      getPlaceGeoPoint: restApiClient.getPlaceGeoPoint,
-      createMySubscription: restApiClient.createMySubscription,
-      bookMyTicket: restApiClient.bookMyTicket,
-      returnMyTicket: restApiClient.returnMyTicket,
-      loginDwbn: restApiClient.loginDwbn,
-      deleteMySubscription: restApiClient.deleteMySubscription,
+      bookTicket: restApiClient.User.bookTicket,
+      getUser: restApiClient.User.getUser,
+      getVisitor: restApiClient.Visitor.getVisitor,
+      getPlaceById: restApiClient.Place.getPlaceById,
+      getSubscription: restApiClient.Subscriptions.getSubscription,
+      getUserTicketById: restApiClient.User.getUserTicketById,
+      getEvent: restApiClient.Event.getEvent,
+      deleteMyVisitor: restApiClient.My.deleteMyVisitor,
+      getManyUsers: restApiClient.User.getManyUsers,
+      getPlaceSubscriptions: restApiClient.Place.getPlaceSubscriptions,
+      getPlaceGeoPoint: restApiClient.Place.getPlaceGeoPoint,
+      createMySubscription: restApiClient.My.createMySubscription,
+      bookMyTicket: restApiClient.My.bookMyTicket,
+      returnMyTicket: restApiClient.My.returnMyTicket,
+      loginDwbn: restApiClient.Authentication.loginDwbn,
+      deleteMySubscription: restApiClient.My.deleteMySubscription,
       __new: {
         getUserApiClientFor: (idTelegramChat: IdTelegramChat) =>
           cache.get(idTelegramChat),

@@ -1,11 +1,13 @@
 import { GetPlaceSubscriptionsUseCase } from "@argazi/application";
 import { Effect } from "effect";
-import { Handler } from "effect-http";
 import { IdAdmin } from "../../authentication/constants.js";
-import { GetPlaceSubscriptionsEndpoint } from "@argazi/rest-api-spec";
+import { HttpApiBuilder } from "@effect/platform";
+import { RestApiSpec } from "@argazi/rest-api-spec";
 
-export const GetPlaceSubscriptionsHandler = Handler.make(
-  GetPlaceSubscriptionsEndpoint,
+export const GetPlaceSubscriptionsHandlerLive = HttpApiBuilder.handler(
+  RestApiSpec,
+  "Place",
+  "getPlaceSubscriptions",
   ({ path }) =>
     Effect.gen(function* () {
       const placeSubscriptions = yield* GetPlaceSubscriptionsUseCase({
@@ -14,10 +16,5 @@ export const GetPlaceSubscriptionsHandler = Handler.make(
       });
 
       return placeSubscriptions;
-    }).pipe(
-      Effect.tapBoth({
-        onFailure: Effect.logError,
-        onSuccess: Effect.logInfo,
-      })
-    )
+    }).pipe(Effect.orDie)
 );

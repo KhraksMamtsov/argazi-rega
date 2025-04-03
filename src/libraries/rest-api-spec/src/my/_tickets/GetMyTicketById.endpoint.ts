@@ -1,11 +1,10 @@
-import * as Schema from "@effect/schema/Schema";
-import { ApiEndpoint } from "effect-http";
+import { Schema } from "effect";
 
 import { IdTicket } from "@argazi/domain";
 
 import { BaseResponseFor } from "../../BaseResponseFor.js";
-import { BearerAuth } from "../../BearerAuth.security-scheme.js";
 import { TicketApi } from "../../tickets/Ticket.api.js";
+import { HttpApiEndpoint } from "@effect/platform";
 
 // #region GetMyTicketByIdResponseBody
 const _GetMyTicketByIdResponseBody = TicketApi.pipe(
@@ -46,14 +45,9 @@ export const GetMyTicketByIdRequestParams: Schema.Schema<
 > = _GetMyTicketByIdRequestParams;
 // #endregion GetMyTicketByIdRequestParams
 
-export const GetMyTicketByIdEndpoint = ApiEndpoint.get(
+export const GetMyTicketByIdEndpoint = HttpApiEndpoint.get(
   "getMyTicketById",
-  "/my/tickets/:idTicket",
-  {
-    summary: "Get user's ticket",
-  }
-).pipe(
-  ApiEndpoint.setResponseBody(GetMyTicketByIdResponseBody),
-  ApiEndpoint.setRequestPath(GetMyTicketByIdRequestParams),
-  ApiEndpoint.setSecurity(BearerAuth)
-);
+  "/my/tickets/:idTicket"
+)
+  .setPath(GetMyTicketByIdRequestParams)
+  .addSuccess(GetMyTicketByIdResponseBody);

@@ -1,11 +1,10 @@
-import * as Schema from "@effect/schema/Schema";
-import { ApiEndpoint } from "effect-http";
+import { Schema } from "effect";
+import { HttpApiEndpoint } from "@effect/platform";
 
 import { UpdateUserCommandPayload } from "@argazi/application";
 import { IdUser } from "@argazi/domain";
 
 import { BaseResponseFor } from "../../BaseResponseFor.js";
-import { BearerAuth } from "../../BearerAuth.security-scheme.js";
 import { UserApi } from "../User.api.js";
 
 // #region UpdateUserRequestParams
@@ -66,13 +65,10 @@ export const UpdateUserResponseBody: Schema.Schema<
 > = _UpdateUserResponseBody;
 // #endregion UpdateUserResponseBody
 
-export const UpdateUserEndpoint = ApiEndpoint.patch(
+export const UpdateUserEndpoint = HttpApiEndpoint.patch(
   "updateUser",
-  "/users/:id",
-  {}
-).pipe(
-  ApiEndpoint.setRequestPath(UpdateUserRequestParams),
-  ApiEndpoint.setRequestBody(UpdateUserRequestBody),
-  ApiEndpoint.setResponseBody(UpdateUserResponseBody),
-  ApiEndpoint.setSecurity(BearerAuth)
-);
+  "/users/:id"
+)
+  .addSuccess(UpdateUserResponseBody)
+  .setPayload(UpdateUserRequestBody)
+  .setPath(UpdateUserRequestParams);

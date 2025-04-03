@@ -1,21 +1,20 @@
 import { GetPlacesUseCase } from "@argazi/application";
 import { Effect } from "effect";
-import { Handler } from "effect-http";
 import { IdAdmin } from "../../authentication/constants.js";
-import { GetPlacesEndpoint } from "@argazi/rest-api-spec";
+import { HttpApiBuilder } from "@effect/platform";
+import { RestApiSpec } from "@argazi/rest-api-spec";
 
-export const GetPlacesHandler = Handler.make(GetPlacesEndpoint, () =>
-  Effect.gen(function* () {
-    const places = yield* GetPlacesUseCase({
-      idInitiator: IdAdmin,
-      payload: {},
-    });
+export const GetPlacesHandlerLive = HttpApiBuilder.handler(
+  RestApiSpec,
+  "Place",
+  "getPlaces",
+  ({}) =>
+    Effect.gen(function* () {
+      const places = yield* GetPlacesUseCase({
+        idInitiator: IdAdmin,
+        payload: {},
+      });
 
-    return places;
-  }).pipe(
-    Effect.tapBoth({
-      onFailure: Effect.logError,
-      onSuccess: Effect.logInfo,
-    })
-  )
+      return places;
+    }).pipe(Effect.orDie)
 );

@@ -1,10 +1,11 @@
-import * as Schema from "@effect/schema/Schema";
-import { ApiEndpoint } from "effect-http";
+import { Schema } from "effect";
+import { HttpApiEndpoint } from "@effect/platform";
 
 import { IdUser } from "@argazi/domain";
 
 import { BaseResponseFor } from "../../BaseResponseFor.js";
 import { UserApi } from "../User.api.js";
+import { Empty } from "@effect/platform/HttpApiSchema";
 
 // #region GetUserResponseBody
 const _GetUserResponseBody = UserApi.pipe(
@@ -45,11 +46,7 @@ export const GetUserRequestParams: Schema.Schema<
 > = _GetUserRequestParams;
 // #endregion GetUserRequestParams
 
-export const GetUserEndpoint = ApiEndpoint.get(
-  "getUser",
-  "/users/:idUser",
-  {}
-).pipe(
-  ApiEndpoint.setRequestPath(GetUserRequestParams),
-  ApiEndpoint.setResponseBody(GetUserResponseBody)
-);
+export const GetUserEndpoint = HttpApiEndpoint.get("getUser", "/users/:idUser")
+  .setPath(GetUserRequestParams)
+  .addSuccess(GetUserResponseBody)
+  .addError(Empty(404));

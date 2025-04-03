@@ -1,12 +1,13 @@
-import * as Schema from "@effect/schema/Schema";
-import { ApiEndpoint, ApiResponse } from "effect-http";
+import { Schema } from "effect";
 
 import { CreateGeoPointCommandPayload } from "@argazi/application";
 
 import { GeoPointApi } from "./GeoPoint.api.js";
 
 import { BaseResponseFor } from "../BaseResponseFor.js";
-import { BearerAuth } from "../BearerAuth.security-scheme.js";
+import { HttpApiEndpoint } from "@effect/platform";
+import { Empty } from "@effect/platform/HttpApiSchema";
+import { Summary } from "@effect/platform/OpenApi";
 
 export const _CreateGeoPointRequestBody = CreateGeoPointCommandPayload.pipe(
   Schema.annotations({ identifier: "CreateGeoPointRequestBody" })
@@ -39,12 +40,11 @@ export const CreateGeoPointResponse: Schema.Schema<
   CreateGeoPointResponseBodyEncoded
 > = _CreateGeoPointResponseBody;
 
-export const CreateGeoPointEndpoint = ApiEndpoint.post(
+export const CreateGeoPointEndpoint = HttpApiEndpoint.post(
   "createGeoPoint",
   "/geo-points"
-).pipe(
-  ApiEndpoint.setRequestBody(CreateGeoPointRequestBody),
-  ApiEndpoint.setResponse(ApiResponse.make(200, CreateGeoPointResponse)),
-  ApiEndpoint.addResponse(ApiResponse.make(401)),
-  ApiEndpoint.setSecurity(BearerAuth)
-);
+)
+  .annotate(Summary, "Create geo-point")
+  .setPayload(CreateGeoPointRequestBody)
+  .addSuccess(CreateGeoPointResponse)
+  .addError(Empty(401));

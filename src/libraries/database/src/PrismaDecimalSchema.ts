@@ -1,4 +1,4 @@
-import { Schema, ParseResult } from "@effect/schema";
+import { Schema, ParseResult } from "effect";
 import { Decimal } from "@prisma/client/runtime/library.js";
 
 import { _S } from "@argazi/shared";

@@ -1,10 +1,13 @@
 import { ReturnTicketUseCase } from "@argazi/application";
-import { ReturnTicketEndpoint } from "@argazi/rest-api-spec";
 import { Effect } from "effect";
-import { Handler } from "effect-http";
+import { HttpApiBuilder } from "@effect/platform";
 
-export const ReturnTicketHandler = Handler.make(
-  ReturnTicketEndpoint,
+import { RestApiSpec } from "@argazi/rest-api-spec";
+
+export const ReturnTicketHandlerLive = HttpApiBuilder.handler(
+  RestApiSpec,
+  "User",
+  "returnTicket",
   ({ path }) =>
     Effect.gen(function* () {
       const content = yield* ReturnTicketUseCase({
@@ -16,10 +19,5 @@ export const ReturnTicketHandler = Handler.make(
       });
 
       return content;
-    }).pipe(
-      Effect.tapBoth({
-        onFailure: Effect.logError,
-        onSuccess: Effect.logInfo,
-      })
-    )
+    }).pipe(Effect.orDie)
 );

@@ -1,23 +1,20 @@
 import { UpdateUserUseCase } from "@argazi/application";
 import { Effect } from "effect";
-import { Handler } from "effect-http";
+import { HttpApiBuilder } from "@effect/platform";
 import { IdAdmin } from "../../authentication/constants.js";
-import { UpdateUserEndpoint } from "@argazi/rest-api-spec";
+import { RestApiSpec } from "@argazi/rest-api-spec";
 
-export const UpdateUserHandler = Handler.make(
-  UpdateUserEndpoint,
-  ({ body, path }) =>
+export const UpdateUserHandlerLive = HttpApiBuilder.handler(
+  RestApiSpec,
+  "User",
+  "updateUser",
+  ({ payload, path }) =>
     Effect.gen(function* () {
       const newUser = yield* UpdateUserUseCase({
         idInitiator: IdAdmin,
-        payload: { id: path.id, ...body },
+        payload: { id: path.id, ...payload },
       });
 
       return newUser;
-    }).pipe(
-      Effect.tapBoth({
-        onFailure: Effect.logError,
-        onSuccess: Effect.logInfo,
-      })
-    )
+    }).pipe(Effect.orDie)
 );

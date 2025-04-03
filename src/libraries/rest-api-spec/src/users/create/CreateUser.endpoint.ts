@@ -1,10 +1,9 @@
-import * as Schema from "@effect/schema/Schema";
-import { ApiEndpoint } from "effect-http";
+import { Schema } from "effect";
+import { HttpApiEndpoint } from "@effect/platform";
 
 import { CreateUserCommandPayload } from "@argazi/application";
 
 import { BaseResponseFor } from "../../BaseResponseFor.js";
-import { BearerAuth } from "../../BearerAuth.security-scheme.js";
 import { UserApi } from "../User.api.js";
 
 // #region CreateUserRequestBody
@@ -46,12 +45,6 @@ export const CreateUserResponseBody: Schema.Schema<
 > = _CreateUserResponseBody;
 // #endregion CreateUserResponseBody
 
-export const CreateUserEndpoint = ApiEndpoint.post(
-  "createUser",
-  "/users",
-  {}
-).pipe(
-  ApiEndpoint.setRequestBody(CreateUserRequestBody),
-  ApiEndpoint.setResponseBody(CreateUserResponseBody),
-  ApiEndpoint.setSecurity(BearerAuth)
-);
+export const CreateUserEndpoint = HttpApiEndpoint.post("createUser", "/users")
+  .setPayload(CreateUserRequestBody)
+  .addSuccess(CreateUserResponseBody);

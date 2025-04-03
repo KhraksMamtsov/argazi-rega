@@ -26,8 +26,10 @@ export const EventsCommandHandler = (args: {
 
     const { userSubscriptions, userTickets } = yield* Effect.all(
       {
-        userSubscriptions: restApiUserClient.getMySubscriptions({}),
-        userTickets: restApiUserClient.getMyTickets({}),
+        userSubscriptions: restApiUserClient.getMySubscriptions({
+          headers: {},
+        }),
+        userTickets: restApiUserClient.getMyTickets({ headers: {} }),
       },
       { concurrency: "unbounded" }
     );

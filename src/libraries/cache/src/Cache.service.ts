@@ -9,7 +9,7 @@ import {
   Option,
   Redacted,
   Stream,
-  flow,
+  Schema,
 } from "effect";
 import { createClient, type RedisClientOptions } from "redis";
 
@@ -70,7 +70,7 @@ const makeClient = (client: RedisClient) => {
         catch: (cause) => new CacheSetError({ cause }),
         try: () => client.hGet(...args),
       })
-        .pipe(Effect.map(flow(Option.fromNullable, Option.map(Redacted.make))))
+        .pipe(Effect.map(Option.fromNullable))
         .pipe(
           Effect.tapBoth({
             onFailure: Effect.logError,
@@ -138,12 +138,16 @@ export class CacheServiceTag extends Context.Tag("CacheService")<
       this,
       Effect.gen(function* () {
         const password = yield* Config.redacted("REDIS_PASSWORD");
-        const port = yield* Config.redacted("REDIS_PORT");
+        const port = yield* Schema.Config(
+          "REDIS_PORT",
+          Schema.NumberFromString.pipe(Schema.int(), Schema.between(0, 65535))
+        );
         const host = yield* Config.redacted("REDIS_HOST");
 
-        const redisURL = new URL(
-          `redis://:${Redacted.value(password)}@${Redacted.value(host)}:${Redacted.value(port)}`
-        );
+        const redisURL = new URL(host);
+        redisURL.protocol = "redis";
+        redisURL.password = Redacted.value(password);
+        redisURL.port = port.toString();
 
         const initResult = yield* initialize({
           url: redisURL.toString(),

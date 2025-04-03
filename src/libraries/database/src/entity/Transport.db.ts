@@ -1,6 +1,5 @@
-import { Schema } from "@effect/schema";
 import { type Transport as _Transport } from "@prisma/client";
-import { Effect } from "effect";
+import { Effect, Schema } from "effect";
 
 import { IdTransport, Transport, IdUser } from "@argazi/domain";
 import { _SS } from "@argazi/shared";

@@ -1,5 +1,4 @@
-import { AST, Schema } from "@effect/schema";
-import { Option, pipe } from "effect";
+import { Option, pipe, Schema, SchemaAST as AST } from "effect";
 
 import {
   DateCreated,
@@ -9,21 +8,22 @@ import {
   type Base,
 } from "@argazi/domain";
 import { _SS, _S } from "@argazi/shared";
+import type { Json } from "@argazi/shared/Schema";
+
+class ApiMeta extends Schema.Class<ApiMeta>("ApiMeta")({
+  dateCreated: Schema.compose(Schema.DateFromString, DateCreated),
+  dateDeleted: Schema.OptionFromNullOr(
+    Schema.compose(Schema.DateFromString, DateDeleted)
+  ),
+  dateUpdated: Schema.compose(Schema.DateFromString, DateUpdated),
+  idUserCreator: IdUser,
+  idUserDeleter: Schema.OptionFromNullOr(IdUser),
+  idUserUpdater: IdUser,
+}) {}
+ApiMeta.Encoded satisfies Json.Json;
 
 export const ApiBase = Schema.Struct({
-  meta: Schema.Struct({
-    dateCreated: Schema.compose(Schema.DateFromString, DateCreated),
-    dateDeleted: Schema.OptionFromNullOr(
-      Schema.compose(Schema.DateFromString, DateDeleted)
-    ),
-    dateUpdated: Schema.compose(Schema.DateFromString, DateUpdated),
-    idUserCreator: IdUser,
-    idUserDeleter: Schema.OptionFromNullOr(IdUser),
-    idUserUpdater: IdUser,
-  }).pipe(
-    _SS.satisfies.encoded.json(),
-    Schema.annotations({ identifier: "ApiMeta" })
-  ),
+  meta: ApiMeta,
 }).pipe(
   _SS.satisfies.encoded.json(),
   _SS.satisfies.type<Base>(),

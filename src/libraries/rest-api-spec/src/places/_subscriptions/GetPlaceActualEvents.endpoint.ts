@@ -1,10 +1,10 @@
-import * as Schema from "@effect/schema/Schema";
-import { ApiEndpoint } from "effect-http";
+import { Schema } from "effect";
 
 import { IdPlace } from "@argazi/domain";
 
 import { BaseResponseManyFor } from "../../BaseResponseFor.js";
 import { EventApi } from "../../events/Event.api.js";
+import { HttpApiEndpoint } from "@effect/platform";
 
 // #region Schema for GetPlaceActualEventsResponseBody
 const _GetPlaceActualEventsResponseBody = EventApi.pipe(
@@ -47,10 +47,9 @@ export const GetPlaceActualEventsRequestParams: Schema.Schema<
 > = _GetPlaceActualEventsRequestParams;
 // #endregion GetPlaceActualEventsRequestParams
 
-export const GetPlaceActualEventsEndpoint = ApiEndpoint.get(
+export const GetPlaceActualEventsEndpoint = HttpApiEndpoint.get(
   "getPlaceActualEvents",
   "/places/:idPlace/actual-events"
-).pipe(
-  ApiEndpoint.setRequestPath(GetPlaceActualEventsRequestParams),
-  ApiEndpoint.setResponseBody(GetPlaceActualEventsResponseBody)
-);
+)
+  .setPath(GetPlaceActualEventsRequestParams)
+  .addSuccess(GetPlaceActualEventsResponseBody);

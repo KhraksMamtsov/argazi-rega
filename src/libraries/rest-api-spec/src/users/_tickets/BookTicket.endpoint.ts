@@ -1,11 +1,12 @@
-import * as Schema from "@effect/schema/Schema";
-import { ApiEndpoint, ApiResponse } from "effect-http";
+import { Schema } from "effect";
+import { HttpApiEndpoint } from "@effect/platform";
 
 import { IdEvent } from "@argazi/domain";
 import { IdUser } from "@argazi/domain";
 
 import { BaseResponseFor } from "../../BaseResponseFor.js";
 import { TicketApi } from "../../tickets/Ticket.api.js";
+import { Description } from "@effect/platform/OpenApi";
 
 // #region BookTicketResponseBody
 const _BookTicketResponseBody = TicketApi.pipe(
@@ -65,22 +66,17 @@ export const BookTicketRequestParams: Schema.Schema<
 > = _BookTicketRequestParams;
 // #endregion BookTicketRequestParams
 
-export const BookTicketEndpoint = ApiEndpoint.post(
+export const BookTicketEndpoint = HttpApiEndpoint.post(
   "bookTicket",
-  "/users/:idUser/tickets",
-  {
-    summary: "Book ticket for user on particular event",
-  }
-).pipe(
-  ApiEndpoint.setRequestPath(BookTicketRequestParams),
-  ApiEndpoint.setRequestBody(BookTicketRequestBody),
-  ApiEndpoint.setResponse(ApiResponse.make(200, BookTicketResponseBody)),
-  ApiEndpoint.addResponse(
-    ApiResponse.make(
-      400,
-      Schema.String.pipe(
-        Schema.annotations({ description: "UserSubscriptions not found" })
-      )
-    )
-  )
-);
+  "/users/:idUser/tickets"
+)
+  .annotate(Description, "Book ticket for user on particular event")
+  .setPath(BookTicketRequestParams)
+  .setPayload(BookTicketRequestBody)
+  .addSuccess(BookTicketResponseBody)
+  .addError(
+    Schema.String.pipe(
+      Schema.annotations({ description: "UserSubscriptions not found" })
+    ),
+    { status: 400 }
+  );

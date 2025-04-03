@@ -1,10 +1,10 @@
-import * as Schema from "@effect/schema/Schema";
-import { ApiEndpoint, ApiResponse } from "effect-http";
+import { Schema } from "effect";
 
 import { IdSubscription } from "@argazi/domain";
 
 import { BaseResponseFor } from "../../BaseResponseFor.js";
 import { SubscriptionApi } from "../Subscription.api.js";
+import { HttpApiEndpoint } from "@effect/platform";
 
 // #region GetSubscriptionByIdResponseBody
 const _GetSubscriptionByIdResponseBody = SubscriptionApi.pipe(
@@ -45,21 +45,17 @@ export const GetSubscriptionByIdRequestParams: Schema.Schema<
 > = _GetSubscriptionByIdRequestParams;
 // #endregion GetSubscriptionByIdRequestParams
 
-export const GetSubscriptionByIdEndpoint = ApiEndpoint.get(
+export const GetSubscriptionByIdEndpoint = HttpApiEndpoint.get(
   "getSubscription",
-  "/subscriptions/:idSubscription",
-  {}
-).pipe(
-  ApiEndpoint.setRequestPath(GetSubscriptionByIdRequestParams),
-  ApiEndpoint.setResponse(
-    ApiResponse.make(200, GetSubscriptionByIdResponseBody)
-  ),
-  ApiEndpoint.addResponse(
-    ApiResponse.make(
-      400,
-      Schema.String.pipe(
-        Schema.annotations({ description: "Subscription not found" })
-      )
-    )
-  )
-);
+  "/subscriptions/:idSubscription"
+)
+  .setPath(GetSubscriptionByIdRequestParams)
+  .addSuccess(GetSubscriptionByIdResponseBody)
+  .addError(
+    Schema.String.pipe(
+      Schema.annotations({
+        description: "Subscription not found",
+      })
+    ),
+    { status: 400 }
+  );

@@ -5,8 +5,8 @@ import type { IdTelegramChat } from "@argazi/domain";
 import { AccessToken, RefreshToken } from "@argazi/rest-api-spec";
 
 export interface UserCredentials {
-  readonly accessToken: AccessToken;
-  readonly refreshToken: RefreshToken;
+  readonly accessToken: typeof AccessToken.Type;
+  readonly refreshToken: typeof RefreshToken.Type;
 }
 
 const ACCESS_TOKEN_FIELD = "accessToken" satisfies keyof UserCredentials;

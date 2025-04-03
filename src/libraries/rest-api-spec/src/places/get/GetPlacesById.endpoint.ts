@@ -1,10 +1,10 @@
-import * as Schema from "@effect/schema/Schema";
-import { ApiEndpoint } from "effect-http";
+import { Schema } from "effect";
 
 import { IdPlace } from "@argazi/domain";
 
 import { BaseResponseFor } from "../../BaseResponseFor.js";
 import { PlaceApi } from "../Place.api.js";
+import { HttpApiEndpoint } from "@effect/platform";
 
 export const _GetPlaceByIdRequest = Schema.Struct({
   idPlace: IdPlace,
@@ -35,10 +35,9 @@ export const GetPlaceByIdResponseBody: Schema.Schema<
   GetPlaceByIdResponseBodyEncoded
 > = _GetPlaceByIdResponseBody;
 
-export const GetPlaceByIdEndpoint = ApiEndpoint.get(
+export const GetPlaceByIdEndpoint = HttpApiEndpoint.get(
   "getPlaceById",
   "/places/:idPlace"
-).pipe(
-  ApiEndpoint.setRequestPath(GetPlaceByIdRequest),
-  ApiEndpoint.setResponseBody(GetPlaceByIdResponseBody)
-);
+)
+  .setPath(GetPlaceByIdRequest)
+  .addSuccess(GetPlaceByIdResponseBody);

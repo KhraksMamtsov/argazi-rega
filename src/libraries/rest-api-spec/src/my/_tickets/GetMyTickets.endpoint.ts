@@ -1,9 +1,8 @@
-import * as Schema from "@effect/schema/Schema";
-import { ApiEndpoint } from "effect-http";
+import { Schema } from "effect";
 
 import { BaseResponseManyFor } from "../../BaseResponseFor.js";
-import { BearerAuth } from "../../BearerAuth.security-scheme.js";
 import { TicketApi } from "../../tickets/Ticket.api.js";
+import { HttpApiEndpoint } from "@effect/platform";
 
 // #region GetMyTicketsResponseBody
 const _GetMyTicketsResponseBody = TicketApi.pipe(
@@ -25,13 +24,7 @@ export const GetMyTicketsResponseBody: Schema.Schema<
 > = _GetMyTicketsResponseBody;
 // #endregion GetMyTicketsResponseBody
 
-export const GetMyTicketsEndpoint = ApiEndpoint.get(
+export const GetMyTicketsEndpoint = HttpApiEndpoint.get(
   "getMyTickets",
-  "/my/tickets",
-  {
-    summary: "Get user's tickets",
-  }
-).pipe(
-  ApiEndpoint.setResponseBody(GetMyTicketsResponseBody),
-  ApiEndpoint.setSecurity(BearerAuth)
-);
+  "/my/tickets"
+).addSuccess(GetMyTicketsResponseBody);

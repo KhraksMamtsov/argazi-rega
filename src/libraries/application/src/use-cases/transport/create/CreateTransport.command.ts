@@ -1,29 +1,14 @@
-import { Schema } from "@effect/schema";
+import { Schema } from "effect";
 
 import { TransportDb } from "@argazi/database";
-import { _SS } from "@argazi/shared";
 
 import { BaseCausedCommandFor } from "../../common/Base.command.js";
 
-// #region CreateTransportCommandPayload
-const _CreateTransportCommandPayload = TransportDb.pipe(
-  Schema.pick("idUser", "number", "model", "color", "seatsNumber"),
-  Schema.annotations({ identifier: "CreateTransportCommandPayload" })
-).pipe(_SS.satisfies.encoded.json());
-
-export type CreateTransportCommandPayloadContext = Schema.Schema.Context<
-  typeof _CreateTransportCommandPayload
->;
-export interface CreateTransportCommandPayloadEncoded
-  extends Schema.Schema.Encoded<typeof _CreateTransportCommandPayload> {}
-export interface CreateTransportCommandPayload
-  extends Schema.Schema.Type<typeof _CreateTransportCommandPayload> {}
-
-export const CreateTransportCommandPayload: Schema.Schema<
-  CreateTransportCommandPayload,
-  CreateTransportCommandPayloadEncoded
-> = _CreateTransportCommandPayload;
-// #endregion CreateTransportCommandPayload
+export class CreateTransportCommandPayload extends TransportDb.pipe(
+  Schema.pick("idUser", "number", "model", "color", "seatsNumber")
+).annotations({
+  identifier: "CreateTransportCommandPayload",
+}) {}
 
 // #region CreateTransportCommand
 const _CreateTransportCommand = BaseCausedCommandFor(

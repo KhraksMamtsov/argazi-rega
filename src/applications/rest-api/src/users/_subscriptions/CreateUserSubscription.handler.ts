@@ -1,25 +1,25 @@
 import { CreateSubscriptionUseCase } from "@argazi/application";
-import { CreateUserSubscriptionEndpoint } from "@argazi/rest-api-spec";
+import {
+  RestApiSpec,
+  HttpApiUnexpectedServerError,
+} from "@argazi/rest-api-spec";
+import { HttpApiBuilder } from "@effect/platform";
 import { Effect } from "effect";
-import { Handler } from "effect-http";
 
-export const CreateUserSubscriptionHandler = Handler.make(
-  CreateUserSubscriptionEndpoint,
-  ({ path, body }) =>
+export const CreateUserSubscriptionHandlerLive = HttpApiBuilder.handler(
+  RestApiSpec,
+  "User",
+  "createUserSubscription",
+  ({ path, payload }) =>
     Effect.gen(function* () {
       const content = yield* CreateSubscriptionUseCase({
         idInitiator: path.idUser, // Todo: take from security
         payload: {
-          idPlace: body.idPlace,
+          idPlace: payload.idPlace,
           idUser: path.idUser,
         },
       });
 
       return content;
-    }).pipe(
-      Effect.tapBoth({
-        onFailure: Effect.logError,
-        onSuccess: Effect.logInfo,
-      })
-    )
+    }).pipe(Effect.mapError(() => new HttpApiUnexpectedServerError()))
 );

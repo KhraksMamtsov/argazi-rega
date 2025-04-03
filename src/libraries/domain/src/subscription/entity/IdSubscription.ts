@@ -1,4 +1,4 @@
-import { Schema } from "@effect/schema";
+import { Schema } from "effect";
 
 export const IdSubscriptionSymbol: unique symbol = Symbol.for(
   "IdSubscriptionSymbol"

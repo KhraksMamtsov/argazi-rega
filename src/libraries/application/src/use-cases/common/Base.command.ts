@@ -1,5 +1,4 @@
-import { AST, Schema } from "@effect/schema";
-import { Option, pipe } from "effect";
+import { Option, pipe, Schema, SchemaAST as AST } from "effect";
 
 import { IdUser } from "@argazi/domain";
 import { _S } from "@argazi/shared";
@@ -15,7 +14,7 @@ export const BaseCommandFor = <R, I extends _S.Json.Json, A>(
 
   return Schema.Struct({
     payload,
-  }).pipe(Schema.annotations({identifier:baseAnnotation}));
+  }).pipe(Schema.annotations({ identifier: baseAnnotation }));
 };
 
 export type BaseCommand = Schema.Schema.Type<ReturnType<typeof BaseCommandFor>>;
@@ -32,7 +31,7 @@ export const BaseCausedCommandFor = <R, I extends _S.Json.Json, A>(
   return Schema.Struct({
     idInitiator: IdUser,
     payload,
-  }).pipe(Schema.annotations({identifier:baseAnnotation}));
+  }).pipe(Schema.annotations({ identifier: baseAnnotation }));
 };
 
 export type BaseCausedCommand = Schema.Schema.Type<

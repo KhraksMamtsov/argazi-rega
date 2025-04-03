@@ -1,10 +1,13 @@
 import { GetUserTicketByIdUseCase } from "@argazi/application";
-import { GetUserTicketByIdEndpoint } from "@argazi/rest-api-spec";
 import { Effect, pipe } from "effect";
-import { Handler, HttpError } from "effect-http";
 
-export const GetUserTicketByIdHandler = Handler.make(
-  GetUserTicketByIdEndpoint,
+import { RestApiSpec } from "@argazi/rest-api-spec";
+import { HttpApiBuilder } from "@effect/platform";
+
+export const GetUserTicketByIdHandlerLive = HttpApiBuilder.handler(
+  RestApiSpec,
+  "User",
+  "getUserTicketById",
   ({ path }) =>
     Effect.gen(function* () {
       const ticket = yield* pipe(
@@ -15,16 +18,9 @@ export const GetUserTicketByIdHandler = Handler.make(
             idUser: path.idUser,
           },
         }),
-        Effect.flatten,
-        Effect.tapError(Effect.logError),
-        Effect.mapError(() => HttpError.notFound("NotFound2"))
+        Effect.flatten
       );
 
       return ticket;
-    }).pipe(
-      Effect.tapBoth({
-        onFailure: Effect.logError,
-        onSuccess: Effect.logInfo,
-      })
-    )
+    }).pipe(Effect.orDie)
 );

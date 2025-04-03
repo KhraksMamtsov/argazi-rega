@@ -6,7 +6,7 @@
     "declarationDir": "dist",
     "declaration": true,
     "declarationMap": true,
-    "baseUrl": "."
+    // "baseUrl": "."
   },
   "include": ["src"],
   "references": [{

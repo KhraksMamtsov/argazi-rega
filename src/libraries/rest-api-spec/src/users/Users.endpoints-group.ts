@@ -1,5 +1,4 @@
-import { flow } from "effect";
-import { ApiGroup } from "effect-http";
+import { HttpApiGroup } from "@effect/platform";
 
 import { CreateUserSubscriptionEndpoint } from "./_subscriptions/CreateUserSubscription.endpoint.js";
 import { DeleteUserSubscriptionEndpoint } from "./_subscriptions/DeleteUserSubscription.endpoint.js";
@@ -12,31 +11,24 @@ import { CreateUserEndpoint } from "./create/CreateUser.endpoint.js";
 import { GetUserEndpoint } from "./get/GetUser.endpoint.js";
 import { GetManyUsersEndpoint } from "./get-many/GetManyUsers.endpoint.js";
 import { UpdateUserEndpoint } from "./update/UpdateUser.endpoint.js";
+import { BearerAuthentication } from "../_security/BearerAuth.security.js";
 
-export const UsersEndpointsGroup = ApiGroup.make("User").pipe(
-  ApiGroup.addEndpoint(CreateUserEndpoint),
-  ApiGroup.addEndpoint(GetUserEndpoint),
-  ApiGroup.addEndpoint(UpdateUserEndpoint),
-  ApiGroup.addEndpoint(GetManyUsersEndpoint),
+export const UsersEndpointsGroup = HttpApiGroup.make("User")
+  .add(CreateUserEndpoint)
+  .add(GetUserEndpoint)
+  .add(UpdateUserEndpoint)
+  .add(GetManyUsersEndpoint)
   // region Subscriptions
-  flow(
-    ApiGroup.addEndpoint(CreateUserSubscriptionEndpoint),
-    ApiGroup.addEndpoint(GetUserSubscriptionsEndpoint),
-    ApiGroup.addEndpoint(DeleteUserSubscriptionEndpoint)
-  ),
+  .add(CreateUserSubscriptionEndpoint)
+  .add(GetUserSubscriptionsEndpoint)
+  .add(DeleteUserSubscriptionEndpoint)
   // endregion
   // region Tickets
-  flow(
-    //
-    ApiGroup.addEndpoint(BookTicketEndpoint),
-    ApiGroup.addEndpoint(GetUserTicketByIdEndpoint),
-    ApiGroup.addEndpoint(ReturnTicketEndpoint)
-  ),
+  .add(BookTicketEndpoint)
+  .add(GetUserTicketByIdEndpoint)
+  .add(ReturnTicketEndpoint)
   // endregion
   // region Visitors
-  flow(
-    //
-    ApiGroup.addEndpoint(CreateUsersVisitorEndpoint)
-  )
-  // endregion
-);
+  .add(CreateUsersVisitorEndpoint)
+  .middleware(BearerAuthentication);
+// endregion

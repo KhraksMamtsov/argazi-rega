@@ -1,5 +1,5 @@
-import * as Schema from "@effect/schema/Schema";
-import { ApiEndpoint } from "effect-http";
+import { Schema } from "effect";
+import { HttpApiEndpoint } from "@effect/platform";
 
 import { IdUser } from "@argazi/domain";
 
@@ -45,12 +45,9 @@ export const GetManyUsersRequestParams: Schema.Schema<
 > = _GetManyUsersRequestParams;
 // #endregion GetManyUsersRequestParams
 
-export const GetManyUsersEndpoint = ApiEndpoint.post(
+export const GetManyUsersEndpoint = HttpApiEndpoint.post(
   "getManyUsers",
-  "/users/many",
-  {}
-).pipe(
-  //
-  ApiEndpoint.setRequestBody(GetManyUsersRequestParams),
-  ApiEndpoint.setResponseBody(GetManyUsersResponseBody)
-);
+  "/users/many"
+)
+  .setPayload(GetManyUsersRequestParams)
+  .addSuccess(GetManyUsersResponseBody);

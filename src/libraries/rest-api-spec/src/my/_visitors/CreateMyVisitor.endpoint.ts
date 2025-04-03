@@ -1,11 +1,11 @@
-import * as Schema from "@effect/schema/Schema";
-import { ApiEndpoint, ApiResponse } from "effect-http";
+import { Schema } from "effect";
 
 import { _CreateUsersVisitorCommandPayload } from "@argazi/application";
 
 import { BaseResponseFor } from "../../BaseResponseFor.js";
-import { BearerAuth } from "../../BearerAuth.security-scheme.js";
+
 import { VisitorApi } from "../../visitors/Visitor.api.js";
+import { HttpApiEndpoint } from "@effect/platform";
 
 export const CreateMyVisitorResponseBody = VisitorApi.pipe(
   Schema.annotations({ identifier: "CreateMyVisitorResponseBody" }),
@@ -47,21 +47,17 @@ export const CreateMyVisitorResponse = [
   },
 ] as const;
 
-export const CreateMyVisitorEndpoint = ApiEndpoint.post(
+export const CreateMyVisitorEndpoint = HttpApiEndpoint.post(
   "createMyVisitor",
-  "/my/visitors",
-  {
-    summary: "Creates visitor",
-  }
-).pipe(
-  ApiEndpoint.setRequestBody(CreateMyVisitorRequestBody),
-  ApiEndpoint.setResponse(
-    ApiResponse.make(
-      200,
-      CreateMyVisitorResponseBody.pipe(
-        Schema.annotations({ description: "My visitor" })
-      )
+  "/my/visitors"
+)
+  .setPayload(CreateMyVisitorRequestBody)
+  .addSuccess(
+    CreateMyVisitorResponseBody.pipe(
+      Schema.annotations({ description: "My visitor" })
     )
-  ),
-  ApiEndpoint.setSecurity(BearerAuth)
-);
+  )
+  .addError(
+    Schema.String.pipe(Schema.annotations({ description: "User not found" })),
+    { status: 404 }
+  );

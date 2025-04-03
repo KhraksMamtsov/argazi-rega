@@ -1,4 +1,5 @@
 export const CELL_BORDERS = 6;
+
 export type CellBorder = (typeof CellBorders)[number];
 export const CellBorders = [0, 1, 2, 3, 4, 5] as const;
 
@@ -10,6 +11,7 @@ const neighborsMap = {
   4: [3, 5],
   5: [4, 0],
 } as const satisfies Record<CellBorder, [CellBorder, CellBorder]>;
+
 const oppositeMap = {
   0: 3,
   1: 4,

@@ -1,4 +1,4 @@
-import { Schema } from "@effect/schema";
+import { Schema } from "effect";
 
 import { TicketBase } from "@argazi/domain";
 import { _SS } from "@argazi/shared";

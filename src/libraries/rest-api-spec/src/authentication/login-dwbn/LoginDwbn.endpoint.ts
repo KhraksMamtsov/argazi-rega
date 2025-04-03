@@ -1,46 +1,28 @@
-import * as Schema from "@effect/schema/Schema";
-import { ApiEndpoint } from "effect-http";
+import { Schema } from "effect";
 
 import { IdTelegramChat } from "@argazi/domain";
 import { IdUser } from "@argazi/domain";
 
-import { CredentialsApi } from "../Tokens.response.js";
+import { CredentialsResponse } from "../Credentials.response.js";
+import { HttpApiEndpoint } from "@effect/platform";
 
-export const _LoginDwbnRequestBody = Schema.Struct({
-  code: Schema.compose(Schema.Trim, Schema.NonEmptyString),
+export class LoginDwbnRequestBody extends Schema.Class<LoginDwbnRequestBody>(
+  "LoginDwbnRequestBody"
+)({
+  code: Schema.NonEmptyTrimmedString,
   idTelegramChat: IdTelegramChat,
-}).pipe(Schema.annotations({ identifier: "LoginDwbnRequestBody" }));
+}) {}
 
-export interface LoginDwbnRequestBodyEncoded
-  extends Schema.Schema.Encoded<typeof _LoginDwbnRequestBody> {}
-export interface LoginDwbnRequestBody
-  extends Schema.Schema.Type<typeof _LoginDwbnRequestBody> {}
-
-export const LoginDwbnRequestBody: Schema.Schema<
-  LoginDwbnRequestBody,
-  LoginDwbnRequestBodyEncoded
-> = _LoginDwbnRequestBody;
-
-export const _LoginDwbnResponseBody = Schema.Struct({
-  credentials: CredentialsApi,
+export class LoginDwbnResponseBody extends Schema.Class<LoginDwbnResponseBody>(
+  "LoginDwbnResponseBody"
+)({
+  credentials: CredentialsResponse,
   idUser: IdUser,
-}).pipe(Schema.annotations({ identifier: "LoginDwbnResponseBody" }));
+}) {}
 
-export interface LoginDwbnResponseBodyEncoded
-  extends Schema.Schema.Encoded<typeof _LoginDwbnResponseBody> {}
-export interface LoginDwbnResponseBody
-  extends Schema.Schema.Type<typeof _LoginDwbnResponseBody> {}
-
-export const LoginDwbnResponseBody: Schema.Schema<
-  LoginDwbnResponseBody,
-  LoginDwbnResponseBodyEncoded
-> = _LoginDwbnResponseBody;
-
-export const LoginDwbnEndpoint = ApiEndpoint.post(
+export const LoginDwbnEndpoint = HttpApiEndpoint.post(
   "loginDwbn",
-  "/authentication/login-dwbn",
-  {}
-).pipe(
-  ApiEndpoint.setRequestBody(LoginDwbnRequestBody),
-  ApiEndpoint.setResponseBody(LoginDwbnResponseBody)
-);
+  "/authentication/login-dwbn"
+)
+  .setPayload(LoginDwbnRequestBody)
+  .addSuccess(LoginDwbnResponseBody);

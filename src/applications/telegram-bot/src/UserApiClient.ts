@@ -1,5 +1,5 @@
 import { Config, Effect, Layer, Redacted, Context } from "effect";
-import { Client } from "effect-http";
+import { HttpApiClient } from "@effect/platform";
 
 import { RestApiSpec } from "@argazi/rest-api-spec";
 
@@ -74,7 +74,7 @@ export const makeLive = () =>
     //   ) => cb({client: restApiClient, idUser}),
     // };
 
-    const userApiClient = Client.make(RestApiSpec, {
+    const userApiClient = yield* HttpApiClient.make(RestApiSpec, {
       baseUrl: new URL(`${Redacted.value(apiUrl)}:${Redacted.value(apiPort)}`)
         .origin,
     });

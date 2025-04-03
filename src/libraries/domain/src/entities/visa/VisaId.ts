@@ -1,4 +1,4 @@
-import { Schema } from "@effect/schema";
+import { Schema } from "effect";
 
 export const IdVisaSymbol: unique symbol = Symbol.for("IdVisaSymbol");
 export const IdVisa = Schema.UUID.pipe(

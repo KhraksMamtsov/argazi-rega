@@ -1,13 +1,17 @@
 packages:
-  - "src/applications/*"
-  - "src/libraries/*"
-
+  - src/applications/*
+  - src/libraries/*
 catalog:
-  effect: ^3.6.5
-  effect-http: ^0.77.5
-  effect-http-node: ^0.17.8
-  "@effect/platform": ^0.62.2
-  "@effect/platform-node": ^0.57.2
-  "@effect/schema": ^0.71.1
-  "@effect/typeclass": ^0.25.5
-  typescript: "^5.5.4"
+  effect: ^3.14.4
+  '@effect/platform': ^0.80.4
+  '@effect/platform-node': ^0.76.7
+  '@effect/typeclass': ^0.33.4
+  '@effect/cli': ^0.59.4
+  typescript: ^5.8.2
+onlyBuiltDependencies:
+  - '@parcel/watcher'
+  - '@prisma/client'
+  - '@prisma/engines'
+  - esbuild
+  - msgpackr-extract
+  - prisma

@@ -1,4 +1,4 @@
-import * as Schema from "@effect/schema/Schema";
+import { Schema } from "effect";
 
 import { IdDwbn } from "@argazi/domain";
 import { IdTelegramChat } from "@argazi/domain";

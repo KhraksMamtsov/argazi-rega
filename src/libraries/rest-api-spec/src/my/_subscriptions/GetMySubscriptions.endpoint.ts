@@ -1,9 +1,8 @@
-import * as Schema from "@effect/schema/Schema";
-import { ApiEndpoint } from "effect-http";
+import { Schema } from "effect";
 
 import { BaseResponseManyFor } from "../../BaseResponseFor.js";
-import { BearerAuth } from "../../BearerAuth.security-scheme.js";
 import { SubscriptionApi } from "../../subscriptions/Subscription.api.js";
+import { HttpApiEndpoint } from "@effect/platform";
 
 export const _GetMySubscriptionsResponseBody = SubscriptionApi.pipe(
   Schema.annotations({ identifier: "GetMySubscriptionsResponse" }),
@@ -22,13 +21,7 @@ export const GetMySubscriptionsResponse: Schema.Schema<
   Schema.annotations({ description: "UserSubscriptions" })
 );
 
-export const GetMySubscriptionsEndpoint = ApiEndpoint.get(
+export const GetMySubscriptionsEndpoint = HttpApiEndpoint.get(
   "getMySubscriptions",
-  "/my/subscriptions",
-  {
-    summary: "Get all user's subscriptions",
-  }
-).pipe(
-  ApiEndpoint.setResponseBody(GetMySubscriptionsResponse),
-  ApiEndpoint.setSecurity(BearerAuth)
-);
+  "/my/subscriptions"
+).addSuccess(GetMySubscriptionsResponse);

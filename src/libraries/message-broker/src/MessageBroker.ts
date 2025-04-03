@@ -159,7 +159,7 @@ export const live = Effect.gen(function* () {
   } as const;
 });
 
-export const NotificationServiceLive = Layer.effect(
+export const NotificationServiceLive = Layer.scoped(
   NotificationServiceTag,
   live
 );

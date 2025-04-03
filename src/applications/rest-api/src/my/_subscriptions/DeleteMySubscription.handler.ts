@@ -1,10 +1,15 @@
 import { DeleteUserSubscriptionUseCase } from "@argazi/application";
-import { Handler } from "effect-http";
-import { BearerAuthGuard } from "../../BearerAuth.guard.js";
-import { DeleteMySubscriptionEndpoint } from "@argazi/rest-api-spec";
 
-export const DeleteMySubscriptionHandler = Handler.make(
-  DeleteMySubscriptionEndpoint,
+import { BearerAuthGuard } from "../../BearerAuth.guard.js";
+
+import { RestApiSpec } from "@argazi/rest-api-spec";
+import { HttpApiBuilder } from "@effect/platform";
+import { Effect } from "effect";
+
+export const DeleteMySubscriptionHandlerLive = HttpApiBuilder.handler(
+  RestApiSpec,
+  "My",
+  "deleteMySubscription",
   BearerAuthGuard(({ path }, { idInitiator }) =>
     DeleteUserSubscriptionUseCase({
       idInitiator,
@@ -12,6 +17,6 @@ export const DeleteMySubscriptionHandler = Handler.make(
         idSubscription: path.idSubscription,
         idUser: idInitiator,
       },
-    })
+    }).pipe(Effect.orDie)
   )
 );

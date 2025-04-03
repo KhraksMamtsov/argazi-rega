@@ -1,4 +1,4 @@
-import { Schema } from "@effect/schema";
+import { Schema } from "effect";
 import { Effect, Array, HashMap, pipe } from "effect";
 
 import { PrismaServiceTag, UserDbToDomain } from "@argazi/database";

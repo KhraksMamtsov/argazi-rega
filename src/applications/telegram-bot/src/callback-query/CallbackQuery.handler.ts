@@ -1,5 +1,4 @@
 import { absurd, Effect, Redacted } from "effect";
-import { Client } from "effect-http";
 
 import type { AccessToken } from "@argazi/rest-api-spec";
 
@@ -14,7 +13,7 @@ import { PlaceMdComponent } from "../ui/Place.md-component.js";
 import type { CallbackQueryPayload } from "../telegraf/bot/TelegramPayload.js";
 
 export const CallbackQueryHandler = (args: {
-  readonly accessToken: AccessToken;
+  readonly accessToken: typeof AccessToken.Type;
   readonly callbackQueryPayload: CallbackQueryPayload;
 }) =>
   Effect.gen(function* () {
@@ -25,41 +24,40 @@ export const CallbackQueryHandler = (args: {
 
     if (callbackQuery.type === "Ticket") {
       if (callbackQuery.action === "delete") {
-        return yield* restApiService.returnMyTicket(
-          {
-            path: {
-              idTicket: callbackQuery.id,
-            },
+        return yield* restApiService.returnMyTicket({
+          path: {
+            idTicket: callbackQuery.id,
           },
-          Client.setBearer(Redacted.value(args.accessToken))
-        );
+          headers: {
+            Authorization: `Bearer ${Redacted.value(args.accessToken)}`,
+          },
+        });
       } else if (callbackQuery.action === "create") {
-        return yield* restApiService.bookMyTicket(
-          {
-            body: {
-              idEvent: callbackQuery.id,
-            },
+        return yield* restApiService.bookMyTicket({
+          payload: {
+            idEvent: callbackQuery.id,
           },
-
-          Client.setBearer(Redacted.value(args.accessToken))
-        );
+          headers: {
+            Authorization: `Bearer ${Redacted.value(args.accessToken)}`,
+          },
+        });
       }
     } else if (callbackQuery.type === "Subscription") {
       if (callbackQuery.action === "delete") {
-        return yield* restApiService.deleteMySubscription(
-          {
-            path: { idSubscription: callbackQuery.id },
+        return yield* restApiService.deleteMySubscription({
+          path: { idSubscription: callbackQuery.id },
+          headers: {
+            Authorization: `Bearer ${Redacted.value(args.accessToken)}`,
           },
-          Client.setBearer(Redacted.value(args.accessToken))
-        );
+        });
       }
       if (callbackQuery.action === "create") {
-        return yield* restApiService.createMySubscription(
-          {
-            body: { idPlace: callbackQuery.id },
+        return yield* restApiService.createMySubscription({
+          payload: { idPlace: callbackQuery.id },
+          headers: {
+            Authorization: `Bearer ${Redacted.value(args.accessToken)}`,
           },
-          Client.setBearer(Redacted.value(args.accessToken))
-        );
+        });
       }
     }
     if (callbackQuery.type === "Place") {
@@ -106,12 +104,12 @@ export const CallbackQueryHandler = (args: {
     }
     if (callbackQuery.type === "Visitor") {
       if (callbackQuery.action === "delete") {
-        return yield* restApiService.deleteMyVisitor(
-          {
-            path: { idVisitor: callbackQuery.id },
+        return yield* restApiService.deleteMyVisitor({
+          path: { idVisitor: callbackQuery.id },
+          headers: {
+            Authorization: `Bearer ${Redacted.value(args.accessToken)}`,
           },
-          Client.setBearer(Redacted.value(args.accessToken))
-        );
+        });
       }
     }
 

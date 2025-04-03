@@ -1,11 +1,13 @@
 import { GetPlaceGeoPointUseCase } from "@argazi/application";
 import { Effect, pipe } from "effect";
-import { Handler, HttpError } from "effect-http";
 import { IdAdmin } from "../../authentication/constants.js";
-import { GetPlaceGeoPointEndpoint } from "@argazi/rest-api-spec";
+import { HttpApiBuilder } from "@effect/platform";
+import { RestApiSpec } from "@argazi/rest-api-spec";
 
-export const GetPlaceGeoPointHandler = Handler.make(
-  GetPlaceGeoPointEndpoint,
+export const GetPlaceGeoPointHandlerLive = HttpApiBuilder.handler(
+  RestApiSpec,
+  "Place",
+  "getPlaceGeoPoint",
   ({ path }) =>
     Effect.gen(function* () {
       const geoPoint = yield* pipe(
@@ -13,15 +15,9 @@ export const GetPlaceGeoPointHandler = Handler.make(
           idInitiator: IdAdmin,
           payload: { idPlace: path.idPlace },
         }),
-        Effect.flatten,
-        Effect.mapError(() => HttpError.notFound("NotFound4"))
+        Effect.flatten
       );
 
       return geoPoint;
-    }).pipe(
-      Effect.tapBoth({
-        onFailure: Effect.logError,
-        onSuccess: Effect.logInfo,
-      })
-    )
+    }).pipe(Effect.orDie)
 );

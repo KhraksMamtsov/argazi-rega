@@ -1,4 +1,4 @@
-import { Schema } from "@effect/schema";
+import { Schema } from "effect";
 import { Data, Effect, Either, pipe } from "effect";
 
 import { UserDbToDomain } from "@argazi/database";

@@ -1,10 +1,10 @@
-import * as Schema from "@effect/schema/Schema";
-import { ApiEndpoint, ApiResponse } from "effect-http";
+import { Schema } from "effect";
 
 import { IdPlace } from "@argazi/domain";
 
 import { BaseResponseFor } from "../../BaseResponseFor.js";
 import { GeoPointApi } from "../../geo-points/GeoPoint.api.js";
+import { HttpApiEndpoint } from "@effect/platform";
 
 const _GetPlaceGeoPointResponseBody = GeoPointApi.pipe(BaseResponseFor).pipe(
   Schema.annotations({ identifier: "GetPlaceGeoPointResponseBody" })
@@ -36,12 +36,9 @@ export const GetPlaceGeoPointRequestParams: Schema.Schema<
 > = _GetPlaceGeoPointRequestParams;
 // #endregion GetPlaceGeoPointRequestParams
 
-export const GetPlaceGeoPointEndpoint = ApiEndpoint.get(
+export const GetPlaceGeoPointEndpoint = HttpApiEndpoint.get(
   "getPlaceGeoPoint",
-  "/places/:idPlace/geo-point",
-  {}
-).pipe(
-  ApiEndpoint.setRequestPath(GetPlaceGeoPointRequestParams),
-  ApiEndpoint.setResponse(ApiResponse.make(200, GetPlaceGeoPointResponseBody)),
-  ApiEndpoint.addResponse(ApiResponse.make(404))
-);
+  "/places/:idPlace/geo-point"
+)
+  .setPath(GetPlaceGeoPointRequestParams)
+  .addSuccess(GetPlaceGeoPointResponseBody);

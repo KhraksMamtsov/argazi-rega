@@ -4,31 +4,27 @@ import { GetUserUseCase } from "@argazi/application";
 
 import { JwtServiceTag } from "../Jwt.service.js";
 
-import { Handler, HttpError } from "effect-http";
 import {
-  RefreshTokenEndpoint,
   RefreshTokenRequestBody,
+  RestApiSpec,
+  UnauthorizedHttpError,
 } from "@argazi/rest-api-spec";
+import { HttpApiBuilder } from "@effect/platform";
 
-export const RefreshTokenHandler = Handler.make(
-  RefreshTokenEndpoint,
-  ({ body }) =>
+export const RefreshTokenHandlerLive = HttpApiBuilder.handler(
+  RestApiSpec,
+  "Authentication",
+  "refreshToken",
+  ({ payload }) =>
     Effect.gen(function* () {
-      const loginResult = yield* _RefreshTokenHandler(body);
+      const loginResult = yield* _RefreshTokenHandler(payload);
 
       if (Option.isNone(loginResult)) {
-        return yield* HttpError.unauthorized({
-          content: "User not found",
-        });
+        return yield* new UnauthorizedHttpError();
       }
 
       return loginResult.value;
-    }).pipe(
-      Effect.tapBoth({
-        onFailure: Effect.logError,
-        onSuccess: Effect.logInfo,
-      })
-    )
+    }).pipe(Effect.orDie)
 );
 
 export const _RefreshTokenHandler = (body: RefreshTokenRequestBody) =>

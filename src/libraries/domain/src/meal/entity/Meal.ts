@@ -1,4 +1,4 @@
-import { Schema } from "@effect/schema";
+import { Schema } from "effect";
 
 import { IdMeal } from "./IdMeal.js";
 import { MealTypeSchema } from "./MealType.js";

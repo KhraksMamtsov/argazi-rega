@@ -1,4 +1,4 @@
-import { Schema } from "@effect/schema";
+import { Schema } from "effect";
 
 export const IdRouteToEventSymbol: unique symbol = Symbol.for(
   "IdRouteToEventSymbol"

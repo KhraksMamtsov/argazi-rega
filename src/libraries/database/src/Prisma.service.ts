@@ -1,6 +1,14 @@
-import { Schema, ParseResult } from "@effect/schema";
 import { PrismaClient } from "@prisma/client";
-import { Config, Data, Effect, Layer, pipe, Redacted } from "effect";
+import {
+  Config,
+  Data,
+  Effect,
+  Layer,
+  pipe,
+  Redacted,
+  Schema,
+  ParseResult,
+} from "effect";
 
 export class PrismaDecodeError extends Data.TaggedError("PrismaDecodeError")<{
   readonly cause: ParseResult.ParseError;
@@ -50,7 +58,7 @@ const makeLive = Effect.gen(function* () {
   const queryRaw = (...args: Parameters<(typeof prismaClient)["$queryRaw"]>) =>
     Effect.tryPromise({
       catch: (cause) => new PrismaQueryError({ cause }),
-      try: () => prismaClient.$queryRaw.apply(prismaClient, args),
+      try: () => prismaClient.$queryRaw(...args),
     }).pipe(
       Effect.tapError((x) => {
         console.dir(x.cause, { depth: 100 });

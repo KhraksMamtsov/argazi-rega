@@ -1,36 +1,18 @@
-import * as Schema from "@effect/schema/Schema";
-import { ApiEndpoint } from "effect-http";
-
-import { _SS } from "@argazi/shared";
+import { Schema } from "effect";
 
 import { RefreshToken } from "../RefreshToken.js";
-import { TokensResponse } from "../Tokens.response.js";
+import { CredentialsResponse } from "../Credentials.response.js";
+import { HttpApiEndpoint } from "@effect/platform";
 
-export const _RefreshTokenRequestBody = Schema.Struct({
+export class RefreshTokenRequestBody extends Schema.Class<RefreshTokenRequestBody>(
+  "RefreshTokenRequestBody"
+)({
   refreshToken: RefreshToken,
-}).pipe(
-  _SS.satisfies.encoded.json(),
-  Schema.annotations({ identifier: "RefreshTokenRequest" })
-);
+}) {}
 
-export type RefreshTokenRequestBodyContext = Schema.Schema.Context<
-  typeof _RefreshTokenRequestBody
->;
-export interface RefreshTokenRequestBodyEncoded
-  extends Schema.Schema.Encoded<typeof _RefreshTokenRequestBody> {}
-export interface RefreshTokenRequestBody
-  extends Schema.Schema.Type<typeof _RefreshTokenRequestBody> {}
-
-export const RefreshTokenRequestBody: Schema.Schema<
-  RefreshTokenRequestBody,
-  RefreshTokenRequestBodyEncoded
-> = _RefreshTokenRequestBody;
-
-export const RefreshTokenEndpoint = ApiEndpoint.post(
+export const RefreshTokenEndpoint = HttpApiEndpoint.post(
   "refreshToken",
-  "/authentication/refresh-token",
-  {}
-).pipe(
-  ApiEndpoint.setRequestBody(RefreshTokenRequestBody),
-  ApiEndpoint.setResponse(TokensResponse)
-);
+  "/authentication/refresh-token"
+)
+  .setPayload(RefreshTokenRequestBody)
+  .addSuccess(CredentialsResponse);

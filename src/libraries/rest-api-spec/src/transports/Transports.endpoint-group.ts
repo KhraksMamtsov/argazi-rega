@@ -1,7 +1,6 @@
-import { ApiGroup } from "effect-http";
-
 import { CreateTransportEndpoint } from "./CreateTransport.endpoint.js";
+import { HttpApiGroup } from "@effect/platform";
 
-export const TransportsEndpointGroup = ApiGroup.make("Transport").pipe(
-  ApiGroup.addEndpoint(CreateTransportEndpoint)
-);
+export class TransportsEndpointGroup extends HttpApiGroup.make("Transport").add(
+  CreateTransportEndpoint
+) {}

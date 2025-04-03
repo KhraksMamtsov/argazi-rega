@@ -1,4 +1,4 @@
-import { Schema } from "@effect/schema";
+import { Schema } from "effect";
 // import * as _SS from "@argazi/shared/SchemaSatisfy";
 
 export const mutateTransformationFromAnnotations =

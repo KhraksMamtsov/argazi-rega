@@ -1,9 +1,11 @@
-import { Schema } from "@effect/schema";
+import { Schema } from "effect";
 
 export const AccessTokenSymbol: unique symbol = Symbol.for("AccessTokenSymbol");
-export const AccessToken = Schema.Redacted(Schema.String).pipe(
-  Schema.annotations({ identifier: "AccessToken" }),
-  Schema.brand(AccessTokenSymbol)
-);
-
-export type AccessToken = Schema.Schema.Type<typeof AccessToken>;
+export class AccessToken extends Schema.Redacted(
+  Schema.String.pipe(
+    Schema.annotations({ identifier: "AccessToken" }),
+    Schema.brand(AccessTokenSymbol)
+  )
+) {
+  static make = Schema.decodeSync(this);
+}

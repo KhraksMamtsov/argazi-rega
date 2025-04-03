@@ -1,4 +1,4 @@
-import { Schema } from "@effect/schema";
+import { Schema } from "effect";
 import { absurd, Effect } from "effect";
 
 import { PrismaServiceTag, UserDbToDomain } from "@argazi/database";

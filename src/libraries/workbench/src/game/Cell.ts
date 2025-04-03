@@ -1,103 +1,52 @@
-/* eslint-disable  */
 import {
   Data,
   Array,
-  Equal,
-  Unify,
-  HashSet,
-  Either,
   Option,
   Predicate,
+  Equal,
   Equivalence as _Equivalence,
+  Tuple,
+  Hash,
 } from "effect";
-import { Schema } from "@effect/schema";
 import * as Bug from "./Bug.ts";
-import { pipe } from "effect/Function";
+import { dual, pipe } from "effect/Function";
 import * as CellBorder from "./CellBorder.ts";
 
-export type CellBugs = readonly [Bug.Bug, ...ReadonlyArray<Bug.Beetle>];
-export type CellBugsWithBeetle = readonly [
-  Bug.Bug,
-  Bug.Beetle,
-  ...ReadonlyArray<Bug.Beetle>,
-];
-
-export type CellRelation = Data.TaggedEnum<{
-  Neighbor: { border: CellBorder.CellBorder };
-  Detached: {};
-  Same: {};
-}>;
-
-const CellRelation = Data.taggedEnum<CellRelation>();
-
-export const Equivalence: _Equivalence.Equivalence<Cell> = Equal.equals;
-
-export const relation = (a: CellCoords, b: CellCoords) => {
-  if (Equal.equals(a, b)) {
-    return CellRelation.Same();
-  }
-
-  const possibleX = Unify.unify(
-    a.x - 1 === b.x // left
-      ? Either.right(HashSet.fromIterable([5, 1, 0] as const))
-      : a.x + 1 === b.x // right
-        ? Either.right(HashSet.fromIterable([2, 3, 4] as const))
-        : Either.left(CellRelation.Detached())
-  );
-
-  const possibleY = Unify.unify(
-    a.y + 1 === b.y // top
-      ? Either.right(HashSet.fromIterable([1, 2] as const))
-      : a.y === b.y // middle
-        ? Either.right(HashSet.fromIterable([0, 3] as const))
-        : a.y - 1 === b.y // bottom
-          ? Either.right(HashSet.fromIterable([4, 5] as const))
-          : Either.left(CellRelation.Detached())
-  );
-
-  return Either.zipWith(possibleX, possibleY, (x, y) =>
-    CellRelation.Neighbor({ border: [...HashSet.intersection(x, y)][0]! })
-  ).pipe(Either.merge);
-};
+import * as CellRelation from "./CellRelation.ts";
+import * as CoordsDelta from "./CoordsDelta.ts";
+import * as Coords from "./Coords.ts";
+import { SwarmMember } from "./SwarmMember.ts";
 
 export type Cell = Empty | Occupied;
 export const Cell = Data.taggedEnum<Cell>();
 
-export const match = Cell.$match;
+export type EmptyNeighbors = [
+  Option.Option<Cell>,
+  Option.Option<Cell>,
+  Option.Option<Cell>,
+  Option.Option<Cell>,
+  Option.Option<Cell>,
+  Option.Option<Cell>,
+];
 
-export class CellCoords extends Schema.TaggedClass<CellCoords>("CellCoords")(
-  "CellCoords",
-  {
-    x: Schema.Number,
-    y: Schema.Number,
+export class Empty implements Equal.Equal {
+  readonly _tag = "Empty";
+  neighbors: EmptyNeighbors;
+  readonly coords: Coords.Coords;
+
+  constructor(options: { neighbors: EmptyNeighbors; coords: Coords.Coords }) {
+    this.neighbors = options.neighbors;
+    this.coords = options.coords;
   }
-) {
-  static Null = new CellCoords({ x: 0, y: 0 });
-  static Neighbors = (coords: CellCoords) =>
-    [
-      new CellCoords({ x: coords.x - 1, y: coords.y - 0 }), // 0
-      new CellCoords({ x: coords.x - 1, y: coords.y - 1 }), // 1
-      new CellCoords({ x: coords.x + 0, y: coords.y - 1 }), // 2
-      new CellCoords({ x: coords.x + 1, y: coords.y + 0 }), // 3
-      new CellCoords({ x: coords.x + 0, y: coords.y + 1 }), // 4
-      new CellCoords({ x: coords.x - 1, y: coords.y + 1 }), // 5
-    ] as const;
-}
-
-export class Empty extends Data.TaggedClass("Empty")<{
-  coords: CellCoords;
-  neighbors: [
-    Option.Option<Cell>,
-    Option.Option<Cell>,
-    Option.Option<Cell>,
-    Option.Option<Cell>,
-    Option.Option<Cell>,
-    Option.Option<Cell>,
-  ];
-}> {
-  static Empty = () =>
+  [Equal.symbol](that: unknown): boolean {
+    return Empty.is(that) && Equal.equals(this.coords, that.coords);
+  }
+  [Hash.symbol](): number {
+    return Hash.hash(this.coords);
+  }
+  static Detached = (coords: Coords.Coords) =>
     new Empty({
-      coords: new CellCoords({ x: 0, y: 0 }),
+      coords,
       neighbors: [
         Option.none(),
         Option.none(),
@@ -107,6 +56,7 @@ export class Empty extends Data.TaggedClass("Empty")<{
         Option.none(),
       ],
     });
+
   static is(x: unknown): x is Empty {
     return Cell.$is("Empty")(x);
   }
@@ -115,75 +65,131 @@ export class Empty extends Data.TaggedClass("Empty")<{
   }
   // static isOption = Option.liftPredicate(this.is);
 }
-export type Neighbors = [Cell, Cell, Cell, Cell, Cell, Cell];
+export type OccupiedNeighbors = [Cell, Cell, Cell, Cell, Cell, Cell];
 
-export class Occupied<
-  Bugs extends CellBugs = CellBugs,
-> extends Data.TaggedClass("Occupied")<{
-  bugs: Bugs;
-  coords: CellCoords;
-  neighbors: Neighbors;
-}> {
-  // get coords() {
-  // this.coords
-  // }
-  get id() {
-    return [this.coords.x, this.coords.y].join(",");
+export class Occupied<B extends Bug.Bug = Bug.Bug> implements Equal.Equal {
+  readonly _tag = "Occupied";
+  member: SwarmMember<B>;
+  readonly neighbors: OccupiedNeighbors;
+  readonly coords: Coords.Coords;
+
+  constructor(options: {
+    member: SwarmMember<B>;
+    neighbors: OccupiedNeighbors;
+    coords: Coords.Coords;
+  }) {
+    this.member = options.member;
+    this.neighbors = options.neighbors;
+    this.coords = options.coords;
   }
-  get side() {
-    return Array.lastNonEmpty(this.bugs).side;
+
+  [Equal.symbol](that: unknown): boolean {
+    return Cell.$is("Occupied")(that) && Equal.equals(this.coords, that.coords);
   }
-  static is(x: unknown): x is Occupied {
-    return (
-      typeof x === "object" &&
-      x !== null &&
-      "_tag" in x &&
-      x._tag === "CellWithBug"
+  [Hash.symbol](): number {
+    return Hash.hash(this.coords);
+  }
+
+  setBeetles(beetles: ReadonlyArray<Bug.Beetle>) {
+    this.member = new SwarmMember({
+      bug: this.member.bug,
+      beetles,
+    });
+    return this;
+  }
+  static Detached(options: { member: SwarmMember; coords: Coords.Coords }) {
+    const neighbors = Tuple.map(
+      Coords.Coords.Neighbors(options.coords),
+      Empty.Detached
     );
+
+    const occupiedCell = new Occupied({
+      coords: options.coords,
+      member: options.member,
+      neighbors,
+    });
+
+    neighbors.forEach((currentCell, i, _neighbors) => {
+      // link occupied with empty
+      occupiedCell.neighbors[i as CellBorder.CellBorder] = currentCell;
+      const currentCellBorder = CellBorder.opposite(i as CellBorder.CellBorder);
+      currentCell.neighbors[currentCellBorder] = Option.some(occupiedCell);
+
+      const nextCell = _neighbors[(i + 1) % CellBorder.CELL_BORDERS]!;
+      const currentCellNextBorder = ((CellBorder.CELL_BORDERS +
+        currentCellBorder -
+        1) %
+        CellBorder.CELL_BORDERS) as CellBorder.CellBorder;
+
+      // link current empty and next empty
+      currentCell.neighbors[currentCellNextBorder] = Option.some(nextCell);
+      nextCell.neighbors[CellBorder.opposite(currentCellNextBorder)] =
+        Option.some(currentCell);
+    });
+
+    return occupiedCell;
   }
 }
+
+export const side = (cell: Occupied) =>
+  Array.last(cell.member.beetles).pipe(
+    Option.map((x) => x.side),
+    Option.getOrElse(() => cell.member.bug.side)
+  );
+
+export const masterBug = (cell: Occupied) =>
+  Array.last(cell.member.beetles).pipe(
+    Option.getOrElse(() => bugInBasis(cell))
+  );
+
+export const bugInBasis = <B extends Bug.Bug>(cell: Occupied<B>) =>
+  cell.member.bug;
+
+export const withBugInBasis: {
+  <B extends Bug.Bug>(bug: B): (cell: Occupied) => cell is Occupied<B>;
+  <B extends Bug.Bug>(cell: Occupied, bug: B): cell is Occupied<B>;
+} = dual(2, <B extends Bug.Bug>(cell: Occupied, bug: B): cell is Occupied<B> =>
+  Equal.equals(bugInBasis(cell), bug)
+);
+
+export const hasBug: {
+  (bug: Bug.Bug): (cell: Occupied) => boolean;
+  (cell: Occupied, bug: Bug.Bug): boolean;
+} = dual(
+  2,
+  (cell: Occupied, bug: Bug.Bug) =>
+    Array.contains(cell.member.beetles, bug) || withBugInBasis(cell, bug)
+);
+
+export const isBugUnderPressure: {
+  (bug: Bug.Bug): (cell: Occupied) => Option.Option<boolean>;
+  (cell: Occupied, bug: Bug.Bug): Option.Option<boolean>;
+} = dual(
+  2,
+  (cell: Occupied, bug: Bug.Bug): Option.Option<boolean> =>
+    pipe(
+      cell,
+      Option.liftPredicate(hasBug(bug)),
+      Option.map((cell) => !Equal.equals(bug, masterBug(cell)))
+    )
+);
 
 export const isEmptyOrNoneFromBorder =
   (border: CellBorder.CellBorder) => (cell: Empty) =>
     Option.match(cell.neighbors[border], {
       onNone: () => true,
-      onSome: match({
+      onSome: Cell.$match({
         Empty: () => true,
         Occupied: () => false,
       }),
     });
 
-// export const detachedCellWithBug = (bug: Bug.Bug) => {
-//   return new CellWithBug({
-//     bug: [bug],
-//     coords: CellCoords.Null,
-//     neighbors: [
-//       new EmptyCell({ coords: CellCoords.Null, neighbors: [O.Option] }),
-//       new EmptyCell({ coords: CellCoords.Null }),
-//       new EmptyCell({ coords: CellCoords.Null }),
-//       new EmptyCell({ coords: CellCoords.Null }),
-//       new EmptyCell({ coords: CellCoords.Null }),
-//       new EmptyCell({ coords: CellCoords.Null }),
-//     ],
-//   });
-// };
-
-// export const unsafeSetNeighbour =
-//   (cell: Cell) => (options: { border: CellBorder; neighbour: Cell }) => {
-//     cell;
-//   };
-
-// export const possible
-
-// export const landBug = (emptyCell: EmptyCell, bug: Bug.Bug) =>
-//   Either.gen(function* () {});
-
-export const bordersWithNeighborsOccupied = match({
+export const bordersWithNeighborsOccupied = Cell.$match({
   Empty: ({ neighbors }) =>
     Array.filterMap(neighbors, (neighbor, border) =>
       Option.flatMap(
         neighbor,
-        match({
+        Cell.$match({
           Empty: () => Option.none(),
           Occupied: () => Option.some(border as CellBorder.CellBorder),
         })
@@ -192,40 +198,106 @@ export const bordersWithNeighborsOccupied = match({
   Occupied: (x) => _bordersWithNeighborsOccupied(x.neighbors),
 });
 
-const _bordersWithNeighborsOccupied = (neighbors: Neighbors) =>
+const _bordersWithNeighborsOccupied = (neighbors: OccupiedNeighbors) =>
   Array.filterMap(neighbors, (neighbor, border) =>
-    match(neighbor, {
+    Cell.$match(neighbor, {
       Empty: () => Option.none(),
       Occupied: () => Option.some(border as CellBorder.CellBorder),
     })
   );
 
-export const slideableNeighborsEmptyCells = (cell: Cell): Array<Empty> =>
+export const isSurroundedWithOccupiedCells = <O extends Occupied>(
+  occupied: O
+) =>
+  pipe(occupied.neighbors, Array.filter(Cell.$is("Occupied"))).length ===
+  CellBorder.CELL_BORDERS;
+
+export const slideableNeighborsEmptyCells = (
+  cell: Cell // : Array<Empty>
+) =>
   pipe(
     bordersWithNeighborsOccupied(cell),
     Array.flatMap(CellBorder.neighbors),
     CellBorder.unique,
-    Array.filterMap((slideableCellBorder) => {
-      let neighborCell = cell.neighbors[slideableCellBorder];
+    Array.filterMap((cellBorder) => {
+      const [leftNeighborBorder, rightNeighborBorder] =
+        CellBorder.neighbors(cellBorder);
 
-      if (Option.isOption(neighborCell)) {
-        if (Option.isNone(neighborCell)) {
-          return Option.none();
-        }
+      return Cell.$match(cell, {
+        Empty: (emptyCell) => {
+          const cellN = emptyCell.neighbors[cellBorder];
+          if (Option.isNone(cellN)) {
+            // TODO replace with SwarmError.Absurd
+            throw new Error("Can't be Option.None");
+          }
 
-        neighborCell = neighborCell.value;
-      }
+          return Cell.$match(cellN.value, {
+            Empty: (emptyCellN) => {
+              const leftNeighbor = emptyCellN.neighbors[leftNeighborBorder];
+              const rightNeighbor = emptyCellN.neighbors[rightNeighborBorder];
+              const isNeighborOk = Option.match<boolean, Cell>({
+                onNone: () => true,
+                onSome: Empty.is,
+              });
+              return isNeighborOk(leftNeighbor) || isNeighborOk(rightNeighbor)
+                ? Option.some(emptyCellN)
+                : Option.none();
+            },
+            Occupied: () => Option.none(),
+          });
+        },
+        Occupied: (occupiedCell) => {
+          const cellN = occupiedCell.neighbors[cellBorder];
 
-      if (
-        Empty.refine(neighborCell) &&
-        isAccessibleFromBorder(slideableCellBorder)
-      ) {
-        return Option.some(neighborCell);
-      } else {
-        return Option.none();
-      }
+          return Cell.$match(cellN, {
+            Empty: (emptyCellN) =>
+              Empty.is(occupiedCell.neighbors[leftNeighborBorder]) ||
+              Empty.is(occupiedCell.neighbors[rightNeighborBorder])
+                ? Option.some(emptyCellN)
+                : Option.none(),
+            Occupied: () => Option.none(),
+          });
+        },
+      });
+
+      // if (
+      //   Empty.is(cellN) &&
+      //   (Empty.is(cell.neighbors[leftNeighborBorder]) ||
+      //     Empty.is(cell.neighbors[rightNeighborBorder]))
+      // ) {
+      //   return Option.some(cellN);
+      // } else {
+      //   return Option.none();
+      // }
     })
   );
+
+// export const slideableNeighborsEmptyCells = (cell: Cell): Array<Empty> =>
+//   pipe(
+//     bordersWithNeighborsOccupied(cell),
+//     Array.flatMap(CellBorder.neighbors),
+//     CellBorder.unique,
+//     Array.filterMap((slideableCellBorder) => {
+//       let neighborCell = cell.neighbors[slideableCellBorder];
+
+//       if (Option.isOption(neighborCell)) {
+//         if (Option.isNone(neighborCell)) {
+//           return Option.none();
+//         }
+
+//         neighborCell = neighborCell.value;
+//       }
+
+//       if (
+//         Empty.refine(neighborCell) &&
+//         isAccessibleFromBorder(slideableCellBorder)(neighborCell)
+//       ) {
+//         return Option.some(neighborCell);
+//       } else {
+//         return Option.none();
+//       }
+//     })
+//   );
 
 export const isAccessibleFromBorder = (border: CellBorder.CellBorder) => {
   const [neighborBorderA, neighborBorderB] = CellBorder.neighbors(border);
@@ -238,3 +310,30 @@ export const isAccessibleFromBorder = (border: CellBorder.CellBorder) => {
     Predicate.or(accessibleFromNeighborA, accessibleFromNeighborB)
   );
 };
+
+export function getCellRelationByCoords(options: {
+  readonly main: Coords.Coords;
+  readonly neighbor: Coords.Coords;
+}): CellRelation.CellRelation {
+  const { main, neighbor } = options;
+
+  const delta = new CoordsDelta.CoordsDelta({
+    x: main.x - neighbor.x,
+    y: main.y - neighbor.y,
+  });
+
+  const equalsDelta = Equal.equals(delta);
+
+  if (equalsDelta(Coords.Coords.Zero)) {
+    return CellRelation.CellRelation.Same();
+  }
+
+  return Array.findFirstIndex(CoordsDelta.NeighborsVector, equalsDelta).pipe(
+    Option.map((x) =>
+      CellRelation.CellRelation.Neighbor({
+        border: x as CellBorder.CellBorder,
+      })
+    ),
+    Option.getOrElse(() => CellRelation.CellRelation.Detached())
+  );
+}

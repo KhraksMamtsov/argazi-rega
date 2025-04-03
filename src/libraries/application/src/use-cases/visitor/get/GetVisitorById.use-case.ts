@@ -1,4 +1,4 @@
-import { Schema } from "@effect/schema";
+import { Schema } from "effect";
 import { Effect } from "effect";
 
 import { VisitorDbToDomain } from "@argazi/database";

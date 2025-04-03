@@ -1,34 +1,34 @@
 import { Config, Effect, Option, Redacted } from "effect";
-import { Handler, HttpError } from "effect-http";
 
 import { GetUserUseCase, RegisterUserUseCase } from "@argazi/application";
 import { IdDwbn, IdTelegramChat } from "@argazi/domain";
 
 import { IdAdmin, IdArgazipaBot } from "../constants.js";
 import { JwtServiceTag } from "../Jwt.service.js";
-import { LoginBasicEndpoint } from "@argazi/rest-api-spec";
 
-export const LoginBasicHandler = Handler.make(
-  LoginBasicEndpoint,
-  (_, { pass, user }) =>
+import { HttpApiBuilder } from "@effect/platform";
+import { RestApiSpec } from "@argazi/rest-api-spec";
+
+export const LoginBasicHandlerLive = HttpApiBuilder.handler(
+  RestApiSpec,
+  "Authentication",
+  "loginBasic",
+  () =>
     Effect.gen(function* () {
+      const { pass, user } = {} as any;
       const loginResult = yield* _LoginBasicHandler({
         login: Redacted.make(user),
         password: Redacted.make(pass),
       });
 
-      if (HttpError.isHttpError(loginResult)) {
-        return yield* loginResult;
+      if (loginResult === "Wrong secret") {
+        return yield* Effect.dieMessage("Wrong secret");
       }
 
       return loginResult;
-    }).pipe(
-      Effect.tapBoth({
-        onFailure: Effect.logError,
-        onSuccess: Effect.logInfo,
-      })
-    )
+    }).pipe(Effect.orDie)
 );
+
 export const _LoginBasicHandler = (args: {
   readonly login: Redacted.Redacted;
   readonly password: Redacted.Redacted;
@@ -87,7 +87,7 @@ export const _LoginBasicHandler = (args: {
       });
 
       if (Option.isNone(registeredAdminOption)) {
-        return HttpError.notFound("Wrong secret");
+        return "Wrong secret";
       }
 
       return yield* JwtServiceTag.sign({
@@ -95,5 +95,5 @@ export const _LoginBasicHandler = (args: {
         sub: registeredAdminOption.value.id,
       });
     }
-    return HttpError.unauthorized("Wrong secret");
+    return "Wrong secret";
   });

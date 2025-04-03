@@ -1,30 +1,15 @@
-import * as Schema from "@effect/schema/Schema";
-import { ApiEndpoint } from "effect-http";
+import { Schema } from "effect";
+import { HttpApiEndpoint } from "@effect/platform";
 
 import { CreateTransportCommandPayload } from "@argazi/application";
 
 import { TransportApi } from "./Transport.api.js";
 
 import { BaseResponseFor } from "../BaseResponseFor.js";
+import { HttpApiUnexpectedServerError } from "../HttpApiError.js";
 
 // #region CreateTransportRequestBody
-const _CreateTransportRequestBody = CreateTransportCommandPayload.pipe(
-  Schema.annotations({ identifier: "CreateTransportRequestBody" })
-);
-
-export type CreateTransportRequestBodyContext = Schema.Schema.Context<
-  typeof _CreateTransportRequestBody
->;
-export interface CreateTransportRequestBodyEncoded
-  extends Schema.Schema.Encoded<typeof _CreateTransportRequestBody> {}
-export interface CreateTransportRequestBody
-  extends Schema.Schema.Type<typeof _CreateTransportRequestBody> {}
-
-export const CreateTransportRequestBody: Schema.Schema<
-  CreateTransportRequestBody,
-  CreateTransportRequestBodyEncoded
-> = _CreateTransportRequestBody;
-// #endregion CreateTransportRequestBody
+const CreateTransportRequestBody = CreateTransportCommandPayload;
 
 // #region CreateTransportResponse
 const _CreateTransportResponse = TransportApi.pipe(
@@ -46,11 +31,12 @@ export const CreateTransportResponse: Schema.Schema<
 > = _CreateTransportResponse;
 // #endregion CreateTransportResponse
 
-export const CreateTransportEndpoint = ApiEndpoint.post(
+export const CreateTransportEndpoint = HttpApiEndpoint.post(
   "createTransport",
-  "/transports",
-  {}
-).pipe(
-  ApiEndpoint.setRequestBody(CreateTransportRequestBody),
-  ApiEndpoint.setResponseBody(CreateTransportResponse)
-);
+  "/transports"
+)
+  .setPayload(CreateTransportRequestBody)
+  .addSuccess(CreateTransportResponse, {
+    status: 202,
+  })
+  .addError(HttpApiUnexpectedServerError);

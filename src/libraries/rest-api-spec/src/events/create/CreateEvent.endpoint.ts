@@ -1,10 +1,10 @@
-import * as Schema from "@effect/schema/Schema";
-import { ApiEndpoint } from "effect-http";
+import { Schema } from "effect";
 
 import { CreateEventCommandPayload } from "@argazi/application";
 
 import { BaseResponseFor } from "../../BaseResponseFor.js";
 import { EventApi } from "../Event.api.js";
+import { HttpApiEndpoint } from "@effect/platform";
 
 export const CreateEventRequestBody = CreateEventCommandPayload.pipe(
   Schema.annotations({ identifier: "CreateEventRequestBody" })
@@ -25,11 +25,9 @@ export const CreateEventResponse: Schema.Schema<
   CreateEventResponseFrom
 > = _CreateEventResponse;
 
-export const CreateEventEndpoint = ApiEndpoint.post(
+export const CreateEventEndpoint = HttpApiEndpoint.post(
   "createEvent",
-  "/events",
-  {}
-).pipe(
-  ApiEndpoint.setRequestBody(CreateEventRequestBody),
-  ApiEndpoint.setResponseBody(CreateEventResponse)
-);
+  "/events"
+)
+  .setPayload(CreateEventRequestBody)
+  .addSuccess(CreateEventResponse);

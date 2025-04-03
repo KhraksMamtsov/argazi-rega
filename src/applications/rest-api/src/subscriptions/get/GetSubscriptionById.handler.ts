@@ -1,11 +1,14 @@
 import { GetSubscriptionByIdUseCase } from "@argazi/application";
-import { Effect, pipe, Option } from "effect";
-import { Handler, HttpError } from "effect-http";
+import { Effect, pipe } from "effect";
 import { IdAdmin } from "../../authentication/constants.js";
-import { GetSubscriptionByIdEndpoint } from "@argazi/rest-api-spec";
 
-export const GetSubscriptionByIdHandler = Handler.make(
-  GetSubscriptionByIdEndpoint,
+import { HttpApiBuilder } from "@effect/platform";
+import { RestApiSpec } from "@argazi/rest-api-spec";
+
+export const GetSubscriptionByIdHandlerLive = HttpApiBuilder.handler(
+  RestApiSpec,
+  "Subscriptions",
+  "getSubscription",
   ({ path }) =>
     Effect.gen(function* () {
       const subscriptionOption = yield* pipe(
@@ -16,16 +19,6 @@ export const GetSubscriptionByIdHandler = Handler.make(
         Effect.tapError((x) => Effect.logError(x))
       );
 
-      return yield* subscriptionOption.pipe(
-        Option.match({
-          onNone: () => HttpError.notFound("Not Found"),
-          onSome: (subscription) => Effect.succeed(subscription),
-        })
-      );
-    }).pipe(
-      Effect.tapBoth({
-        onFailure: Effect.logError,
-        onSuccess: Effect.logInfo,
-      })
-    )
+      return yield* subscriptionOption;
+    }).pipe(Effect.orDie)
 );

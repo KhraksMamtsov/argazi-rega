@@ -1,10 +1,9 @@
-import * as Schema from "@effect/schema/Schema";
-import { ApiEndpoint } from "effect-http";
+import { Schema } from "effect";
+import { HttpApiEndpoint } from "@effect/platform";
 
 import { IdPlace } from "@argazi/domain";
 
 import { BaseResponseFor } from "../../BaseResponseFor.js";
-import { BearerAuth } from "../../BearerAuth.security-scheme.js";
 import { SubscriptionApi } from "../../subscriptions/Subscription.api.js";
 
 // #region CreateMySubscriptionRequestBody
@@ -51,14 +50,9 @@ export const CreateMySubscriptionResponseBody: Schema.Schema<
 > = _CreateMySubscriptionResponseBody;
 // #endregion CreateMySubscriptionResponseBody
 
-export const CreateMySubscriptionEndpoint = ApiEndpoint.post(
+export const CreateMySubscriptionEndpoint = HttpApiEndpoint.post(
   "createMySubscription",
-  "/my/subscriptions",
-  {
-    summary: "Subscribe user on events of some place",
-  }
-).pipe(
-  ApiEndpoint.setRequestBody(CreateMySubscriptionRequestBody),
-  ApiEndpoint.setResponseBody(CreateMySubscriptionResponseBody),
-  ApiEndpoint.setSecurity(BearerAuth)
-);
+  "/my/subscriptions"
+)
+  .setPayload(CreateMySubscriptionRequestBody)
+  .addSuccess(CreateMySubscriptionResponseBody);

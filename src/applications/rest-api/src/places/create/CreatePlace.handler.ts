@@ -1,23 +1,20 @@
 import { CreatePlaceUseCase } from "@argazi/application";
 import { Effect } from "effect";
-import { Handler } from "effect-http";
 import { IdAdmin } from "../../authentication/constants.js";
-import { CreatePlaceEndpoint } from "@argazi/rest-api-spec";
+import { HttpApiBuilder } from "@effect/platform";
+import { RestApiSpec } from "@argazi/rest-api-spec";
 
-export const CreatePlaceHandler = Handler.make(
-  CreatePlaceEndpoint,
-  ({ body }) =>
+export const CreatePlaceHandlerLive = HttpApiBuilder.handler(
+  RestApiSpec,
+  "Place",
+  "createPlace",
+  ({ payload }) =>
     Effect.gen(function* () {
       const newPlace = yield* CreatePlaceUseCase({
         idInitiator: IdAdmin,
-        payload: body,
+        payload,
       });
 
       return newPlace;
-    }).pipe(
-      Effect.tapBoth({
-        onFailure: Effect.logError,
-        onSuccess: Effect.logInfo,
-      })
-    )
+    }).pipe(Effect.orDie)
 );

@@ -1,5 +1,5 @@
 import type { Simplify } from "effect/Types";
-import type { Schema } from "@effect/schema/Schema";
+import type { Schema } from "effect/Schema";
 
 import { type Json } from "./Schema.js";
 
@@ -16,8 +16,8 @@ const encoded =
     schema as X;
 
 encoded.json =
-  <Encoded extends Json.Json>() =>
-  <X extends Schema.Any>(
+  <Encoded extends Json.Json = Json.Json>() =>
+  <X extends Schema.All>(
     schema: [Schema.Encoded<X>] extends [Encoded]
       ? X
       : {
@@ -30,7 +30,7 @@ encoded.json =
 const type =
   <Type>() =>
   <X extends Schema.Any>(
-    schema: Type extends Schema.Type<X>
+    schema: [Schema.Type<X>] extends [Type]
       ? X
       : {
           expected: Simplify<Type>;
@@ -42,7 +42,7 @@ const type =
 type.json =
   <Type extends Json.Json>() =>
   <X extends Schema.Any>(
-    schema: [Type] extends [Schema.Type<X>]
+    schema: [Schema.Type<X>] extends [Type]
       ? X
       : {
           expected: Simplify<Type>;
@@ -54,7 +54,7 @@ type.json =
 const context =
   <Context>() =>
   <X extends Schema.Any>(
-    schema: Schema.Context<X> extends Context
+    schema: [Schema.Context<X>] extends [Context]
       ? X
       : {
           expected: Simplify<Context>;
@@ -66,7 +66,7 @@ const context =
 context.json =
   <Context extends Json.Json>() =>
   <X extends Schema.Any>(
-    schema: Schema.Context<X> extends Context
+    schema: [Schema.Context<X>] extends [Context]
       ? X
       : {
           expected: Simplify<Context>;

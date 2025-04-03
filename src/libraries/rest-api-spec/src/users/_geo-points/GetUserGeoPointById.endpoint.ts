@@ -1,11 +1,12 @@
-import * as Schema from "@effect/schema/Schema";
-import { ApiEndpoint } from "effect-http";
+import { Schema } from "effect";
+import { HttpApiEndpoint } from "@effect/platform";
 
 import { IdGeoPoint } from "@argazi/domain";
 import { IdUser } from "@argazi/domain";
 
 import { BaseResponseFor } from "../../BaseResponseFor.js";
 import { GeoPointApi } from "../../geo-points/GeoPoint.api.js";
+import { Description } from "@effect/platform/OpenApi";
 
 // #region GetUserGeoPointByIdResponseBody
 const _GetUserGeoPointByIdResponseBody = GeoPointApi.pipe(
@@ -47,13 +48,10 @@ export const GetUserGeoPointByIdRequestParams: Schema.Schema<
 > = _GetUserGeoPointByIdRequestParams;
 // #endregion GetUserGeoPointByIdRequestParams
 
-export const GetUserGeoPointByIdEndpoint = ApiEndpoint.get(
+export const GetUserGeoPointByIdEndpoint = HttpApiEndpoint.get(
   "getUserGeoPointById",
-  "/users/:idUser/geo-points/:idGeoPoint",
-  {
-    summary: "Get user's geo-point",
-  }
-).pipe(
-  ApiEndpoint.setRequestPath(GetUserGeoPointByIdRequestParams),
-  ApiEndpoint.setResponseBody(GetUserGeoPointByIdResponseBody)
-);
+  "/users/:idUser/geo-points/:idGeoPoint"
+)
+  .annotate(Description, "Get user's geo-point")
+  .setPath(GetUserGeoPointByIdRequestParams)
+  .addSuccess(GetUserGeoPointByIdResponseBody);

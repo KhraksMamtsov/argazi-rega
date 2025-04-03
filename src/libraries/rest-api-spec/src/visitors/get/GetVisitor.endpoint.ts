@@ -1,10 +1,11 @@
-import * as Schema from "@effect/schema/Schema";
-import { ApiEndpoint } from "effect-http";
+import { Schema } from "effect";
 
 import { IdVisitor } from "@argazi/domain";
 
 import { BaseResponseFor } from "../../BaseResponseFor.js";
 import { VisitorApi } from "../Visitor.api.js";
+import { HttpApiEndpoint } from "@effect/platform";
+import { Empty } from "@effect/platform/HttpApiSchema";
 
 // #region GetVisitorResponseBody
 const _GetVisitorResponseBody = VisitorApi.pipe(
@@ -45,11 +46,10 @@ export const GetVisitorRequestParams: Schema.Schema<
 > = _GetVisitorRequestParams;
 // #endregion GetVisitorRequestParams
 
-export const GetVisitorEndpoint = ApiEndpoint.get(
+export const GetVisitorEndpoint = HttpApiEndpoint.get(
   "getVisitor",
-  "/visitors/:idVisitor",
-  {}
-).pipe(
-  ApiEndpoint.setRequestPath(GetVisitorRequestParams),
-  ApiEndpoint.setResponseBody(GetVisitorResponseBody)
-);
+  "/visitors/:idVisitor"
+)
+  .setPath(GetVisitorRequestParams)
+  .addSuccess(GetVisitorResponseBody)
+  .addError(Empty(404));

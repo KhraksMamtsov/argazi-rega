@@ -32,7 +32,7 @@ export const EventCreatedNotificationHandler = (args: {
     const idSubscribers = subscriptionsAnswer.map((x) => x.idUser);
 
     const subscribers = yield* restApiClient.getManyUsers({
-      body: {
+      payload: {
         idsUser: [...idSubscribers, ...idSubscribers],
       },
     });

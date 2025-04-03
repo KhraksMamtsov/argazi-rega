@@ -55,6 +55,7 @@ export default [
     rules: {
       //   "sort-keys": ["error"],
       "@typescript-eslint/no-empty-interface": ["off"],
+      "@typescript-eslint/unbound-method": ["off"],
       //   "functional/readonly-type": ["error", "keyword"],
       "@typescript-eslint/method-signature-style": ["error", "property"],
 
@@ -70,6 +71,9 @@ export default [
       //   ],
 
       "@typescript-eslint/consistent-type-definitions": "off",
+      "@typescript-eslint/no-unsafe-assignment": "off",
+      "@typescript-eslint/consistent-indexed-object-style": "off",
+      "@typescript-eslint/no-unsafe-call": "off",
 
       "@typescript-eslint/no-unused-vars": [
         "error",
@@ -79,6 +83,7 @@ export default [
       ],
 
       "@typescript-eslint/no-explicit-any": "off",
+      "@typescript-eslint/no-empty-object-type": "off",
 
       "@typescript-eslint/array-type": [
         "error",

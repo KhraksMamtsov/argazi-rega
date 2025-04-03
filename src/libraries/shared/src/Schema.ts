@@ -1,5 +1,12 @@
-import { AST, ParseResult, Schema } from "@effect/schema";
-import { identity, Option, pipe, Array } from "effect";
+import {
+  identity,
+  Option,
+  pipe,
+  Array,
+  SchemaAST as AST,
+  ParseResult,
+  Schema,
+} from "effect";
 
 // eslint-disable-next-line @typescript-eslint/no-namespace
 export namespace Json {
@@ -27,9 +34,7 @@ export namespace Json {
 
   export type JsonPrimitive = boolean | number | string | null;
   export type JsonArray = ReadonlyArray<Json>;
-  export type JsonRecord = {
-    readonly [K in string]: Json;
-  };
+  export type JsonRecord = { readonly [K in string]: Json };
   export type Json = JsonPrimitive | JsonArray | JsonRecord;
 }
 
@@ -68,22 +73,3 @@ export const OptionNonEmptyArray = <R, I, A>(item: Schema.Schema<A, I, R>) =>
       encode: Option.match({ onNone: () => [], onSome: identity }),
     }
   );
-
-export const URLFromSelf = Schema.instanceOf(URL);
-
-const _URLFromString = Schema.transformOrFail(Schema.String, URLFromSelf, {
-  strict: true,
-  decode: (encoded, _, ast) =>
-    ParseResult.try({
-      try: () => new URL(encoded),
-      catch: (err) =>
-        new ParseResult.Type(
-          ast,
-          encoded,
-          err instanceof Error ? err.message : undefined
-        ),
-    }),
-  encode: (type) => ParseResult.succeed(type.toString()),
-});
-
-export const URLFromString: Schema.Schema<URL, string> = _URLFromString;

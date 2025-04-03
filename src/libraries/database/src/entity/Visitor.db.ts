@@ -1,4 +1,4 @@
-import { Schema } from "@effect/schema";
+import { Schema } from "effect";
 import { type Visitor as _Visitor } from "@prisma/client";
 import { Effect } from "effect";
 

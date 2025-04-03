@@ -1,11 +1,12 @@
-import * as Schema from "@effect/schema/Schema";
-import { ApiEndpoint } from "effect-http";
+import { Schema } from "effect";
+import { HttpApiEndpoint } from "@effect/platform";
 
 import { IdTicket } from "@argazi/domain";
 import { IdUser } from "@argazi/domain";
 
 import { BaseResponseFor } from "../../BaseResponseFor.js";
 import { TicketApi } from "../../tickets/Ticket.api.js";
+import { Description } from "@effect/platform/OpenApi";
 
 // #region GetUserTicketByIdResponseBody
 const _GetUserTicketByIdResponseBody = TicketApi.pipe(
@@ -47,13 +48,10 @@ export const GetUserTicketByIdRequestParams: Schema.Schema<
 > = _GetUserTicketByIdRequestParams;
 // #endregion GetUserTicketByIdRequestParams
 
-export const GetUserTicketByIdEndpoint = ApiEndpoint.get(
+export const GetUserTicketByIdEndpoint = HttpApiEndpoint.get(
   "getUserTicketById",
-  "/users/:idUser/tickets/:idTicket",
-  {
-    summary: "Get user's ticket",
-  }
-).pipe(
-  ApiEndpoint.setRequestPath(GetUserTicketByIdRequestParams),
-  ApiEndpoint.setResponseBody(GetUserTicketByIdResponseBody)
-);
+  "/users/:idUser/tickets/:idTicket"
+)
+  .annotate(Description, "Get user's ticket")
+  .setPath(GetUserTicketByIdRequestParams)
+  .addSuccess(GetUserTicketByIdResponseBody);

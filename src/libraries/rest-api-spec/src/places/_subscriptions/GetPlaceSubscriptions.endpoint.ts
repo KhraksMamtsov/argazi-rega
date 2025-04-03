@@ -1,10 +1,10 @@
-import * as Schema from "@effect/schema/Schema";
-import { ApiEndpoint, ApiResponse } from "effect-http";
+import { Schema } from "effect";
 
 import { IdPlace } from "@argazi/domain";
 
 import { BaseResponseManyFor } from "../../BaseResponseFor.js";
 import { SubscriptionApi } from "../../subscriptions/Subscription.api.js";
+import { HttpApiEndpoint } from "@effect/platform";
 
 export const GetPlaceSubscriptionsResponse = SubscriptionApi.pipe(
   Schema.annotations({ identifier: "GetPlaceSubscriptionsResponse" }),
@@ -30,19 +30,15 @@ export const GetPlaceSubscriptionsRequestPath: Schema.Schema<
 > = _GetPlaceSubscriptionsRequestPath;
 // #endregion GetPlaceSubscriptionsRequestPath
 
-export const GetPlaceSubscriptionsEndpoint = ApiEndpoint.get(
+export const GetPlaceSubscriptionsEndpoint = HttpApiEndpoint.get(
   "getPlaceSubscriptions",
-  "/places/:idPlace/subscriptions",
-  {}
-).pipe(
-  ApiEndpoint.setRequestPath(GetPlaceSubscriptionsRequestPath),
-  ApiEndpoint.setResponse(ApiResponse.make(200, GetPlaceSubscriptionsResponse)),
-  ApiEndpoint.addResponse(
-    ApiResponse.make(
-      404,
-      Schema.String.pipe(
-        Schema.annotations({ description: "PlaceSubscriptions not found" })
-      )
-    )
-  )
-);
+  "/places/:idPlace/subscriptions"
+)
+  .setPath(GetPlaceSubscriptionsRequestPath)
+  .addSuccess(GetPlaceSubscriptionsResponse)
+  .addError(
+    Schema.String.pipe(
+      Schema.annotations({ description: "PlaceSubscriptions not found" })
+    ),
+    { status: 400 }
+  );

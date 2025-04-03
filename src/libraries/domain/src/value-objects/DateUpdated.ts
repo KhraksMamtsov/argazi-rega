@@ -1,4 +1,4 @@
-import { Schema } from "@effect/schema";
+import { Schema } from "effect";
 
 export const DateUpdatedSymbol: unique symbol = Symbol.for("DateUpdated");
 export const DateUpdated = Schema.ValidDateFromSelf.pipe(

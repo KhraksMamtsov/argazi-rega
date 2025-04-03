@@ -6,7 +6,7 @@ export * from "./authentication/refresh-token/RefreshToken.endpoint.js";
 export * from "./authentication/login-basic/LoginBasic.endpoint.js";
 export * from "./authentication/AccessToken.js";
 export * from "./authentication/RefreshToken.js";
-export * from "./authentication/Tokens.response.js";
+export * from "./authentication/Credentials.response.js";
 
 export * from "./events/create/CreateEvent.endpoint.js";
 export * from "./events/get/GetEvent.endpoint.js";
@@ -53,5 +53,10 @@ export * from "./users/get-many/GetManyUsers.endpoint.js";
 export * from "./users/update/UpdateUser.endpoint.js";
 
 export * from "./visitors/get/GetVisitor.endpoint.js";
+
+export * from "./HttpApiError.js";
+export * from "./_security/BasicAuth.security.js";
+export * from "./_security/BearerAuth.security.js";
+export * from "./_security/Security.common.js";
 
 export { RestApiSpec } from "./RestApiSpec.js";

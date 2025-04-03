@@ -1,4 +1,4 @@
-import { Schema } from "@effect/schema";
+import { Schema } from "effect";
 
 export const Longitude = Schema.RedactedFromSelf(Schema.String).pipe(
   Schema.annotations({ identifier: "Longitude" }),

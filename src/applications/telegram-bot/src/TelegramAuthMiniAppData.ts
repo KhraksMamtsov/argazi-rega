@@ -1,4 +1,4 @@
-import { Schema } from "@effect/schema";
+import { Schema } from "effect";
 
 export const _TelegramAuthMiniAppData = Schema.parseJson(
   Schema.Struct({

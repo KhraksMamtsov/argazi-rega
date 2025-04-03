@@ -1,4 +1,4 @@
-import * as Schema from "@effect/schema/Schema";
+import { Schema } from "effect";
 
 import { type GeoPointBase } from "@argazi/domain";
 import { IdGeoPoint } from "@argazi/domain";

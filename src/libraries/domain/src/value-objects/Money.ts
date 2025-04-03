@@ -1,4 +1,4 @@
-import { Schema } from "@effect/schema";
+import { Schema } from "effect";
 
 export const MoneySymbol: unique symbol = Symbol.for("Money");
 

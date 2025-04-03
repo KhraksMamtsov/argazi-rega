@@ -1,10 +1,13 @@
 import { DeleteUserSubscriptionUseCase } from "@argazi/application";
-import { DeleteUserSubscriptionEndpoint } from "@argazi/rest-api-spec";
 import { Effect } from "effect";
-import { Handler } from "effect-http";
 
-export const DeleteUserSubscriptionHandler = Handler.make(
-  DeleteUserSubscriptionEndpoint,
+import { HttpApiBuilder } from "@effect/platform";
+import { RestApiSpec } from "@argazi/rest-api-spec";
+
+export const DeleteUserSubscriptionHandlerLive = HttpApiBuilder.handler(
+  RestApiSpec,
+  "User",
+  "deleteUserSubscription",
   ({ path }) =>
     Effect.gen(function* () {
       const subscription = yield* DeleteUserSubscriptionUseCase({
@@ -16,10 +19,5 @@ export const DeleteUserSubscriptionHandler = Handler.make(
       });
 
       return subscription;
-    }).pipe(
-      Effect.tapBoth({
-        onFailure: Effect.logError,
-        onSuccess: Effect.logInfo,
-      })
-    )
+    }).pipe(Effect.orDie)
 );

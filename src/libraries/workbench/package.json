@@ -12,7 +12,8 @@
     "build": "tsc -b",
     "test": "vitest",
     "typecheck:watch": "tsc --noEmit --watch",
-    "start:watch": "node --watch --experimental-transform-types src/index.ts"
+    "start:watch": "node --watch --experimental-transform-types src/index.ts",
+    "start": "node --watch --experimental-transform-types src/index.ts"
   },
   "dependencies": {
     "@argazi/domain": "workspace:*"

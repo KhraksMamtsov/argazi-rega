@@ -1,10 +1,12 @@
 import { GetUserSubscriptionsUseCase } from "@argazi/application";
-import { GetUserSubscriptionsEndpoint } from "@argazi/rest-api-spec";
 import { Effect } from "effect";
-import { Handler } from "effect-http";
+import { HttpApiBuilder } from "@effect/platform";
+import { RestApiSpec } from "@argazi/rest-api-spec";
 
-export const GetUserSubscriptionsHandler = Handler.make(
-  GetUserSubscriptionsEndpoint,
+export const GetUserSubscriptionsHandlerLive = HttpApiBuilder.handler(
+  RestApiSpec,
+  "User",
+  "getUserSubscriptions",
   ({ path }) =>
     Effect.gen(function* () {
       const content = yield* GetUserSubscriptionsUseCase({
@@ -15,10 +17,5 @@ export const GetUserSubscriptionsHandler = Handler.make(
       });
 
       return content;
-    }).pipe(
-      Effect.tapBoth({
-        onFailure: Effect.logError,
-        onSuccess: Effect.logInfo,
-      })
-    )
+    }).pipe(Effect.orDie)
 );

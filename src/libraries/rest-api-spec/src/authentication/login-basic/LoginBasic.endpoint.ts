@@ -1,25 +1,19 @@
-import * as Schema from "@effect/schema/Schema";
-import { Api, ApiEndpoint, Security } from "effect-http";
+import { Schema } from "effect";
 
 import { _SS } from "@argazi/shared";
 
-import { TokensResponse, CredentialsApi } from "../Tokens.response.js";
+import { CredentialsResponse } from "../Credentials.response.js";
+import { HttpApiEndpoint } from "@effect/platform";
+import { BasicAuthentication } from "../../_security/BasicAuth.security.js";
 
-export const LoginBasicResponseBody = CredentialsApi.pipe(
+export const LoginBasicResponseBody = CredentialsResponse.pipe(
   _SS.satisfies.encoded.json(),
   Schema.annotations({ identifier: "LoginBasicResponseBody" })
 );
 
-export const LoginBasicEndpoint = ApiEndpoint.post(
+export const LoginBasicEndpoint = HttpApiEndpoint.post(
   "loginBasic",
-  "/authentication/login-basic",
-  {}
-).pipe(
-  ApiEndpoint.setResponseBody(LoginBasicResponseBody),
-  ApiEndpoint.setResponse(TokensResponse),
-  Api.setSecurity(
-    Security.basic({
-      name: "basic",
-    })
-  )
-);
+  "/authentication/login-basic"
+)
+  .addSuccess(LoginBasicResponseBody)
+  .middleware(BasicAuthentication);

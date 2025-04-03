@@ -1,10 +1,14 @@
 import { ReturnTicketUseCase } from "@argazi/application";
-import { Handler } from "effect-http";
-import { BearerAuthGuard } from "../../BearerAuth.guard.js";
-import { ReturnMyTicketEndpoint } from "@argazi/rest-api-spec";
 
-export const ReturnMyTicketHandler = Handler.make(
-  ReturnMyTicketEndpoint,
+import { BearerAuthGuard } from "../../BearerAuth.guard.js";
+import { RestApiSpec } from "@argazi/rest-api-spec";
+import { HttpApiBuilder } from "@effect/platform";
+import { Effect } from "effect";
+
+export const ReturnMyTicketHandlerLive = HttpApiBuilder.handler(
+  RestApiSpec,
+  "My",
+  "returnMyTicket",
   BearerAuthGuard((input, { idInitiator }) =>
     ReturnTicketUseCase({
       idInitiator,
@@ -12,6 +16,6 @@ export const ReturnMyTicketHandler = Handler.make(
         id: input.path.idTicket,
         idUser: idInitiator,
       },
-    })
+    }).pipe(Effect.orDie)
   )
 );

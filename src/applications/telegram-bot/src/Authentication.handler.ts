@@ -1,4 +1,4 @@
-import { Schema } from "@effect/schema";
+import { Schema } from "effect";
 import { Effect, Either } from "effect";
 import { constVoid, pipe } from "effect/Function";
 
@@ -51,7 +51,9 @@ export const AuthenticationHandler = (webAppDataPayload: WebAppDataPayload) =>
       yield* restApiService.__new.getUserApiClientFor(idTelegramChat);
 
     const myIdentity = yield* restApiUserClient
-      .getMyIdentity({})
+      .getMyIdentity({
+        headers: {},
+      })
       .pipe(Effect.tapError(Effect.logError));
 
     const answerText = yield* MD.document(

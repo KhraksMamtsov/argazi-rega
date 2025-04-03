@@ -1,4 +1,4 @@
-import { Schema } from "@effect/schema";
+import { Schema } from "effect";
 
 export enum UserType {
   ADULT = "ADULT",
@@ -6,6 +6,6 @@ export enum UserType {
   STUDENT = "STUDENT",
 }
 
-export const UserTypeSchema = Schema.Enums(UserType).pipe(
-  Schema.annotations({ identifier: "UserType" })
-);
+export class UserTypeSchema extends Schema.Enums(UserType).annotations({
+  identifier: "UserType",
+}) {}

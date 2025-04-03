@@ -1,5 +1,4 @@
-import { ParseResult, Schema } from "@effect/schema";
-import { Either, Encoding } from "effect";
+import { Either, Encoding, ParseResult, Schema } from "effect";
 
 export type JWTStruct = Schema.Schema.Type<typeof JWTStruct>;
 

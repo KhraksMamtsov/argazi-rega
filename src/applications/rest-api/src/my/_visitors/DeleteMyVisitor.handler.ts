@@ -1,10 +1,15 @@
 import { DeleteUsersVisitorUseCase } from "@argazi/application";
-import { Handler } from "effect-http";
-import { BearerAuthGuard } from "../../BearerAuth.guard.js";
-import { DeleteMyVisitorEndpoint } from "@argazi/rest-api-spec";
 
-export const DeleteMyVisitorHandler = Handler.make(
-  DeleteMyVisitorEndpoint,
+import { BearerAuthGuard } from "../../BearerAuth.guard.js";
+import { Effect } from "effect";
+
+import { RestApiSpec } from "@argazi/rest-api-spec";
+import { HttpApiBuilder } from "@effect/platform";
+
+export const DeleteMyVisitorHandlerLive = HttpApiBuilder.handler(
+  RestApiSpec,
+  "My",
+  "deleteMyVisitor",
   BearerAuthGuard(({ path }, { idInitiator }) =>
     DeleteUsersVisitorUseCase({
       idInitiator,
@@ -12,6 +17,6 @@ export const DeleteMyVisitorHandler = Handler.make(
         id: path.idVisitor,
         idUser: idInitiator,
       },
-    })
+    }).pipe(Effect.orDie)
   )
 );

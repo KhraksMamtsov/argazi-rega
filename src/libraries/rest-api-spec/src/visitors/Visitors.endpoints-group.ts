@@ -1,7 +1,6 @@
-import { ApiGroup } from "effect-http";
-
+import { HttpApiGroup } from "@effect/platform";
 import { GetVisitorEndpoint } from "./get/GetVisitor.endpoint.js";
 
-export const VisitorsEndpointsGroup = ApiGroup.make("Visitor").pipe(
-  ApiGroup.addEndpoint(GetVisitorEndpoint)
-);
+export class VisitorsEndpointsGroup extends HttpApiGroup.make("Visitor").add(
+  GetVisitorEndpoint
+) {}

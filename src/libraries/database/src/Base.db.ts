@@ -1,5 +1,11 @@
-import { Schema, AST, ParseResult } from "@effect/schema";
-import { Effect, Option, pipe } from "effect";
+import {
+  Effect,
+  Option,
+  pipe,
+  Schema,
+  SchemaAST as AST,
+  ParseResult,
+} from "effect";
 
 import {
   Base,
@@ -29,12 +35,12 @@ export const ToDomainBase = Schema.transform(BaseDb, Base, {
     meta: {
       dateCreated: DateCreated.make(x.dateCreated),
       dateDeleted: Option.fromNullable(x.dateDeleted).pipe(
-        Option.map(DateDeleted.make)
+        Option.map((x) => DateDeleted.make(x))
       ),
       dateUpdated: DateUpdated.make(x.dateUpdated),
       idUserCreator: IdUser.make(x.idUserCreator),
       idUserDeleter: Option.fromNullable(x.idUserDeleter).pipe(
-        Option.map(IdUser.make)
+        Option.map((x) => IdUser.make(x))
       ),
       idUserUpdater: IdUser.make(x.idUserUpdater),
     },

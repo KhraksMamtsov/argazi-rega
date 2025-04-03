@@ -1,11 +1,10 @@
-import * as Schema from "@effect/schema/Schema";
-import { ApiEndpoint } from "effect-http";
+import { Schema } from "effect";
 
 import { IdTicket } from "@argazi/domain";
 
 import { BaseResponseFor } from "../../BaseResponseFor.js";
-import { BearerAuth } from "../../BearerAuth.security-scheme.js";
 import { TicketApi } from "../../tickets/Ticket.api.js";
+import { HttpApiEndpoint } from "@effect/platform";
 
 // #region ReturnMyTicketResponseBody
 const _ReturnMyTicketResponseBody = TicketApi.pipe(
@@ -46,14 +45,9 @@ export const ReturnMyTicketRequestParams: Schema.Schema<
 > = _ReturnMyTicketRequestParams;
 // #endregion ReturnMyTicketRequestParams
 
-export const ReturnMyTicketEndpoint = ApiEndpoint.delete(
+export const ReturnMyTicketEndpoint = HttpApiEndpoint.del(
   "returnMyTicket",
-  "/my/tickets/:idTicket",
-  {
-    summary: "Return ticket for user on particular event",
-  }
-).pipe(
-  ApiEndpoint.setSecurity(BearerAuth),
-  ApiEndpoint.setRequestPath(ReturnMyTicketRequestParams),
-  ApiEndpoint.setResponseBody(ReturnMyTicketResponseBody)
-);
+  "/my/tickets/:idTicket"
+)
+  .setPath(ReturnMyTicketRequestParams)
+  .addSuccess(ReturnMyTicketResponseBody);

@@ -1,9 +1,9 @@
-import * as Schema from "@effect/schema/Schema";
+import { Schema } from "effect";
 
 import { IdEvent, IdPlace, Price, type EventBase } from "@argazi/domain";
-import { _SS } from "@argazi/shared";
+import type { Json } from "@argazi/shared/Schema";
 
-export const _EventApi = Schema.Struct({
+export class EventApi extends Schema.Class<EventApi>("EventApi")({
   dateAnnouncement: Schema.compose(
     Schema.DateFromString,
     Schema.ValidDateFromSelf
@@ -17,14 +17,7 @@ export const _EventApi = Schema.Struct({
   priceDay: Schema.compose(Schema.BigDecimalFromNumber, Price),
   priceEvent: Schema.compose(Schema.BigDecimalFromNumber, Price),
   description: Schema.String,
-}).pipe(
-  _SS.satisfies.encoded.json(),
-  _SS.satisfies.type<EventBase>(),
-  Schema.annotations({ identifier: "EventApi" })
-);
+}) {}
 
-export interface EventApiEncoded
-  extends Schema.Schema.Encoded<typeof _EventApi> {}
-export interface EventApi extends Schema.Schema.Type<typeof _EventApi> {}
-
-export const EventApi: Schema.Schema<EventApi, EventApiEncoded> = _EventApi;
+EventApi.Type satisfies EventBase;
+EventApi.Encoded satisfies Json.Json;

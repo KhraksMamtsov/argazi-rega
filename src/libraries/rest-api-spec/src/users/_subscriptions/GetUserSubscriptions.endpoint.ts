@@ -1,10 +1,11 @@
-import * as Schema from "@effect/schema/Schema";
-import { ApiEndpoint } from "effect-http";
+import { Schema } from "effect";
+import { HttpApiEndpoint } from "@effect/platform";
 
 import { IdUser } from "@argazi/domain";
 
 import { BaseResponseManyFor } from "../../BaseResponseFor.js";
 import { SubscriptionApi } from "../../subscriptions/Subscription.api.js";
+import { Description } from "@effect/platform/OpenApi";
 
 // #region GetUserSubscriptionsResponseBody
 const _GetUserSubscriptionsResponseBody = SubscriptionApi.pipe(
@@ -47,13 +48,10 @@ export const GetUserSubscriptionsRequestParams: Schema.Schema<
 > = _GetUserSubscriptionsRequestParams;
 // #endregion GetUserSubscriptionsRequestParams
 
-export const GetUserSubscriptionsEndpoint = ApiEndpoint.get(
+export const GetUserSubscriptionsEndpoint = HttpApiEndpoint.get(
   "getUserSubscriptions",
-  "/users/:idUser/subscriptions",
-  {
-    summary: "Get all user's subscriptions",
-  }
-).pipe(
-  ApiEndpoint.setRequestPath(GetUserSubscriptionsRequestParams),
-  ApiEndpoint.setResponseBody(GetUserSubscriptionsResponseBody)
-);
+  "/users/:idUser/subscriptions"
+)
+  .annotate(Description, "Get all user's subscriptions")
+  .setPath(GetUserSubscriptionsRequestParams)
+  .addSuccess(GetUserSubscriptionsResponseBody);

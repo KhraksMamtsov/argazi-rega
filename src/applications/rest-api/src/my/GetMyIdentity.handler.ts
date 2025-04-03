@@ -1,22 +1,24 @@
 import { GetUserUseCase } from "@argazi/application";
 import { Effect } from "effect";
-import { Handler, HttpError } from "effect-http";
 import { BearerAuthGuard } from "../BearerAuth.guard.js";
-import { GetMyIdentityEndpoint } from "@argazi/rest-api-spec";
 
-export const GetMyIdentityHandler = Handler.make(
-  GetMyIdentityEndpoint,
-  BearerAuthGuard((_, { idInitiator }) => {
-    const user = GetUserUseCase({
-      payload: {
-        id: idInitiator,
-        type: "id",
-      },
-    }).pipe(
-      Effect.flatten,
-      Effect.mapError(() => HttpError.notFound("NotFound2"))
-    );
+import { HttpApiBuilder } from "@effect/platform";
+import { RestApiSpec } from "@argazi/rest-api-spec";
 
-    return user;
-  })
+export const GetMyIdentityHandlerLive = HttpApiBuilder.handler(
+  RestApiSpec,
+  "My",
+  "getMyIdentity",
+  BearerAuthGuard((_, { idInitiator }) =>
+    Effect.gen(function* () {
+      const user = yield* GetUserUseCase({
+        payload: {
+          id: idInitiator,
+          type: "id",
+        },
+      }).pipe(Effect.flatten);
+
+      return user;
+    }).pipe(Effect.orDie)
+  )
 );

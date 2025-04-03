@@ -1,4 +1,4 @@
-import * as Schema from "@effect/schema/Schema";
+import { Schema } from "effect";
 
 import {
   IdVisitor,
@@ -6,23 +6,15 @@ import {
   VisitorTypeSchema,
   type VisitorData,
 } from "@argazi/domain";
-import { _SS } from "@argazi/shared";
+import type { Json } from "@argazi/shared/Schema";
 
-export const _VisitorApi = Schema.Struct({
-  email: Schema.OptionFromNullOr(Schema.Trimmed.pipe(Schema.nonEmptyString())),
+export class VisitorApi extends Schema.Class<VisitorApi>("VisitorApi")({
+  email: Schema.OptionFromNullOr(Schema.NonEmptyTrimmedString),
   id: IdVisitor,
   idUser: IdUser,
-  name: Schema.Trimmed.pipe(Schema.nonEmptyString()),
+  name: Schema.NonEmptyTrimmedString,
   type: VisitorTypeSchema,
-}).pipe(
-  _SS.satisfies.encoded.json(),
-  _SS.satisfies.type<VisitorData>(),
-  Schema.annotations({ identifier: "VisitorApi" })
-);
+}) {}
 
-export interface VisitorApiFrom
-  extends Schema.Schema.Encoded<typeof _VisitorApi> {}
-export interface VisitorApi extends Schema.Schema.Type<typeof _VisitorApi> {}
-
-export const VisitorApi: Schema.Schema<VisitorApi, VisitorApiFrom> =
-  _VisitorApi;
+VisitorApi.Encoded satisfies Json.Json;
+VisitorApi.Type satisfies VisitorData;

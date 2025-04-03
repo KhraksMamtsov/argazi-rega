@@ -1,17 +1,25 @@
 import { GetVisitorByIdUseCase } from "@argazi/application";
-import { Handler, HttpError } from "effect-http";
+
 import { IdAdmin } from "../../authentication/constants.js";
 import { Effect } from "effect";
-import { GetVisitorEndpoint } from "@argazi/rest-api-spec";
+import { RestApiSpec } from "@argazi/rest-api-spec";
+import { HttpApiBuilder } from "@effect/platform";
 
-export const GetVisitorHandler = Handler.make(GetVisitorEndpoint, ({ path }) =>
-  GetVisitorByIdUseCase({
-    idInitiator: IdAdmin,
-    payload: {
-      idVisitor: path.idVisitor,
-    },
-  }).pipe(
-    Effect.flatten,
-    Effect.mapError(() => HttpError.notFound("NotFound1"))
-  )
+const GetVisitorHandlerLive = HttpApiBuilder.handler(
+  RestApiSpec,
+  "Visitor",
+  "getVisitor",
+  ({ path }) =>
+    GetVisitorByIdUseCase({
+      idInitiator: IdAdmin,
+      payload: {
+        idVisitor: path.idVisitor,
+      },
+    }).pipe(Effect.flatten, Effect.orDie)
+);
+
+export const VisitorGroupHandlerLive = HttpApiBuilder.group(
+  RestApiSpec,
+  "Visitor",
+  (handlers) => handlers.handle("getVisitor", GetVisitorHandlerLive)
 );

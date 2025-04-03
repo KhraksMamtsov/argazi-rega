@@ -1,11 +1,13 @@
 import { GetPlaceActualEventsUseCase } from "@argazi/application";
 import { Effect } from "effect";
-import { Handler } from "effect-http";
 import { IdAdmin } from "../../authentication/constants.js";
-import { GetPlaceActualEventsEndpoint } from "@argazi/rest-api-spec";
+import { HttpApiBuilder } from "@effect/platform";
+import { RestApiSpec } from "@argazi/rest-api-spec";
 
-export const GetPlaceActualEventsHandler = Handler.make(
-  GetPlaceActualEventsEndpoint,
+export const GetPlaceActualEventsHandlerLive = HttpApiBuilder.handler(
+  RestApiSpec,
+  "Place",
+  "getPlaceActualEvents",
   ({ path }) =>
     Effect.gen(function* () {
       const placeActualEvents = yield* GetPlaceActualEventsUseCase(
@@ -17,10 +19,5 @@ export const GetPlaceActualEventsHandler = Handler.make(
       );
 
       return placeActualEvents;
-    }).pipe(
-      Effect.tapBoth({
-        onFailure: Effect.logError,
-        onSuccess: Effect.logInfo,
-      })
-    )
+    }).pipe(Effect.orDie)
 );

@@ -1,9 +1,8 @@
-import * as Schema from "@effect/schema/Schema";
-import { ApiEndpoint } from "effect-http";
+import { Schema } from "effect";
 
 import { BaseResponseFor } from "../BaseResponseFor.js";
-import { BearerAuth } from "../BearerAuth.security-scheme.js";
 import { UserApi } from "../users/User.api.js";
+import { HttpApiEndpoint } from "@effect/platform";
 
 export const _GetMyIdentityResponse = UserApi.pipe(
   Schema.annotations({ identifier: "GetMyIdentityResponse" }),
@@ -20,13 +19,7 @@ export const GetMyIdentityResponse: Schema.Schema<
   GetMyIdentityResponseFrom
 > = _GetMyIdentityResponse;
 
-export const GetMyIdentityEndpoint = ApiEndpoint.get(
+export const GetMyIdentityEndpoint = HttpApiEndpoint.get(
   "getMyIdentity",
-  "/my/identity",
-  {
-    summary: "Get user",
-  }
-).pipe(
-  ApiEndpoint.setResponseBody(GetMyIdentityResponse),
-  ApiEndpoint.setSecurity(BearerAuth)
-);
+  "/my/identity"
+).addSuccess(GetMyIdentityResponse);

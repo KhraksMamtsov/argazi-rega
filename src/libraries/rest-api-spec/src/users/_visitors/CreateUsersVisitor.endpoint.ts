@@ -1,11 +1,10 @@
-import * as Schema from "@effect/schema/Schema";
-import { ApiEndpoint } from "effect-http";
+import { Schema } from "effect";
+import { HttpApiEndpoint, OpenApi } from "@effect/platform";
 
 import { CreateUsersVisitorCommandPayload } from "@argazi/application";
 import { IdUser } from "@argazi/domain";
 
 import { BaseResponseFor } from "../../BaseResponseFor.js";
-import { BearerAuth } from "../../BearerAuth.security-scheme.js";
 import { VisitorApi } from "../../visitors/Visitor.api.js";
 
 // #region CreateUsersVisitorResponseBody
@@ -66,15 +65,11 @@ export const CreateUsersVisitorRequestParams: Schema.Schema<
 > = _CreateUsersVisitorRequestParams;
 // #endregion CreateUsersVisitorRequestParams
 
-export const CreateUsersVisitorEndpoint = ApiEndpoint.post(
+export const CreateUsersVisitorEndpoint = HttpApiEndpoint.post(
   "createUsersVisitor",
-  "/users/:idUser/visitors",
-  {
-    summary: "Creates user's visitor",
-  }
-).pipe(
-  ApiEndpoint.setRequestPath(CreateUsersVisitorRequestParams),
-  ApiEndpoint.setRequestBody(CreateUsersVisitorRequestBody),
-  ApiEndpoint.setResponseBody(CreateUsersVisitorResponseBody),
-  ApiEndpoint.setSecurity(BearerAuth)
-);
+  "/users/:idUser/visitors"
+)
+  .annotate(OpenApi.Description, "Creates user's visitor")
+  .setPath(CreateUsersVisitorRequestParams)
+  .setPayload(CreateUsersVisitorRequestBody)
+  .addSuccess(CreateUsersVisitorResponseBody);

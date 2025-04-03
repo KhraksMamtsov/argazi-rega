@@ -1,5 +1,5 @@
 import * as Visitor from "@argazi/domain/Visitor";
-import { Schema, JSONSchema as JSONSchema_ } from "@effect/schema";
+import { Schema, JSONSchema as JSONSchema_ } from "effect";
 import * as _SS from "@argazi/shared/SchemaSatisfy";
 import { mutateTransformationFromAnnotations } from "./Helpers";
 

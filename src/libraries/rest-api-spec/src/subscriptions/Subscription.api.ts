@@ -1,4 +1,4 @@
-import * as Schema from "@effect/schema/Schema";
+import { Schema } from "effect";
 
 import { IdPlace } from "@argazi/domain";
 import { IdSubscription } from "@argazi/domain";

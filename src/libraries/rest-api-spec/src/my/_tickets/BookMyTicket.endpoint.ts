@@ -1,11 +1,10 @@
-import * as Schema from "@effect/schema/Schema";
-import { ApiEndpoint } from "effect-http";
+import { Schema } from "effect";
 
 import { IdEvent } from "@argazi/domain";
 
 import { BaseResponseFor } from "../../BaseResponseFor.js";
-import { BearerAuth } from "../../BearerAuth.security-scheme.js";
 import { TicketApi } from "../../tickets/Ticket.api.js";
+import { HttpApiEndpoint } from "@effect/platform";
 
 export const BookMyTicketResponseBody = TicketApi.pipe(
   Schema.annotations({ identifier: "BookMyTicketResponseBody" }),
@@ -46,13 +45,7 @@ export const BookMyTicketResponse = [
   },
 ] as const;
 
-export const BookMyTicketEndpoint = ApiEndpoint.post(
+export const BookMyTicketEndpoint = HttpApiEndpoint.post(
   "bookMyTicket",
-  "/my/tickets",
-  {
-    summary: "Book ticket for user on particular event",
-  }
-).pipe(
-  ApiEndpoint.setRequestBody(BookMyTicketRequestBody),
-  ApiEndpoint.setSecurity(BearerAuth)
-);
+  "/my/tickets"
+).setPayload(BookMyTicketRequestBody);

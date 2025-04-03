@@ -1,159 +1,67 @@
-import { HttpClient } from "@effect/platform";
-import { NodeRuntime } from "@effect/platform-node";
-import { Effect, flow, Layer, Logger, LogLevel, pipe } from "effect";
-import { Middlewares, RouterBuilder } from "effect-http";
-import { NodeServer } from "effect-http-node";
+import {
+  HttpApiBuilder,
+  HttpApiScalar,
+  HttpApiSwagger,
+  HttpMiddleware,
+  HttpServer,
+} from "@effect/platform";
+import {
+  NodeHttpClient,
+  NodeHttpServer,
+  NodeRuntime,
+} from "@effect/platform-node";
+
+import { NotificationServiceLive } from "@argazi/message-broker";
+import { Layer } from "effect";
 
 import { PrismaServiceTag } from "@argazi/database";
-import { NotificationServiceLive } from "@argazi/message-broker";
 
-import { JwtServiceTag } from "./authentication/Jwt.service.js";
-import { LoginBasicHandler } from "./authentication/login-basic/LoginBasic.handler.js";
-import { LoginDwbnHandler } from "./authentication/login-dwbn/LoginDwbn.handler.js";
-import { RefreshTokenHandler } from "./authentication/refresh-token/RefreshToken.handler.js";
-import { CreateTransportHandler } from "./transports/CreateTransport.handler.js";
-import { GetVisitorHandler } from "./visitors/get/GetVisitor.handler.js";
-import { CreateEventHandler } from "./events/create/CreateEvent.handler.js";
-import { GetEventHandler } from "./events/get/GetEvent.handler.js";
-import { GetSubscriptionByIdHandler } from "./subscriptions/get/GetSubscriptionById.handler.js";
-import { CreateGeoPointHandler } from "./geo-points/CreateGeoPoint.handler.js";
-import { CreateUsersVisitorHandler } from "./users/_visitors/CreateUsersVisitor.handler.js";
-import { CreatePlaceHandler } from "./places/create/CreatePlace.handler.js";
-import { GetPlaceByIdHandler } from "./places/get/GetPlacesById.handler.js";
-import { GetPlaceGeoPointHandler } from "./places/_geo-points/GetPlaceGeoPoint.handler.js";
-import { GetPlacesHandler } from "./places/get/GetPlaces.handler.js";
-import { GetPlaceSubscriptionsHandler } from "./places/_subscriptions/GetPlaceSubscriptions.handler.js";
-import { GetPlaceActualEventsHandler } from "./places/_subscriptions/GetPlaceActualEvents.handler.js";
-import { CreateUserHandler } from "./users/create/CreateUser.handler.js";
-import { UpdateUserHandler } from "./users/update/UpdateUser.handler.js";
-import { GetUserHandler } from "./users/get/GetUser.handler.js";
-import { GetUserSubscriptionsHandler } from "./users/_subscriptions/GetUserSubscriptions.handler.js";
-import { CreateUserSubscriptionHandler } from "./users/_subscriptions/CreateUserSubscription.handler.js";
-import { DeleteUserSubscriptionHandler } from "./users/_subscriptions/DeleteUserSubscription.handler.js";
-import { GetManyUsersHandler } from "./users/get-many/GetManyUsers.handler.js";
-import { BookTicketHandler } from "./users/_tickets/BookTicket.handler.js";
-import { ReturnTicketHandler } from "./users/_tickets/ReturnTicketOnEvent.handler.js";
-import { GetUserTicketByIdHandler } from "./users/_tickets/GetUserTicketById.handler.js";
-import { GetMyIdentityHandler } from "./my/GetMyIdentity.handler.js";
-import { CreateMyVisitorHandler } from "./my/_visitors/CreateMyVisitor.handler.js";
-import { GetMyVisitorsHandler } from "./my/_visitors/GetMyVisitors.handler.js";
-import { DeleteMyVisitorHandler } from "./my/_visitors/DeleteMyVisitor.handler.js";
-import { ReturnMyTicketHandler } from "./my/_tickets/ReturnMyTicket.handler.js";
-import { GetMyTicketsHandler } from "./my/_tickets/GetMyTickets.handler.js";
-import { BookMyTicketHandler } from "./my/_tickets/BookMyTicket.handler.js";
-import { GetMyTicketByIdHandler } from "./my/_tickets/GetMyTicketById.handler.js";
-import { GetMySubscriptionsHandler } from "./my/_subscriptions/GetMySubscriptions.handler.js";
-import { DeleteMySubscriptionHandler } from "./my/_subscriptions/DeleteMySubscription.handler.js";
-import { CreateMySubscriptionHandler } from "./my/_subscriptions/CreateMySubscription.handler.js";
-import { NotificationServiceTag } from "@argazi/domain";
+import { TransportGroupHandlerLive } from "./transports/Transport.group-handler.js";
+
 import { RestApiSpec } from "@argazi/rest-api-spec";
+import { createServer } from "node:http";
+import { VisitorGroupHandlerLive } from "./visitors/get/GetVisitor.handler.js";
+import { UserGroupHandlerLive } from "./users/User.group-handler.js";
+import { BearerAuthenticationLive } from "./_security/BearerAuth.security.js";
+import { BasicAuthenticationLive } from "./_security/BasicAuth.security.js";
+import { JwtServiceTag } from "./authentication/Jwt.service.js";
+import { AuthenticationGroupHandlerLive } from "./authentication/Authentication.group-handler.js";
+import { GeoPointGroupHandlerLive } from "./geo-points/GeoPoint.group-handler.js";
+import { PlaceGroupHandlerLive } from "./places/Place.group-handler.js";
+import { EventGroupHandlerLive } from "./events/Event.group-handler.js";
+import { MyGroupHandlerLive } from "./my/My.group-handler.js";
+import { SubscriptionGroupHandlerLive } from "./subscriptions/Subscription.group-handler.js";
+import { HealthCheckGroupHandlerLive } from "./healthcheck/Healthcheck.group-handler.js";
 
-export const debugLogger = pipe(
-  Logger.pretty,
-  Layer.merge(Logger.minimumLogLevel(LogLevel.All))
+const RestApiLive = HttpApiBuilder.api(RestApiSpec).pipe(
+  Layer.provide(TransportGroupHandlerLive),
+  Layer.provide(VisitorGroupHandlerLive),
+  Layer.provide(UserGroupHandlerLive),
+  Layer.provide(AuthenticationGroupHandlerLive),
+  Layer.provide(GeoPointGroupHandlerLive),
+  Layer.provide(EventGroupHandlerLive),
+  Layer.provide(PlaceGroupHandlerLive),
+  Layer.provide(MyGroupHandlerLive),
+  Layer.provide(SubscriptionGroupHandlerLive),
+  Layer.provide(HealthCheckGroupHandlerLive)
 );
 
-const app = pipe(
-  RouterBuilder.make(RestApiSpec, { parseOptions: { errors: "all" } }),
-  // #region Authentications handlers
-  flow(
-    RouterBuilder.handle(LoginDwbnHandler),
-    RouterBuilder.handle(LoginBasicHandler),
-    RouterBuilder.handle(RefreshTokenHandler)
+const HttpLive = HttpApiBuilder.serve(HttpMiddleware.logger).pipe(
+  Layer.provide(
+    HttpApiBuilder.middlewareOpenApi({ path: "/docs/openapi.json" })
   ),
-  // #endregion
-  // #region Users handlers
-  flow(
-    RouterBuilder.handle(CreateUsersVisitorHandler),
-    RouterBuilder.handle(CreateUserHandler),
-    RouterBuilder.handle(UpdateUserHandler),
-    RouterBuilder.handle(GetUserHandler),
-    RouterBuilder.handle(GetUserSubscriptionsHandler),
-    RouterBuilder.handle(CreateUserSubscriptionHandler),
-    RouterBuilder.handle(DeleteUserSubscriptionHandler),
-    RouterBuilder.handle(GetManyUsersHandler)
-  ),
-  flow(
-    RouterBuilder.handle(BookTicketHandler),
-    RouterBuilder.handle(ReturnTicketHandler),
-    RouterBuilder.handle(GetUserTicketByIdHandler)
-  ),
-  // #endregion
-  // #region Transport handlers
-  RouterBuilder.handle(CreateTransportHandler),
-  // #endregion
-
-  // #region Event
-  flow(
-    RouterBuilder.handle(CreateEventHandler),
-    RouterBuilder.handle(GetEventHandler)
-  ),
-  // #endregion
-
-  // #region Place
-  flow(
-    RouterBuilder.handle(CreatePlaceHandler),
-    RouterBuilder.handle(GetPlaceByIdHandler),
-    RouterBuilder.handle(GetPlaceGeoPointHandler),
-    RouterBuilder.handle(GetPlacesHandler),
-    RouterBuilder.handle(GetPlaceSubscriptionsHandler),
-    RouterBuilder.handle(GetPlaceActualEventsHandler)
-  ),
-  // #endregion
-
-  // #region Subscriptions handlers
-  RouterBuilder.handle(GetSubscriptionByIdHandler),
-  // #endregion
-  // #region GeoPoints handlers
-  RouterBuilder.handle(CreateGeoPointHandler),
-  // #endregion
-  // #region My handlers
-  flow(
-    RouterBuilder.handle(GetMyIdentityHandler),
-    RouterBuilder.handle(GetMySubscriptionsHandler),
-    RouterBuilder.handle(DeleteMySubscriptionHandler),
-    RouterBuilder.handle(CreateMySubscriptionHandler),
-    RouterBuilder.handle(GetMyTicketByIdHandler),
-    RouterBuilder.handle(ReturnMyTicketHandler),
-    RouterBuilder.handle(GetMyTicketsHandler),
-    RouterBuilder.handle(BookMyTicketHandler),
-    flow(
-      RouterBuilder.handle(CreateMyVisitorHandler),
-      RouterBuilder.handle(GetMyVisitorsHandler),
-      RouterBuilder.handle(DeleteMyVisitorHandler)
-    )
-  ),
-  // #endregion
-  // #region Visitor
-  flow(RouterBuilder.handle(GetVisitorHandler)),
-  // #endregion
-  // #region Healthcheck handlers
-  RouterBuilder.handle("healthCheckPing", (x) =>
-    Effect.gen(function* () {
-      const result = x.query.echo ?? "pong";
-
-      yield* Effect.all([
-        //
-        NotificationServiceTag.healthCheck,
-        PrismaServiceTag.queryRaw`SELECT 1`,
-      ]);
-
-      return result;
-    }).pipe(Effect.tap(Effect.logDebug))
-  )
-  // #endregion
+  Layer.provide(HttpApiSwagger.layer({ path: "/docs/swagger" })),
+  Layer.provide(HttpApiScalar.layer({ source: { type: "cdn" } })),
+  Layer.provide(HttpApiBuilder.middlewareCors()),
+  Layer.provide(RestApiLive),
+  Layer.provide(BasicAuthenticationLive),
+  Layer.provide(BearerAuthenticationLive),
+  Layer.provide(PrismaServiceTag.Live),
+  Layer.provide(NodeHttpClient.layerUndici),
+  Layer.provide(NotificationServiceLive),
+  Layer.provide(JwtServiceTag.Live),
+  HttpServer.withLogAddress,
+  Layer.provide(NodeHttpServer.layer(createServer, { port: 3000 }))
 );
 
-pipe(
-  RouterBuilder.build(app),
-  Middlewares.accessLog(LogLevel.All),
-  Middlewares.errorLog,
-  NodeServer.listen({ port: 80 }),
-  Effect.provide(debugLogger),
-  Effect.provide(PrismaServiceTag.Live),
-  Effect.provide(NotificationServiceLive),
-  Effect.provide(HttpClient.layer),
-  Effect.provide(JwtServiceTag.Live),
-  Effect.scoped,
-  NodeRuntime.runMain
-);
+Layer.launch(HttpLive).pipe(NodeRuntime.runMain);

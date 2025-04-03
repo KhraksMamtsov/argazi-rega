@@ -1,11 +1,13 @@
-import { Schema } from "@effect/schema";
+import { Schema } from "effect";
 
 export const RefreshTokenSymbol: unique symbol =
   Symbol.for("RefreshTokenSymbol");
 
-export const RefreshToken = Schema.Redacted(Schema.String).pipe(
-  Schema.annotations({ identifier: "RefreshToken" }),
-  Schema.brand(RefreshTokenSymbol)
-);
-
-export type RefreshToken = Schema.Schema.Type<typeof RefreshToken>;
+export class RefreshToken extends Schema.Redacted(
+  Schema.String.pipe(
+    Schema.annotations({ identifier: "RefreshToken" }),
+    Schema.brand(RefreshTokenSymbol)
+  )
+) {
+  static make = Schema.decodeSync(this);
+}

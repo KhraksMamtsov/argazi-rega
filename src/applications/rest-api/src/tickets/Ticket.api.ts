@@ -1,4 +1,4 @@
-import * as Schema from "@effect/schema/Schema";
+import { Schema } from "effect";
 
 import { IdTransportOnEvent } from "@argazi/domain";
 import { IdEvent } from "@argazi/domain";

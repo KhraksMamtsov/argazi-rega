@@ -1,8 +1,6 @@
-import * as Schema from "@effect/schema/Schema";
+import { Schema } from "effect";
 
-import { IdTransport } from "@argazi/domain";
-import { IdUser } from "@argazi/domain";
-import type { TransportBase } from "@argazi/domain";
+import { IdUser, IdTransport, type TransportBase } from "@argazi/domain";
 import { _SS } from "@argazi/shared";
 
 // #region TransportApi

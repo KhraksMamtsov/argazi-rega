@@ -1,16 +1,19 @@
 import { GetUserSubscriptionsUseCase } from "@argazi/application";
-import { Handler } from "effect-http";
+import { Effect } from "effect";
+import { HttpApiBuilder } from "@effect/platform";
+import { RestApiSpec } from "@argazi/rest-api-spec";
 import { BearerAuthGuard } from "../../BearerAuth.guard.js";
-import { GetMySubscriptionsEndpoint } from "@argazi/rest-api-spec";
 
-export const GetMySubscriptionsHandler = Handler.make(
-  GetMySubscriptionsEndpoint,
+export const GetMySubscriptionsHandlerLive = HttpApiBuilder.handler(
+  RestApiSpec,
+  "My",
+  "getMySubscriptions",
   BearerAuthGuard((_, { idInitiator }) =>
     GetUserSubscriptionsUseCase({
       idInitiator,
       payload: {
         idUser: idInitiator,
       },
-    })
+    }).pipe(Effect.orDie)
   )
 );

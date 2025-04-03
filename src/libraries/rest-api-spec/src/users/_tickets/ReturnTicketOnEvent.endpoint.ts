@@ -1,11 +1,12 @@
-import * as Schema from "@effect/schema/Schema";
-import { ApiEndpoint } from "effect-http";
+import { Schema } from "effect";
+import { HttpApiEndpoint } from "@effect/platform";
 
 import { IdTicket } from "@argazi/domain";
 import { IdUser } from "@argazi/domain";
 
 import { BaseResponseFor } from "../../BaseResponseFor.js";
 import { TicketApi } from "../../tickets/Ticket.api.js";
+import { Description } from "@effect/platform/OpenApi";
 
 // #region ReturnTicketResponseBody
 const _ReturnTicketResponseBody = TicketApi.pipe(
@@ -47,13 +48,10 @@ export const ReturnTicketRequestParams: Schema.Schema<
 > = _ReturnTicketRequestParams;
 // #endregion ReturnTicketRequestParams
 
-export const ReturnTicketEndpoint = ApiEndpoint.delete(
+export const ReturnTicketEndpoint = HttpApiEndpoint.del(
   "returnTicket",
-  "/users/:idUser/tickets/:idTicket",
-  {
-    summary: "Return ticket for user on particular event",
-  }
-).pipe(
-  ApiEndpoint.setResponseBody(ReturnTicketResponseBody),
-  ApiEndpoint.setRequestPath(ReturnTicketRequestParams)
-);
+  "/users/:idUser/tickets/:idTicket"
+)
+  .annotate(Description, "Return ticket for user on particular event")
+  .setPath(ReturnTicketRequestParams)
+  .addSuccess(ReturnTicketResponseBody);

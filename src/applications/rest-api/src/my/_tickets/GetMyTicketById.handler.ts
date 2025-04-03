@@ -1,11 +1,13 @@
 import { GetUserTicketByIdUseCase } from "@argazi/application";
 import { Effect } from "effect";
-import { Handler, HttpError } from "effect-http";
 import { BearerAuthGuard } from "../../BearerAuth.guard.js";
-import { GetMyTicketByIdEndpoint } from "@argazi/rest-api-spec";
+import { RestApiSpec } from "@argazi/rest-api-spec";
+import { HttpApiBuilder } from "@effect/platform";
 
-export const GetMyTicketByIdHandler = Handler.make(
-  GetMyTicketByIdEndpoint,
+export const GetMyTicketByIdHandlerLive = HttpApiBuilder.handler(
+  RestApiSpec,
+  "My",
+  "getMyTicketById",
   BearerAuthGuard((input, { idInitiator }) =>
     GetUserTicketByIdUseCase({
       idInitiator,
@@ -13,10 +15,6 @@ export const GetMyTicketByIdHandler = Handler.make(
         idTicket: input.path.idTicket,
         idUser: idInitiator,
       },
-    }).pipe(
-      Effect.flatten,
-      Effect.tapError(Effect.logError),
-      Effect.mapError(() => HttpError.notFound("NotFound2"))
-    )
+    }).pipe(Effect.flatten, Effect.orDie)
   )
 );

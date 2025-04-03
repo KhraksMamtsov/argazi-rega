@@ -1,10 +1,14 @@
 import { GetUsersVisitorsUseCase } from "@argazi/application";
-import { Handler } from "effect-http";
 import { BearerAuthGuard } from "../../BearerAuth.guard.js";
-import { GetMyVisitorsEndpoint } from "@argazi/rest-api-spec";
 
-export const GetMyVisitorsHandler = Handler.make(
-  GetMyVisitorsEndpoint,
+import { HttpApiBuilder } from "@effect/platform";
+import { RestApiSpec } from "@argazi/rest-api-spec";
+import { Effect } from "effect";
+
+export const GetMyVisitorsHandlerLive = HttpApiBuilder.handler(
+  RestApiSpec,
+  "My",
+  "getMyVisitors",
   BearerAuthGuard((_, { idInitiator }) =>
     GetUsersVisitorsUseCase(
       {
@@ -14,6 +18,6 @@ export const GetMyVisitorsHandler = Handler.make(
         },
       },
       { includeDeleted: false }
-    )
+    ).pipe(Effect.orDie)
   )
 );

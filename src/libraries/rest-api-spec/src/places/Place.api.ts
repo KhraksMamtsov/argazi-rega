@@ -1,4 +1,4 @@
-import * as Schema from "@effect/schema/Schema";
+import { Schema } from "effect";
 
 import { IdGeoPoint } from "@argazi/domain";
 import { IdPlace } from "@argazi/domain";

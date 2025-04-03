@@ -1,11 +1,12 @@
-import * as Schema from "@effect/schema/Schema";
-import { ApiEndpoint } from "effect-http";
+import { Schema } from "effect";
+import { HttpApiEndpoint } from "@effect/platform";
 
 import { IdPlace } from "@argazi/domain";
 import { IdUser } from "@argazi/domain";
 
 import { BaseResponseFor } from "../../BaseResponseFor.js";
 import { SubscriptionApi } from "../../subscriptions/Subscription.api.js";
+import { Description } from "@effect/platform/OpenApi";
 
 // #region CreateUserSubscriptionResponseBody
 const _CreateUserSubscriptionResponseBody = SubscriptionApi.pipe(
@@ -68,14 +69,11 @@ export const CreateUserSubscriptionRequestParams: Schema.Schema<
 > = _CreateUserSubscriptionRequestParams;
 // #endregion CreateUserSubscriptionRequestParams
 
-export const CreateUserSubscriptionEndpoint = ApiEndpoint.post(
+export const CreateUserSubscriptionEndpoint = HttpApiEndpoint.post(
   "createUserSubscription",
-  "/users/:idUser/subscriptions",
-  {
-    summary: "Subscribe user on events of some place",
-  }
-).pipe(
-  ApiEndpoint.setRequestBody(CreateUserSubscriptionRequestBody),
-  ApiEndpoint.setRequestPath(CreateUserSubscriptionRequestParams),
-  ApiEndpoint.setResponseBody(CreateUserSubscriptionResponseBody)
-);
+  "/users/:idUser/subscriptions"
+)
+  .annotate(Description, "Subscribe user on events of some place")
+  .setPath(CreateUserSubscriptionRequestParams)
+  .setPayload(CreateUserSubscriptionRequestBody)
+  .addSuccess(CreateUserSubscriptionResponseBody);

@@ -1,10 +1,10 @@
-import * as Schema from "@effect/schema/Schema";
-import { ApiEndpoint } from "effect-http";
+import { Schema } from "effect";
 
 import { IdEvent } from "@argazi/domain";
 
 import { BaseResponseFor } from "../../BaseResponseFor.js";
 import { EventApi } from "../Event.api.js";
+import { HttpApiEndpoint } from "@effect/platform";
 
 export const _GetEventResponseBody = EventApi.pipe(
   Schema.annotations({ identifier: "GetEventResponse" }),
@@ -35,11 +35,9 @@ export const GetEventRequestPath: Schema.Schema<
   GetEventRequestPathFrom
 > = _GetEventRequestPath;
 
-export const GetEventEndpoint = ApiEndpoint.get(
+export const GetEventEndpoint = HttpApiEndpoint.get(
   "getEvent",
-  "/events/:idEvent",
-  {}
-).pipe(
-  ApiEndpoint.setRequestPath(GetEventRequestPath),
-  ApiEndpoint.setResponseBody(GetEventResponseBody)
-);
+  "/events/:idEvent"
+)
+  .setPath(GetEventRequestPath)
+  .addSuccess(GetEventResponseBody);

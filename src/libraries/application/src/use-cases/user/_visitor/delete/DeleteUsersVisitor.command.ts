@@ -1,4 +1,4 @@
-import { Schema } from "@effect/schema";
+import { Schema } from "effect";
 
 import { VisitorData } from "@argazi/domain";
 import { _SS } from "@argazi/shared";

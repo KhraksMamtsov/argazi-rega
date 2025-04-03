@@ -1,5 +1,4 @@
-import * as Schema from "@effect/schema/Schema";
-import { ApiEndpoint } from "effect-http";
+import { Schema } from "effect";
 
 import { CreatePlaceCommandPayload } from "@argazi/application";
 import { IdGeoPoint } from "@argazi/domain";
@@ -8,6 +7,7 @@ import { type PlaceBase } from "@argazi/domain";
 import { _SS } from "@argazi/shared";
 
 import { BaseResponseFor } from "../../BaseResponseFor.js";
+import { HttpApiEndpoint } from "@effect/platform";
 
 // #region CreatePlaceRequestBody
 const _CreatePlaceRequestBody = CreatePlaceCommandPayload.pipe(
@@ -55,11 +55,9 @@ export const CreatePlaceResponse: Schema.Schema<
 > = _CreatePlaceResponse;
 // #endregion Schema for  CreatePlaceResponse
 
-export const CreatePlaceEndpoint = ApiEndpoint.post(
+export const CreatePlaceEndpoint = HttpApiEndpoint.post(
   "createPlace",
-  "/places",
-  {}
-).pipe(
-  ApiEndpoint.setRequestBody(CreatePlaceRequestBody),
-  ApiEndpoint.setResponseBody(CreatePlaceResponse)
-);
+  "/places"
+)
+  .setPayload(CreatePlaceRequestBody)
+  .addSuccess(CreatePlaceResponse);
