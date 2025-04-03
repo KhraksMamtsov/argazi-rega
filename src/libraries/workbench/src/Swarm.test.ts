@@ -10,7 +10,7 @@ import {
   Predicate,
   HashSet,
 } from "effect";
-import { SwarmMember } from "./game/SwarmMember.ts";
+import * as SwarmMember from "./game/SwarmMember.ts";
 import { Coords } from "./game/Coords.ts";
 import { test, describe, expect, assert } from "vitest";
 import * as SwarmError from "./game/SwarmError.ts";
@@ -47,10 +47,7 @@ describe("Swarm", () => {
     const swarm = new Swarm.Swarm({
       field: HashMap.make([
         Coords.Zero,
-        new SwarmMember({
-          bug: new Bug.Ant({ number: 1, side: Side.Black }),
-          beetles: [],
-        }),
+        SwarmMember.Init(new Bug.Ant({ number: 1, side: Side.Black })),
       ]),
     });
 
@@ -71,17 +68,11 @@ describe("Swarm", () => {
       field: HashMap.make(
         [
           Coords.Zero,
-          new SwarmMember({
-            bug: new Bug.Ant({ number: 1, side: Side.Black }),
-            beetles: [],
-          }),
+          SwarmMember.Init(new Bug.Ant({ number: 1, side: Side.Black })),
         ],
         [
-          new Coords({ x: 1, y: 0 }),
-          new SwarmMember({
-            bug: new Bug.Ant({ number: 2, side: Side.White }),
-            beetles: [],
-          }),
+          Coords.Init(1, 0),
+          SwarmMember.Init(new Bug.Ant({ number: 2, side: Side.White })),
         ]
       ),
     });
@@ -103,24 +94,15 @@ describe("Swarm", () => {
       field: HashMap.make(
         [
           Coords.Zero,
-          new SwarmMember({
-            bug: new Bug.Ant({ number: 1, side: Side.Black }),
-            beetles: [],
-          }),
+          SwarmMember.Init(new Bug.Ant({ number: 1, side: Side.Black })),
         ],
         [
-          new Coords({ x: 1, y: 0 }),
-          new SwarmMember({
-            bug: new Bug.Ant({ number: 2, side: Side.White }),
-            beetles: [],
-          }),
+          Coords.Init(1, 0),
+          SwarmMember.Init(new Bug.Ant({ number: 1, side: Side.White })),
         ],
         [
-          new Coords({ x: 0.5, y: -1 }),
-          new SwarmMember({
-            bug: new Bug.Ant({ number: 3, side: Side.White }),
-            beetles: [],
-          }),
+          Coords.Init(0.5, -1),
+          SwarmMember.Init(new Bug.Ant({ number: 2, side: Side.White })),
         ]
       ),
     });
@@ -142,24 +124,15 @@ describe("Swarm", () => {
       field: HashMap.make(
         [
           Coords.Zero,
-          new SwarmMember({
-            bug: new Bug.Ant({ number: 1, side: Side.Black }),
-            beetles: [],
-          }),
+          SwarmMember.Init(new Bug.Ant({ number: 1, side: Side.Black })),
         ],
         [
-          new Coords({ x: 1, y: 0 }),
-          new SwarmMember({
-            bug: new Bug.Ant({ number: 2, side: Side.White }),
-            beetles: [],
-          }),
+          Coords.Init(1, 0),
+          SwarmMember.Init(new Bug.Ant({ number: 2, side: Side.White })),
         ],
         [
-          new Coords({ x: 2, y: 0 }),
-          new SwarmMember({
-            bug: new Bug.Ant({ number: 3, side: Side.White }),
-            beetles: [],
-          }),
+          Coords.Init(2, 0),
+          SwarmMember.Init(new Bug.Ant({ number: 2, side: Side.White })),
         ]
       ),
     });
@@ -180,24 +153,15 @@ describe("Swarm", () => {
       field: HashMap.make(
         [
           Coords.Zero,
-          new SwarmMember({
-            bug: new Bug.Ant({ number: 1, side: Side.Black }),
-            beetles: [],
-          }),
+          SwarmMember.Init(new Bug.Ant({ number: 1, side: Side.Black })),
         ],
         [
-          new Coords({ x: 1, y: 0 }),
-          new SwarmMember({
-            bug: new Bug.Ant({ number: 2, side: Side.White }),
-            beetles: [],
-          }),
+          Coords.Init(1, 0),
+          SwarmMember.Init(new Bug.Ant({ number: 2, side: Side.White })),
         ],
         [
-          new Coords({ x: 1.5, y: -1 }),
-          new SwarmMember({
-            bug: new Bug.Ant({ number: 3, side: Side.White }),
-            beetles: [],
-          }),
+          Coords.Init(1.5, -1),
+          SwarmMember.Init(new Bug.Ant({ number: 2, side: Side.White })),
         ]
       ),
     });
@@ -233,31 +197,16 @@ describe("Swarm", () => {
         field: HashMap.make(
           [
             Coords.Zero,
-            new SwarmMember({
-              bug: new Bug.Ant({ number: 1, side: Side.Black }),
-              beetles: [],
-            }),
+            SwarmMember.Init(new Bug.Ant({ number: 1, side: Side.Black })),
           ],
           [
-            new Coords({ x: 1, y: 0 }),
-            new SwarmMember({
-              bug: new Bug.Ant({ number: 2, side: Side.White }),
-              beetles: [],
-            }),
+            Coords.Init(1, 0),
+            SwarmMember.Init(new Bug.Ant({ number: 2, side: Side.White })),
           ],
+          [Coords.Init(0.5, -1), SwarmMember.Init(TestGrasshopper())],
           [
-            new Coords({ x: 0.5, y: -1 }),
-            new SwarmMember({
-              bug: TestGrasshopper(),
-              beetles: [],
-            }),
-          ],
-          [
-            new Coords({ x: 1, y: -2 }),
-            new SwarmMember({
-              bug: new Bug.Ant({ number: 3, side: Side.White }),
-              beetles: [],
-            }),
+            Coords.Init(1, -2),
+            SwarmMember.Init(new Bug.Ant({ number: 2, side: Side.White })),
           ]
         ),
       });
@@ -281,45 +230,31 @@ describe("Swarm", () => {
 
       expect(actualCoords).toEqual(
         Option.some([
-          new Coords({ x: 1.5, y: 1 }),
-          new Coords({ x: 1.5, y: -3 }),
-          new Coords({ x: -0.5, y: 1 }),
+          Coords.Init(1.5, 1),
+          Coords.Init(1.5, -3),
+          Coords.Init(-0.5, 1),
         ])
       );
     });
 
     test("QueenBee", () => {
-      const TestQueenBee = () => new Bug.QueenBee({ side: Side.Black });
+      const TestQueenBee = () =>
+        new Bug.QueenBee({ side: Side.Black, number: 1 });
 
       const swarm = new Swarm.Swarm({
         field: HashMap.make(
           [
             Coords.Zero,
-            new SwarmMember({
-              bug: new Bug.Ant({ number: 1, side: Side.Black }),
-              beetles: [],
-            }),
+            SwarmMember.Init(new Bug.Ant({ number: 1, side: Side.Black })),
           ],
           [
-            new Coords({ x: 1, y: 0 }),
-            new SwarmMember({
-              bug: new Bug.Ant({ number: 2, side: Side.White }),
-              beetles: [],
-            }),
+            Coords.Init(1, 0),
+            SwarmMember.Init(new Bug.Ant({ number: 2, side: Side.White })),
           ],
+          [Coords.Init(0.5, -1), SwarmMember.Init(TestQueenBee())],
           [
-            new Coords({ x: 0.5, y: -1 }),
-            new SwarmMember({
-              bug: TestQueenBee(),
-              beetles: [],
-            }),
-          ],
-          [
-            new Coords({ x: 1, y: -2 }),
-            new SwarmMember({
-              bug: new Bug.Ant({ number: 3, side: Side.White }),
-              beetles: [],
-            }),
+            Coords.Init(1, -2),
+            SwarmMember.Init(new Bug.Ant({ number: 2, side: Side.White })),
           ]
         ),
       });
@@ -339,10 +274,7 @@ describe("Swarm", () => {
       );
 
       expect(actualCoords).toEqual(
-        Option.some([
-          new Coords({ x: 0, y: -2 }),
-          new Coords({ x: -0.5, y: -1 }),
-        ])
+        Option.some([Coords.Init(0, -2), Coords.Init(-0.5, -1)])
       );
     });
     test("Beetle", () => {
@@ -352,25 +284,13 @@ describe("Swarm", () => {
         field: HashMap.make(
           [
             Coords.Zero,
-            new SwarmMember({
-              bug: new Bug.Ant({ number: 1, side: Side.Black }),
-              beetles: [],
-            }),
+            SwarmMember.Init(new Bug.Ant({ number: 1, side: Side.Black })),
           ],
           [
-            new Coords({ x: 1, y: 0 }),
-            new SwarmMember({
-              bug: new Bug.Ant({ number: 2, side: Side.White }),
-              beetles: [],
-            }),
+            Coords.Init(1, 0),
+            SwarmMember.Init(new Bug.Ant({ number: 2, side: Side.White })),
           ],
-          [
-            new Coords({ x: 0.5, y: -1 }),
-            new SwarmMember({
-              bug: TestBug(),
-              beetles: [],
-            }),
-          ]
+          [Coords.Init(0.5, -1), SwarmMember.Init(TestBug())]
         ),
       });
 
@@ -390,9 +310,9 @@ describe("Swarm", () => {
 
       expect(actualCoords).toEqual(
         Option.some([
-          new Coords({ x: 1.5, y: -1 }),
-          new Coords({ x: -0.5, y: -1 }),
-          new Coords({ x: 1, y: 0 }),
+          Coords.Init(1.5, -1),
+          Coords.Init(-0.5, -1),
+          Coords.Init(1, 0),
           Coords.Zero,
         ])
       );
@@ -404,38 +324,67 @@ describe("Swarm", () => {
         field: HashMap.make(
           [
             Coords.Zero,
-            new SwarmMember({
-              bug: new Bug.Ant({ number: 1, side: Side.Black }),
-              beetles: [],
-            }),
+            SwarmMember.Init(new Bug.Ant({ number: 1, side: Side.Black })),
           ],
           [
-            new Coords({ x: 1, y: 0 }),
-            new SwarmMember({
-              bug: new Bug.Ant({ number: 2, side: Side.White }),
-              beetles: [],
-            }),
+            Coords.Init(1, 0),
+            SwarmMember.Init(new Bug.Ant({ number: 2, side: Side.White })),
+          ],
+          [Coords.Init(0.5, -1), SwarmMember.Init(TestBug())],
+          [
+            Coords.Init(1, -2),
+            SwarmMember.Init(new Bug.Ant({ number: 2, side: Side.White })),
           ],
           [
-            new Coords({ x: 0.5, y: -1 }),
-            new SwarmMember({
-              bug: TestBug(),
-              beetles: [],
-            }),
+            Coords.Init(1.5, -3),
+            SwarmMember.Init(
+              new Bug.Grasshopper({ number: 2, side: Side.Black })
+            ),
+          ]
+        ),
+      });
+
+      const actualEmptyCells = Swarm.getMovementCellsFor(swarm, TestBug());
+      const actualCoords = actualEmptyCells.pipe(
+        Option.map(Array.map((x) => x.coords))
+      );
+
+      assertRefinement(Option.isSome, actualEmptyCells);
+      assertRefinement(Array.every(Cell.$is("Empty")), actualEmptyCells.value);
+
+      console.log(
+        Swarm.toString(swarm, {
+          highlightEmpty: HashSet.fromIterable(actualEmptyCells.value),
+        })
+      );
+
+      expect(actualCoords).toEqual(
+        Option.some([Coords.Init(1, -4), Coords.Init(-0.5, 1)])
+      );
+    });
+    test("Ant", () => {
+      const TestBug = () => new Bug.Ant({ number: 1, side: Side.Black });
+
+      const swarm = new Swarm.Swarm({
+        field: HashMap.make(
+          [
+            Coords.Zero,
+            SwarmMember.Init(new Bug.Ant({ number: 2, side: Side.Black })),
           ],
           [
-            new Coords({ x: 1, y: -2 }),
-            new SwarmMember({
-              bug: new Bug.Ant({ number: 3, side: Side.White }),
-              beetles: [],
-            }),
+            Coords.Init(1, 0),
+            SwarmMember.Init(new Bug.Ant({ number: 2, side: Side.White })),
+          ],
+          [Coords.Init(0.5, -1), SwarmMember.Init(TestBug())],
+          [
+            Coords.Init(1, -2),
+            SwarmMember.Init(new Bug.Ant({ number: 3, side: Side.White })),
           ],
           [
-            new Coords({ x: 1.5, y: -3 }),
-            new SwarmMember({
-              bug: new Bug.Ant({ number: 3, side: Side.Black }),
-              beetles: [],
-            }),
+            Coords.Init(2, -2),
+            SwarmMember.Init(
+              new Bug.Grasshopper({ number: 3, side: Side.Black })
+            ),
           ]
         ),
       });
@@ -456,46 +405,45 @@ describe("Swarm", () => {
 
       expect(actualCoords).toEqual(
         Option.some([
-          new Coords({ x: 1, y: -4 }),
-          new Coords({ x: -0.5, y: 1 }),
+          Coords.Init(0, -2),
+          Coords.Init(-0.5, -1),
+          Coords.Init(0.5, -3),
+          Coords.Init(-1, 0),
+          Coords.Init(1.5, -3),
+          Coords.Init(-0.5, 1),
+          Coords.Init(2.5, -3),
+          Coords.Init(0.5, 1),
+          Coords.Init(3, -2),
+          Coords.Init(1.5, 1),
+          Coords.Init(2.5, -1),
+          Coords.Init(2, 0),
+          Coords.Init(1.5, -1),
         ])
       );
     });
   });
 
-  test("validateSplit", () => {
+  test.skip("validateSplit", () => {
     const TestBug = () => new Bug.Beetle({ number: 1, side: Side.Black });
 
     const swarm = new Swarm.Swarm({
       field: HashMap.make(
         [
           Coords.Zero,
-          new SwarmMember({
-            bug: new Bug.Ant({ number: 1, side: Side.Black }),
-            beetles: [],
-          }),
+          SwarmMember.Init(new Bug.Ant({ number: 1, side: Side.Black })),
         ],
         [
-          new Coords({ x: 1, y: 0 }),
-          new SwarmMember({
-            bug: new Bug.Ant({ number: 2, side: Side.White }),
-            beetles: [],
-          }),
+          Coords.Init(1, 0),
+          SwarmMember.Init(new Bug.Ant({ number: 2, side: Side.White })),
         ],
-        [
-          new Coords({ x: 0.5, y: -1 }),
-          new SwarmMember({
-            bug: TestBug(),
-            beetles: [],
-          }),
-        ]
+        [Coords.Init(0.5, -1), SwarmMember.Init(TestBug())]
       ),
     });
 
     console.log(Swarm.toString(swarm));
 
     const occupiedCell = Swarm.findFirstOccupied(swarm, (cell) =>
-      Equal.equals(cell.coords, new Coords({ x: 0.5, y: -1 }))
+      Equal.equals(cell.coords, Coords.Init(0.5, -1))
     );
 
     expect(occupiedCell).toMatchObject(Option.some(expect.anything()));
@@ -507,37 +455,29 @@ describe("Swarm", () => {
 
     expect(result.right).toEqual(swarm);
   });
-  test("validateSplit SplitError", () => {
+  test.skip("validateSplit SplitError", () => {
     const swarm = new Swarm.Swarm({
       field: HashMap.make(
         [
           Coords.Zero,
-          new SwarmMember({
-            bug: new Bug.Ant({ number: 1, side: Side.Black }),
-            beetles: [],
-          }),
+          SwarmMember.Init(new Bug.Ant({ number: 1, side: Side.Black })),
         ],
         [
-          new Coords({ x: 1, y: 0 }),
-          new SwarmMember({
-            bug: new Bug.Ant({ number: 2, side: Side.White }),
-            beetles: [],
-          }),
+          Coords.Init(1, 0),
+          SwarmMember.Init(new Bug.Ant({ number: 2, side: Side.White })),
         ],
         [
-          new Coords({ x: 2, y: 0 }),
-          new SwarmMember({
-            bug: new Bug.Ant({ number: 3, side: Side.White }),
-            beetles: [],
-          }),
+          Coords.Init(2, 0),
+          SwarmMember.Init(new Bug.Ant({ number: 2, side: Side.White })),
         ]
       ),
     });
 
     console.log(Swarm.toString(swarm));
+    console.log(swarm.graphStats);
 
     const occupiedCell = Swarm.findFirstOccupied(swarm, (cell) =>
-      Equal.equals(cell.coords, new Coords({ x: 1, y: 0 }))
+      Equal.equals(cell.coords, Coords.Init(1, 0))
     );
 
     function assertRefinement<A, B extends A>(

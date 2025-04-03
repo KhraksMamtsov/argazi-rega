@@ -233,11 +233,11 @@ export const slideableNeighborsEmptyCells = (
 
           return Cell.$match(cellN.value, {
             Empty: (emptyCellN) => {
-              const leftNeighbor = emptyCellN.neighbors[leftNeighborBorder];
-              const rightNeighbor = emptyCellN.neighbors[rightNeighborBorder];
+              const leftNeighbor = emptyCell.neighbors[leftNeighborBorder];
+              const rightNeighbor = emptyCell.neighbors[rightNeighborBorder];
               const isNeighborOk = Option.match<boolean, Cell>({
                 onNone: () => true,
-                onSome: Empty.is,
+                onSome: (x) => Empty.is(x),
               });
               return isNeighborOk(leftNeighbor) || isNeighborOk(rightNeighbor)
                 ? Option.some(emptyCellN)
@@ -259,45 +259,8 @@ export const slideableNeighborsEmptyCells = (
           });
         },
       });
-
-      // if (
-      //   Empty.is(cellN) &&
-      //   (Empty.is(cell.neighbors[leftNeighborBorder]) ||
-      //     Empty.is(cell.neighbors[rightNeighborBorder]))
-      // ) {
-      //   return Option.some(cellN);
-      // } else {
-      //   return Option.none();
-      // }
     })
   );
-
-// export const slideableNeighborsEmptyCells = (cell: Cell): Array<Empty> =>
-//   pipe(
-//     bordersWithNeighborsOccupied(cell),
-//     Array.flatMap(CellBorder.neighbors),
-//     CellBorder.unique,
-//     Array.filterMap((slideableCellBorder) => {
-//       let neighborCell = cell.neighbors[slideableCellBorder];
-
-//       if (Option.isOption(neighborCell)) {
-//         if (Option.isNone(neighborCell)) {
-//           return Option.none();
-//         }
-
-//         neighborCell = neighborCell.value;
-//       }
-
-//       if (
-//         Empty.refine(neighborCell) &&
-//         isAccessibleFromBorder(slideableCellBorder)(neighborCell)
-//       ) {
-//         return Option.some(neighborCell);
-//       } else {
-//         return Option.none();
-//       }
-//     })
-//   );
 
 export const isAccessibleFromBorder = (border: CellBorder.CellBorder) => {
   const [neighborBorderA, neighborBorderB] = CellBorder.neighbors(border);

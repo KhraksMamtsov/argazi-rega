@@ -6,7 +6,8 @@ export class Coords extends Data.Class<{
   x: number;
   y: number;
 }> {
-  static Zero = new Coords({ x: 0, y: 0 });
+  static Init = (x: number, y: number) => new Coords({ x, y });
+  static Zero = this.Init(0, 0);
 
   static Neighbor(coords: Coords, cellBorder: CellBorder.CellBorder): Coords {
     const neighborDelta = CoordsDelta.NeighborsVector[cellBorder];

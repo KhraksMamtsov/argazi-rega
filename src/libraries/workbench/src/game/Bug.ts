@@ -1,9 +1,9 @@
-import { Data, Predicate, Tuple } from "effect";
+import { Data, pipe, Predicate, Tuple } from "effect";
 import { Schema } from "effect";
 import * as Side from "./Side.ts";
-import { aN } from "vitest/dist/chunks/reporters.d.CfRkRKN2.js";
 
-export const OneTwo = [1, 2] as const;
+export const One = [1] as const;
+export const OneTwo = [...One, 2] as const;
 export const OneTwoThree = [...OneTwo, 3] as const;
 
 class _Bug extends Schema.Struct({
@@ -12,10 +12,10 @@ class _Bug extends Schema.Struct({
 
 export class QueenBee extends Schema.TaggedClass<QueenBee>("QueenBee")(
   "QueenBee",
-  { ..._Bug.fields }
+  { ..._Bug.fields, number: Schema.Literal(...One) }
 ) {
   static Init(side: Side.Side) {
-    return new QueenBee({ side });
+    return new QueenBee({ number: One[0], side });
   }
 }
 
@@ -98,14 +98,14 @@ export const emoji = Bug.$match({
 
 const one = "\u030A";
 const two = "\u0308";
-const three = two + one;
-const symbols_ = ["", one, two, three] as const;
+const three = one + two;
+const numberMap = ["", one, two, three] as const;
+const underline = "\u0332";
 
-export const symbol = Bug.$match({
-  Ant: ({ number }) => "A" + symbols_[number],
-  QueenBee: () => "Q",
-  Beetle: ({ number }) => "B" + symbols_[number],
-  Grasshopper: ({ number }) => "G" + symbols_[number],
-  Spider: ({ number }) => "S" + symbols_[number],
-  // 🦟 🐞 🪱
-});
+const colorMap: Record<Side.Side, string> = {
+  [Side.Side.Black]: underline,
+  [Side.Side.White]: "",
+};
+
+export const symbol = (bug: Bug) =>
+  bug._tag[0] + numberMap[bug.number] + colorMap[bug.side];

@@ -382,10 +382,29 @@ export const bugs = (swarm: Swarm) =>
     )
   );
 
+const slideableNeighborsEmptyCellsStep = (
+  from: ReadonlyArray<Cell.Cell>,
+  prev: ReadonlyArray<Cell.Cell> = []
+) => {
+  const stepResult = pipe(
+    from,
+    Array.flatMap(Cell.slideableNeighborsEmptyCells)
+  );
+  return stepResult.filter((x) => !prev.includes(x));
+};
+
 const movesStrategies = {
   Ant: (from) => {
-    // TODO: Can ref itself
-    throw "notImplemented";
+    let result: Array<Cell.Cell> = [];
+    let next: ReadonlyArray<Cell.Cell> = [from];
+
+    while (next.length !== 0) {
+      const stepResult = slideableNeighborsEmptyCellsStep(next, result);
+      next = stepResult;
+      result.push(...stepResult);
+    }
+
+    return result;
   },
   Grasshopper: (from) =>
     pipe(
@@ -397,15 +416,15 @@ const movesStrategies = {
     ...Array.filter(from.neighbors, Cell.Cell.$is("Occupied")),
   ],
   Spider: (from) => {
-    // TODO: Can ref itself
-    const stepOne = Cell.slideableNeighborsEmptyCells(from);
-    console.log(stepOne);
-    const stepTwo = Array.flatMap(stepOne, Cell.slideableNeighborsEmptyCells);
-    console.log(stepTwo);
-    const stepThree = Array.flatMap(stepTwo, Cell.slideableNeighborsEmptyCells);
-    const forbiddenCells = [...stepOne, ...stepTwo];
+    // TODO: Can ref itself ???
+    const stepOne = slideableNeighborsEmptyCellsStep([from]);
+    const stepTwo = slideableNeighborsEmptyCellsStep(stepOne, [from]);
 
-    return stepThree.filter((x) => !forbiddenCells.includes(x));
+    return slideableNeighborsEmptyCellsStep(stepTwo, [
+      from,
+      ...stepOne,
+      ...stepTwo,
+    ]);
   },
   QueenBee: (from) => Cell.slideableNeighborsEmptyCells(from),
 } as const satisfies Record<
@@ -647,7 +666,7 @@ export function toString(
                   HashSet.has(options.highlightEmpty, emptyCell)
                     ? " × "
                     : " ○ ",
-                Occupied: (x) => Bug.symbol(x.member.bug), //BugDto.encodeSync(x.member.bug),
+                Occupied: (x) => ` ${Bug.symbol(x.member.bug)} `, //BugDto.encodeSync(x.member.bug),
               })
         )
       )
