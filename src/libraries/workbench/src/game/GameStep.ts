@@ -15,6 +15,6 @@ export const Init = () => init;
 
 export const next = (step: GameStep) => GameStep(step + 1);
 
-export const QueenPlacementViolationStep = GameStep(5);
+export const QueenPlacementViolationStep = GameStep(9);
 
 export const isInitialStep = (step: GameStep) => step === init;

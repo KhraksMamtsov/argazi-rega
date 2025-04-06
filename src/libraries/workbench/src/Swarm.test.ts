@@ -433,7 +433,7 @@ describe("Swarm", () => {
     });
   });
 
-  test.skip("validateSplit", () => {
+  test("validateSplit", () => {
     const TestBug = () => new Bug.Beetle({ number: 1, side: Side.Black });
 
     const swarm = new Swarm.Swarm({
@@ -465,7 +465,7 @@ describe("Swarm", () => {
 
     expect(result.right).toEqual(swarm);
   });
-  test.skip("validateSplit SplitError", () => {
+  test("validateSplit SplitError", () => {
     const swarm = new Swarm.Swarm({
       field: HashMap.make(
         [

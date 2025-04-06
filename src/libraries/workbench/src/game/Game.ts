@@ -103,71 +103,57 @@ export const makeMove: {
   (
     move: Move.Move
   ): (game: Game) => Either.Either<Game, GameError.GameError | Finish>;
-} = dual(
-  2,
-  (
-    game: Game,
-    move: Move.Move
-  ) =>
-    Either.gen(function* () {
-      const moveSide = Move.side(move)
-      if (currentSide(game.step) !== moveSide) {
-        return yield* Either.left(
-          new GameError.WrongSideMove({ move, step: game.step })
-        );
-      }
+} = dual(2, (game: Game, move: Move.Move) =>
+  Either.gen(function* () {
+    const moveSide = Move.side(move);
+    if (currentSide(game.step) !== moveSide) {
+      return yield* Either.left(
+        new GameError.WrongSideMove({ move, step: game.step })
+      );
+    }
 
-      if (
-        game.step >= GameStep.QueenPlacementViolationStep &&
-        Move.isNotQueenMove(move)
-      ) {
-        return yield* Either.left(
-          new GameError.QueenPlacementViolation({ move, step: game.step })
-        );
-      }
+    if (
+      game.step >= GameStep.QueenPlacementViolationStep &&
+      Move.isNotQueenMove(move)
+    ) {
+      return yield* Either.left(
+        new GameError.QueenPlacementViolation({ move, step: game.step })
+      );
+    }
 
-
-      if(Swarm.getQueenBee(moveSide)) {
-        new GameError.MoveBeforeQueenBeePlacement
-      }
-
-      if(){
-        new GameError.ForbiddenIntroduceMove
-      }
-
-      const afterMoveGame = yield* Move.Move.$match(move, {
-        InitialMove: makeInitialMove(game),
-        BugMove: (movingMove) =>
-          Swarm.move(game.swarm, movingMove).pipe(
-            Either.mapLeft(
-              (swarmError) =>
-                new GameError.ImpossibleMove({
-                  swarmError,
-                  move,
-                  step: game.step,
-                })
-            ),
-            Either.map((newSwarm) => {
-              const [_extractedWhiteBug, white] = Hand.extractBug(
-                game.white,
-                movingMove.bug
-              );
-              const [_extractedBlackBug, black] = Hand.extractBug(
-                game.black,
-                movingMove.bug
-              );
-              return new Game({
-                step: GameStep.next(game.step),
-                white,
-                black,
-                swarm: newSwarm,
-              });
-            })
+    const afterMoveGame = yield* Move.Move.$match(move, {
+      InitialMove: makeInitialMove(game),
+      BugMove: (movingMove) =>
+        Swarm.move(game.swarm, movingMove).pipe(
+          Either.mapLeft(
+            (swarmError) =>
+              new GameError.ImpossibleMove({
+                swarmError,
+                move,
+                step: game.step,
+              })
           ),
-      });
+          Either.map((newSwarm) => {
+            const [_extractedWhiteBug, white] = Hand.extractBug(
+              game.white,
+              movingMove.bug
+            );
+            const [_extractedBlackBug, black] = Hand.extractBug(
+              game.black,
+              movingMove.bug
+            );
+            return new Game({
+              step: GameStep.next(game.step),
+              white,
+              black,
+              swarm: newSwarm,
+            });
+          })
+        ),
+    });
 
-      return yield* validateFinish(afterMoveGame);
-    })
+    return yield* validateFinish(afterMoveGame);
+  })
 );
 
 export const moveAll = (moves: Iterable<Move.Move>) => (game: Game) =>

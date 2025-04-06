@@ -185,26 +185,39 @@ export const isEmptyOrNoneFromBorder =
       }),
     });
 
-export const bordersWithNeighborsOccupied = Cell.$match({
+export const neighborsOccupied = Cell.$match({
   Empty: ({ neighbors }) =>
     Array.filterMap(neighbors, (neighbor, border) =>
       Option.flatMap(
         neighbor,
         Cell.$match({
           Empty: () => Option.none(),
-          Occupied: () => Option.some(border as CellBorder.CellBorder),
+          Occupied: (occupied) =>
+            Option.some({
+              occupied,
+              border: border as CellBorder.CellBorder,
+            }),
         })
       )
     ),
-  Occupied: (x) => _bordersWithNeighborsOccupied(x.neighbors),
+  Occupied: (x) => _neighborsOccupied(x.neighbors),
 });
 
-const _bordersWithNeighborsOccupied = (neighbors: OccupiedNeighbors) =>
+const _neighborsOccupied = (neighbors: OccupiedNeighbors) =>
   Array.filterMap(neighbors, (neighbor, border) =>
     Cell.$match(neighbor, {
       Empty: () => Option.none(),
-      Occupied: () => Option.some(border as CellBorder.CellBorder),
+      Occupied: (occupied) =>
+        Option.some({
+          occupied,
+          border: border as CellBorder.CellBorder,
+        }),
     })
+  );
+export const bordersWithNeighborsOccupied = (cell: Cell) =>
+  pipe(
+    neighborsOccupied(cell),
+    Array.map((x) => x.border)
   );
 
 export const isSurroundedWithOccupiedCells = <O extends Occupied>(

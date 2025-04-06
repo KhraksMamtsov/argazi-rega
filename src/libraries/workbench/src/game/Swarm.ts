@@ -24,7 +24,6 @@ import { distributive } from "../shared/effect/Types.ts";
 import { QueenBeeState } from "./QueenBeeState.ts";
 import * as SwarmError from "./SwarmError.ts";
 import * as Move from "./Move.ts";
-import { readonlyArray } from "effect/Differ";
 
 export interface Swarm extends Pipeable.Pipeable {}
 export class Swarm extends Data.Class<{
@@ -476,12 +475,36 @@ export const move: {
       if (Option.isNone(fromCell)) {
         // introduction
         return yield* Cell.Cell.$match(targetCell, {
-          Empty: (cell) =>
-            Either.right(unsafeIntroduce(swarm, move.bug, cell.coords)),
-          Occupied: () => Either.left(new SwarmError.ImpossibleMove({ move })),
+          Empty: (cell) => {
+            const isOnlyNeighborsWithMoveSide = pipe(
+              Cell.neighborsOccupied(cell),
+              Array.every((x) => Cell.side(x.occupied) === Move.side(move))
+            );
+
+            if (isOnlyNeighborsWithMoveSide) {
+              return Either.right(
+                unsafeIntroduce(swarm, move.bug, cell.coords)
+              );
+            } else {
+              return Either.left(
+                new SwarmError.IntroductionMoveViolation({ move })
+              );
+            }
+          },
+          Occupied: () =>
+            Either.left(new SwarmError.IntroductionMoveViolation({ move })),
         });
       }
-      // move
+
+      const queenBeeFromSwarm = getQueenBee(swarm, Move.side(move));
+      if (Option.isNone(queenBeeFromSwarm)) {
+        // ходить только если королева размещена
+        return Either.left(
+          new SwarmError.MoveBeforeQueenBeePlacementViolation({ move })
+        );
+      }
+
+      // moving move
       const underPressure = yield* Cell.isBugUnderPressure(
         fromCell.value,
         move.bug
@@ -494,12 +517,34 @@ export const move: {
         return yield* Either.left(new SwarmError.BeetlePressure({ move }));
       }
 
-      yield* validateSplit(swarm, fromCell.value);
+      const validatedSwarm = yield* validateSplit(swarm, fromCell.value);
+      const movementCells = yield* getMovementCellsFor(
+        validatedSwarm,
+        move.bug
+      ).pipe(
+        Either.fromOption(
+          () => new SwarmError.BugNotFound({ move, type: "self" })
+        )
+      );
 
-      // check valid move
-      // possible errors: Forbidden
-      targetCell;
-      fromCell.value;
+      if (!HashSet.has(movementCells, targetCell)) {
+        return new SwarmError.ImpossibleMove({ move });
+      }
+
+      if (Equal.equals(fromCell.value.member.bug, move.bug)) {
+        const newField = validatedSwarm.field.pipe(
+          HashMap.remove(fromCell.value.coords),
+          HashMap.set(targetCell.coords, SwarmMember.Init(move.bug))
+        );
+      } else {
+        const newField = validatedSwarm.field.pipe(
+          HashMap.remove(fromCell.value.coords),
+          HashMap.set(targetCell.coords, SwarmMember.Init(move.bug))
+        );
+      }
+
+      const newField = validatedSwarm.field.pipe(HashMap.remo);
+      const newSwarm = new Swarm({ field: HashMap.remo });
 
       return 123 as any;
     })
@@ -525,16 +570,6 @@ export const findTargetMovingCell: {
     )
   )
 );
-
-export const movementCells = (from: Cell.Occupied) => (swarm: Swarm) => {
-  const bug = Array.last(from.member.beetles).pipe(
-    Option.getOrElse(() => from.member.bug)
-  );
-
-  const moveCells = movesStrategies[bug._tag](from);
-
-  return validateSplit(swarm, from).pipe(Either.map(() => moveCells));
-};
 
 export const getEmptyByDiagonal =
   (from: Cell.Cell) =>
@@ -578,8 +613,6 @@ export const validateSplit: {
       ),
       (acc) => acc + 1
     );
-
-    // console.log(occupiedCount(swarm), connectedOccupiedWithoutCell);
 
     if (
       occupiedCount(swarm) !==

@@ -27,26 +27,6 @@ export class Absurd extends Data.TaggedError("Absurd")<{
   step: GameStep.GameStep;
 }> {}
 
-/**
- * Introducing move has to be made on an empty cell connected ONLY to bug's side cells
- */
-export class ForbiddenIntroduceMove extends Data.TaggedError(
-  "ForbiddenIntroduceMove"
-)<{
-  move: Move.Move;
-  step: GameStep.GameStep;
-}> {}
-
-/**
- * Introducing move has to be made on an empty cell connected ONLY to bug's side cells
- */
-export class MoveBeforeQueenBeePlacement extends Data.TaggedError(
-  "MoveBeforeQueenBeePlacement"
-)<{
-  move: Move.Move;
-  step: GameStep.GameStep;
-}> {}
-
 export class ImpossibleMove extends Data.TaggedError("ImpossibleMove")<{
   move: Move.Move;
   step: GameStep.GameStep;
@@ -58,6 +38,4 @@ export type GameError =
   | QueenPlacementViolation
   | ForbiddenInitialMove
   | Absurd
-  | ForbiddenIntroduceMove
-  | ImpossibleMove
-  | MoveBeforeQueenBeePlacement;
+  | ImpossibleMove;
