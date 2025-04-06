@@ -16,7 +16,7 @@ import * as CellBorder from "./CellBorder.ts";
 import * as CellRelation from "./CellRelation.ts";
 import * as CoordsDelta from "./CoordsDelta.ts";
 import * as Coords from "./Coords.ts";
-import { SwarmMember } from "./SwarmMember.ts";
+import * as SwarmMember from "./SwarmMember.ts";
 
 export type Cell = Empty | Occupied;
 export const Cell = Data.taggedEnum<Cell>();
@@ -70,12 +70,12 @@ export type OccupiedNeighbors = [Cell, Cell, Cell, Cell, Cell, Cell];
 
 export class Occupied<B extends Bug.Bug = Bug.Bug> implements Equal.Equal {
   readonly _tag = "Occupied";
-  member: SwarmMember<B>;
+  member: SwarmMember.SwarmMember<B>;
   readonly neighbors: OccupiedNeighbors;
   readonly coords: Coords.Coords;
 
   constructor(options: {
-    member: SwarmMember<B>;
+    member: SwarmMember.SwarmMember<B>;
     neighbors: OccupiedNeighbors;
     coords: Coords.Coords;
   }) {
@@ -92,13 +92,16 @@ export class Occupied<B extends Bug.Bug = Bug.Bug> implements Equal.Equal {
   }
 
   setBeetles(beetles: ReadonlyArray<Bug.Beetle>) {
-    this.member = new SwarmMember({
+    this.member = new SwarmMember.SwarmMember({
       bug: this.member.bug,
       beetles,
     });
     return this;
   }
-  static Detached(options: { member: SwarmMember; coords: Coords.Coords }) {
+  static Detached(options: {
+    member: SwarmMember.SwarmMember;
+    coords: Coords.Coords;
+  }) {
     const neighbors = Tuple.map(
       Coords.Coords.Neighbors(options.coords),
       Empty.Detached

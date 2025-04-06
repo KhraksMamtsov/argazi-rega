@@ -237,7 +237,7 @@ export const Empty = () => new Swarm({ field: HashMap.empty() });
 export const Init = (bug: Bug.Bug) =>
   unsafeIntroduce(Empty(), bug, Coords.Coords.Zero);
 
-export const unsafeIntroduce: {
+const unsafeIntroduce: {
   (swarm: Swarm, bug: Bug.Bug, coords: Coords.Coords): Swarm;
   (bug: Bug.Bug, coords: Coords.Coords): (swarm: Swarm) => Swarm;
 } = dual(
@@ -499,7 +499,7 @@ export const move: {
       const queenBeeFromSwarm = getQueenBee(swarm, Move.side(move));
       if (Option.isNone(queenBeeFromSwarm)) {
         // ходить только если королева размещена
-        return Either.left(
+        return yield* Either.left(
           new SwarmError.MoveBeforeQueenBeePlacementViolation({ move })
         );
       }
@@ -528,25 +528,36 @@ export const move: {
       );
 
       if (!HashSet.has(movementCells, targetCell)) {
-        return new SwarmError.ImpossibleMove({ move });
+        return yield* Either.left(new SwarmError.ImpossibleMove({ move }));
       }
 
-      if (Equal.equals(fromCell.value.member.bug, move.bug)) {
-        const newField = validatedSwarm.field.pipe(
-          HashMap.remove(fromCell.value.coords),
-          HashMap.set(targetCell.coords, SwarmMember.Init(move.bug))
-        );
-      } else {
-        const newField = validatedSwarm.field.pipe(
-          HashMap.remove(fromCell.value.coords),
-          HashMap.set(targetCell.coords, SwarmMember.Init(move.bug))
-        );
-      }
+      const [bug, newFromMember] = SwarmMember.popBug(fromCell.value.member);
 
-      const newField = validatedSwarm.field.pipe(HashMap.remo);
-      const newSwarm = new Swarm({ field: HashMap.remo });
+      const fieldWithMovedBug = yield* Cell.Cell.$match(targetCell, {
+        Empty: (x) =>
+          Either.right(
+            HashMap.set(validatedSwarm.field, x.coords, SwarmMember.Init(bug))
+          ),
+        Occupied: (x) => {
+          if (bug._tag !== "Beetle") {
+            return Either.left(new SwarmError.ImpossibleMove({ move }));
+          }
 
-      return 123 as any;
+          return Either.right(
+            HashMap.set(
+              validatedSwarm.field,
+              x.coords,
+              SwarmMember.addBeetle(x.member, bug)
+            )
+          );
+        },
+      });
+      const newField = Option.match(newFromMember, {
+        onNone: () => HashMap.remove(fieldWithMovedBug, fromCell.value.coords),
+        onSome: (x) => HashMap.set(fieldWithMovedBug, fromCell.value.coords, x),
+      });
+
+      return new Swarm({ field: newField });
     })
 );
 
@@ -561,7 +572,7 @@ export const findTargetMovingCell: {
 } = dual(2, (swarm: Swarm, move: Move.MovingMove) =>
   swarm.pipe(
     findFirstOccupiedMap((cell) =>
-      Cell.withBugInBasis(move.neighbor)(cell)
+      Cell.withBugInBasis(cell, move.neighbor)
         ? Option.some(cell.neighbors[move.cellBorder])
         : Option.none()
     ),
