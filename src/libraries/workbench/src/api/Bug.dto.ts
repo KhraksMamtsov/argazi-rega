@@ -3,6 +3,7 @@ import * as Bug from "../game/Bug.ts";
 import { SideDto } from "./Side.dto.ts";
 
 // #region common
+const One = Schema.Literal(...Bug.One);
 const OneTwo = Schema.Literal(...Bug.OneTwo);
 const OneTwoThree = Schema.Literal(...Bug.OneTwoThree);
 // #region
@@ -12,15 +13,16 @@ const QUEEN_BEE_SIGN = "Q";
 
 export const _QueenBeeDto = Schema.TemplateLiteralParser(
   SideDto,
-  Schema.Literal(QUEEN_BEE_SIGN)
+  Schema.Literal(QUEEN_BEE_SIGN),
+  One
 ).annotations({
   identifier: "_QueenBeeDto",
 });
 
 export class QueenBeeDto extends Schema.transform(_QueenBeeDto, Bug.QueenBee, {
   strict: true,
-  decode: ([side]) => new Bug.QueenBee({ side }),
-  encode: (b) => [b.side, QUEEN_BEE_SIGN] as const,
+  decode: ([side, _, number]) => new Bug.QueenBee({ side, number }),
+  encode: (b) => [b.side, QUEEN_BEE_SIGN, b.number] as const,
 }).annotations({
   identifier: "QueenBeeDto",
 }) {}

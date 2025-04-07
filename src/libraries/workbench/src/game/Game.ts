@@ -1,4 +1,4 @@
-import { Data, Array, Either, Match, Unify } from "effect";
+import { Data, Array, Either, Match, Unify, Pipeable } from "effect";
 import * as Hand from "./Hand.ts";
 import * as Side from "./Side.ts";
 import * as Move from "./Move.ts";
@@ -11,12 +11,19 @@ import * as Swarm from "./Swarm.ts";
 import * as GameError from "./GameError.ts";
 import { dual } from "effect/Function";
 
+export interface Game extends Pipeable.Pipeable {}
 export class Game extends Data.Class<{
   step: GameStep.GameStep;
   swarm: Swarm.Swarm;
   black: Hand.Hand;
   white: Hand.Hand;
-}> {}
+}> {
+  static {
+    this.prototype.pipe = function () {
+      return Pipeable.pipeArguments(this, arguments);
+    };
+  }
+}
 
 export const Init = () =>
   new Game({
@@ -33,54 +40,63 @@ export type MoveResult = Either.Either.Left<
   ReturnType<ReturnType<typeof makeMove>>
 >;
 
-export const makeInitialMove = (game: Game) =>
-  Unify.unify((initialMove: Move.InitialMove) => {
-    if (GameStep.isInitialStep(game.step)) {
-      return Either.left(
-        new GameError.ForbiddenInitialMove({
-          move: initialMove,
-          step: game.step,
-        })
-      );
-    }
-    const [_extractedWhiteBug, white] = Hand.extractBug(
-      game.white,
-      initialMove.bug
+const makeInitialMove: {
+  (
+    initialMove: Move.InitialMove
+  ): (
+    game: Game
+  ) => Either.Either<Game, GameError.ForbiddenInitialMove | GameError.Absurd>;
+  (
+    game: Game,
+    initialMove: Move.InitialMove
+  ): Either.Either<Game, GameError.ForbiddenInitialMove | GameError.Absurd>;
+} = dual(2, (game: Game, initialMove: Move.InitialMove) => {
+  if (!GameStep.isInitialStep(game.step)) {
+    return Either.left(
+      new GameError.ForbiddenInitialMove({
+        move: initialMove,
+        step: game.step,
+      })
     );
-    const [_extractedBlackBug, black] = Hand.extractBug(
-      game.black,
-      initialMove.bug
-    );
+  }
+  const [_extractedWhiteBug, white] = Hand.extractBug(
+    game.white,
+    initialMove.bug
+  );
+  const [_extractedBlackBug, black] = Hand.extractBug(
+    game.black,
+    initialMove.bug
+  );
 
-    return Match.value(distributive([_extractedWhiteBug, _extractedBlackBug]))
-      .pipe(
-        Match.when([{ _tag: "Some" }, { _tag: "None" }], ([white, _black]) =>
-          Either.right(white.value)
-        ),
-        Match.when([{ _tag: "None" }, { _tag: "Some" }], ([_white, black]) =>
-          Either.right(black.value)
-        ),
-        Match.orElse(() =>
-          Either.left(
-            new GameError.Absurd({
-              move: initialMove,
-              step: game.step,
-            })
-          )
+  return Match.value(distributive([_extractedWhiteBug, _extractedBlackBug]))
+    .pipe(
+      Match.when([{ _tag: "Some" }, { _tag: "None" }], ([white, _black]) =>
+        Either.right(white.value)
+      ),
+      Match.when([{ _tag: "None" }, { _tag: "Some" }], ([_white, black]) =>
+        Either.right(black.value)
+      ),
+      Match.orElse(() =>
+        Either.left(
+          new GameError.Absurd({
+            move: initialMove,
+            step: game.step,
+          })
         )
       )
-      .pipe(
-        Either.map(
-          (x) =>
-            new Game({
-              white,
-              black,
-              swarm: Swarm.Init(x),
-              step: GameStep.next(game.step),
-            })
-        )
-      );
-  });
+    )
+    .pipe(
+      Either.map(
+        (x) =>
+          new Game({
+            white,
+            black,
+            swarm: Swarm.Init(x),
+            step: GameStep.next(game.step),
+          })
+      )
+    );
+});
 
 export const validateFinish = (game: Game) =>
   QueenBeeState.$match(Swarm.queenBeeState(game.swarm), {
@@ -122,7 +138,7 @@ export const makeMove: {
     }
 
     const afterMoveGame = yield* Move.Move.$match(move, {
-      InitialMove: makeInitialMove(game),
+      InitialMove: (x) => makeInitialMove(game, x),
       BugMove: (movingMove) =>
         Swarm.move(game.swarm, movingMove).pipe(
           Either.mapLeft(

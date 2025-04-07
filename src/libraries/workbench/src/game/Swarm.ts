@@ -509,9 +509,7 @@ export const move: {
         fromCell.value,
         move.bug
       ).pipe(
-        Either.fromOption(
-          () => new SwarmError.BugNotFound({ move, type: "self" })
-        )
+        Either.fromOption(() => new SwarmError.BugNotFound({ bug: move.bug }))
       );
       if (underPressure) {
         return yield* Either.left(new SwarmError.BeetlePressure({ move }));
@@ -522,9 +520,7 @@ export const move: {
         validatedSwarm,
         move.bug
       ).pipe(
-        Either.fromOption(
-          () => new SwarmError.BugNotFound({ move, type: "self" })
-        )
+        Either.fromOption(() => new SwarmError.BugNotFound({ bug: move.bug }))
       );
 
       if (!HashSet.has(movementCells, targetCell)) {
@@ -576,9 +572,7 @@ export const findTargetMovingCell: {
         ? Option.some(cell.neighbors[move.cellBorder])
         : Option.none()
     ),
-    Either.fromOption(
-      () => new SwarmError.BugNotFound({ move, type: "neighbor" })
-    )
+    Either.fromOption(() => new SwarmError.BugNotFound({ bug: move.neighbor }))
   )
 );
 

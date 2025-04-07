@@ -1,12 +1,12 @@
-import * as Bug from "./game/Bug.ts";
-import { Side } from "./game/Side.ts";
-import * as Swarm from "./game/Swarm.ts";
+import * as Bug from "../game/Bug.ts";
+import { Side } from "../game/Side.ts";
+import * as Swarm from "../game/Swarm.ts";
 import { HashMap, Option, Equal, Either, Predicate, HashSet } from "effect";
-import * as SwarmMember from "./game/SwarmMember.ts";
-import { Coords } from "./game/Coords.ts";
+import * as SwarmMember from "../game/SwarmMember.ts";
+import { Coords } from "../game/Coords.ts";
 import { test, describe, expect, assert } from "@effect/vitest";
-import * as SwarmError from "./game/SwarmError.ts";
-import { Cell } from "./game/Cell.ts";
+import * as SwarmError from "../game/SwarmError.ts";
+import { Cell } from "../game/Cell.ts";
 
 const EmptySwarm = new Swarm.Swarm({
   field: HashMap.empty(),
@@ -484,7 +484,6 @@ describe("Swarm", () => {
     });
 
     console.log(Swarm.toString(swarm));
-    console.log(swarm.graphStats);
 
     const occupiedCell = Swarm.findFirstOccupied(swarm, (cell) =>
       Equal.equals(cell.coords, Coords.Init(1, 0))

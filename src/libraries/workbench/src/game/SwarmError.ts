@@ -1,5 +1,6 @@
 import { Data } from "effect";
 import * as Move from "./Move.ts";
+import * as Bug from "./Bug.ts";
 import * as Cell from "./Cell.ts";
 
 export class SplitSwarm extends Data.TaggedError("SplitSwarm")<{
@@ -7,8 +8,7 @@ export class SplitSwarm extends Data.TaggedError("SplitSwarm")<{
 }> {}
 
 export class BugNotFound extends Data.TaggedError("BugNotFound")<{
-  move: Move.MovingMove;
-  type: "neighbor" | "self";
+  bug: Bug.Bug;
 }> {}
 
 export class BeetlePressure extends Data.TaggedError("BeetlePressure")<{
