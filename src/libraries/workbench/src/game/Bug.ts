@@ -1,10 +1,7 @@
-import { Data, pipe, Predicate, Tuple } from "effect";
+import { Data, Predicate, Tuple, Brand } from "effect";
 import { Schema } from "effect";
 import * as Side from "./Side.ts";
-
-export const One = [1] as const;
-export const OneTwo = [...One, 2] as const;
-export const OneTwoThree = [...OneTwo, 3] as const;
+import * as BugNumber from "./BugNumber.ts";
 
 class _Bug extends Schema.Struct({
   side: Side._Side,
@@ -12,19 +9,22 @@ class _Bug extends Schema.Struct({
 
 export class QueenBee extends Schema.TaggedClass<QueenBee>("QueenBee")(
   "QueenBee",
-  { ..._Bug.fields, number: Schema.Literal(...One) }
+  { ..._Bug.fields, number: Schema.Literal(...BugNumber._One) }
 ) {
   static Init(side: Side.Side) {
-    return new QueenBee({ number: One[0], side });
+    return new QueenBee({ number: BugNumber._One[0], side });
   }
 }
 
 export class Beetle extends Schema.TaggedClass<Beetle>("Beetle")("Beetle", {
   ..._Bug.fields,
-  number: Schema.Literal(...OneTwo),
+  number: Schema.Literal(...BugNumber._OneTwo),
 }) {
   static Init(side: Side.Side) {
-    return Tuple.map(OneTwo, (number) => new Beetle({ number, side }));
+    return Tuple.map(
+      BugNumber._OneTwo,
+      (number) => new Beetle({ number, side })
+    );
   }
 }
 
@@ -32,12 +32,12 @@ export class Grasshopper extends Schema.TaggedClass<Grasshopper>("Grasshopper")(
   "Grasshopper",
   {
     ..._Bug.fields,
-    number: Schema.Literal(...OneTwoThree),
+    number: Schema.Literal(...BugNumber._OneTwoThree),
   }
 ) {
   static Init(side: Side.Side) {
     return Tuple.map(
-      OneTwoThree,
+      BugNumber._OneTwoThree,
       (number) => new Grasshopper({ number, side })
     );
   }
@@ -45,19 +45,25 @@ export class Grasshopper extends Schema.TaggedClass<Grasshopper>("Grasshopper")(
 
 export class Spider extends Schema.TaggedClass<Spider>("Spider")("Spider", {
   ..._Bug.fields,
-  number: Schema.Literal(...OneTwo),
+  number: Schema.Literal(...BugNumber._OneTwo),
 }) {
   static Init(side: Side.Side) {
-    return Tuple.map(OneTwo, (number) => new Spider({ number, side }));
+    return Tuple.map(
+      BugNumber._OneTwo,
+      (number) => new Spider({ number, side })
+    );
   }
 }
 
 export class Ant extends Schema.TaggedClass<Ant>("Ant")("Ant", {
   ..._Bug.fields,
-  number: Schema.Literal(...OneTwoThree),
+  number: Schema.Literal(...BugNumber._OneTwoThree),
 }) {
   static Init(side: Side.Side) {
-    return Tuple.map(OneTwoThree, (number) => new Ant({ number, side }));
+    return Tuple.map(
+      BugNumber._OneTwoThree,
+      (number) => new Ant({ number, side })
+    );
   }
 }
 
@@ -106,6 +112,14 @@ const colorMap: Record<Side.Side, string> = {
   [Side.Side.Black]: underline,
   [Side.Side.White]: "",
 };
+const symbolMap: Record<Bug["_tag"], string> = {
+  Ant: "A",
+  Beetle: "B",
+  Grasshopper: "G",
+  QueenBee: "Q",
+  Spider: "S",
+};
 
-export const symbol = (bug: Bug) =>
-  bug._tag[0] + numberMap[bug.number] + colorMap[bug.side];
+export const symbol = (bug: Bug) => {
+  return symbolMap[bug._tag] + numberMap[bug.number] + colorMap[bug.side];
+};

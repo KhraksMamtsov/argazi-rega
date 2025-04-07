@@ -1,11 +1,12 @@
 import { Schema } from "effect";
 import * as Bug from "../game/Bug.ts";
+import * as BugNumber from "../game/BugNumber.ts";
 import { SideDto } from "./Side.dto.ts";
 
 // #region common
-const One = Schema.Literal(...Bug.One);
-const OneTwo = Schema.Literal(...Bug.OneTwo);
-const OneTwoThree = Schema.Literal(...Bug.OneTwoThree);
+const One = Schema.Literal(...BugNumber._One);
+const OneTwo = Schema.Literal(...BugNumber._OneTwo);
+const OneTwoThree = Schema.Literal(...BugNumber._OneTwoThree);
 // #region
 
 // #region QueenBeeDto
