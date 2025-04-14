@@ -122,29 +122,34 @@ export class Swarm extends Data.Class<{
     return cell;
   }
 
+  #graph: null | Cell.Cell = null;
+
   get graph(): Cell.Cell {
+    if (this.#graph) {
+      return this.#graph;
+    }
     const _field = HashMap.map(this.field, (member, coords) =>
       Cell.Occupied.Detached({ member, coords })
     );
     const cellCache = new Map<string, Cell.Cell>();
     const first = HashMap.findFirst(this.field, () => true);
 
-    if (Option.isNone(first)) {
-      return Cell.Empty.Detached(Coords.Coords.Zero);
-    } else {
-      const [coords, member] = first.value;
+    const result = Option.isNone(first)
+      ? Cell.Empty.Detached(Coords.Coords.Zero)
+      : this.getFor(
+          Cell.Occupied.Detached({
+            member: first.value[1],
+            coords: first.value[0],
+          }),
+          {
+            cellCache,
+            reversedField: _field,
+          }
+        );
 
-      const initialCell = this.getFor(
-        Cell.Occupied.Detached({ member, coords }),
-        {
-          cellCache,
-          reversedField: _field,
-        }
-      );
-
-      return initialCell;
-    }
+    return (this.#graph = result);
   }
+
   get graphStats() {
     return reduce(
       this.graph,
