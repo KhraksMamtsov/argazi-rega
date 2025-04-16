@@ -34,14 +34,6 @@ export class Swarm extends Data.Class<{
       return Pipeable.pipeArguments(this, arguments);
     };
   }
-  get reversedField() {
-    return pipe(
-      this.field,
-      HashMap.toEntries,
-      Array.map(Tuple.swap),
-      HashMap.fromIterable
-    );
-  }
 
   private getFor<C extends Cell.Cell>(
     cell: C,

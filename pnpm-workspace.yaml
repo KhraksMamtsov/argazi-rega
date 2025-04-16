@@ -2,12 +2,12 @@ packages:
   - src/applications/*
   - src/libraries/*
 catalog:
-  effect: ^3.14.4
-  "@effect/platform": ^0.80.4
-  "@effect/platform-node": ^0.76.7
-  "@effect/typeclass": ^0.33.4
-  "@effect/cli": ^0.59.4
-  typescript: ^5.8.2
+  effect: ^3.14.10
+  "@effect/platform": ^0.80.10
+  "@effect/platform-node": ^0.76.19
+  "@effect/typeclass": ^0.33.10
+  "@effect/cli": ^0.59.10
+  typescript: ^5.8.3
 onlyBuiltDependencies:
   - "@parcel/watcher"
   - "@prisma/client"
