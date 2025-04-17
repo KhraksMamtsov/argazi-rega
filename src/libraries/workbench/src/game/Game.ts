@@ -28,13 +28,13 @@ export class Game extends Data.Class<{
 export const Init = () =>
   new Game({
     step: GameStep.Init(),
-    black: Hand.Init(Side.Side.Black),
-    white: Hand.Init(Side.Side.White),
+    black: Hand.Init("black"),
+    white: Hand.Init("white"),
     swarm: Swarm.Empty(),
   });
 
-export const currentSide = (step: GameStep.GameStep) =>
-  step % 2 === 0 ? Side.Side.White : Side.Side.Black;
+export const currentSide = (step: GameStep.GameStep): Side.Side =>
+  step % 2 === 0 ? "white" : "black";
 
 export type MoveResult = Either.Either.Left<
   ReturnType<ReturnType<typeof makeMove>>
@@ -99,7 +99,7 @@ const makeInitialMove: {
 });
 
 export const validateFinish = (game: Game) =>
-  QueenBeeState.$match(Swarm.queenBeeState(game.swarm), {
+  QueenBeeState.$match(Swarm.queenBeesState(game.swarm), {
     BothSurrounded: () => Either.left(Finish.Draw({ step: game.step })),
     OneSurrounded: (x) =>
       Either.left(
@@ -110,6 +110,12 @@ export const validateFinish = (game: Game) =>
       ),
     Free: () => Either.right(game),
   });
+
+export const validateSkip = (game: Game) => {
+  const currentSide_ = currentSide(game.step);
+  // if (Hand.isEmpty(game[Side.opposite(currentSide_)])) {
+  // }
+};
 
 export const makeMove: {
   (

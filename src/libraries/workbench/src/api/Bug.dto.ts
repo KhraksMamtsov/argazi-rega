@@ -1,19 +1,19 @@
 import { Schema } from "effect";
 import * as Bug from "../game/Bug.ts";
 import * as BugNumber from "../game/BugNumber.ts";
-import { SideDto } from "./Side.dto.ts";
+import { SideSchema } from "../game/Side.ts";
 
 // #region common
-const One = Schema.Literal(...BugNumber._One);
-const OneTwo = Schema.Literal(...BugNumber._OneTwo);
-const OneTwoThree = Schema.Literal(...BugNumber._OneTwoThree);
+const One = BugNumber.OneSchema;
+const OneTwo = Schema.Union(One, BugNumber.TwoSchema);
+const OneTwoThree = Schema.Union(OneTwo, BugNumber.ThreeSchema);
 // #region
 
 // #region QueenBeeDto
 const QUEEN_BEE_SIGN = "Q";
 
 export const _QueenBeeDto = Schema.TemplateLiteralParser(
-  SideDto,
+  Schema.encodedSchema(SideSchema),
   Schema.Literal(QUEEN_BEE_SIGN),
   One
 ).annotations({
@@ -22,7 +22,7 @@ export const _QueenBeeDto = Schema.TemplateLiteralParser(
 
 export class QueenBeeDto extends Schema.transform(_QueenBeeDto, Bug.QueenBee, {
   strict: true,
-  decode: ([side, _, number]) => new Bug.QueenBee({ side, number }),
+  decode: ([side, _, number]) => ({ side, number, _tag: "QueenBee" }) as const,
   encode: (b) => [b.side, QUEEN_BEE_SIGN, b.number] as const,
 }).annotations({
   identifier: "QueenBeeDto",
@@ -34,7 +34,7 @@ export class QueenBeeDto extends Schema.transform(_QueenBeeDto, Bug.QueenBee, {
 const BEETLE_SIGN = "B";
 
 export const _BeetleDto = Schema.TemplateLiteralParser(
-  SideDto,
+  Schema.encodedSchema(SideSchema),
   Schema.Literal(BEETLE_SIGN),
   OneTwo
 ).annotations({
@@ -43,7 +43,7 @@ export const _BeetleDto = Schema.TemplateLiteralParser(
 
 export class BeetleDto extends Schema.transform(_BeetleDto, Bug.Beetle, {
   strict: true,
-  decode: ([side, _, number]) => new Bug.Beetle({ side, number }),
+  decode: ([side, _, number]) => ({ side, number, _tag: "Beetle" }) as const,
   encode: (b) => [b.side, BEETLE_SIGN, b.number] as const,
 }).annotations({
   identifier: "BeetleDto",
@@ -54,7 +54,7 @@ export class BeetleDto extends Schema.transform(_BeetleDto, Bug.Beetle, {
 const SPIDER_SIGN = "S";
 
 export const _SpiderDto = Schema.TemplateLiteralParser(
-  SideDto,
+  Schema.encodedSchema(SideSchema),
   Schema.Literal(SPIDER_SIGN),
   OneTwo
 ).annotations({
@@ -63,7 +63,7 @@ export const _SpiderDto = Schema.TemplateLiteralParser(
 
 export class SpiderDto extends Schema.transform(_SpiderDto, Bug.Spider, {
   strict: true,
-  decode: ([side, _, number]) => new Bug.Spider({ side, number }),
+  decode: ([side, _, number]) => ({ side, number, _tag: "Spider" }) as const,
   encode: (b) => [b.side, SPIDER_SIGN, b.number] as const,
 }).annotations({
   identifier: "SpiderDto",
@@ -74,7 +74,7 @@ export class SpiderDto extends Schema.transform(_SpiderDto, Bug.Spider, {
 const ANT_SIGN = "A";
 
 export const _AntDto = Schema.TemplateLiteralParser(
-  SideDto,
+  Schema.encodedSchema(SideSchema),
   Schema.Literal(ANT_SIGN),
   OneTwoThree
 ).annotations({
@@ -83,7 +83,7 @@ export const _AntDto = Schema.TemplateLiteralParser(
 
 export class AntDto extends Schema.transform(_AntDto, Bug.Ant, {
   strict: true,
-  decode: ([side, _, number]) => new Bug.Ant({ side, number }),
+  decode: ([side, _, number]) => ({ side, number, _tag: "Ant" }) as const,
   encode: (b) => [b.side, ANT_SIGN, b.number] as const,
 }).annotations({
   identifier: "AntDto",
@@ -94,7 +94,7 @@ export class AntDto extends Schema.transform(_AntDto, Bug.Ant, {
 const GRASSHOPPER_SIGN = "G";
 
 export const _GrasshopperDto = Schema.TemplateLiteralParser(
-  SideDto,
+  Schema.encodedSchema(SideSchema),
   Schema.Literal(GRASSHOPPER_SIGN),
   OneTwoThree
 ).annotations({
@@ -106,7 +106,8 @@ export class GrasshopperDto extends Schema.transform(
   Bug.Grasshopper,
   {
     strict: true,
-    decode: ([side, _, number]) => new Bug.Grasshopper({ side, number }),
+    decode: ([side, _, number]) =>
+      ({ side, number, _tag: "Grasshopper" }) as const,
     encode: (b) => [b.side, GRASSHOPPER_SIGN, b.number] as const,
   }
 ).annotations({

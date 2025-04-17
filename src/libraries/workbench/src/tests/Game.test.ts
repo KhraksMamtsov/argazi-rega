@@ -1,6 +1,5 @@
 import * as Bug from "../game/Bug.ts";
 import * as BugNumber from "../game/BugNumber.ts";
-import { Side } from "../game/Side.ts";
 import * as Swarm from "../game/Swarm.ts";
 import * as Move from "../game/Move.ts";
 import * as GameError from "../game/GameError.ts";
@@ -29,7 +28,7 @@ describe("Game", () => {
           new Move.InitialMove({
             bug: new Bug.Ant({
               number: BugNumber.One(1),
-              side: Side.Black,
+              side: "black",
             }),
           })
         ),
@@ -41,7 +40,7 @@ describe("Game", () => {
           move: new Move.InitialMove({
             bug: new Bug.Ant({
               number: BugNumber.One(1),
-              side: Side.Black,
+              side: "black",
             }),
           }),
           step: GameStep.Init(),
@@ -58,7 +57,7 @@ describe("Game", () => {
           new Move.InitialMove({
             bug: new Bug.Ant({
               number: BugNumber.One(1),
-              side: Side.White,
+              side: "white",
             }),
           })
         )
@@ -84,13 +83,13 @@ describe("Game", () => {
           new Move.InitialMove({
             bug: new Bug.Ant({
               number: BugNumber.One(1),
-              side: Side.White,
+              side: "white",
             }),
           }),
           new Move.InitialMove({
             bug: new Bug.Ant({
               number: BugNumber.One(1),
-              side: Side.White,
+              side: "white",
             }),
           }),
         ]),
@@ -102,7 +101,7 @@ describe("Game", () => {
           move: new Move.InitialMove({
             bug: new Bug.Ant({
               number: BugNumber.One(1),
-              side: Side.White,
+              side: "white",
             }),
           }),
           step: GameStep.GameStep(1),
@@ -120,11 +119,11 @@ describe("Game", () => {
             cellBorder: 0,
             neighbor: new Bug.Ant({
               number: BugNumber.One(1),
-              side: Side.White,
+              side: "white",
             }),
             bug: new Bug.Ant({
               number: BugNumber.One(1),
-              side: Side.White,
+              side: "white",
             }),
           }),
         ]),
@@ -136,18 +135,18 @@ describe("Game", () => {
           swarmError: new SwarmError.BugNotFound({
             bug: new Bug.Ant({
               number: BugNumber.One(1),
-              side: Side.White,
+              side: "white",
             }),
           }),
           move: new Move.BugMove({
             cellBorder: 0,
             neighbor: new Bug.Ant({
               number: BugNumber.One(1),
-              side: Side.White,
+              side: "white",
             }),
             bug: new Bug.Ant({
               number: BugNumber.One(1),
-              side: Side.White,
+              side: "white",
             }),
           }),
           step: GameStep.Init(),

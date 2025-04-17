@@ -1,5 +1,5 @@
 import { Data } from "effect";
-import { Side } from "./Side.ts";
+import type { Side } from "./Side.ts";
 import * as GameStep from "./GameStep.ts";
 
 export class Win extends Data.TaggedClass("Win")<{ side: Side }> {}

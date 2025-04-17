@@ -1,13 +1,16 @@
 import { Schema } from "effect";
+export class SideSchema extends Schema.transformLiterals(
+  ["w", "white"],
+  ["b", "black"]
+).annotations({
+  identifier: "Side",
+}) {}
 
-export enum Side {
-  Black = "black",
-  White = "white",
-}
+export type Side = typeof SideSchema.Type;
 
-export class _Side extends Schema.Enums(Side) {}
-const oppositeMap: Record<Side, Side> = {
-  [Side.Black]: Side.White,
-  [Side.White]: Side.Black,
-};
-export const opposite = (side: Side) => oppositeMap[side];
+const oppositeMap = {
+  black: "white",
+  white: "black",
+} as const satisfies Record<Side, Side>;
+
+export const opposite = <S extends Side>(side: S) => oppositeMap[side];

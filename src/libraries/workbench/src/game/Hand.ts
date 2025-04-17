@@ -39,3 +39,5 @@ export const extractBug: {
     return [Option.none(), hand];
   }
 });
+
+export const isEmpty = (hand: Hand) => HashSet.size(hand.bugs) === 0;

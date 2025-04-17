@@ -1,16 +1,21 @@
-import { Brand, Array } from "effect";
+import { Schema } from "effect";
 
 export type _BugNumber = typeof _BugNumber;
 export const _BugNumber: unique symbol = Symbol.for("game/BugNumber");
 
-export type One = Brand.Branded<1, _BugNumber>;
-export type Two = Brand.Branded<2, _BugNumber>;
-export type Three = Brand.Branded<3, _BugNumber>;
-export type BugNumber = One | Two | Three;
+export const OneSchema = Schema.Literal(1).pipe(Schema.brand(_BugNumber));
+export const TwoSchema = Schema.Literal(2).pipe(Schema.brand(_BugNumber));
+export const ThreeSchema = Schema.Literal(3).pipe(Schema.brand(_BugNumber));
+export const BugNumberSchema = Schema.Union(OneSchema, TwoSchema, ThreeSchema);
 
-export const One = Brand.nominal<One>();
-export const Two = Brand.nominal<Two>();
-export const Three = Brand.nominal<Three>();
+export type One = typeof OneSchema.Type;
+export type Two = typeof TwoSchema.Type;
+export type Three = typeof ThreeSchema.Type;
+export type BugNumber = typeof BugNumberSchema.Type;
+
+export const One = OneSchema.make;
+export const Two = TwoSchema.make;
+export const Three = ThreeSchema.make;
 
 export const _One = [One(1)] as const;
 export const _OneTwo = [..._One, Two(2)] as const;

@@ -14,7 +14,7 @@ import {
   Equal,
 } from "effect";
 import * as Cell from "./Cell.ts";
-import { Side } from "./Side.ts";
+import type { Side } from "./Side.ts";
 import * as CellBorder from "./CellBorder.ts";
 import * as Coords from "./Coords.ts";
 import * as Bug from "./Bug.ts";
@@ -207,9 +207,9 @@ export const getSurroundedQueenBee: {
   )
 );
 
-export const queenBeeState = (swarm: Swarm) => {
-  const whiteSurroundedQueenBee = getSurroundedQueenBee(swarm, Side.White);
-  const blackSurroundedQueenBee = getSurroundedQueenBee(swarm, Side.Black);
+export const queenBeesState = (swarm: Swarm) => {
+  const whiteSurroundedQueenBee = getSurroundedQueenBee(swarm, "white");
+  const blackSurroundedQueenBee = getSurroundedQueenBee(swarm, "black");
 
   return Match.value(
     distributive([whiteSurroundedQueenBee, blackSurroundedQueenBee])
@@ -367,8 +367,8 @@ export const bugs = (swarm: Swarm) =>
     HashMap.entries(swarm.field),
     Iterable.reduce(
       {
-        [Side.White]: [] as Array<Bug.Bug>,
-        [Side.Black]: [] as Array<Bug.Bug>,
+        white: [] as Array<Bug.Bug>,
+        black: [] as Array<Bug.Bug>,
       },
       (acc, [_coords, swarmMember]) => {
         acc[swarmMember.bug.side].push(swarmMember.bug);
@@ -714,3 +714,38 @@ export function toString(
       .join("\n\n")
   );
 }
+
+export const hasIntroducableCells = (side: Side) => (swarm: Swarm) =>
+  reduce(swarm.graph, false, (res, cell) =>
+    Cell.Cell.$match(cell, {
+      Empty: () => res,
+      Occupied: (occupied) =>
+        res ||
+        Array.some(CellBorder.CellBorders, (cellBorder) =>
+          Cell.Cell.$match(occupied.neighbors[cellBorder], {
+            Empty: (emptyNeighbor) =>
+              /* has oppositeColor neighbor*/ pipe(
+                Cell.neighborsOccupied(emptyNeighbor),
+                Array.every((x) => Cell.side(x.occupied) === side)
+              ),
+            Occupied: () => false,
+          })
+        ),
+    })
+  );
+
+export const hasMovableSwarmMembers = (side: Side) => (swarm: Swarm) => {
+  // return reduce(swarm.graph, false, (res, cell) => {
+  //   return Cell.Cell.$match(cell, {
+  //     Empty: () => res || false,
+  //     Occupied: (occupied) => {
+  //       Array.some(CellBorder.CellBorders, (cellBorder) => {
+  //         return Cell.Cell.$match(occupied.neighbors[cellBorder], {
+  //           Empty: (emptyNeighbor) => false,
+  //           Occupied: () => false,
+  //         });
+  //       });
+  //     },
+  //   });
+  // });
+};

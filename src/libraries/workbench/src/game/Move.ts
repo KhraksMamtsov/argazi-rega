@@ -1,21 +1,24 @@
-import { Data } from "effect";
+import { Data, Schema } from "effect";
 import * as Bug from "./Bug.ts";
 import * as CellBorder from "./CellBorder.ts";
 
-export class BugMove extends Data.TaggedClass("BugMove")<{
-  bug: Bug.Bug;
-  neighbor: Bug.Bug;
-  cellBorder: CellBorder.CellBorder;
-}> {}
+export class BugMove extends Schema.TaggedClass<BugMove>("BugMove")("BugMove", {
+  bug: Bug.BugSchema,
+  neighbor: Bug.BugSchema,
+  cellBorder: CellBorder.CellBorderSchema,
+}) {}
 
-export class BeetleMove extends Data.TaggedClass("BeetleMove")<{
-  bug: Bug.Beetle;
-  onto: Bug.Bug;
-}> {}
+// export class BeetleMove extends Data.TaggedClass("BeetleMove")<{
+//   bug: Bug.Beetle;
+//   onto: Bug.Bug;
+// }> {}
 
-export class InitialMove extends Data.TaggedClass("InitialMove")<{
-  bug: Bug.Bug;
-}> {}
+export class InitialMove extends Schema.TaggedClass<InitialMove>("InitialMove")(
+  "InitialMove",
+  {
+    bug: Bug.BugSchema,
+  }
+) {}
 
 export type MovingMove = BugMove;
 export const MovingMove = Data.taggedEnum<MovingMove>();

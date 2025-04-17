@@ -135,11 +135,7 @@ export class Occupied<B extends Bug.Bug = Bug.Bug> implements Equal.Equal {
   }
 }
 
-export const side = (cell: Occupied) =>
-  Array.last(cell.member.beetles).pipe(
-    Option.map((x) => x.side),
-    Option.getOrElse(() => cell.member.bug.side)
-  );
+export const side = (cell: Occupied) => masterBug(cell).side;
 
 export const masterBug = (cell: Occupied) =>
   Array.last(cell.member.beetles).pipe(

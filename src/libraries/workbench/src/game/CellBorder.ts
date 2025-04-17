@@ -1,7 +1,19 @@
-export const CELL_BORDERS = 6;
+import { Schema } from "effect";
 
-export type CellBorder = (typeof CellBorders)[number];
-export const CellBorders = [0, 1, 2, 3, 4, 5] as const;
+export const CELL_BORDERS = 6;
+export class CellBorderSchema extends Schema.Literal(
+  0,
+  1,
+  2,
+  3,
+  4,
+  5
+).annotations({
+  identifier: "CellBorder",
+}) {}
+
+export type CellBorder = typeof CellBorderSchema.Type;
+export const CellBorders = CellBorderSchema.literals;
 
 const neighborsMap = {
   0: [5, 1],

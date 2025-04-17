@@ -1,10 +1,10 @@
-import { Data, Predicate, Tuple, Brand } from "effect";
+import { Data, Predicate, Tuple } from "effect";
 import { Schema } from "effect";
 import * as Side from "./Side.ts";
 import * as BugNumber from "./BugNumber.ts";
 
-class _Bug extends Schema.Struct({
-  side: Side._Side,
+export class _Bug extends Schema.Struct({
+  side: Side.SideSchema,
 }) {}
 
 export class QueenBee extends Schema.TaggedClass<QueenBee>("QueenBee")(
@@ -16,16 +16,14 @@ export class QueenBee extends Schema.TaggedClass<QueenBee>("QueenBee")(
   }
 }
 
+const qwe = Schema.asSchema(QueenBee);
+
 export class Beetle extends Schema.TaggedClass<Beetle>("Beetle")("Beetle", {
   ..._Bug.fields,
   number: Schema.Literal(...BugNumber._OneTwo),
 }) {
-  static Init(side: Side.Side) {
-    return Tuple.map(
-      BugNumber._OneTwo,
-      (number) => new Beetle({ number, side })
-    );
-  }
+  static Init = (side: Side.Side) =>
+    Tuple.map(BugNumber._OneTwo, (number) => new Beetle({ number, side }));
 }
 
 export class Grasshopper extends Schema.TaggedClass<Grasshopper>("Grasshopper")(
@@ -80,10 +78,14 @@ export class Pillbug extends Schema.TaggedClass<Pillbug>("Pillbug")("Pillbug", {
   ..._Bug.fields,
 }) {}
 
-export type Bug = QueenBee | Beetle | Grasshopper | Spider | Ant;
-// | Ladybug
-// | Mosquito
-// | Pillbug;
+export const BugSchema = Schema.Union(
+  QueenBee,
+  Beetle,
+  Grasshopper,
+  Spider,
+  Ant
+);
+export type Bug = typeof BugSchema.Type;
 
 export const Bug = Data.taggedEnum<Bug>();
 
@@ -109,8 +111,8 @@ const numberMap = ["", one, two, three] as const;
 const underline = "\u0332";
 
 const colorMap: Record<Side.Side, string> = {
-  [Side.Side.Black]: underline,
-  [Side.Side.White]: "",
+  black: underline,
+  white: "",
 };
 const symbolMap: Record<Bug["_tag"], string> = {
   Ant: "A",
