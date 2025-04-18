@@ -125,6 +125,7 @@ export class BugDto extends Schema.Union(
 ).annotations({
   identifier: "BugDto",
 }) {
-  static encodeSync = Schema.encodeSync(BugDto);
+  static encodeSync = Schema.encodeSync(this);
+  static decode = Schema.decodeSync(this);
 }
 // #endregion

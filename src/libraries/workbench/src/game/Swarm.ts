@@ -19,7 +19,7 @@ import * as CellBorder from "./CellBorder.ts";
 import * as Coords from "./Coords.ts";
 import * as Bug from "./Bug.ts";
 import * as SwarmMember from "./SwarmMember.ts";
-import { dual } from "effect/Function";
+import { absurd, dual, hole } from "effect/Function";
 import { distributive } from "../shared/effect/Types.ts";
 import { QueenBeeState } from "./QueenBeeState.ts";
 import * as SwarmError from "./SwarmError.ts";
@@ -143,7 +143,7 @@ export class Swarm extends Data.Class<{
   }
 
   get graphStats() {
-    return reduce(
+    return Cell.reduce(
       this.graph,
       {
         connections: {
@@ -188,8 +188,8 @@ export const getQueenBee: {
   (side: Side): (swarm: Swarm) => Option.Option<Cell.Occupied<Bug.QueenBee>>;
   (swarm: Swarm, Side: Side): Option.Option<Cell.Occupied<Bug.QueenBee>>;
 } = dual(2, (swarm: Swarm, side: Side) =>
-  findFirstMap(
-    swarm,
+  Cell.findFirstMap(
+    swarm.graph,
     pipe(
       Cell.Cell.$is("Occupied"),
       Predicate.compose(Cell.withBugInBasis(Bug.QueenBee.Init(side))),
@@ -245,121 +245,6 @@ const unsafeIntroduce: {
     })
 );
 
-export const reduceWithFilter = <B, C extends Cell.Cell>(
-  startCell: Cell.Cell,
-  b: B,
-  filterPath: Predicate.Refinement<Cell.Cell, C>,
-  f: (b: B, a: C) => B
-): B => {
-  let acc = b;
-  const cellsToVisit = [startCell];
-  const visitedCells = new Set();
-
-  while (cellsToVisit.length) {
-    const currentCell = cellsToVisit.pop();
-
-    if (currentCell === undefined) {
-      continue;
-    }
-    if (visitedCells.has(currentCell)) {
-      continue;
-    }
-    if (!filterPath(currentCell)) {
-      continue;
-    }
-
-    acc = f(acc, currentCell);
-
-    Cell.Cell.$match(currentCell, {
-      Occupied: (x) => cellsToVisit.push(...x.neighbors),
-      Empty: (x) => cellsToVisit.push(...pipe(x.neighbors, Array.getSomes)),
-    });
-
-    visitedCells.add(currentCell);
-  }
-
-  return acc;
-};
-
-export const reduce = <B>(
-  initialCell: Cell.Cell,
-  b: B,
-  f: (b: B, a: Cell.Cell) => B
-): B => reduceWithFilter(initialCell, b, (x): x is Cell.Cell => true, f);
-
-export const filter =
-  (predicate: Predicate.Predicate<Cell.Cell>) => (swarm: Swarm) =>
-    reduce<Array<Cell.Cell>>(swarm.graph, Array.empty(), (acc, cur) => {
-      if (predicate(cur)) {
-        acc.push(cur);
-      }
-      return acc;
-    });
-
-export const findFirst: {
-  (
-    predicate: (cell: Cell.Cell) => boolean
-  ): (swarm: Swarm) => Option.Option<Cell.Cell>;
-  (
-    swarm: Swarm,
-    predicate: (cell: Cell.Cell) => boolean
-  ): Option.Option<Cell.Cell>;
-} = dual(2, (swarm: Swarm, predicate: (cell: Cell.Cell) => boolean) => {
-  const predicateOption = Option.liftPredicate(predicate);
-
-  return reduce(swarm.graph, Option.none<Cell.Cell>(), (acc, cur) =>
-    acc.pipe(Option.orElse(() => predicateOption(cur)))
-  );
-});
-
-export const findFirstMap: {
-  <A>(
-    predicate: (cell: Cell.Cell) => Option.Option<A>
-  ): (swarm: Swarm) => Option.Option<A>;
-  <A>(
-    swarm: Swarm,
-    predicate: (cell: Cell.Cell) => Option.Option<A>
-  ): Option.Option<A>;
-} = dual(
-  2,
-  <A>(swarm: Swarm, predicate: (cell: Cell.Cell) => Option.Option<A>) =>
-    reduce(swarm.graph, Option.none<A>(), (acc, cur) =>
-      acc.pipe(Option.orElse(() => predicate(cur)))
-    )
-);
-
-export const findFirstOccupiedMap: {
-  <A>(
-    predicate: (cell: Cell.Occupied) => Option.Option<A>
-  ): (swarm: Swarm) => Option.Option<A>;
-  <A>(
-    swarm: Swarm,
-    predicate: (cell: Cell.Occupied) => Option.Option<A>
-  ): Option.Option<A>;
-} = dual(
-  2,
-  <A>(swarm: Swarm, predicate: (cell: Cell.Occupied) => Option.Option<A>) =>
-    findFirstMap(
-      swarm,
-      Cell.Cell.$match({
-        Empty: () => Option.none(),
-        Occupied: predicate,
-      })
-    )
-);
-
-export const findFirstOccupied: {
-  (
-    predicate: (cell: Cell.Occupied) => boolean
-  ): (swarm: Swarm) => Option.Option<Cell.Cell>;
-  (
-    swarm: Swarm,
-    predicate: (cell: Cell.Occupied) => boolean
-  ): Option.Option<Cell.Occupied>;
-} = dual(2, (swarm: Swarm, predicate: (cell: Cell.Occupied) => boolean) =>
-  findFirstOccupiedMap(swarm, Option.liftPredicate(predicate))
-);
-
 export const occupiedCount = (swarm: Swarm) => HashMap.size(swarm.field);
 
 export const bugs = (swarm: Swarm) =>
@@ -380,34 +265,95 @@ export const bugs = (swarm: Swarm) =>
   );
 
 const slideableNeighborsEmptyCellsStep = (
-  from: HashSet.HashSet<Cell.Cell>,
-  prev: HashSet.HashSet<Cell.Cell> = HashSet.empty()
-) => {
-  return from.pipe(
-    HashSet.flatMap(Cell.slideableNeighborsEmptyCells),
-    HashSet.difference(prev)
+  from: HashSet.HashSet<Cell.Occupied>,
+  prev: HashSet.HashSet<Coords.Coords> = HashSet.empty()
+): HashMap.HashMap<Coords.Coords /* empty cell coords */, Cell.Occupied> => {
+  return pipe(
+    HashSet.toValues(from),
+    Array.map((fromCell) => ({
+      fromCell,
+      toCells: Cell.slideableNeighborsEmptyCells(fromCell),
+    })),
+    // HashSet.flatMap(Cell.slideableNeighborsEmptyCells),
+    // HashSet.difference(prev),
+    // HashSet.toValues,
+    Array.flatMap((x) => {
+      const newSwarmClone = Cell.toField(x.fromCell).pipe(
+        HashMap.remove(x.fromCell.coords)
+      );
+
+      return pipe(
+        HashSet.toValues(x.toCells),
+        Array.map((toCell) => {
+          const newSwarm = new Swarm({
+            field: HashMap.set(newSwarmClone, toCell.coords, x.fromCell.member),
+          });
+
+          const cellInNewSwarm = Cell.findFirstOccupied(newSwarm.graph, (x) =>
+            Equal.equals(x.coords, toCell.coords)
+          );
+
+          if (Option.isNone(cellInNewSwarm)) {
+            throw new Error("slideableNeighborsEmptyCellsStep");
+          }
+
+          return {
+            toEmptyCellCoords: toCell.coords,
+            cellInNewSwarm,
+          };
+        })
+      );
+    }),
+    (x) =>
+      HashMap.make(
+        ...x.map((s) => [s.toEmptyCellCoords, s.cellInNewSwarm.value] as const)
+      ),
+    HashMap.removeMany(prev)
   );
 };
 
 const movesStrategies = {
   Ant: (from) => {
-    let result: HashSet.HashSet<Cell.Cell> = HashSet.empty();
-    let next: HashSet.HashSet<Cell.Cell> = HashSet.make(from);
+    let result = HashSet.make(from.coords);
+    let next = HashSet.make(from);
 
     while (HashSet.size(next) !== 0) {
       const stepResult = slideableNeighborsEmptyCellsStep(next, result);
-      next = stepResult;
-      result = HashSet.union(result, stepResult);
+
+      next = HashSet.make(...HashMap.values(stepResult));
+
+      const emptyCells = HashMap.keySet(stepResult).pipe(
+        HashSet.map((emptyCoords) => {
+          const emptyCellWithCoords = Cell.findFirstEmpty(from, (emptyCell) =>
+            Equal.equals(emptyCoords, emptyCell.coords)
+          );
+
+          if (Option.isNone(emptyCellWithCoords)) {
+            throw new Error("movesStrategies.Ant");
+          }
+          return emptyCellWithCoords.value.coords;
+        })
+      );
+
+      result = HashSet.union(result, emptyCells);
     }
 
-    return result;
+    return HashSet.remove(result, from.coords).pipe(
+      HashSet.map(
+        (coord) =>
+          [
+            coord,
+            Cell.findFirstEmpty(from, (x) => Equal.equals(x.coords, coord)),
+          ] as const
+      ),
+      HashSet.map(([_, x]) => {
+        if (Option.isNone(x)) {
+          throw new Error("movesStrategies.Ant222");
+        }
+        return x.value;
+      })
+    );
   },
-  Grasshopper: (from) =>
-    pipe(
-      Cell.bordersWithNeighborsOccupied(from),
-      Array.map(getEmptyByDiagonal(from)),
-      HashSet.fromIterable
-    ),
   Beetle: (from) =>
     HashSet.union<Cell.Cell>(
       Cell.slideableNeighborsEmptyCells(from),
@@ -415,17 +361,58 @@ const movesStrategies = {
         Array.filter(from.neighbors, Cell.Cell.$is("Occupied"))
       )
     ),
-  Spider: (from) => {
-    // TODO: Can ref itself ???
-    const initOne = HashSet.make(from);
-    const stepOne = slideableNeighborsEmptyCellsStep(initOne, initOne);
-    const initTwo = HashSet.union(initOne, stepOne);
-    const stepTwo = slideableNeighborsEmptyCellsStep(stepOne, initTwo);
-    const initThree = HashSet.union(initTwo, stepTwo);
-
-    return slideableNeighborsEmptyCellsStep(stepTwo, initThree);
-  },
+  Grasshopper: (from) =>
+    pipe(
+      Cell.bordersWithNeighborsOccupied(from),
+      Array.map(getEmptyByDiagonal(from)),
+      HashSet.fromIterable
+    ),
   QueenBee: (from) => Cell.slideableNeighborsEmptyCells(from),
+  Spider: (from) => {
+    // copied from Ant
+    let result = HashSet.make(from.coords);
+    let next = HashSet.make(from);
+    let i = 0;
+
+    let finalResult = HashSet.empty<Coords.Coords>();
+
+    while (i++ !== 3) {
+      const stepResult = slideableNeighborsEmptyCellsStep(next, result);
+
+      next = HashSet.make(...HashMap.values(stepResult));
+
+      finalResult = HashMap.keySet(stepResult).pipe(
+        HashSet.map((emptyCoords) => {
+          const emptyCellWithCoords = Cell.findFirstEmpty(from, (emptyCell) =>
+            Equal.equals(emptyCoords, emptyCell.coords)
+          );
+
+          if (Option.isNone(emptyCellWithCoords)) {
+            throw new Error("movesStrategies.Ant");
+          }
+          return emptyCellWithCoords.value.coords;
+        })
+      );
+
+      result = HashSet.union(result, finalResult);
+    }
+
+    return HashSet.remove(finalResult, from.coords).pipe(
+      HashSet.map(
+        (coord) =>
+          [
+            coord,
+            Cell.findFirstEmpty(from, (x) => Equal.equals(x.coords, coord)),
+          ] as const
+      ),
+      HashSet.map(([_, x]) => {
+        if (Option.isNone(x)) {
+          throw new Error("movesStrategies.Ant222");
+        }
+        return x.value;
+      })
+    );
+  },
 } as const satisfies Record<
   Bug.Bug["_tag"],
   (from: Cell.Occupied) => HashSet.HashSet<Cell.Cell>
@@ -440,13 +427,15 @@ export const getMovementCellsFor: {
     bug: B
   ): Option.Option<HashSet.HashSet<Cell.Cell>>;
 } = dual(2, <B extends Bug.Bug>(swarm: Swarm, bug: B) =>
-  swarm.pipe(
-    findFirstMap(
+  pipe(
+    Cell.findFirstMap(
+      swarm.graph,
       Cell.Cell.$match({
         Empty: () => Option.none(),
         Occupied: Option.liftPredicate(Cell.hasBug(bug)),
       })
     ),
+    (x) => x,
     Option.map(movesStrategies[bug._tag])
   )
 );
@@ -467,7 +456,10 @@ export const move: {
   ): Either.Either<Swarm, SwarmError.SwarmError> =>
     Either.gen(function* () {
       const targetCell = yield* findTargetMovingCell(swarm, move);
-      const fromCell = findFirstOccupied(swarm, Cell.hasBug(move.bug));
+      const fromCell = Cell.findFirstOccupied(
+        swarm.graph,
+        Cell.hasBug(move.bug)
+      );
 
       if (Option.isNone(fromCell)) {
         // introduction
@@ -563,8 +555,8 @@ export const findTargetMovingCell: {
     move: Move.MovingMove
   ): Either.Either<Cell.Cell, SwarmError.BugNotFound>;
 } = dual(2, (swarm: Swarm, move: Move.MovingMove) =>
-  swarm.pipe(
-    findFirstOccupiedMap((cell) =>
+  pipe(
+    Cell.findFirstOccupiedMap(swarm.graph, (cell) =>
       Cell.withBugInBasis(cell, move.neighbor)
         ? Option.some(cell.neighbors[move.cellBorder])
         : Option.none()
@@ -606,7 +598,7 @@ export const validateSplit: {
         })
       );
     }
-    const connectedOccupiedWithoutCell = reduceWithFilter(
+    const connectedOccupiedWithoutCell = Cell.reduceWithFilter(
       occupiedNeighbor.value,
       0,
       Predicate.compose(
@@ -631,7 +623,7 @@ export const validateSplit: {
  * Возвращает координаты каждой ячейки
  */
 export function getCoordsMap(cell: Cell.Cell) {
-  return reduce<Map<Cell.Cell, Coords.Coords>>(
+  return Cell.reduce<Map<Cell.Cell, Coords.Coords>>(
     cell,
     new Map([[cell, Coords.Coords.Zero]]),
     (acc, cell) => {
@@ -667,11 +659,13 @@ export function getCoordsMap(cell: Cell.Cell) {
   );
 }
 
+const underline = "\u0332";
 export function toString(
   swarm: Swarm,
   options?:
     | {
-        highlightEmpty?: HashSet.HashSet<Cell.Cell> | undefined;
+        target?: Cell.Cell | undefined;
+        highlight?: HashSet.HashSet<Cell.Cell> | undefined;
       }
     | undefined
 ) {
@@ -695,18 +689,47 @@ export function toString(
   return (
     field
       .map((row) =>
-        [...row].map((cell, i) =>
-          cell === undefined
-            ? "   "
-            : Cell.Cell.$match(cell, {
-                Empty: (emptyCell) =>
-                  options?.highlightEmpty &&
-                  HashSet.has(options.highlightEmpty, emptyCell)
-                    ? " × "
-                    : " ○ ",
-                Occupied: (x) => ` ${Bug.symbol(x.member.bug)} `, //BugDto.encodeSync(x.member.bug),
-              })
-        )
+        [...row].map((cell, i) => {
+          if (cell === undefined) {
+            return "   ";
+          } else {
+            const isZero = Equal.equals(cell.coords, Coords.Coords.Zero);
+            const isTarget = options?.target
+              ? Equal.equals(options.target, cell)
+              : false;
+
+            const left = () =>
+              isZero ? "(" + (isTarget ? underline : "") : isTarget ? "_" : " ";
+            const right = (override?: string) => {
+              if (isZero) {
+                if (isTarget) {
+                  return (override ? override : ")") + underline;
+                }
+                return override ? override : ")";
+              } else {
+                if (isTarget) {
+                  return override ? override + underline : "_";
+                }
+                return override ? override : " ";
+              }
+            };
+
+            return Cell.Cell.$match(cell, {
+              Empty: (emptyCell) =>
+                options?.highlight && HashSet.has(options.highlight, emptyCell)
+                  ? `${left()}×${right()}`
+                  : `${left()}○${right()}`,
+              Occupied: (x) =>
+                `${left()}${Bug.symbol(x.member.bug)}${right(
+                  options?.highlight
+                    ? HashSet.has(options.highlight, x)
+                      ? "×"
+                      : undefined
+                    : undefined
+                )}`, //BugDto.encodeSync(x.member.bug),
+            });
+          }
+        })
       )
       // .toReversed()
       .map((x) => x.join(""))
@@ -716,7 +739,7 @@ export function toString(
 }
 
 export const hasIntroducableCells = (side: Side) => (swarm: Swarm) =>
-  reduce(swarm.graph, false, (res, cell) =>
+  Cell.reduce(swarm.graph, false, (res, cell) =>
     Cell.Cell.$match(cell, {
       Empty: () => res,
       Occupied: (occupied) =>

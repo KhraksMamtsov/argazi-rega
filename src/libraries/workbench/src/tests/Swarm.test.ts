@@ -1,13 +1,14 @@
 import * as Bug from "../game/Bug.ts";
 import * as BugNumber from "../game/BugNumber.ts";
-import { SideSchema } from "../game/Side.ts";
+
 import * as Swarm from "../game/Swarm.ts";
 import { HashMap, Option, Equal, Either, Predicate, HashSet } from "effect";
 import * as SwarmMember from "../game/SwarmMember.ts";
 import { Coords } from "../game/Coords.ts";
 import { test, describe, expect, assert } from "@effect/vitest";
 import * as SwarmError from "../game/SwarmError.ts";
-import { Cell } from "../game/Cell.ts";
+import * as Cell from "../game/Cell.ts";
+import { BugDto } from "../api/Bug.dto.ts";
 
 const EmptySwarm = new Swarm.Swarm({
   field: HashMap.empty(),
@@ -40,9 +41,7 @@ describe("Swarm", () => {
     const swarm = new Swarm.Swarm({
       field: HashMap.make([
         Coords.Zero,
-        SwarmMember.Init(
-          new Bug.Ant({ number: BugNumber.One(1), side: "black" })
-        ),
+        SwarmMember.Init(BugDto.decode("bA1")),
       ]),
     });
 
@@ -61,18 +60,8 @@ describe("Swarm", () => {
   test("two members", () => {
     const swarm = new Swarm.Swarm({
       field: HashMap.make(
-        [
-          Coords.Zero,
-          SwarmMember.Init(
-            new Bug.Ant({ number: BugNumber.One(1), side: "black" })
-          ),
-        ],
-        [
-          Coords.Init(1, 0),
-          SwarmMember.Init(
-            new Bug.Ant({ number: BugNumber.Two(2), side: "white" })
-          ),
-        ]
+        [Coords.Zero, SwarmMember.Init(BugDto.decode("bA1"))],
+        [Coords.Init(1, 0), SwarmMember.Init(BugDto.decode("wA2"))]
       ),
     });
 
@@ -91,24 +80,9 @@ describe("Swarm", () => {
   test("three triangle", () => {
     const swarm = new Swarm.Swarm({
       field: HashMap.make(
-        [
-          Coords.Zero,
-          SwarmMember.Init(
-            new Bug.Ant({ number: BugNumber.One(1), side: "black" })
-          ),
-        ],
-        [
-          Coords.Init(1, 0),
-          SwarmMember.Init(
-            new Bug.Ant({ number: BugNumber.One(1), side: "white" })
-          ),
-        ],
-        [
-          Coords.Init(0.5, -1),
-          SwarmMember.Init(
-            new Bug.Ant({ number: BugNumber.Two(2), side: "white" })
-          ),
-        ]
+        [Coords.Zero, SwarmMember.Init(BugDto.decode("bA1"))],
+        [Coords.Init(1, 0), SwarmMember.Init(BugDto.decode("wA1"))],
+        [Coords.Init(0.5, -1), SwarmMember.Init(BugDto.decode("wA2"))]
       ),
     });
 
@@ -247,13 +221,13 @@ describe("Swarm", () => {
 
       assertRefinement(Option.isSome, actualEmptyCells);
       assertRefinement(
-        HashSet.every(Cell.$is("Empty")),
+        HashSet.every(Cell.Cell.$is("Empty")),
         actualEmptyCells.value
       );
 
       console.log(
         Swarm.toString(swarm, {
-          highlightEmpty: actualEmptyCells.value,
+          highlight: actualEmptyCells.value,
         })
       );
 
@@ -303,13 +277,13 @@ describe("Swarm", () => {
 
       assertRefinement(Option.isSome, actualEmptyCells);
       assertRefinement(
-        HashSet.every(Cell.$is("Empty")),
+        HashSet.every(Cell.Cell.$is("Empty")),
         actualEmptyCells.value
       );
 
       console.log(
         Swarm.toString(swarm, {
-          highlightEmpty: actualEmptyCells.value,
+          highlight: actualEmptyCells.value,
         })
       );
 
@@ -343,13 +317,18 @@ describe("Swarm", () => {
       const actualCoords = actualEmptyCells.pipe(
         Option.map(HashSet.map((x) => x.coords))
       );
+      const testBeetleCell = Cell.findFirstOccupied(swarm.graph, (x) =>
+        Cell.withBugInBasis(x, TestBug())
+      );
 
       assertRefinement(Option.isSome, actualEmptyCells);
+      assertRefinement(Option.isSome, testBeetleCell);
       // assertRefinement(Array.every(Cell.$is("Empty")), actualEmptyCells.value);
 
       console.log(
         Swarm.toString(swarm, {
-          highlightEmpty: actualEmptyCells.value,
+          highlight: actualEmptyCells.value,
+          target: testBeetleCell.value,
         })
       );
 
@@ -365,39 +344,15 @@ describe("Swarm", () => {
       );
     });
     test("Spider", () => {
-      const TestBug = () =>
-        new Bug.Spider({ number: BugNumber.One(1), side: "black" });
+      const TestBug = () => BugDto.decode("bS1");
 
       const swarm = new Swarm.Swarm({
         field: HashMap.make(
-          [
-            Coords.Zero,
-            SwarmMember.Init(
-              new Bug.Ant({ number: BugNumber.One(1), side: "black" })
-            ),
-          ],
-          [
-            Coords.Init(1, 0),
-            SwarmMember.Init(
-              new Bug.Ant({ number: BugNumber.Two(2), side: "white" })
-            ),
-          ],
+          [Coords.Zero, SwarmMember.Init(BugDto.decode("bA1"))],
+          [Coords.Init(1, 0), SwarmMember.Init(BugDto.decode("wA2"))],
           [Coords.Init(0.5, -1), SwarmMember.Init(TestBug())],
-          [
-            Coords.Init(1, -2),
-            SwarmMember.Init(
-              new Bug.Ant({ number: BugNumber.Two(2), side: "white" })
-            ),
-          ],
-          [
-            Coords.Init(1.5, -3),
-            SwarmMember.Init(
-              new Bug.Grasshopper({
-                number: BugNumber.Two(2),
-                side: "black",
-              })
-            ),
-          ]
+          [Coords.Init(1, -2), SwarmMember.Init(BugDto.decode("bA2"))],
+          [Coords.Init(1.5, -3), SwarmMember.Init(BugDto.decode("bG3"))]
         ),
       });
 
@@ -405,16 +360,22 @@ describe("Swarm", () => {
       const actualCoords = actualEmptyCells.pipe(
         Option.map(HashSet.map((x) => x.coords))
       );
+      const testSpider = Cell.findFirstOccupied(
+        swarm.graph,
+        Cell.withBugInBasis(TestBug())
+      );
 
       assertRefinement(Option.isSome, actualEmptyCells);
+      assertRefinement(Option.isSome, testSpider);
       assertRefinement(
-        HashSet.every(Cell.$is("Empty")),
+        HashSet.every(Cell.Cell.$is("Empty")),
         actualEmptyCells.value
       );
 
       console.log(
         Swarm.toString(swarm, {
-          highlightEmpty: actualEmptyCells.value,
+          highlight: actualEmptyCells.value,
+          target: testSpider.value,
         })
       );
 
@@ -423,42 +384,15 @@ describe("Swarm", () => {
       );
     });
     test("Ant", () => {
-      const TestBug = () =>
-        new Bug.Ant({ number: BugNumber.One(1), side: "black" });
+      const TestBug = () => BugDto.decode("bA2");
 
       const swarm = new Swarm.Swarm({
         field: HashMap.make(
-          [
-            Coords.Zero,
-            SwarmMember.Init(
-              new Bug.Ant({ number: BugNumber.Two(2), side: "black" })
-            ),
-          ],
-          [
-            Coords.Init(1, 0),
-            SwarmMember.Init(
-              new Bug.Ant({ number: BugNumber.Two(2), side: "white" })
-            ),
-          ],
+          [Coords.Zero, SwarmMember.Init(BugDto.decode("bA1"))],
+          [Coords.Init(1, 0), SwarmMember.Init(BugDto.decode("wA2"))],
           [Coords.Init(0.5, -1), SwarmMember.Init(TestBug())],
-          [
-            Coords.Init(1, -2),
-            SwarmMember.Init(
-              new Bug.Ant({
-                number: BugNumber.Three(3),
-                side: "white",
-              })
-            ),
-          ],
-          [
-            Coords.Init(2, -2),
-            SwarmMember.Init(
-              new Bug.Grasshopper({
-                number: BugNumber.Three(3),
-                side: "black",
-              })
-            ),
-          ]
+          [Coords.Init(1, -2), SwarmMember.Init(BugDto.decode("wA3"))],
+          [Coords.Init(2, -2), SwarmMember.Init(BugDto.decode("bG3"))]
         ),
       });
 
@@ -469,13 +403,20 @@ describe("Swarm", () => {
 
       assertRefinement(Option.isSome, actualEmptyCells);
       assertRefinement(
-        HashSet.every(Cell.$is("Empty")),
+        HashSet.every(Cell.Cell.$is("Empty")),
         actualEmptyCells.value
       );
 
+      const testBugCell = Cell.findFirstOccupied(swarm.graph, (x) =>
+        Equal.equals(x.member.bug, TestBug())
+      );
+
+      assertRefinement(Option.isSome, testBugCell);
+
       console.log(
         Swarm.toString(swarm, {
-          highlightEmpty: actualEmptyCells.value,
+          highlight: actualEmptyCells.value,
+          target: testBugCell.value,
         })
       );
 
@@ -491,8 +432,8 @@ describe("Swarm", () => {
             Coords.Init(2.5, -3),
             Coords.Init(0.5, 1),
             Coords.Init(3, -2),
-            Coords.Init(-0.5, -1),
             Coords.Init(1.5, 1),
+            Coords.Init(-0.5, -1),
             Coords.Init(2, 0),
             Coords.Init(1.5, -1)
           )
@@ -525,7 +466,7 @@ describe("Swarm", () => {
 
     console.log(Swarm.toString(swarm));
 
-    const occupiedCell = Swarm.findFirstOccupied(swarm, (cell) =>
+    const occupiedCell = Cell.findFirstOccupied(swarm.graph, (cell) =>
       Equal.equals(cell.coords, Coords.Init(0.5, -1))
     );
 
@@ -564,7 +505,7 @@ describe("Swarm", () => {
 
     console.log(Swarm.toString(swarm));
 
-    const occupiedCell = Swarm.findFirstOccupied(swarm, (cell) =>
+    const occupiedCell = Cell.findFirstOccupied(swarm.graph, (cell) =>
       Equal.equals(cell.coords, Coords.Init(1, 0))
     );
 

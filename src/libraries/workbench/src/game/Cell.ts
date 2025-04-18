@@ -8,6 +8,7 @@ import {
   Tuple,
   Hash,
   HashSet,
+  HashMap,
 } from "effect";
 import * as Bug from "./Bug.ts";
 import { dual, pipe } from "effect/Function";
@@ -232,6 +233,9 @@ export const slideableNeighborsEmptyCells = (
     bordersWithNeighborsOccupied(cell),
     Array.flatMap(CellBorder.neighbors),
     CellBorder.unique,
+    (x) => {
+      return x;
+    },
     Array.filterMap((cellBorder) => {
       const [leftNeighborBorder, rightNeighborBorder] =
         CellBorder.neighbors(cellBorder);
@@ -314,3 +318,142 @@ export function getCellRelationByCoords(options: {
     Option.getOrElse(() => CellRelation.CellRelation.Detached())
   );
 }
+
+export const reduceWithFilter = <B, C extends Cell>(
+  startCell: Cell,
+  b: B,
+  filterPath: Predicate.Refinement<Cell, C>,
+  f: (b: B, a: C) => B
+): B => {
+  let acc = b;
+  const cellsToVisit = [startCell];
+  const visitedCells = new Set();
+
+  while (cellsToVisit.length) {
+    const currentCell = cellsToVisit.pop();
+
+    if (currentCell === undefined) {
+      continue;
+    }
+    if (visitedCells.has(currentCell)) {
+      continue;
+    }
+    if (!filterPath(currentCell)) {
+      continue;
+    }
+
+    acc = f(acc, currentCell);
+
+    Cell.$match(currentCell, {
+      Occupied: (x) => cellsToVisit.push(...x.neighbors),
+      Empty: (x) => cellsToVisit.push(...pipe(x.neighbors, Array.getSomes)),
+    });
+
+    visitedCells.add(currentCell);
+  }
+
+  return acc;
+};
+
+export const reduce = <B>(
+  initialCell: Cell,
+  b: B,
+  f: (b: B, a: Cell) => B
+): B => reduceWithFilter(initialCell, b, (x): x is Cell => true, f);
+
+export const toField = (cell: Cell) =>
+  reduce(
+    cell,
+    HashMap.empty<Coords.Coords, SwarmMember.SwarmMember>(),
+    (field, cell) =>
+      Cell.$match(cell, {
+        Empty: () => field,
+        Occupied: (occupied) =>
+          HashMap.set(field, occupied.coords, occupied.member),
+      })
+  );
+
+export const filter = (predicate: Predicate.Predicate<Cell>) => (cell: Cell) =>
+  reduce<Array<Cell>>(cell, Array.empty(), (acc, cur) => {
+    if (predicate(cur)) {
+      acc.push(cur);
+    }
+    return acc;
+  });
+
+export const findFirst: {
+  (predicate: (cell: Cell) => boolean): (cell: Cell) => Option.Option<Cell>;
+  (cell: Cell, predicate: (cell: Cell) => boolean): Option.Option<Cell>;
+} = dual(2, (cell: Cell, predicate: (cell: Cell) => boolean) => {
+  const predicateOption = Option.liftPredicate(predicate);
+
+  return reduce(cell, Option.none<Cell>(), (acc, cur) =>
+    acc.pipe(Option.orElse(() => predicateOption(cur)))
+  );
+});
+
+export const findFirstMap: {
+  <A>(
+    predicate: (cell: Cell) => Option.Option<A>
+  ): (cell: Cell) => Option.Option<A>;
+  <A>(
+    cell: Cell,
+    predicate: (cell: Cell) => Option.Option<A>
+  ): Option.Option<A>;
+} = dual(2, <A>(cell: Cell, predicate: (cell: Cell) => Option.Option<A>) =>
+  reduce(cell, Option.none<A>(), (acc, cur) =>
+    acc.pipe(Option.orElse(() => predicate(cur)))
+  )
+);
+
+export const findFirstOccupiedMap: {
+  <A>(
+    predicate: (cell: Occupied) => Option.Option<A>
+  ): (cell: Cell) => Option.Option<A>;
+  <A>(
+    cell: Cell,
+    predicate: (cell: Occupied) => Option.Option<A>
+  ): Option.Option<A>;
+} = dual(2, <A>(cell: Cell, predicate: (cell: Occupied) => Option.Option<A>) =>
+  findFirstMap(
+    cell,
+    Cell.$match({
+      Empty: () => Option.none(),
+      Occupied: predicate,
+    })
+  )
+);
+
+export const findFirstOccupied: {
+  (
+    predicate: (cell: Occupied) => boolean
+  ): (cell: Cell) => Option.Option<Occupied>;
+  (cell: Cell, predicate: (cell: Occupied) => boolean): Option.Option<Occupied>;
+} = dual(2, (cell: Cell, predicate: (cell: Occupied) => boolean) =>
+  findFirstOccupiedMap(cell, Option.liftPredicate(predicate))
+);
+
+export const findFirstEmptyMap: {
+  <A>(
+    predicate: (cell: Empty) => Option.Option<A>
+  ): (cell: Cell) => Option.Option<A>;
+  <A>(
+    cell: Cell,
+    predicate: (cell: Empty) => Option.Option<A>
+  ): Option.Option<A>;
+} = dual(2, <A>(cell: Cell, predicate: (cell: Empty) => Option.Option<A>) =>
+  findFirstMap(
+    cell,
+    Cell.$match({
+      Empty: predicate,
+      Occupied: () => Option.none(),
+    })
+  )
+);
+
+export const findFirstEmpty: {
+  (predicate: (cell: Empty) => boolean): (cell: Cell) => Option.Option<Empty>;
+  (cell: Cell, predicate: (cell: Empty) => boolean): Option.Option<Empty>;
+} = dual(2, (cell: Cell, predicate: (cell: Empty) => boolean) =>
+  findFirstEmptyMap(cell, Option.liftPredicate(predicate))
+);

@@ -80,4 +80,6 @@ export class MoveDto extends Schema.Union(
   InitialMoveDto
 ).annotations({
   identifier: "MoveDto",
-}) {}
+}) {
+  static decode = Schema.decodeSync(this);
+}
