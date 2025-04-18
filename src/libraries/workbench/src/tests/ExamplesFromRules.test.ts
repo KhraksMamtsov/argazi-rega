@@ -346,17 +346,12 @@ describe("Examples from rules", () => {
         actualCoords,
         Option.some(
           HashSet.make(
-            Coords.Init(1, 2),
-            Coords.Init(0, 2),
             Coords.Init(-0.5, 1),
-            Coords.Init(1.5, 1),
-            Coords.Init(2.5, 1),
-            Coords.Init(-1, 0),
+            Coords.Init(0, 0),
+            Coords.Init(1, 0),
             Coords.Init(3, 0),
             Coords.Init(-0.5, -1),
-            Coords.Init(2.5, -1),
-            Coords.Init(0, -2),
-            Coords.Init(2, -2)
+            Coords.Init(1.5, -1)
           )
         )
       )
