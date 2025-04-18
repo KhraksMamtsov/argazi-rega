@@ -9,6 +9,7 @@ import { test, describe, expect, assert } from "@effect/vitest";
 import * as SwarmError from "../game/SwarmError.ts";
 import * as Cell from "../game/Cell.ts";
 import { BugDto } from "../api/Bug.dto.ts";
+import { itemsCount } from "effect/Schema";
 
 const EmptySwarm = new Swarm.Swarm({
   field: HashMap.empty(),
@@ -420,25 +421,28 @@ describe("Swarm", () => {
         })
       );
 
-      expect(actualCoords).toEqual(
-        Option.some(
-          HashSet.make(
-            Coords.Init(0, -2),
-            Coords.Init(0.5, -3),
-            Coords.Init(-1, 0),
-            Coords.Init(1.5, -3),
-            Coords.Init(2.5, -1),
-            Coords.Init(-0.5, 1),
-            Coords.Init(2.5, -3),
-            Coords.Init(0.5, 1),
-            Coords.Init(3, -2),
-            Coords.Init(1.5, 1),
-            Coords.Init(-0.5, -1),
-            Coords.Init(2, 0),
-            Coords.Init(1.5, -1)
+      expect(
+        Equal.equals(
+          actualCoords,
+          Option.some(
+            HashSet.make(
+              Coords.Init(0, -2),
+              Coords.Init(0.5, -3),
+              Coords.Init(-1, 0),
+              Coords.Init(1.5, -3),
+              Coords.Init(2.5, -1),
+              Coords.Init(-0.5, 1),
+              Coords.Init(2.5, -3),
+              Coords.Init(0.5, 1),
+              Coords.Init(3, -2),
+              Coords.Init(1.5, 1),
+              Coords.Init(-0.5, -1),
+              Coords.Init(2, 0),
+              Coords.Init(1.5, -1)
+            )
           )
         )
-      );
+      ).toBe(true);
     });
   });
 

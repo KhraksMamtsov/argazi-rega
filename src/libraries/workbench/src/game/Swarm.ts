@@ -312,7 +312,10 @@ const slideableNeighborsEmptyCellsStep = (
   );
 };
 
-const movesStrategies = {
+const movesStrategies: Record<
+  Bug.Bug["_tag"],
+  (from: Cell.Occupied) => HashSet.HashSet<Cell.Cell>
+> = {
   Ant: (from) => {
     let result = HashSet.make(from.coords);
     let next = HashSet.make(from);
@@ -360,6 +363,23 @@ const movesStrategies = {
       HashSet.fromIterable(
         Array.filter(from.neighbors, Cell.Cell.$is("Occupied"))
       )
+    ),
+  Ladybug: (from) =>
+    HashSet.fromIterable(
+      Array.filter(from.neighbors, Cell.Cell.$is("Occupied"))
+    ).pipe(
+      HashSet.flatMap((x) =>
+        Array.filter(x.neighbors, Cell.Cell.$is("Occupied"))
+      ),
+      HashSet.difference(HashSet.make(from)),
+      HashSet.flatMap((x) => Array.filter(x.neighbors, Cell.Cell.$is("Empty")))
+    ),
+  Mosquito: (from) =>
+    pipe(
+      HashSet.fromIterable(from.neighbors),
+      HashSet.filter(Cell.Cell.$is("Occupied")),
+      HashSet.filter((x) => Cell.masterBug(x)._tag !== "Mosquito"), // ???
+      HashSet.flatMap((x) => movesStrategies[Cell.masterBug(x)._tag](from))
     ),
   Grasshopper: (from) =>
     pipe(

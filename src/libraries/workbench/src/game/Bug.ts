@@ -16,8 +16,6 @@ export class QueenBee extends Schema.TaggedClass<QueenBee>("QueenBee")(
   }
 }
 
-const qwe = Schema.asSchema(QueenBee);
-
 export class Beetle extends Schema.TaggedClass<Beetle>("Beetle")("Beetle", {
   ..._Bug.fields,
   number: Schema.Literal(...BugNumber._OneTwo),
@@ -65,25 +63,46 @@ export class Ant extends Schema.TaggedClass<Ant>("Ant")("Ant", {
   }
 }
 
-export class Ladybug extends Schema.TaggedClass<Ladybug>("Ladybug")("Ladybug", {
-  ..._Bug.fields,
-}) {}
+export class Ladybug extends Schema.TaggedClass<Ladybug>("Ladybug")(
+  "Ladybug",
+
+  { ..._Bug.fields, number: Schema.Literal(...BugNumber._One) }
+) {
+  static Init(side: Side.Side) {
+    return new Ladybug({ number: BugNumber._One[0], side });
+  }
+}
 
 export class Mosquito extends Schema.TaggedClass<Mosquito>("Mosquito")(
   "Mosquito",
-  { ..._Bug.fields }
-) {}
+  { ..._Bug.fields, number: Schema.Literal(...BugNumber._One) }
+) {
+  static Init(side: Side.Side) {
+    return new Mosquito({ number: BugNumber._One[0], side });
+  }
+}
 
 export class Pillbug extends Schema.TaggedClass<Pillbug>("Pillbug")("Pillbug", {
   ..._Bug.fields,
-}) {}
+  number: Schema.Literal(...BugNumber._OneTwo),
+}) {
+  static Init(side: Side.Side) {
+    return Tuple.map(
+      BugNumber._OneTwo,
+      (number) => new Pillbug({ number, side })
+    );
+  }
+}
 
 export const BugSchema = Schema.Union(
   QueenBee,
   Beetle,
   Grasshopper,
   Spider,
-  Ant
+  Ant,
+  Ladybug,
+  Mosquito
+  // Pillbug
 );
 export type Bug = typeof BugSchema.Type;
 
@@ -101,7 +120,9 @@ export const emoji = Bug.$match({
   Beetle: () => "🪲",
   Grasshopper: () => "🦗",
   Spider: () => "🕷",
-  // 🦟 🐞 🪱
+  Ladybug: () => "🐞",
+  Mosquito: () => "🦟",
+  Pillbug: () => "🪱",
 });
 
 const one = "\u030A";
@@ -120,6 +141,8 @@ const symbolMap: Record<Bug["_tag"], string> = {
   Grasshopper: "G",
   QueenBee: "Q",
   Spider: "S",
+  Ladybug: "L",
+  Mosquito: "M",
 };
 
 export const symbol = (bug: Bug) => {
