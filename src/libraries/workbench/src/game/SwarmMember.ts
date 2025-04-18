@@ -4,41 +4,41 @@ import { dual } from "effect/Function";
 
 export class SwarmMember<B extends Bug.Bug = Bug.Bug> extends Data.Class<{
   bug: B;
-  beetles: ReadonlyArray<Bug.Beetle>;
+  cover: ReadonlyArray<Bug.Beetle | Bug.Mosquito>;
 }> {}
 
-export const Init = (bug: Bug.Bug) => new SwarmMember({ bug, beetles: [] });
+export const Init = (bug: Bug.Bug) => new SwarmMember({ bug, cover: [] });
 
-export const addBeetle: {
+export const addCover: {
   <B extends Bug.Bug>(
     swarmMember: SwarmMember<B>,
-    beetle: Bug.Beetle
+    beetle: Bug.Beetle | Bug.Mosquito
   ): SwarmMember<B>;
   (
-    beetle: Bug.Beetle
+    beetle: Bug.Beetle | Bug.Mosquito
   ): <B extends Bug.Bug>(swarmMember: SwarmMember<B>) => SwarmMember<B>;
 } = dual(
   2,
   <B extends Bug.Bug>(
     swarmMember: SwarmMember<B>,
-    beetle: Bug.Beetle
+    beetle: Bug.Beetle | Bug.Mosquito
   ): SwarmMember<B> =>
     new SwarmMember({
       bug: swarmMember.bug,
-      beetles: [...swarmMember.beetles, beetle],
+      cover: [...swarmMember.cover, beetle],
     })
 );
 
 export const popBug = (
   swarmMember: SwarmMember
 ): readonly [Bug.Bug, Option.Option<SwarmMember>] => {
-  if (Array.isNonEmptyReadonlyArray(swarmMember.beetles)) {
+  if (Array.isNonEmptyReadonlyArray(swarmMember.cover)) {
     return [
-      Array.lastNonEmpty(swarmMember.beetles),
+      Array.lastNonEmpty(swarmMember.cover),
       Option.some(
         new SwarmMember({
           bug: swarmMember.bug,
-          beetles: Array.initNonEmpty(swarmMember.beetles),
+          cover: Array.initNonEmpty(swarmMember.cover),
         })
       ),
     ];

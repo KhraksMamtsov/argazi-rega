@@ -257,7 +257,7 @@ export const bugs = (swarm: Swarm) =>
       },
       (acc, [_coords, swarmMember]) => {
         acc[swarmMember.bug.side].push(swarmMember.bug);
-        swarmMember.beetles.forEach((bug) => acc[bug.side].push(bug));
+        swarmMember.cover.forEach((bug) => acc[bug.side].push(bug));
 
         return acc;
       }
@@ -378,7 +378,7 @@ const movesStrategies: Record<
     pipe(
       HashSet.fromIterable(from.neighbors),
       HashSet.filter(Cell.Cell.$is("Occupied")),
-      HashSet.filter((x) => Cell.masterBug(x)._tag !== "Mosquito"), // ???
+      HashSet.filter((x) => !Bug.Bug.$is("Mosquito")(Cell.masterBug(x))),
       HashSet.flatMap((x) => movesStrategies[Cell.masterBug(x)._tag](from))
     ),
   Grasshopper: (from) =>
@@ -455,8 +455,14 @@ export const getMovementCellsFor: {
         Occupied: Option.liftPredicate(Cell.hasBug(bug)),
       })
     ),
-    (x) => x,
-    Option.map(movesStrategies[bug._tag])
+    Option.map((x) => {
+      if (Bug.Bug.$is("Mosquito")(bug)) {
+        if (!Cell.withBugInBasis(bug)) {
+          return movesStrategies["Beetle"](x);
+        }
+      }
+      return movesStrategies[bug._tag](x);
+    })
   )
 );
 
@@ -552,7 +558,7 @@ export const move: {
             HashMap.set(
               validatedSwarm.field,
               x.coords,
-              SwarmMember.addBeetle(x.member, bug)
+              SwarmMember.addCover(x.member, bug)
             )
           );
         },

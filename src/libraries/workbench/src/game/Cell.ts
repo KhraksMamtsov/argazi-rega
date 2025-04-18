@@ -95,7 +95,7 @@ export class Occupied<B extends Bug.Bug = Bug.Bug> implements Equal.Equal {
   setBeetles(beetles: ReadonlyArray<Bug.Beetle>) {
     this.member = new SwarmMember.SwarmMember({
       bug: this.member.bug,
-      beetles,
+      cover: beetles,
     });
     return this;
   }
@@ -139,9 +139,7 @@ export class Occupied<B extends Bug.Bug = Bug.Bug> implements Equal.Equal {
 export const side = (cell: Occupied) => masterBug(cell).side;
 
 export const masterBug = (cell: Occupied) =>
-  Array.last(cell.member.beetles).pipe(
-    Option.getOrElse(() => bugInBasis(cell))
-  );
+  Array.last(cell.member.cover).pipe(Option.getOrElse(() => bugInBasis(cell)));
 
 export const bugInBasis = <B extends Bug.Bug>(cell: Occupied<B>) =>
   cell.member.bug;
@@ -159,7 +157,7 @@ export const hasBug: {
 } = dual(
   2,
   (cell: Occupied, bug: Bug.Bug) =>
-    Array.contains(cell.member.beetles, bug) || withBugInBasis(cell, bug)
+    Array.contains(cell.member.cover, bug) || withBugInBasis(cell, bug)
 );
 
 export const isBugUnderPressure: {
