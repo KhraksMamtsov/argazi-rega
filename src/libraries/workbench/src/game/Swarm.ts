@@ -313,7 +313,7 @@ const slideableNeighborsEmptyCellsStep = (
 };
 
 const movesStrategies: Record<
-  Bug.Bug["_tag"],
+  Exclude<Bug.Bug["_tag"], "Beetle"> | "BeetleCover" | "BeetleBottom",
   (from: Cell.Occupied) => HashSet.HashSet<Cell.Cell>
 > = {
   Ant: (from) => {
@@ -357,13 +357,14 @@ const movesStrategies: Record<
       })
     );
   },
-  Beetle: (from) =>
+  BeetleBottom: (from) =>
     HashSet.union<Cell.Cell>(
       Cell.slideableNeighborsEmptyCells(from),
       HashSet.fromIterable(
         Array.filter(from.neighbors, Cell.Cell.$is("Occupied"))
       )
     ),
+  BeetleCover: (from) => HashSet.fromIterable(from.neighbors),
   Ladybug: (from) =>
     HashSet.fromIterable(
       Array.filter(from.neighbors, Cell.Cell.$is("Occupied"))
@@ -379,7 +380,14 @@ const movesStrategies: Record<
       HashSet.fromIterable(from.neighbors),
       HashSet.filter(Cell.Cell.$is("Occupied")),
       HashSet.filter((x) => !Bug.Bug.$is("Mosquito")(Cell.masterBug(x))),
-      HashSet.flatMap((x) => movesStrategies[Cell.masterBug(x)._tag](from))
+      HashSet.flatMap((x) => {
+        const masterBug = Cell.masterBug(x);
+        if (Bug.Bug.$is("Beetle")(masterBug)) {
+          return movesStrategies["BeetleBottom"](from);
+        }
+
+        return movesStrategies[masterBug._tag](from);
+      })
     ),
   Grasshopper: (from) =>
     pipe(
@@ -433,10 +441,7 @@ const movesStrategies: Record<
       })
     );
   },
-} as const satisfies Record<
-  Bug.Bug["_tag"],
-  (from: Cell.Occupied) => HashSet.HashSet<Cell.Cell>
->;
+};
 
 export const getMovementCellsFor: {
   <B extends Bug.Bug>(
@@ -457,8 +462,17 @@ export const getMovementCellsFor: {
     ),
     Option.map((x) => {
       if (Bug.Bug.$is("Mosquito")(bug)) {
-        if (!Cell.withBugInBasis(bug)) {
-          return movesStrategies["Beetle"](x);
+        // если ходят комаром и он стоит на другом жуке
+        if (!Cell.withBugInBasis(x, bug)) {
+          return movesStrategies["BeetleCover"](x);
+        }
+      }
+      if (Bug.Bug.$is("Beetle")(bug)) {
+        // если ходят жуком и он стоит на другом жуке
+        if (!Cell.withBugInBasis(x, bug)) {
+          return movesStrategies["BeetleCover"](x);
+        } else {
+          return movesStrategies["BeetleBottom"](x);
         }
       }
       return movesStrategies[bug._tag](x);
@@ -752,7 +766,10 @@ export function toString(
                       ? "×"
                       : undefined
                     : undefined
-                )}`, //BugDto.encodeSync(x.member.bug),
+                )}` +
+                (x.member.cover.length === 0
+                  ? ""
+                  : x.member.cover.map(Bug.symbol).join("")), //BugDto.encodeSync(x.member.bug),
             });
           }
         })
