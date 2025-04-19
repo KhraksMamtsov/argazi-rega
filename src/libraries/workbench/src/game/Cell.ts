@@ -78,10 +78,6 @@ export class Empty implements Equal.Equal {
   static is(x: unknown): x is Empty {
     return Cell.$is("Empty")(x);
   }
-  static refine(x: Cell): x is Empty {
-    return x._tag === "Empty";
-  }
-  // static isOption = Option.liftPredicate(this.is);
 }
 export type OccupiedNeighbors = [Cell, Cell, Cell, Cell, Cell, Cell];
 

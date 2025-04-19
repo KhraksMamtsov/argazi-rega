@@ -66,7 +66,7 @@ describe("Examples from rules", () => {
     );
   });
 
-  test.only("Beetle", () => {
+  test("Beetle", () => {
     const WhiteBeetle = () => BugDto.decode("wB1");
 
     const swarm = new Swarm.Swarm({

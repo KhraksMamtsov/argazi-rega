@@ -121,13 +121,8 @@ export const refine: {
   <T extends Bug["_tag"]>(bug: Bug, tag: T): bug is Extract<Bug, { _tag: T }>;
 } = dual(
   2,
-  <T extends Bug["_tag"]>(
-    bug: Bug,
-    tag: T
-  ): bug is Extract<Bug, { _tag: T }> => {
-    console.log(tag, bug);
-    return Bug.$is(tag)(bug);
-  }
+  <T extends Bug["_tag"]>(bug: Bug, tag: T): bug is Extract<Bug, { _tag: T }> =>
+    Bug.$is(tag)(bug)
 );
 
 export const refineQueen = refine("QueenBee");
