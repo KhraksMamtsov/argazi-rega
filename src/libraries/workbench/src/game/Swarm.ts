@@ -19,7 +19,7 @@ import * as CellBorder from "./CellBorder.ts";
 import * as Coords from "./Coords.ts";
 import * as Bug from "./Bug.ts";
 import * as SwarmMember from "./SwarmMember.ts";
-import { absurd, dual, hole } from "effect/Function";
+import { dual } from "effect/Function";
 import { distributive } from "../shared/effect/Types.ts";
 import { QueenBeeState } from "./QueenBeeState.ts";
 import * as SwarmError from "./SwarmError.ts";

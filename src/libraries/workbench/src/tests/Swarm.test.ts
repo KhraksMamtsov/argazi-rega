@@ -334,9 +334,63 @@ describe("Swarm", () => {
       );
     });
 
-    test.only("Beetle cover", () => {
+    test("Beetle cover", () => {
       const TestBug = () =>
         new Bug.Beetle({
+          number: BugNumber.One(1),
+          side: "black",
+        });
+
+      const swarm = new Swarm.Swarm({
+        field: HashMap.make(
+          [Coords.Zero, SwarmMember.Init(BugDto.decode("bA1"))],
+          [Coords.Init(1, 0), SwarmMember.Init(BugDto.decode("wA2"))],
+          [
+            Coords.Init(0.5, -1),
+            new SwarmMember.SwarmMember({
+              bug: BugDto.decode("bA2"),
+              cover: [TestBug()],
+            }),
+          ]
+        ),
+      });
+
+      const actualEmptyCells = Swarm.getMovementCellsFor(swarm, TestBug());
+      const actualCoords = actualEmptyCells.pipe(
+        Option.map(HashSet.map((x) => x.coords))
+      );
+      const testBeetleCell = Cell.findFirstOccupied(swarm.graph, (x) =>
+        Cell.withBugInBasis(x, TestBug())
+      );
+
+      assertRefinement(Option.isSome, actualEmptyCells);
+      // assertRefinement(Option.isSome, testBeetleCell);
+      // assertRefinement(Array.every(Cell.$is("Empty")), actualEmptyCells.value);
+
+      console.log(
+        Swarm.toString(swarm, {
+          highlight: actualEmptyCells.value,
+          // target: testBeetleCell.value,
+        })
+      );
+
+      expect(actualCoords).toEqual(
+        Option.some(
+          HashSet.make(
+            Coords.Init(1, 0),
+            Coords.Zero,
+            Coords.Init(-0.5, -1),
+            Coords.Init(1.5, -1),
+            Coords.Init(0, -2),
+            Coords.Init(1, -2)
+          )
+        )
+      );
+    });
+
+    test("Mosquito cover", () => {
+      const TestBug = () =>
+        new Bug.Mosquito({
           number: BugNumber.One(1),
           side: "black",
         });
