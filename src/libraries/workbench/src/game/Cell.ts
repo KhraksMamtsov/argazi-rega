@@ -20,8 +20,24 @@ import * as Coords from "./Coords.ts";
 import * as SwarmMember from "./SwarmMember.ts";
 
 export type Cell = Empty | Occupied;
-export const Cell = Data.taggedEnum<Cell>();
+const Cell = Data.taggedEnum<Cell>();
 
+export const match = Cell.$match;
+export const refine: {
+  <T extends Cell["_tag"]>(
+    tag: T
+  ): (cell: Cell) => cell is Extract<Cell, { _tag: T }>;
+  <T extends Cell["_tag"]>(
+    cell: Cell,
+    tag: T
+  ): cell is Extract<Cell, { _tag: T }>;
+} = dual(
+  2,
+  <T extends Cell["_tag"]>(
+    cell: Cell,
+    tag: T
+  ): cell is Extract<Cell, { _tag: T }> => Cell.$is(tag)(cell)
+);
 export type EmptyNeighbors = [
   Option.Option<Cell>,
   Option.Option<Cell>,
@@ -69,7 +85,9 @@ export class Empty implements Equal.Equal {
 }
 export type OccupiedNeighbors = [Cell, Cell, Cell, Cell, Cell, Cell];
 
-export class Occupied<B extends Bug.Bug = Bug.Bug> implements Equal.Equal {
+export class Occupied<B extends Bug.Bug = Bug.Bug>
+  implements Hash.Hash, Equal.Equal
+{
   readonly _tag = "Occupied";
   member: SwarmMember.SwarmMember<B>;
   readonly neighbors: OccupiedNeighbors;
@@ -90,14 +108,6 @@ export class Occupied<B extends Bug.Bug = Bug.Bug> implements Equal.Equal {
   }
   [Hash.symbol](): number {
     return Hash.hash(this.coords);
-  }
-
-  setBeetles(beetles: ReadonlyArray<Bug.Beetle>) {
-    this.member = new SwarmMember.SwarmMember({
-      bug: this.member.bug,
-      cover: beetles,
-    });
-    return this;
   }
   static Detached(options: {
     member: SwarmMember.SwarmMember;
@@ -221,7 +231,7 @@ export const bordersWithNeighborsOccupied = (cell: Cell) =>
 export const isSurroundedWithOccupiedCells = <O extends Occupied>(
   occupied: O
 ) =>
-  pipe(occupied.neighbors, Array.filter(Cell.$is("Occupied"))).length ===
+  pipe(occupied.neighbors, Array.filter(refine("Occupied"))).length ===
   CellBorder.CELL_BORDERS;
 
 export const slideableNeighborsEmptyCells = (

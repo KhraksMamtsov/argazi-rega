@@ -59,7 +59,7 @@ export class Swarm extends Data.Class<{
           reversedField: cache.reversedField,
         });
 
-        Cell.Cell.$match(cell, {
+        Cell.match(cell, {
           Empty: (emptyCell) => {
             emptyCell.neighbors[cellBorder] = Option.some(neighbor);
           },
@@ -78,7 +78,7 @@ export class Swarm extends Data.Class<{
           reversedField: cache.reversedField,
         });
 
-        Cell.Cell.$match(cell, {
+        Cell.match(cell, {
           Empty: (x) => {
             x.neighbors[cellBorder] = Option.some(neighbor);
           },
@@ -86,7 +86,7 @@ export class Swarm extends Data.Class<{
             x.neighbors[cellBorder] = neighbor;
           },
         });
-        Cell.Cell.$match(neighbor, {
+        Cell.match(neighbor, {
           Empty: (x) => {
             x.neighbors[CellBorder.opposite(cellBorder)] = Option.some(cell);
           },
@@ -97,7 +97,7 @@ export class Swarm extends Data.Class<{
         return;
       }
 
-      Cell.Cell.$match(cell, {
+      Cell.match(cell, {
         Empty: () => {},
         Occupied: (x) => {
           const neighbor = this.getFor(Cell.Empty.Detached(neighborCoords), {
@@ -154,13 +154,13 @@ export class Swarm extends Data.Class<{
         occupied: 0,
       },
       (stats, cell) =>
-        Cell.Cell.$match(cell, {
+        Cell.match(cell, {
           Empty: (empty) => {
             stats.empty++;
             pipe(
               Array.getSomes(empty.neighbors),
               Array.map(
-                Cell.Cell.$match({
+                Cell.match({
                   Empty: () => stats.connections.empty.empty++,
                   Occupied: () => stats.connections.empty.occupied++,
                 })
@@ -172,7 +172,7 @@ export class Swarm extends Data.Class<{
             stats.occupied++;
             Array.map(
               occupied.neighbors,
-              Cell.Cell.$match({
+              Cell.match({
                 Empty: () => stats.connections.occupied.empty++,
                 Occupied: () => stats.connections.occupied.occupied++,
               })
@@ -191,7 +191,7 @@ export const getQueenBee: {
   Cell.findFirstMap(
     swarm.graph,
     pipe(
-      Cell.Cell.$is("Occupied"),
+      Cell.refine("Occupied"),
       Predicate.compose(Cell.withBugInBasis(Bug.QueenBee.Init(side))),
       (x) => Option.liftPredicate(x)
     )
@@ -361,29 +361,33 @@ const movesStrategies: Record<
     HashSet.union<Cell.Cell>(
       Cell.slideableNeighborsEmptyCells(from),
       HashSet.fromIterable(
-        Array.filter(from.neighbors, Cell.Cell.$is("Occupied"))
+        Array.filter(from.neighbors, Cell.refine("Occupied"))
       )
     ),
   BeetleCover: (from) => HashSet.fromIterable(from.neighbors),
   Ladybug: (from) =>
     HashSet.fromIterable(
-      Array.filter(from.neighbors, Cell.Cell.$is("Occupied"))
+      Array.filter(from.neighbors, Cell.refine("Occupied"))
     ).pipe(
       HashSet.flatMap((x) =>
-        Array.filter(x.neighbors, Cell.Cell.$is("Occupied"))
+        Array.filter(x.neighbors, Cell.refine("Occupied"))
       ),
       HashSet.difference(HashSet.make(from)),
-      HashSet.flatMap((x) => Array.filter(x.neighbors, Cell.Cell.$is("Empty")))
+      HashSet.flatMap((x) => Array.filter(x.neighbors, Cell.refine("Empty")))
     ),
   Mosquito: (from) =>
     pipe(
       HashSet.fromIterable(from.neighbors),
-      HashSet.filter(Cell.Cell.$is("Occupied")),
-      HashSet.filter((x) => !Bug.Bug.$is("Mosquito")(Cell.masterBug(x))),
+      HashSet.filter(Cell.refine("Occupied")),
+      HashSet.filter((x) => !Bug.refine("Mosquito")(Cell.masterBug(x))),
       HashSet.flatMap((x) => {
         const masterBug = Cell.masterBug(x);
-        if (Bug.Bug.$is("Beetle")(masterBug)) {
+        if (Bug.refine("Beetle")(masterBug)) {
           return movesStrategies["BeetleBottom"](from);
+        }
+        // TODO: add Pillbug
+        if (Bug.refine("Pillbug")(masterBug)) {
+          return movesStrategies["Pillbug"](from);
         }
 
         return movesStrategies[masterBug._tag](from);
@@ -395,6 +399,7 @@ const movesStrategies: Record<
       Array.map(getEmptyByDiagonal(from)),
       HashSet.fromIterable
     ),
+  Pillbug: (from) => Cell.slideableNeighborsEmptyCells(from),
   QueenBee: (from) => Cell.slideableNeighborsEmptyCells(from),
   Spider: (from) => {
     // copied from Ant
@@ -455,24 +460,24 @@ export const getMovementCellsFor: {
   pipe(
     Cell.findFirstMap(
       swarm.graph,
-      Cell.Cell.$match({
+      Cell.match({
         Empty: () => Option.none(),
         Occupied: Option.liftPredicate(Cell.hasBug(bug)),
       })
     ),
     Option.map((x) => {
-      if (Bug.Bug.$is("Mosquito")(bug)) {
+      if (Bug.refine("Mosquito")(bug)) {
         // если ходят комаром и он стоит на другом жуке
         if (!Cell.withBugInBasis(x, bug)) {
           return movesStrategies["BeetleCover"](x);
         }
       }
-      if (Bug.Bug.$is("Beetle")(bug)) {
-        const beetleStretegy = Cell.withBugInBasis(x, bug)
+      if (Bug.refine("Beetle")(bug)) {
+        const beetleStrategy = Cell.withBugInBasis(x, bug)
           ? "BeetleBottom"
           : "BeetleCover";
 
-        return movesStrategies[beetleStretegy](x);
+        return movesStrategies[beetleStrategy](x);
       }
       return movesStrategies[bug._tag](x);
     })
@@ -502,7 +507,7 @@ export const move: {
 
       if (Option.isNone(fromCell)) {
         // introduction
-        return yield* Cell.Cell.$match(targetCell, {
+        return yield* Cell.match(targetCell, {
           Empty: (cell) => {
             const isOnlyNeighborsWithMoveSide = pipe(
               Cell.neighborsOccupied(cell),
@@ -557,12 +562,16 @@ export const move: {
 
       const [bug, newFromMember] = SwarmMember.popBug(fromCell.value.member);
 
-      const fieldWithMovedBug = yield* Cell.Cell.$match(targetCell, {
-        Empty: (x) =>
+      const fieldWithMovedBug = yield* Cell.match(targetCell, {
+        Empty: (empty) =>
           Either.right(
-            HashMap.set(validatedSwarm.field, x.coords, SwarmMember.Init(bug))
+            HashMap.set(
+              validatedSwarm.field,
+              empty.coords,
+              SwarmMember.Init(bug)
+            )
           ),
-        Occupied: (x) => {
+        Occupied: (occupied) => {
           if (bug._tag !== "Beetle") {
             return Either.left(new SwarmError.ImpossibleMove({ move }));
           }
@@ -570,8 +579,8 @@ export const move: {
           return Either.right(
             HashMap.set(
               validatedSwarm.field,
-              x.coords,
-              SwarmMember.addCover(x.member, bug)
+              occupied.coords,
+              SwarmMember.addCover(occupied.member, bug)
             )
           );
         },
@@ -607,7 +616,7 @@ export const findTargetMovingCell: {
 export const getEmptyByDiagonal =
   (from: Cell.Cell) =>
   (border: CellBorder.CellBorder): Cell.Empty =>
-    Cell.Cell.$match(from, {
+    Cell.match(from, {
       Empty: (x) => x,
       Occupied: (x) => getEmptyByDiagonal(x.neighbors[border])(border),
     });
@@ -628,7 +637,7 @@ export const validateSplit: {
   ): Either.Either<Swarm, SwarmError.SplitSwarm> => {
     const occupiedNeighbor = Array.findFirst(
       cell.neighbors,
-      Cell.Cell.$is("Occupied")
+      Cell.refine("Occupied")
     );
     if (Option.isNone(occupiedNeighbor)) {
       return Either.left(
@@ -640,10 +649,7 @@ export const validateSplit: {
     const connectedOccupiedWithoutCell = Cell.reduceWithFilter(
       occupiedNeighbor.value,
       0,
-      Predicate.compose(
-        Cell.Cell.$is("Occupied"),
-        (x) => !Equal.equals(x, cell)
-      ),
+      Predicate.compose(Cell.refine("Occupied"), (x) => !Equal.equals(x, cell)),
       (acc) => acc + 1
     );
 
@@ -753,7 +759,7 @@ export function toString(
               }
             };
 
-            return Cell.Cell.$match(cell, {
+            return Cell.match(cell, {
               Empty: (emptyCell) =>
                 options?.highlight && HashSet.has(options.highlight, emptyCell)
                   ? `${left()}×${right()}`
@@ -782,12 +788,12 @@ export function toString(
 
 export const hasIntroducableCells = (side: Side) => (swarm: Swarm) =>
   Cell.reduce(swarm.graph, false, (res, cell) =>
-    Cell.Cell.$match(cell, {
+    Cell.match(cell, {
       Empty: () => res,
       Occupied: (occupied) =>
         res ||
         Array.some(CellBorder.CellBorders, (cellBorder) =>
-          Cell.Cell.$match(occupied.neighbors[cellBorder], {
+          Cell.match(occupied.neighbors[cellBorder], {
             Empty: (emptyNeighbor) =>
               /* has oppositeColor neighbor*/ pipe(
                 Cell.neighborsOccupied(emptyNeighbor),
@@ -801,11 +807,11 @@ export const hasIntroducableCells = (side: Side) => (swarm: Swarm) =>
 
 export const hasMovableSwarmMembers = (side: Side) => (swarm: Swarm) => {
   // return reduce(swarm.graph, false, (res, cell) => {
-  //   return Cell.Cell.$match(cell, {
+  //   return Cell.match(cell, {
   //     Empty: () => res || false,
   //     Occupied: (occupied) => {
   //       Array.some(CellBorder.CellBorders, (cellBorder) => {
-  //         return Cell.Cell.$match(occupied.neighbors[cellBorder], {
+  //         return Cell.match(occupied.neighbors[cellBorder], {
   //           Empty: (emptyNeighbor) => false,
   //           Occupied: () => false,
   //         });

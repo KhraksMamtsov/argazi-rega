@@ -9,7 +9,6 @@ import { test, describe, expect, assert } from "@effect/vitest";
 import * as SwarmError from "../game/SwarmError.ts";
 import * as Cell from "../game/Cell.ts";
 import { BugDto } from "../api/Bug.dto.ts";
-import { itemsCount } from "effect/Schema";
 
 const EmptySwarm = new Swarm.Swarm({
   field: HashMap.empty(),
@@ -222,7 +221,7 @@ describe("Swarm", () => {
 
       assertRefinement(Option.isSome, actualEmptyCells);
       assertRefinement(
-        HashSet.every(Cell.Cell.$is("Empty")),
+        HashSet.every(Cell.refine("Empty")),
         actualEmptyCells.value
       );
 
@@ -278,7 +277,7 @@ describe("Swarm", () => {
 
       assertRefinement(Option.isSome, actualEmptyCells);
       assertRefinement(
-        HashSet.every(Cell.Cell.$is("Empty")),
+        HashSet.every(Cell.refine("Empty")),
         actualEmptyCells.value
       );
 
@@ -313,7 +312,7 @@ describe("Swarm", () => {
 
       assertRefinement(Option.isSome, actualEmptyCells);
       assertRefinement(Option.isSome, testBeetleCell);
-      // assertRefinement(Array.every(Cell.$is("Empty")), actualEmptyCells.value);
+      // assertRefinement(Array.every(Cell.refine("Empty")), actualEmptyCells.value);
 
       console.log(
         Swarm.toString(swarm, {
@@ -365,7 +364,7 @@ describe("Swarm", () => {
 
       assertRefinement(Option.isSome, actualEmptyCells);
       // assertRefinement(Option.isSome, testBeetleCell);
-      // assertRefinement(Array.every(Cell.$is("Empty")), actualEmptyCells.value);
+      // assertRefinement(Array.every(Cell.refine("Empty")), actualEmptyCells.value);
 
       console.log(
         Swarm.toString(swarm, {
@@ -414,17 +413,17 @@ describe("Swarm", () => {
         Option.map(HashSet.map((x) => x.coords))
       );
       const testBeetleCell = Cell.findFirstOccupied(swarm.graph, (x) =>
-        Cell.withBugInBasis(x, TestBug())
+        Cell.hasBug(x, TestBug())
       );
 
       assertRefinement(Option.isSome, actualEmptyCells);
-      // assertRefinement(Option.isSome, testBeetleCell);
-      // assertRefinement(Array.every(Cell.$is("Empty")), actualEmptyCells.value);
+      assertRefinement(Option.isSome, testBeetleCell);
+      // assertRefinement(Array.every(Cell.refine("Empty")), actualEmptyCells.value);
 
       console.log(
         Swarm.toString(swarm, {
           highlight: actualEmptyCells.value,
-          // target: testBeetleCell.value,
+          target: testBeetleCell.value,
         })
       );
 
@@ -466,7 +465,7 @@ describe("Swarm", () => {
       assertRefinement(Option.isSome, actualEmptyCells);
       assertRefinement(Option.isSome, testSpider);
       assertRefinement(
-        HashSet.every(Cell.Cell.$is("Empty")),
+        HashSet.every(Cell.refine("Empty")),
         actualEmptyCells.value
       );
 
@@ -501,7 +500,7 @@ describe("Swarm", () => {
 
       assertRefinement(Option.isSome, actualEmptyCells);
       assertRefinement(
-        HashSet.every(Cell.Cell.$is("Empty")),
+        HashSet.every(Cell.refine("Empty")),
         actualEmptyCells.value
       );
 

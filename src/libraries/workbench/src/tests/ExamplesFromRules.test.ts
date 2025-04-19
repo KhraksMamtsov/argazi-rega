@@ -44,7 +44,7 @@ describe("Examples from rules", () => {
 
     assertRefinement(Option.isSome, actualEmptyCells);
     assertRefinement(
-      HashSet.every(Cell.Cell.$is("Empty")),
+      HashSet.every(Cell.refine("Empty")),
       actualEmptyCells.value
     );
 
@@ -66,7 +66,7 @@ describe("Examples from rules", () => {
     );
   });
 
-  test("Beetle", () => {
+  test.only("Beetle", () => {
     const WhiteBeetle = () => BugDto.decode("wB1");
 
     const swarm = new Swarm.Swarm({

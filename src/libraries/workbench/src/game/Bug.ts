@@ -2,6 +2,7 @@ import { Data, Predicate, Tuple } from "effect";
 import { Schema } from "effect";
 import * as Side from "./Side.ts";
 import * as BugNumber from "./BugNumber.ts";
+import { dual } from "effect/Function";
 
 export class _Bug extends Schema.Struct({
   side: Side.SideSchema,
@@ -101,18 +102,35 @@ export const BugSchema = Schema.Union(
   Spider,
   Ant,
   Ladybug,
-  Mosquito
-  // Pillbug
+  Mosquito,
+  Pillbug
 );
 export type Bug = typeof BugSchema.Type;
 
-export const Bug = Data.taggedEnum<Bug>();
-
-export const refineQueen = (bug: Bug): bug is QueenBee =>
-  Bug.$is("QueenBee")(bug);
+const Bug = Data.taggedEnum<Bug>();
 
 export const refineNotQueen = (bug: Bug): bug is Exclude<Bug, QueenBee> =>
   Predicate.not(refineQueen)(bug);
+
+export const match = Bug.$match;
+// export const refine = Bug.$is;
+export const refine: {
+  <T extends Bug["_tag"]>(
+    tag: T
+  ): (bug: Bug) => bug is Extract<Bug, { _tag: T }>;
+  <T extends Bug["_tag"]>(bug: Bug, tag: T): bug is Extract<Bug, { _tag: T }>;
+} = dual(
+  2,
+  <T extends Bug["_tag"]>(
+    bug: Bug,
+    tag: T
+  ): bug is Extract<Bug, { _tag: T }> => {
+    console.log(tag, bug);
+    return Bug.$is(tag)(bug);
+  }
+);
+
+export const refineQueen = refine("QueenBee");
 
 export const emoji = Bug.$match({
   Ant: () => "🐜",
@@ -143,6 +161,7 @@ const symbolMap: Record<Bug["_tag"], string> = {
   Spider: "S",
   Ladybug: "L",
   Mosquito: "M",
+  Pillbug: "P",
 };
 
 export const symbol = (bug: Bug) => {

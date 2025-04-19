@@ -12,20 +12,20 @@ export const Init = (bug: Bug.Bug) => new SwarmMember({ bug, cover: [] });
 export const addCover: {
   <B extends Bug.Bug>(
     swarmMember: SwarmMember<B>,
-    beetle: Bug.Beetle | Bug.Mosquito
+    beetleOrMosquito: Bug.Beetle | Bug.Mosquito
   ): SwarmMember<B>;
   (
-    beetle: Bug.Beetle | Bug.Mosquito
+    beetleOrMosquito: Bug.Beetle | Bug.Mosquito
   ): <B extends Bug.Bug>(swarmMember: SwarmMember<B>) => SwarmMember<B>;
 } = dual(
   2,
   <B extends Bug.Bug>(
     swarmMember: SwarmMember<B>,
-    beetle: Bug.Beetle | Bug.Mosquito
+    beetleOrMosquito: Bug.Beetle | Bug.Mosquito
   ): SwarmMember<B> =>
     new SwarmMember({
       bug: swarmMember.bug,
-      cover: [...swarmMember.cover, beetle],
+      cover: [...swarmMember.cover, beetleOrMosquito],
     })
 );
 
