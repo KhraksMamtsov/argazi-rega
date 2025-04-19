@@ -468,12 +468,11 @@ export const getMovementCellsFor: {
         }
       }
       if (Bug.Bug.$is("Beetle")(bug)) {
-        // если ходят жуком и он стоит на другом жуке
-        if (!Cell.withBugInBasis(x, bug)) {
-          return movesStrategies["BeetleCover"](x);
-        } else {
-          return movesStrategies["BeetleBottom"](x);
-        }
+        const beetleStretegy = Cell.withBugInBasis(x, bug)
+          ? "BeetleBottom"
+          : "BeetleCover";
+
+        return movesStrategies[beetleStretegy](x);
       }
       return movesStrategies[bug._tag](x);
     })
