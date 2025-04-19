@@ -110,7 +110,27 @@ export class SpiderDto extends Schema.transform(_SpiderDto, Bug.Spider, {
 }).annotations({
   identifier: "SpiderDto",
 }) {}
-// #endregion BeetleDto
+// #endregion SpiderDto
+
+// #region PillbugDto
+const PILLBUG_SIGN = "P";
+
+export const _PillbugDto = Schema.TemplateLiteralParser(
+  Schema.encodedSchema(SideSchema),
+  Schema.Literal(PILLBUG_SIGN),
+  OneTwo
+).annotations({
+  identifier: "_PillbugDto",
+});
+
+export class PillbugDto extends Schema.transform(_PillbugDto, Bug.Pillbug, {
+  strict: true,
+  decode: ([side, _, number]) => ({ side, number, _tag: "Pillbug" }) as const,
+  encode: (b) => [b.side, PILLBUG_SIGN, b.number] as const,
+}).annotations({
+  identifier: "PillbugDto",
+}) {}
+// #endregion PillbugDto
 
 // #region AntDto
 const ANT_SIGN = "A";
@@ -165,7 +185,8 @@ export class BugDto extends Schema.Union(
   AntDto,
   GrasshopperDto,
   LadybugDto,
-  MosquitoDto
+  MosquitoDto,
+  PillbugDto
 ).annotations({
   identifier: "BugDto",
 }) {

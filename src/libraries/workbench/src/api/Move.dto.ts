@@ -61,7 +61,9 @@ export class MovingMoveDto extends Schema.transform(
   }
 ).annotations({
   identifier: "MovingMoveDto",
-}) {}
+}) {
+  static decode = Schema.decodeSync(this);
+}
 
 export class InitialMoveDto extends Schema.transform(
   BugDto,
@@ -73,7 +75,9 @@ export class InitialMoveDto extends Schema.transform(
   }
 ).annotations({
   identifier: "InitialMoveDto",
-}) {}
+}) {
+  static decode = Schema.decodeSync(this);
+}
 
 export class MoveDto extends Schema.Union(
   MovingMoveDto,

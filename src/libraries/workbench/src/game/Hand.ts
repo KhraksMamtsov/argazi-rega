@@ -1,14 +1,14 @@
 import { Data, HashSet, Option } from "effect";
 import * as Bug from "./Bug.ts";
-import type { Side } from "./Side.ts";
+import * as Side from "./Side.ts";
 import { dual } from "effect/Function";
 
 export class Hand extends Data.Class<{
   bugs: HashSet.HashSet<Bug.Bug>;
-  side: Side;
+  side: Side.Side;
 }> {}
 
-export const Init = (side: Side) =>
+export const Init = (side: Side.Side) =>
   new Hand({
     side,
     bugs: HashSet.fromIterable([
@@ -41,3 +41,10 @@ export const extractBug: {
 });
 
 export const isEmpty = (hand: Hand) => HashSet.size(hand.bugs) === 0;
+
+export const toString = (hand: Hand) =>
+  Side.toString(hand.side) +
+  ":" +
+  HashSet.map(hand.bugs, (x) => x._tag[0]! + x.number.toString())
+    .pipe(HashSet.toValues)
+    .join(" ");

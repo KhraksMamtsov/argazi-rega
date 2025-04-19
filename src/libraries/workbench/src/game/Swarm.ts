@@ -28,6 +28,7 @@ import * as Move from "./Move.ts";
 export interface Swarm extends Pipeable.Pipeable {}
 export class Swarm extends Data.Class<{
   field: HashMap.HashMap<Coords.Coords, SwarmMember.SwarmMember>;
+  justMoved: Bug.Bug;
 }> {
   static {
     this.prototype.pipe = function () {
@@ -230,9 +231,12 @@ export const queenBeesState = (swarm: Swarm) => {
   );
 };
 
-export const Empty = () => new Swarm({ field: HashMap.empty() });
 export const Init = (bug: Bug.Bug) =>
-  unsafeIntroduce(Empty(), bug, Coords.Coords.Zero);
+  unsafeIntroduce(
+    new Swarm({ field: HashMap.empty(), justMoved: bug }),
+    bug,
+    Coords.Coords.Zero
+  );
 
 const unsafeIntroduce: {
   (swarm: Swarm, bug: Bug.Bug, coords: Coords.Coords): Swarm;
@@ -242,6 +246,7 @@ const unsafeIntroduce: {
   (swarm: Swarm, bug: Bug.Bug, coords: Coords.Coords): Swarm =>
     new Swarm({
       field: HashMap.set(swarm.field, coords, SwarmMember.Init(bug)),
+      justMoved: bug,
     })
 );
 
@@ -287,6 +292,7 @@ const slideableNeighborsEmptyCellsStep = (
         Array.map((toCell) => {
           const newSwarm = new Swarm({
             field: HashMap.set(newSwarmClone, toCell.coords, x.fromCell.member),
+            justMoved: x.fromCell.member.bug,
           });
 
           const cellInNewSwarm = Cell.findFirstOccupied(newSwarm.graph, (x) =>
@@ -514,7 +520,7 @@ export const move: {
               Array.every((x) => Cell.side(x.occupied) === Move.side(move))
             );
 
-            if (isOnlyNeighborsWithMoveSide) {
+            if (isOnlyNeighborsWithMoveSide || occupiedCount(swarm) >= 1) {
               return Either.right(
                 unsafeIntroduce(swarm, move.bug, cell.coords)
               );
@@ -590,7 +596,7 @@ export const move: {
         onSome: (x) => HashMap.set(fieldWithMovedBug, fromCell.value.coords, x),
       });
 
-      return new Swarm({ field: newField });
+      return new Swarm({ field: newField, justMoved: bug });
     })
 );
 

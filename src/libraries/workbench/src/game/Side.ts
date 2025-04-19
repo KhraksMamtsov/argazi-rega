@@ -14,3 +14,5 @@ const oppositeMap = {
 } as const satisfies Record<Side, Side>;
 
 export const opposite = <S extends Side>(side: S) => oppositeMap[side];
+
+export const toString = (side: Side) => side[0];
