@@ -2,11 +2,11 @@ packages:
   - src/applications/*
   - src/libraries/*
 catalog:
-  effect: ^3.14.10
-  "@effect/platform": ^0.80.10
-  "@effect/platform-node": ^0.76.19
-  "@effect/typeclass": ^0.33.10
-  "@effect/cli": ^0.59.10
+  effect: ^3.14.11
+  "@effect/platform": ^0.80.11
+  "@effect/platform-node": ^0.76.21
+  "@effect/typeclass": ^0.33.11
+  "@effect/cli": ^0.59.11
   typescript: ^5.8.3
 onlyBuiltDependencies:
   - "@parcel/watcher"

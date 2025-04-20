@@ -93,10 +93,10 @@ const makeInitialMove: {
 
   return Match.value(distributive([_extractedWhiteBug, _extractedBlackBug]))
     .pipe(
-      Match.when([{ _tag: "Some" }, { _tag: "None" }], ([white, _black]) =>
+      Match.when([Option.isSome, Option.isNone], ([white, _black]) =>
         Either.right(white.value)
       ),
-      Match.when([{ _tag: "None" }, { _tag: "Some" }], ([_white, black]) =>
+      Match.when([Option.isNone, Option.isSome], ([_white, black]) =>
         Either.right(black.value)
       ),
       Match.orElse(() =>

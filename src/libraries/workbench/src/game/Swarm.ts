@@ -572,7 +572,7 @@ export const move: {
               Array.every((x) => Cell.side(x.occupied) === Move.side(move))
             );
 
-            if (isOnlyNeighborsWithMoveSide || occupiedCount(swarm) >= 1) {
+            if (isOnlyNeighborsWithMoveSide || occupiedCount(swarm) === 1) {
               return Either.right(
                 unsafeIntroduce(swarm, move.bug, cell.coords)
               );
@@ -870,7 +870,7 @@ export function toString(
   );
 }
 
-export const hasIntroducableCells = (side: Side.Side) => (swarm: Swarm) =>
+export const hasIntroducibleCells = (side: Side.Side) => (swarm: Swarm) =>
   Cell.reduce(swarm.graph, false, (res, cell) =>
     Cell.match(cell, {
       Empty: () => res,

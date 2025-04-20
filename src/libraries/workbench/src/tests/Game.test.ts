@@ -45,69 +45,6 @@ b: A1 A2 A3 B1 B2 G1 G2 G3 Q1 S1
   );
 
   it.effect(
-    "pillbug ability",
-    Effect.fn(function* () {
-      const game = yield* Game.Init({
-        pillbug: true,
-      }).pipe(
-        Game.moveAll({
-          init: InitialMoveDto.decode("wQ1"),
-          moves: [
-            MovingMoveDto.decode("b: bP2 wQ1|"),
-            MovingMoveDto.decode("w: wP1 bP2|"),
-            MovingMoveDto.decode("b: bQ1 bP2/"),
-            MovingMoveDto.decode("w: wA1 \\bP2"),
-            MovingMoveDto.decode("b: wQ1 /bP2"),
-          ],
-        })
-      );
-
-      expect(Game.toString(game)).toBe(`№: 6
-⇄: w
-w: A2 A3 B1 B2 G1 G2 G3 P2 S1 S2
-b: A1 A2 A3 B1 B2 G1 G2 G3 P1 S1 S2
-♻: Q̊ !P
-    ○     ○ 
-
- ○     Q̊     ○     ○ 
-
-   (○)    P̲̈     P̊     ○ 
-
- ○     Å     Q̲̊     ○ 
-
-    ○     ○     ○ `);
-
-      const gameError = yield* Game.makeMove(
-        game,
-        MovingMoveDto.decode("w: wQ1 |bP2")
-      ).pipe(Either.flip);
-
-      // expect(gameError).toStrictEqual(
-      //   new GameError.ImpossibleMove({
-      //     move: MovingMoveDto.decode("w: wQ1 |bP2"),
-      //     swarmError: new SwarmError.LastMovedByPillbugViolation({
-      //       move: MovingMoveDto.decode("w: wQ1 |bP2"),
-      //     }),
-      //     step: GameStep.GameStep(6),
-      //   })
-      // );
-
-      expect(
-        Equal.equals(
-          gameError,
-          new GameError.ImpossibleMove({
-            move: MovingMoveDto.decode("w: wQ1 |bP2"),
-            swarmError: new SwarmError.LastMovedByPillbugViolation({
-              move: MovingMoveDto.decode("w: wQ1 |bP2"),
-            }),
-            step: GameStep.GameStep(6),
-          })
-        )
-      ).toBe(true);
-    })
-  );
-
-  it.effect(
     "BugNotFound in game",
     Effect.fn(function* () {
       const gameError = yield* Game.Init().pipe(
@@ -211,4 +148,35 @@ b: A1 A2 A3 B1 B2 G1 G2 G3 Q1 S1 S2
   //     );
   //   })
   // );
+
+  it.effect(
+    "introduction violation",
+    Effect.fn(function* () {
+      const gameError = yield* Game.Init({
+        pillbug: true,
+      }).pipe(
+        Game.moveAll({
+          init: InitialMoveDto.decode("wQ1"),
+          moves: [
+            MovingMoveDto.decode("b: bA1 wQ1|"),
+            MovingMoveDto.decode("w: wP1 wQ1\\"),
+          ],
+        }),
+        Either.flip
+      );
+
+      expect(
+        Equal.equals(
+          gameError,
+          new GameError.ImpossibleMove({
+            move: MovingMoveDto.decode("w: wP1 wQ1\\"),
+            swarmError: new SwarmError.IntroductionMoveViolation({
+              move: MovingMoveDto.decode("w: wP1 wQ1\\"),
+            }),
+            step: GameStep.GameStep(2),
+          })
+        )
+      ).toBe(true);
+    })
+  );
 });
