@@ -1,7 +1,8 @@
-import { Schema } from "effect";
+import { Schema, hole } from "effect";
 import { BugDto } from "./Bug.dto.ts";
 import * as _Move from "../game/Move.ts";
 import * as _Bug from "../game/Bug.ts";
+import * as Side from "../game/Side.ts";
 import type { CellBorder } from "../game/CellBorder.ts";
 
 export class CellBorderRightDto extends Schema.transformLiterals(
@@ -21,6 +22,8 @@ export class CellBorderLeftDto extends Schema.transformLiterals(
 }) {}
 
 export const _MovingMoveDto = Schema.TemplateLiteralParser(
+  Side.SideSchema,
+  Schema.Literal(": "),
   BugDto,
   Schema.Literal(" "),
   Schema.Union(
@@ -36,7 +39,7 @@ export class MovingMoveDto extends Schema.transform(
   Schema.typeSchema(_Move.BugMove),
   {
     strict: true,
-    decode: ([bug, _, target]) => {
+    decode: ([side, __, bug, _, target]) => {
       let neighbor: _Bug.Bug;
       let cellBorder: CellBorder;
       if (typeof target[0] === "number") {
@@ -49,13 +52,14 @@ export class MovingMoveDto extends Schema.transform(
         bug,
         cellBorder,
         neighbor,
+        side,
       });
     },
     encode: (d) => {
       if (d.cellBorder === 0 || d.cellBorder === 1 || d.cellBorder === 2) {
-        return [d.bug, " ", [d.neighbor, d.cellBorder]] as const;
+        return [d.side, ": ", d.bug, " ", [d.neighbor, d.cellBorder]] as const;
       } else {
-        return [d.bug, " ", [d.cellBorder, d.neighbor]] as const;
+        return [d.side, ": ", d.bug, " ", [d.cellBorder, d.neighbor]] as const;
       }
     },
   }

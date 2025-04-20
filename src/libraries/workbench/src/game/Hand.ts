@@ -44,7 +44,7 @@ export const isEmpty = (hand: Hand) => HashSet.size(hand.bugs) === 0;
 
 export const toString = (hand: Hand) =>
   Side.toString(hand.side) +
-  ":" +
+  ": " +
   HashSet.map(hand.bugs, (x) => x._tag[0]! + x.number.toString())
     .pipe(HashSet.toValues, Array.sort(String.Order))
     .join(" ");

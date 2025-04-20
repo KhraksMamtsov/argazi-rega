@@ -23,6 +23,7 @@ describe("Examples from rules", () => {
     const BlackQueenBee = () => BugDto.decode("bQ1");
 
     const swarm = new Swarm.Swarm({
+      lastMovedByPillbug: false,
       lastMoved: BugDto.decode("bA1"),
       field: HashMap.make(
         [Coords.Init(1, 2), SwarmMember.Init(BugDto.decode("bA1"))],
@@ -71,6 +72,7 @@ describe("Examples from rules", () => {
     const WhiteBeetle = () => BugDto.decode("wB1");
 
     const swarm = new Swarm.Swarm({
+      lastMovedByPillbug: false,
       lastMoved: BugDto.decode("bA1"),
       field: HashMap.make(
         [Coords.Init(0.5, 1), SwarmMember.Init(BugDto.decode("wS1"))],
@@ -112,6 +114,7 @@ describe("Examples from rules", () => {
     const WhiteGrasshopper = () => BugDto.decode("wG1");
 
     const swarm = new Swarm.Swarm({
+      lastMovedByPillbug: false,
       lastMoved: BugDto.decode("bA1"),
       field: HashMap.make(
         [Coords.Init(0.5, 1), SwarmMember.Init(BugDto.decode("bA1"))],
@@ -160,6 +163,7 @@ describe("Examples from rules", () => {
     const BlackSpider = () => BugDto.decode("bS1");
 
     const swarm = new Swarm.Swarm({
+      lastMovedByPillbug: false,
       lastMoved: BugDto.decode("bA1"),
       field: HashMap.make(
         [Coords.Init(2.5, 3), SwarmMember.Init(BlackSpider())],
@@ -205,6 +209,7 @@ describe("Examples from rules", () => {
     const BlackAnt = () => BugDto.decode("bA1");
 
     const swarm = new Swarm.Swarm({
+      lastMovedByPillbug: false,
       lastMoved: BugDto.decode("bA1"),
       field: HashMap.make(
         [Coords.Init(0.5, 1), SwarmMember.Init(BugDto.decode("bQ1"))],
@@ -262,6 +267,7 @@ describe("Examples from rules", () => {
     const Ladybug = () => BugDto.decode("bL1");
 
     const swarm = new Swarm.Swarm({
+      lastMovedByPillbug: false,
       lastMoved: BugDto.decode("bQ1"),
       field: HashMap.make(
         [Coords.Init(0.5, 1), SwarmMember.Init(BugDto.decode("bQ1"))],
@@ -318,6 +324,7 @@ describe("Examples from rules", () => {
     const Mosquito = () => BugDto.decode("wM1");
 
     const swarm = new Swarm.Swarm({
+      lastMovedByPillbug: false,
       lastMoved: BugDto.decode("bA1"),
       field: HashMap.make(
         [Coords.Init(1.5, 1), SwarmMember.Init(BugDto.decode("bQ1"))],
@@ -369,6 +376,7 @@ describe("Examples from rules", () => {
     const BlackQueenBee = () => BugDto.decode("bQ1");
 
     const swarm = new Swarm.Swarm({
+      lastMovedByPillbug: false,
       lastMoved: BugDto.decode("bA1"),
       field: HashMap.make(
         [Coords.Zero, SwarmMember.Init(BugDto.decode("bG1"))],

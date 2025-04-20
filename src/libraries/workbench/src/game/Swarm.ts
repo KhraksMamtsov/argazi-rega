@@ -14,7 +14,7 @@ import {
   Equal,
 } from "effect";
 import * as Cell from "./Cell.ts";
-import type { Side } from "./Side.ts";
+import * as Side from "./Side.ts";
 import * as CellBorder from "./CellBorder.ts";
 import * as Coords from "./Coords.ts";
 import * as Bug from "./Bug.ts";
@@ -187,9 +187,11 @@ export class Swarm extends Data.Class<{
 }
 
 export const getQueenBee: {
-  (side: Side): (swarm: Swarm) => Option.Option<Cell.Occupied<Bug.QueenBee>>;
-  (swarm: Swarm, Side: Side): Option.Option<Cell.Occupied<Bug.QueenBee>>;
-} = dual(2, (swarm: Swarm, side: Side) =>
+  (
+    side: Side.Side
+  ): (swarm: Swarm) => Option.Option<Cell.Occupied<Bug.QueenBee>>;
+  (swarm: Swarm, Side: Side.Side): Option.Option<Cell.Occupied<Bug.QueenBee>>;
+} = dual(2, (swarm: Swarm, side: Side.Side) =>
   Cell.findFirstMap(
     swarm.graph,
     pipe(
@@ -201,9 +203,11 @@ export const getQueenBee: {
 );
 
 export const getSurroundedQueenBee: {
-  (side: Side): (swarm: Swarm) => Option.Option<Cell.Occupied<Bug.QueenBee>>;
-  (swarm: Swarm, Side: Side): Option.Option<Cell.Occupied<Bug.QueenBee>>;
-} = dual(2, (swarm: Swarm, side: Side) =>
+  (
+    side: Side.Side
+  ): (swarm: Swarm) => Option.Option<Cell.Occupied<Bug.QueenBee>>;
+  (swarm: Swarm, Side: Side.Side): Option.Option<Cell.Occupied<Bug.QueenBee>>;
+} = dual(2, (swarm: Swarm, side: Side.Side) =>
   getQueenBee(swarm, side).pipe(
     Option.filter(Cell.isSurroundedWithOccupiedCells)
   )
@@ -500,17 +504,19 @@ export const getMovementCellsFor: {
 export const pillbugAbilityMovingCells: {
   (
     move: Move.MovingMove
-  ): (swarm: Swarm) => Either.Either<Swarm, SwarmError.SwarmError>;
+  ): (
+    swarm: Swarm
+  ) => Either.Either<HashSet.HashSet<Cell.Empty>, SwarmError.SwarmError>;
   (
     swarm: Swarm,
     move: Move.MovingMove
-  ): Either.Either<Swarm, SwarmError.SwarmError>;
+  ): Either.Either<HashSet.HashSet<Cell.Empty>, SwarmError.SwarmError>;
 } = dual(
   2,
   (
     swarm: Swarm,
-    move: Move.MovingMove //: Either.Either<HashSet.HashSet<Cell.Empty>, 2>
-  ) =>
+    move: Move.MovingMove
+  ): Either.Either<HashSet.HashSet<Cell.Empty>, SwarmError.BugNotFound> =>
     Either.gen(function* () {
       const fromCell = yield* Cell.findFirstOccupied(
         swarm.graph,
@@ -523,11 +529,15 @@ export const pillbugAbilityMovingCells: {
         return HashSet.empty();
       }
 
-      pipe(
+      return pipe(
         fromCell.neighbors,
         Array.filter(Cell.refine("Occupied")),
         Array.filter(Cell.refineBugInBasis(Bug.refine("Pillbug"))),
-        Array.filter((x) => !Cell.isWithCover(x))
+        Array.filter(
+          (x) => !Cell.isWithCover(x) && x.member.bug.side === Move.side(move)
+        ),
+        Array.flatMap((x) => Array.filter(x.neighbors, Cell.refine("Empty"))),
+        HashSet.fromIterable
       );
     })
 );
@@ -605,15 +615,29 @@ export const move: {
       }
 
       const validatedSwarm = yield* validateSplit(swarm, fromCell.value);
-      const movementCells = yield* getMovementCellsFor(
-        validatedSwarm,
-        move.bug
-      ).pipe(
-        Either.fromOption(() => new SwarmError.BugNotFound({ bug: move.bug }))
-      );
 
-      if (!HashSet.has(movementCells, targetCell)) {
-        return yield* Either.left(new SwarmError.ImpossibleMove({ move }));
+      let lastMovedByPillbug = false;
+      if (move.bug.side === move.side) {
+        const movementCells = yield* getMovementCellsFor(
+          validatedSwarm,
+          move.bug
+        ).pipe(
+          Either.fromOption(() => new SwarmError.BugNotFound({ bug: move.bug }))
+        );
+
+        if (!HashSet.has(movementCells, targetCell)) {
+          lastMovedByPillbug = yield* isMovedByPillbug(
+            validatedSwarm,
+            move,
+            targetCell
+          );
+        }
+      } else {
+        lastMovedByPillbug = yield* isMovedByPillbug(
+          validatedSwarm,
+          move,
+          targetCell
+        );
       }
 
       const [bug, newFromMember] = SwarmMember.popBug(fromCell.value.member);
@@ -649,7 +673,7 @@ export const move: {
       return new Swarm({
         field: newField,
         lastMoved: bug,
-        lastMovedByPillbug: false,
+        lastMovedByPillbug,
       });
     })
 );
@@ -846,7 +870,7 @@ export function toString(
   );
 }
 
-export const hasIntroducableCells = (side: Side) => (swarm: Swarm) =>
+export const hasIntroducableCells = (side: Side.Side) => (swarm: Swarm) =>
   Cell.reduce(swarm.graph, false, (res, cell) =>
     Cell.match(cell, {
       Empty: () => res,
@@ -865,7 +889,7 @@ export const hasIntroducableCells = (side: Side) => (swarm: Swarm) =>
     })
   );
 
-export const hasMovableSwarmMembers = (side: Side) => (swarm: Swarm) => {
+export const hasMovableSwarmMembers = (side: Side.Side) => (swarm: Swarm) => {
   // return reduce(swarm.graph, false, (res, cell) => {
   //   return Cell.match(cell, {
   //     Empty: () => res || false,
@@ -880,3 +904,20 @@ export const hasMovableSwarmMembers = (side: Side) => (swarm: Swarm) => {
   //   });
   // });
 };
+
+const isMovedByPillbug = (
+  swarm: Swarm,
+  move: Move.MovingMove,
+  targetCell: Cell.Cell
+) =>
+  Either.gen(function* () {
+    const pillBugAbilityMovingCells = yield* pillbugAbilityMovingCells(
+      swarm,
+      move
+    );
+
+    if (!HashSet.has(pillBugAbilityMovingCells, targetCell)) {
+      return yield* Either.left(new SwarmError.ImpossibleMove({ move }));
+    }
+    return true as const;
+  });

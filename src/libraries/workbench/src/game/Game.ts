@@ -130,15 +130,16 @@ export const validateSkip = (game: Game) => {
 export const makeMove: {
   (
     game: Game,
-    move: Move.Move
+    move: Move.MovingMove
   ): Either.Either<Game, GameError.GameError | Finish>;
   (
-    move: Move.Move
+    move: Move.MovingMove
   ): (game: Game) => Either.Either<Game, GameError.GameError | Finish>;
-} = dual(2, (game: Game, move: Move.Move) =>
+} = dual(2, (game: Game, move: Move.MovingMove) =>
   Either.gen(function* () {
     const moveSide = Move.side(move);
-    if (currentSide(game.step) !== moveSide) {
+    const gameCurrentSide = currentSide(game.step);
+    if (gameCurrentSide !== moveSide) {
       return yield* Either.left(
         new GameError.WrongSideMove({ move, step: game.step })
       );
@@ -216,9 +217,12 @@ export const toString = (game: InitGame | Game) =>
     Game: (game) =>
       [
         "№: " + game.step,
+        "⇄: " + Side.toString(currentSide(game.step)),
         Hand.toString(game.white),
         Hand.toString(game.black),
-        "♻: " + Bug.symbol(game.swarm.lastMoved),
+        "♻: " +
+          Bug.symbol(game.swarm.lastMoved) +
+          (game.swarm.lastMovedByPillbug ? " !P" : ""),
         Swarm.toString(game.swarm),
       ].join("\n"),
   });

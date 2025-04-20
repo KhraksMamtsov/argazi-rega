@@ -160,5 +160,5 @@ const symbolMap: Record<Bug["_tag"], string> = {
 };
 
 export const symbol = (bug: Bug) => {
-  return symbolMap[bug._tag] + numberMap[bug.number] + colorMap[bug.side];
+  return symbolMap[bug._tag] + colorMap[bug.side] + numberMap[bug.number];
 };

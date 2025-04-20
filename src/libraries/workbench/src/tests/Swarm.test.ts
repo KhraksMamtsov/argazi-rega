@@ -294,6 +294,58 @@ describe("Swarm", () => {
         Option.some(HashSet.make(Coords.Init(0, -2), Coords.Init(-0.5, -1)))
       );
     });
+
+    test("Pillbug", () => {
+      const TestQueenBee = () =>
+        new Bug.Pillbug({ side: "white", number: BugNumber.One(1) });
+
+      const swarm = new Swarm.Swarm({
+        lastMoved: BugDto.decode("bA1"),
+        lastMovedByPillbug: false,
+        field: HashMap.make(
+          [
+            Coords.Zero,
+            SwarmMember.Init(
+              new Bug.Ant({ number: BugNumber.One(1), side: "black" })
+            ),
+          ],
+          [
+            Coords.Init(1, 0),
+            SwarmMember.Init(
+              new Bug.Ant({ number: BugNumber.Two(2), side: "white" })
+            ),
+          ],
+          [Coords.Init(0.5, -1), SwarmMember.Init(TestQueenBee())],
+          [
+            Coords.Init(1, -2),
+            SwarmMember.Init(
+              new Bug.Ant({ number: BugNumber.Two(2), side: "white" })
+            ),
+          ]
+        ),
+      });
+
+      const actualEmptyCells = Swarm.getMovementCellsFor(swarm, TestQueenBee());
+      const actualCoords = actualEmptyCells.pipe(
+        Option.map(HashSet.map((x) => x.coords))
+      );
+
+      assertRefinement(Option.isSome, actualEmptyCells);
+      assertRefinement(
+        HashSet.every(Cell.refine("Empty")),
+        actualEmptyCells.value
+      );
+
+      console.log(
+        Swarm.toString(swarm, {
+          highlight: actualEmptyCells.value,
+        })
+      );
+
+      expect(actualCoords).toEqual(
+        Option.some(HashSet.make(Coords.Init(0, -2), Coords.Init(-0.5, -1)))
+      );
+    });
     test("Beetle", () => {
       const TestBug = () => BugDto.decode("bB1");
 
@@ -563,18 +615,8 @@ describe("Swarm", () => {
       lastMoved: BugDto.decode("bA1"),
       lastMovedByPillbug: false,
       field: HashMap.make(
-        [
-          Coords.Zero,
-          SwarmMember.Init(
-            new Bug.Ant({ number: BugNumber.One(1), side: "black" })
-          ),
-        ],
-        [
-          Coords.Init(1, 0),
-          SwarmMember.Init(
-            new Bug.Ant({ number: BugNumber.Two(2), side: "white" })
-          ),
-        ],
+        [Coords.Zero, SwarmMember.Init(BugDto.decode("bA1"))],
+        [Coords.Init(1, 0), SwarmMember.Init(BugDto.decode("wA2"))],
         [Coords.Init(0.5, -1), SwarmMember.Init(TestBug())]
       ),
     });
