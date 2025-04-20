@@ -15,6 +15,11 @@ export class QueenPlacementViolation extends Data.TaggedError(
   step: GameStep.GameStep;
 }> {}
 
+export class BugNotFound extends Data.TaggedError("BugNotFound")<{
+  move: Move.Move;
+  step: GameStep.GameStep;
+}> {}
+
 export class ForbiddenInitialMove extends Data.TaggedError(
   "ForbiddenInitialMove"
 )<{
@@ -38,4 +43,5 @@ export type GameError =
   | QueenPlacementViolation
   | ForbiddenInitialMove
   | Absurd
+  | BugNotFound
   | ImpossibleMove;

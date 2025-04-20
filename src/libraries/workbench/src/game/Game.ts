@@ -1,4 +1,13 @@
-import { Data, Array, Either, Match, Unify, Pipeable, Effect } from "effect";
+import {
+  Data,
+  Array,
+  Either,
+  Match,
+  Unify,
+  Pipeable,
+  Effect,
+  Option,
+} from "effect";
 import * as Hand from "./Hand.ts";
 import * as Side from "./Side.ts";
 import * as Move from "./Move.ts";
@@ -39,11 +48,15 @@ export class InitGame extends Data.TaggedClass("InitGame")<{
   }
 }
 
-export const Init = () =>
+export const Init = (option?: {
+  mosquito?: boolean;
+  pillbug?: boolean;
+  ladybug?: boolean;
+}) =>
   new InitGame({
     step: GameStep.Init(),
-    black: Hand.Init("black"),
-    white: Hand.Init("white"),
+    black: Hand.Init("black", option),
+    white: Hand.Init("white", option),
   });
 
 export const currentSide = (step: GameStep.GameStep): Side.Side =>
@@ -154,46 +167,41 @@ export const makeMove: {
       );
     }
 
-    const afterMoveGame = yield* Move.Move.$match(move, {
-      InitialMove: (x) =>
-        G.$match(game, {
-          Game: () =>
-            Either.left(
-              new GameError.ForbiddenInitialMove({
-                move,
-                step: game.step,
-              })
-            ), //TODO
-          InitGame: makeInitialMove(x),
-        }),
-      BugMove: (movingMove) =>
-        Swarm.move(game.swarm, movingMove).pipe(
-          Either.mapLeft(
-            (swarmError) =>
-              new GameError.ImpossibleMove({
-                swarmError,
-                move,
-                step: game.step,
-              })
-          ),
-          Either.map((newSwarm) => {
-            const [_extractedWhiteBug, white] = Hand.extractBug(
-              game.white,
-              movingMove.bug
-            );
-            const [_extractedBlackBug, black] = Hand.extractBug(
-              game.black,
-              movingMove.bug
-            );
-            return new Game({
-              step: GameStep.next(game.step),
-              white,
-              black,
-              swarm: newSwarm,
-            });
+    if (
+      !Hand.containsBug(game[moveSide], move.bug) &&
+      Option.isNone(Swarm.findBug(game.swarm, move.bug))
+    ) {
+      return yield* Either.left(
+        new GameError.BugNotFound({ move, step: game.step })
+      );
+    }
+
+    const afterMoveGame = yield* Swarm.move(game.swarm, move).pipe(
+      Either.mapLeft(
+        (swarmError) =>
+          new GameError.ImpossibleMove({
+            swarmError,
+            move,
+            step: game.step,
           })
-        ),
-    });
+      ),
+      Either.map((newSwarm) => {
+        const [_extractedWhiteBug, white] = Hand.extractBug(
+          game.white,
+          move.bug
+        );
+        const [_extractedBlackBug, black] = Hand.extractBug(
+          game.black,
+          move.bug
+        );
+        return new Game({
+          step: GameStep.next(game.step),
+          white,
+          black,
+          swarm: newSwarm,
+        });
+      })
+    );
 
     return yield* validateFinish(afterMoveGame);
   })

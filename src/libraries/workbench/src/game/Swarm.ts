@@ -921,3 +921,6 @@ const isMovedByPillbug = (
     }
     return true as const;
   });
+
+export const findBug = (swarm: Swarm, bug: Bug.Bug) =>
+  Cell.findFirstOccupied(swarm.graph, (x) => Equal.equals(x.member.bug, bug));

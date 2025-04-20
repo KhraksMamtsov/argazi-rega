@@ -47,7 +47,9 @@ b: A1 A2 A3 B1 B2 G1 G2 G3 Q1 S1
   it.effect(
     "pillbug ability",
     Effect.fn(function* () {
-      const game = yield* Game.Init().pipe(
+      const game = yield* Game.Init({
+        pillbug: true,
+      }).pipe(
         Game.moveAll({
           init: InitialMoveDto.decode("wQ1"),
           moves: [
@@ -62,8 +64,8 @@ b: A1 A2 A3 B1 B2 G1 G2 G3 Q1 S1
 
       expect(Game.toString(game)).toBe(`№: 6
 ⇄: w
-w: A2 A3 B1 B2 G1 G2 G3 S1 S2
-b: A1 A2 A3 B1 B2 G1 G2 G3 S1 S2
+w: A2 A3 B1 B2 G1 G2 G3 P2 S1 S2
+b: A1 A2 A3 B1 B2 G1 G2 G3 P1 S1 S2
 ♻: Q̊ !P
     ○     ○ 
 
@@ -80,7 +82,7 @@ b: A1 A2 A3 B1 B2 G1 G2 G3 S1 S2
         MovingMoveDto.decode("w: wQ1 |bP2")
       ).pipe(Either.flip);
 
-      // expect(gameError).toBe(
+      // expect(gameError).toStrictEqual(
       //   new GameError.ImpossibleMove({
       //     move: MovingMoveDto.decode("w: wQ1 |bP2"),
       //     swarmError: new SwarmError.LastMovedByPillbugViolation({
@@ -102,6 +104,32 @@ b: A1 A2 A3 B1 B2 G1 G2 G3 S1 S2
           })
         )
       ).toBe(true);
+    })
+  );
+
+  it.effect(
+    "BugNotFound in game",
+    Effect.fn(function* () {
+      const gameError = yield* Game.Init().pipe(
+        Game.moveAll({
+          init: InitialMoveDto.decode("wQ1"),
+          moves: [
+            MovingMoveDto.decode("b: bP2 wQ1|"),
+            MovingMoveDto.decode("w: wP1 bP2|"),
+            MovingMoveDto.decode("b: bQ1 bP2/"),
+            MovingMoveDto.decode("w: wA1 \\bP2"),
+            MovingMoveDto.decode("b: wQ1 /bP2"),
+          ],
+        }),
+        Either.flip
+      );
+
+      expect(gameError).toStrictEqual(
+        new GameError.BugNotFound({
+          move: MovingMoveDto.decode("b: bP2 wQ1|"),
+          step: GameStep.GameStep(1),
+        })
+      );
     })
   );
 
@@ -133,8 +161,13 @@ b: A1 A2 A3 B1 B2 G1 G2 G3 S1 S2
       );
 
       expect(game.step, "step increased").toBe(1);
-      expect(Swarm.toString(game.swarm)).toBe(
+      expect(Game.toString(game)).toBe(
         trimNewline`
+№: 1
+⇄: b
+w: A2 A3 B1 B2 G1 G2 G3 Q1 S1 S2
+b: A1 A2 A3 B1 B2 G1 G2 G3 Q1 S1 S2
+♻: Å
     ○     ○ 
 
  ○    (Å)    ○ 

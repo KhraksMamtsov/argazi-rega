@@ -70,7 +70,7 @@ export class Ladybug extends Schema.TaggedClass<Ladybug>("Ladybug")(
   { ..._Bug.fields, number: Schema.Literal(...BugNumber._One) }
 ) {
   static Init(side: Side.Side) {
-    return new Ladybug({ number: BugNumber._One[0], side });
+    return [new Ladybug({ number: BugNumber._One[0], side })];
   }
 }
 
@@ -79,7 +79,7 @@ export class Mosquito extends Schema.TaggedClass<Mosquito>("Mosquito")(
   { ..._Bug.fields, number: Schema.Literal(...BugNumber._One) }
 ) {
   static Init(side: Side.Side) {
-    return new Mosquito({ number: BugNumber._One[0], side });
+    return [new Mosquito({ number: BugNumber._One[0], side })];
   }
 }
 

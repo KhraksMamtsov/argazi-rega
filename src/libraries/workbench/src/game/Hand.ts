@@ -8,7 +8,14 @@ export class Hand extends Data.Class<{
   side: Side.Side;
 }> {}
 
-export const Init = (side: Side.Side) =>
+export const Init = (
+  side: Side.Side,
+  option?: {
+    mosquito?: boolean;
+    pillbug?: boolean;
+    ladybug?: boolean;
+  }
+) =>
   new Hand({
     side,
     bugs: HashSet.fromIterable([
@@ -17,17 +24,26 @@ export const Init = (side: Side.Side) =>
       ...Bug.Spider.Init(side),
       ...Bug.Ant.Init(side),
       ...Bug.Grasshopper.Init(side),
+      ...(option?.ladybug ? Bug.Ladybug.Init(side) : []),
+      ...(option?.mosquito ? Bug.Mosquito.Init(side) : []),
+      ...(option?.pillbug ? Bug.Pillbug.Init(side) : []),
     ]),
   });
 
 export const isWithQueenBee = (hand: Hand) =>
   HashSet.has(hand.bugs, Bug.QueenBee.Init(hand.side));
 
+export const containsBug: {
+  <B extends Bug.Bug>(bug: B): (hand: Hand) => boolean;
+  <B extends Bug.Bug>(hand: Hand, bug: B): boolean;
+} = dual(2, <B extends Bug.Bug>(hand: Hand, bug: B) =>
+  HashSet.has(hand.bugs, bug)
+);
 export const extractBug: {
   <B extends Bug.Bug>(bug: B): (hand: Hand) => [Option.Option<B>, Hand];
   <B extends Bug.Bug>(hand: Hand, bug: B): [Option.Option<B>, Hand];
 } = dual(2, <B extends Bug.Bug>(hand: Hand, bug: B) => {
-  if (HashSet.has(hand.bugs, bug)) {
+  if (containsBug(hand, bug)) {
     return [
       Option.some(bug),
       new Hand({
