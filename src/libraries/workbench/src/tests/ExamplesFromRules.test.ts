@@ -61,6 +61,50 @@ describe("Examples from rules", () => {
     );
   });
 
+  test("Peelbug", () => {
+    const WhitePeelbug = () => BugDto.decode("wP1");
+
+    const swarm = new Swarm.Swarm({
+      lastMovedByPillbug: false,
+      lastMoved: BugDto.decode("bA1"),
+      field: HashMap.make(
+        [Coords.Init(1.5, 1), SwarmMember.Init(BugDto.decode("bA1"))],
+        [Coords.Init(2.5, 1), SwarmMember.Init(BugDto.decode("wQ1"))],
+        [Coords.Zero, SwarmMember.Init(BugDto.decode("bB1"))],
+        [Coords.Init(1, 0), SwarmMember.Init(BugDto.decode("wS1"))],
+        [Coords.Init(2, 0), SwarmMember.Init(WhitePeelbug())],
+        [Coords.Init(1.5, -1), SwarmMember.Init(BugDto.decode("bQ1"))]
+      ),
+    });
+
+    const testPillbug = Cell.findFirstOccupied(
+      swarm.graph,
+      Cell.withBugInBasis(WhitePeelbug())
+    );
+    const actualEmptyCells = Swarm.getMovementCellsFor(swarm, WhitePeelbug());
+    const actualCoords = actualEmptyCells.pipe(
+      Option.map(HashSet.map((x) => x.coords))
+    );
+
+    assertRefinement(Option.isSome, actualEmptyCells);
+    assertRefinement(Option.isSome, testPillbug);
+    assertRefinement(
+      HashSet.every(Cell.refine("Empty")),
+      actualEmptyCells.value
+    );
+
+    console.log(
+      Swarm.toString(swarm, {
+        highlight: actualEmptyCells.value,
+        target: testPillbug.value,
+      })
+    );
+
+    expect(actualCoords).toEqual(
+      Option.some(HashSet.make(Coords.Init(3, 0), Coords.Init(2.5, -1)))
+    );
+  });
+
   test("Beetle", () => {
     const WhiteBeetle = () => BugDto.decode("wB1");
 
