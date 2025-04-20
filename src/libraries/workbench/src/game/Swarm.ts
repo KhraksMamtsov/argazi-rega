@@ -529,13 +529,38 @@ export const pillbugAbilityMovingCells: {
         return HashSet.empty();
       }
 
-      return pipe(
+      const occupiedNeighbors = Array.filter(
         fromCell.neighbors,
-        Array.filter(Cell.refine("Occupied")),
+        Cell.refine("Occupied")
+      );
+
+      const pillbugNeighbors = pipe(
+        occupiedNeighbors,
         Array.filter(Cell.refineBugInBasis(Bug.refine("Pillbug"))),
         Array.filter(
           (x) => !Cell.isWithCover(x) && x.member.bug.side === Move.side(move)
-        ),
+        )
+      );
+
+      const mosquotoNeighbors = pipe(
+        occupiedNeighbors,
+        Array.filter(Cell.refineBugInBasis(Bug.refine("Mosquito"))),
+        Array.filter(
+          (x) =>
+            !Cell.isWithCover(x) &&
+            x.member.bug.side === Move.side(move) &&
+            Array.some(Cell.neighborsOccupied(x), (x) => {
+              return (
+                !Cell.isWithCover(x.occupied) &&
+                Cell.refineBugInBasis(Bug.refine("Pillbug"))(x.occupied)
+              );
+            })
+        )
+      );
+
+      return pipe(
+        pillbugNeighbors,
+        Array.prependAll(mosquotoNeighbors),
         Array.flatMap((x) => Array.filter(x.neighbors, Cell.refine("Empty"))),
         HashSet.fromIterable
       );
