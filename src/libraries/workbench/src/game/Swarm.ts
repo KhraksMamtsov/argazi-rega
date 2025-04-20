@@ -28,7 +28,8 @@ import * as Move from "./Move.ts";
 export interface Swarm extends Pipeable.Pipeable {}
 export class Swarm extends Data.Class<{
   field: HashMap.HashMap<Coords.Coords, SwarmMember.SwarmMember>;
-  justMoved: Bug.Bug;
+  lastMoved: Bug.Bug;
+  lastMovedByPillbug: boolean;
 }> {
   static {
     this.prototype.pipe = function () {
@@ -233,7 +234,11 @@ export const queenBeesState = (swarm: Swarm) => {
 
 export const Init = (bug: Bug.Bug) =>
   unsafeIntroduce(
-    new Swarm({ field: HashMap.empty(), justMoved: bug }),
+    new Swarm({
+      field: HashMap.empty(),
+      lastMoved: bug,
+      lastMovedByPillbug: false,
+    }),
     bug,
     Coords.Coords.Zero
   );
@@ -246,7 +251,8 @@ const unsafeIntroduce: {
   (swarm: Swarm, bug: Bug.Bug, coords: Coords.Coords): Swarm =>
     new Swarm({
       field: HashMap.set(swarm.field, coords, SwarmMember.Init(bug)),
-      justMoved: bug,
+      lastMoved: bug,
+      lastMovedByPillbug: false,
     })
 );
 
@@ -292,7 +298,8 @@ const slideableNeighborsEmptyCellsStep = (
         Array.map((toCell) => {
           const newSwarm = new Swarm({
             field: HashMap.set(newSwarmClone, toCell.coords, x.fromCell.member),
-            justMoved: x.fromCell.member.bug,
+            lastMoved: x.fromCell.member.bug,
+            lastMovedByPillbug: false,
           });
 
           const cellInNewSwarm = Cell.findFirstOccupied(newSwarm.graph, (x) =>
@@ -490,6 +497,41 @@ export const getMovementCellsFor: {
   )
 );
 
+export const pillbugAbilityMovingCells: {
+  (
+    move: Move.MovingMove
+  ): (swarm: Swarm) => Either.Either<Swarm, SwarmError.SwarmError>;
+  (
+    swarm: Swarm,
+    move: Move.MovingMove
+  ): Either.Either<Swarm, SwarmError.SwarmError>;
+} = dual(
+  2,
+  (
+    swarm: Swarm,
+    move: Move.MovingMove //: Either.Either<HashSet.HashSet<Cell.Empty>, 2>
+  ) =>
+    Either.gen(function* () {
+      const fromCell = yield* Cell.findFirstOccupied(
+        swarm.graph,
+        Cell.hasBug(move.bug)
+      ).pipe(
+        Either.fromOption(() => new SwarmError.BugNotFound({ bug: move.bug }))
+      );
+
+      if (Cell.isWithCover(fromCell)) {
+        return HashSet.empty();
+      }
+
+      pipe(
+        fromCell.neighbors,
+        Array.filter(Cell.refine("Occupied")),
+        Array.filter(Cell.refineBugInBasis(Bug.refine("Pillbug"))),
+        Array.filter((x) => !Cell.isWithCover(x))
+      );
+    })
+);
+
 export const move: {
   (
     move: Move.MovingMove
@@ -554,6 +596,14 @@ export const move: {
         return yield* Either.left(new SwarmError.BeetlePressure({ move }));
       }
 
+      if (swarm.lastMovedByPillbug && Equal.equals(move.bug, swarm.lastMoved)) {
+        return yield* Either.left(
+          new SwarmError.LastMovedByPillbugViolation({
+            move,
+          })
+        );
+      }
+
       const validatedSwarm = yield* validateSplit(swarm, fromCell.value);
       const movementCells = yield* getMovementCellsFor(
         validatedSwarm,
@@ -596,7 +646,11 @@ export const move: {
         onSome: (x) => HashMap.set(fieldWithMovedBug, fromCell.value.coords, x),
       });
 
-      return new Swarm({ field: newField, justMoved: bug });
+      return new Swarm({
+        field: newField,
+        lastMoved: bug,
+        lastMovedByPillbug: false,
+      });
     })
 );
 

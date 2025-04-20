@@ -62,16 +62,13 @@ const makeInitialMove: {
   (
     game: InitGame,
     initialMove: Move.InitialMove
-  ): Either.Either<Game, GameError.ForbiddenInitialMove | GameError.Absurd>;
+  ): Either.Either<Game, GameError.WrongSideMove | GameError.Absurd>;
 } = dual(2, (game: InitGame, initialMove: Move.InitialMove) => {
-  // if (!GameStep.isInitialStep(game.step)) {
-  //   return Either.left(
-  //     new GameError.ForbiddenInitialMove({
-  //       move: initialMove,
-  //       step: game.step,
-  //     })
-  //   );
-  // }
+  if (currentSide(game.step) !== initialMove.bug.side) {
+    return Either.left(
+      new GameError.WrongSideMove({ move: initialMove, step: game.step })
+    );
+  }
   const [_extractedWhiteBug, white] = Hand.extractBug(
     game.white,
     initialMove.bug
@@ -221,7 +218,7 @@ export const toString = (game: InitGame | Game) =>
         "№: " + game.step,
         Hand.toString(game.white),
         Hand.toString(game.black),
-        "♻: " + Bug.symbol(game.swarm.justMoved),
+        "♻: " + Bug.symbol(game.swarm.lastMoved),
         Swarm.toString(game.swarm),
       ].join("\n"),
   });

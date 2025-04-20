@@ -157,6 +157,22 @@ export const withBugInBasis: {
   Equal.equals(bugInBasis(cell), bug)
 );
 
+export const refineBugInBasis: {
+  <A extends Bug.Bug, B extends A>(
+    refinement: Predicate.Refinement<A, B>
+  ): (cell: Occupied<A>) => cell is Occupied<B>;
+  <A extends Bug.Bug, B extends A>(
+    cell: Occupied<A>,
+    refinement: Predicate.Refinement<A, B>
+  ): cell is Occupied<B>;
+} = dual(
+  2,
+  <A extends Bug.Bug, B extends A>(
+    cell: Occupied<A>,
+    refinement: Predicate.Refinement<A, B>
+  ): cell is Occupied<B> => refinement(cell.member.bug)
+);
+
 export const hasBug: {
   (bug: Bug.Bug): (cell: Occupied) => boolean;
   (cell: Occupied, bug: Bug.Bug): boolean;
@@ -178,6 +194,9 @@ export const isBugUnderPressure: {
       Option.map((cell) => !Equal.equals(bug, masterBug(cell)))
     )
 );
+
+export const isWithCover = (cell: Occupied) =>
+  Array.isNonEmptyReadonlyArray(cell.member.cover);
 
 export const isEmptyOrNoneFromBorder =
   (border: CellBorder.CellBorder) => (cell: Empty) =>

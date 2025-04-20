@@ -1,4 +1,4 @@
-import { Data, HashSet, Option } from "effect";
+import { Data, HashSet, Option, Array, String } from "effect";
 import * as Bug from "./Bug.ts";
 import * as Side from "./Side.ts";
 import { dual } from "effect/Function";
@@ -46,5 +46,5 @@ export const toString = (hand: Hand) =>
   Side.toString(hand.side) +
   ":" +
   HashSet.map(hand.bugs, (x) => x._tag[0]! + x.number.toString())
-    .pipe(HashSet.toValues)
+    .pipe(HashSet.toValues, Array.sort(String.Order))
     .join(" ");

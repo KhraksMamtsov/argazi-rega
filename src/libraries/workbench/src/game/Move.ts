@@ -1,11 +1,13 @@
 import { Data, Schema } from "effect";
 import * as Bug from "./Bug.ts";
 import * as CellBorder from "./CellBorder.ts";
+import * as Side from "./Side.ts";
 
 export class BugMove extends Schema.TaggedClass<BugMove>("BugMove")("BugMove", {
   bug: Bug.BugSchema,
   neighbor: Bug.BugSchema,
   cellBorder: CellBorder.CellBorderSchema,
+  // side: Side.SideSchema,
 }) {}
 
 // export class BeetleMove extends Data.TaggedClass("BeetleMove")<{

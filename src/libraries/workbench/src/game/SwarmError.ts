@@ -29,10 +29,17 @@ export class MoveBeforeQueenBeePlacementViolation extends Data.TaggedError(
   move: Move.MovingMove;
 }> {}
 
+export class LastMovedByPillbugViolation extends Data.TaggedError(
+  "LastMovedByPillbugViolation"
+)<{
+  move: Move.MovingMove;
+}> {}
+
 export type SwarmError =
   | SplitSwarm
   | BugNotFound
   | BeetlePressure
   | ImpossibleMove
   | MoveBeforeQueenBeePlacementViolation
+  | LastMovedByPillbugViolation
   | IntroductionMoveViolation;

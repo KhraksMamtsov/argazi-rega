@@ -32,9 +32,10 @@ describe("Game", () => {
         })
       );
 
+      console.log(Game.toString(game));
       expect(Game.toString(game)).toBe(`№: 2
-w:S2 Q1 S1 G2 G3 G1 B2 A2 B1 A3
-b:Q1 S1 G2 G3 G1 B2 A1 A2 B1 A3
+w:A2 A3 B1 B2 G1 G2 G3 Q1 S1 S2
+b:A1 A2 A3 B1 B2 G1 G2 G3 Q1 S1
 ♻: S̲̈
     ○     ○     ○ 
 
@@ -44,22 +45,25 @@ b:Q1 S1 G2 G3 G1 B2 A1 A2 B1 A3
     })
   );
 
-  // it.effect.skip(
-  //   "wrong turn move",
-  //   Effect.fn(function* () {
-  //     const turnError = yield* Game.Init().pipe(
-  //       Game.moveAll({ init: InitialMoveDto.decode("bA1"), moves: [] }),
-  //       Either.flip
-  //     );
+  it.effect(
+    "wrong turn initial move",
+    Effect.fn(function* () {
+      const turnError = yield* Game.Init().pipe(
+        Game.moveAll({
+          init: InitialMoveDto.decode("bA1"),
+          moves: [],
+        }),
+        Either.flip
+      );
 
-  //     expect(turnError).toStrictEqual(
-  //       new GameError.WrongSideMove({
-  //         move: MoveDto.decode("bA1"),
-  //         step: GameStep.Init(),
-  //       })
-  //     );
-  //   })
-  // );
+      expect(turnError).toStrictEqual(
+        new GameError.WrongSideMove({
+          move: MoveDto.decode("bA1"),
+          step: GameStep.Init(),
+        })
+      );
+    })
+  );
 
   it.effect(
     "makeMove",
