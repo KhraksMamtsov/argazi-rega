@@ -9,14 +9,7 @@ import { test, describe, expect, assert } from "@effect/vitest";
 import * as SwarmError from "../game/SwarmError.ts";
 import * as Cell from "../game/Cell.ts";
 import { BugDto } from "../api/Bug.dto.ts";
-
-function assertRefinement<A, B extends A>(
-  refinement: Predicate.Refinement<A, B>,
-  value: A,
-  message?: string
-): asserts value is B {
-  assert(refinement(value), message);
-}
+import { assertRefinement } from "./TestUtills.ts";
 
 describe("Swarm", () => {
   test("one member", () => {
@@ -303,25 +296,10 @@ describe("Swarm", () => {
         lastMoved: BugDto.decode("bA1"),
         lastMovedByPillbug: false,
         field: HashMap.make(
-          [
-            Coords.Zero,
-            SwarmMember.Init(
-              new Bug.Ant({ number: BugNumber.One(1), side: "black" })
-            ),
-          ],
-          [
-            Coords.Init(1, 0),
-            SwarmMember.Init(
-              new Bug.Ant({ number: BugNumber.Two(2), side: "white" })
-            ),
-          ],
+          [Coords.Zero, SwarmMember.Init(BugDto.decode("bA1"))],
+          [Coords.Init(1, 0), SwarmMember.Init(BugDto.decode("wA2"))],
           [Coords.Init(0.5, -1), SwarmMember.Init(TestQueenBee())],
-          [
-            Coords.Init(1, -2),
-            SwarmMember.Init(
-              new Bug.Ant({ number: BugNumber.Two(2), side: "white" })
-            ),
-          ]
+          [Coords.Init(1, -2), SwarmMember.Init(BugDto.decode("wA2"))]
         ),
       });
 
@@ -641,24 +619,9 @@ describe("Swarm", () => {
       lastMoved: BugDto.decode("bA1"),
       lastMovedByPillbug: false,
       field: HashMap.make(
-        [
-          Coords.Zero,
-          SwarmMember.Init(
-            new Bug.Ant({ number: BugNumber.One(1), side: "black" })
-          ),
-        ],
-        [
-          Coords.Init(1, 0),
-          SwarmMember.Init(
-            new Bug.Ant({ number: BugNumber.Two(2), side: "white" })
-          ),
-        ],
-        [
-          Coords.Init(2, 0),
-          SwarmMember.Init(
-            new Bug.Ant({ number: BugNumber.Two(2), side: "white" })
-          ),
-        ]
+        [Coords.Zero, SwarmMember.Init(BugDto.decode("bA1"))],
+        [Coords.Init(1, 0), SwarmMember.Init(BugDto.decode("wA2"))],
+        [Coords.Init(2, 0), SwarmMember.Init(BugDto.decode("wA3"))]
       ),
     });
 

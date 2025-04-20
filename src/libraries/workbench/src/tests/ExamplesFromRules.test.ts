@@ -9,14 +9,7 @@ import { test, describe, expect, assert } from "@effect/vitest";
 import * as SwarmError from "../game/SwarmError.ts";
 import * as Cell from "../game/Cell.ts";
 import { BugDto } from "../api/Bug.dto.ts";
-
-function assertRefinement<A, B extends A>(
-  refinement: Predicate.Refinement<A, B>,
-  value: A,
-  message?: string
-): asserts value is B {
-  assert(refinement(value), message);
-}
+import { assertRefinement } from "./TestUtills.ts";
 
 describe("Examples from rules", () => {
   test("QueenBee", () => {
@@ -89,12 +82,18 @@ describe("Examples from rules", () => {
     const actualCoords = actualEmptyCells.pipe(
       Option.map(HashSet.map((x) => x.coords))
     );
+    const testBeetle = Cell.findFirstOccupied(
+      swarm.graph,
+      Cell.withBugInBasis(WhiteBeetle())
+    );
 
     assertRefinement(Option.isSome, actualEmptyCells);
+    assertRefinement(Option.isSome, testBeetle);
 
     console.log(
       Swarm.toString(swarm, {
         highlight: actualEmptyCells.value,
+        target: testBeetle.value,
       })
     );
 
