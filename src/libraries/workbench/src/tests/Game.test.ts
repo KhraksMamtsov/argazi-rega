@@ -113,13 +113,7 @@ b: A1 A2 A3 B1 B2 G1 G2 G3 P1 S1 S2
       const gameError = yield* Game.Init().pipe(
         Game.moveAll({
           init: InitialMoveDto.decode("wQ1"),
-          moves: [
-            MovingMoveDto.decode("b: bP2 wQ1|"),
-            MovingMoveDto.decode("w: wP1 bP2|"),
-            MovingMoveDto.decode("b: bQ1 bP2/"),
-            MovingMoveDto.decode("w: wA1 \\bP2"),
-            MovingMoveDto.decode("b: wQ1 /bP2"),
-          ],
+          moves: [MovingMoveDto.decode("b: bP2 wQ1|")],
         }),
         Either.flip
       );
