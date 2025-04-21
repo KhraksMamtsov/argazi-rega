@@ -9,7 +9,7 @@ import { test, describe, expect, assert } from "@effect/vitest";
 import * as SwarmError from "../game/SwarmError.ts";
 import * as Cell from "../game/Cell.ts";
 import { BugDto } from "../api/Bug.dto.ts";
-import { assertRefinement } from "./TestUtills.ts";
+import { assertRefinement, trimNewline } from "./TestUtills.ts";
 
 describe("Swarm", () => {
   test("one member", () => {
@@ -355,6 +355,20 @@ describe("Swarm", () => {
           target: testBeetleCell.value,
         })
       );
+      expect(
+        Swarm.toString(swarm, {
+          highlight: actualEmptyCells.value,
+          target: testBeetleCell.value,
+        })
+      ).toBe(trimNewline`
+    ○     ○     ○ 
+
+ ○    (Å̲×    Ä×    ○ 
+
+    ×    _B̲̊_    × 
+
+       ○     ○ 
+`);
 
       expect(actualCoords).toEqual(
         Option.some(
@@ -452,7 +466,7 @@ describe("Swarm", () => {
         Option.map(HashSet.map((x) => x.coords))
       );
       const testBeetleCell = Cell.findFirstOccupied(swarm.graph, (x) =>
-        Cell.hasBug(x, TestBug())
+        Cell.hasBug(x, TestBug()).pipe(Option.isSome)
       );
 
       assertRefinement(Option.isSome, actualEmptyCells);
@@ -465,6 +479,20 @@ describe("Swarm", () => {
           target: testBeetleCell.value,
         })
       );
+
+      expect(
+        Swarm.toString(swarm, {
+          highlight: actualEmptyCells.value,
+          target: testBeetleCell.value,
+        })
+      ).toBe(trimNewline`
+    ○     ○     ○ 
+
+ ○    (Å̲×    Ä×    ○ 
+
+    ×    _Ä̲_M̲̊    × 
+
+       ×     × `);
 
       expect(actualCoords).toEqual(
         Option.some(
@@ -497,7 +525,7 @@ describe("Swarm", () => {
         Option.map(HashSet.map((x) => x.coords))
       );
       const testBeetleCell = Cell.findFirstOccupied(swarm.graph, (x) =>
-        Cell.hasBug(x, TestBug())
+        Cell.hasBug(x, TestBug()).pipe(Option.isSome)
       );
 
       assertRefinement(Option.isSome, actualEmptyCells);

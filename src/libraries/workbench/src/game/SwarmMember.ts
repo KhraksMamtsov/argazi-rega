@@ -1,13 +1,26 @@
-import { Data, Array, Option } from "effect";
+import { Data, Array, Option, Pipeable } from "effect";
 import * as Bug from "./Bug.ts";
 import { dual } from "effect/Function";
 
+export interface SwarmMember extends Pipeable.Pipeable {}
 export class SwarmMember<B extends Bug.Bug = Bug.Bug> extends Data.Class<{
   bug: B;
   cover: ReadonlyArray<Bug.Beetle | Bug.Mosquito>;
-}> {}
+}> {
+  static {
+    this.prototype.pipe = function () {
+      return Pipeable.pipeArguments(this, arguments);
+    };
+  }
+}
 
 export const Init = (bug: Bug.Bug) => new SwarmMember({ bug, cover: [] });
+
+export const bugFromLevel = <B extends Bug.Bug = Bug.Bug>(
+  sm: SwarmMember<B>,
+  level: number
+): Option.Option<B | Bug.Mosquito | Bug.Beetle> =>
+  level === 0 ? Option.some(sm.bug) : Array.get(sm.cover, level - 1);
 
 export const addCover: {
   <B extends Bug.Bug>(

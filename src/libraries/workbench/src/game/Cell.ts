@@ -174,13 +174,16 @@ export const refineBugInBasis: {
 );
 
 export const hasBug: {
-  (bug: Bug.Bug): (cell: Occupied) => boolean;
-  (cell: Occupied, bug: Bug.Bug): boolean;
-} = dual(
-  2,
-  (cell: Occupied, bug: Bug.Bug) =>
-    Array.contains(cell.member.cover, bug) || withBugInBasis(cell, bug)
-);
+  (bug: Bug.Bug): (cell: Occupied) => Option.Option<number>;
+  (cell: Occupied, bug: Bug.Bug): Option.Option<number>;
+} = dual(2, (cell: Occupied, bug: Bug.Bug): Option.Option<number> => {
+  return Array.findFirstIndex(cell.member.cover, Equal.equals(bug)).pipe(
+    Option.map((x) => x + 1),
+    Option.orElse(() =>
+      withBugInBasis(cell, bug) ? Option.some(0) : Option.none()
+    )
+  );
+});
 
 export const isBugUnderPressure: {
   (bug: Bug.Bug): (cell: Occupied) => Option.Option<boolean>;
@@ -190,7 +193,7 @@ export const isBugUnderPressure: {
   (cell: Occupied, bug: Bug.Bug): Option.Option<boolean> =>
     pipe(
       cell,
-      Option.liftPredicate(hasBug(bug)),
+      Option.liftPredicate((x) => hasBug(x, bug).pipe(Option.isSome)),
       Option.map((cell) => !Equal.equals(bug, masterBug(cell)))
     )
 );
@@ -480,3 +483,37 @@ export const findFirstEmpty: {
 } = dual(2, (cell: Cell, predicate: (cell: Empty) => boolean) =>
   findFirstEmptyMap(cell, Option.liftPredicate(predicate))
 );
+
+export const climbableNeighbors = (from: Occupied, fromLevel: number) =>
+  pipe(
+    neighborsOccupied(from),
+    Array.filter((x) =>
+      isClimbableFromBorder(
+        x.occupied,
+        CellBorder.opposite(x.border),
+        fromLevel
+      )
+    ),
+    Array.map((x) => x.occupied),
+    HashSet.fromIterable
+  );
+
+const isClimbableFromBorder = (
+  target: Occupied,
+  border: CellBorder.CellBorder,
+  fromLevel: number
+) => {
+  const [neighborBorderA, neighborBorderB] = CellBorder.neighbors(border);
+  const test = isObstacleForClimbingFromLevel(fromLevel);
+
+  const isObstacleForClimbingA = test(target.neighbors[neighborBorderA]);
+  const isObstacleForClimbingB = test(target.neighbors[neighborBorderB]);
+  return isObstacleForClimbingA && isObstacleForClimbingB;
+};
+
+const isObstacleForClimbingFromLevel = (level: number) =>
+  match({
+    Empty: () => false,
+    Occupied: (occupied) =>
+      SwarmMember.bugFromLevel(occupied.member, level + 1).pipe(Option.isSome),
+  });

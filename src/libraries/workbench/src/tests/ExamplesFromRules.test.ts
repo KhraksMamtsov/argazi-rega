@@ -1,6 +1,6 @@
 import * as Bug from "../game/Bug.ts";
 import * as BugNumber from "../game/BugNumber.ts";
-import { SideSchema } from "../game/Side.ts";
+import * as Side from "../game/Side.ts";
 import * as Swarm from "../game/Swarm.ts";
 import { HashMap, Option, Equal, Either, Predicate, HashSet } from "effect";
 import * as SwarmMember from "../game/SwarmMember.ts";
@@ -9,7 +9,7 @@ import { test, describe, expect, assert } from "@effect/vitest";
 import * as SwarmError from "../game/SwarmError.ts";
 import * as Cell from "../game/Cell.ts";
 import { BugDto } from "../api/Bug.dto.ts";
-import { assertRefinement } from "./TestUtills.ts";
+import { assertRefinement, trimNewline } from "./TestUtills.ts";
 
 describe("Examples from rules", () => {
   test("QueenBee", () => {
@@ -456,5 +456,172 @@ describe("Examples from rules", () => {
     assertRefinement(Either.isLeft, validateResult);
 
     expect(validateResult.left._tag).toBe("SplitSwarm");
+  });
+
+  test("Freedom to move: Beetle can climb", () => {
+    const TestBug = () =>
+      new Bug.Beetle({
+        number: BugNumber.One(1),
+        side: "black",
+      });
+
+    const swarm = new Swarm.Swarm({
+      lastMoved: BugDto.decode("bA1"),
+      lastMovedByPillbug: false,
+      field: HashMap.make(
+        [
+          Coords.Init(0.5, 1),
+          SwarmMember.Init(BugDto.decode("bP2")).pipe(
+            SwarmMember.addCover(
+              new Bug.Mosquito({
+                number: BugNumber.One(1),
+                side: "white",
+              })
+            )
+          ),
+        ],
+        [Coords.Init(1.5, 1), SwarmMember.Init(TestBug())],
+        [Coords.Zero, SwarmMember.Init(BugDto.decode("wA1"))],
+        [Coords.Init(1, 0), SwarmMember.Init(BugDto.decode("wQ1"))],
+        [Coords.Init(2, 0), SwarmMember.Init(BugDto.decode("bP1"))],
+        [Coords.Init(0.5, -1), SwarmMember.Init(BugDto.decode("bA1"))]
+      ),
+    });
+
+    const actualEmptyCells = Swarm.getMovementCellsFor(swarm, TestBug());
+    const actualCoords = actualEmptyCells.pipe(
+      Option.map(HashSet.map((x) => x.coords))
+    );
+    const testBeetleCell = Cell.findFirstOccupied(swarm.graph, (x) =>
+      Cell.withBugInBasis(x, TestBug())
+    );
+
+    assertRefinement(Option.isSome, actualEmptyCells);
+    assertRefinement(Option.isSome, testBeetleCell);
+    // assertRefinement(Array.every(Cell.refine("Empty")), actualEmptyCells.value);
+
+    console.log(
+      Swarm.toString(swarm, {
+        highlight: actualEmptyCells.value,
+        target: testBeetleCell.value,
+      })
+    );
+
+    expect(
+      Swarm.toString(swarm, {
+        highlight: actualEmptyCells.value,
+        target: testBeetleCell.value,
+      })
+    ).toBe(trimNewline`
+       ○     ×     ○ 
+
+    ○     P̲̈×M̊   _B̲̊_    × 
+
+ ○    (Å)    Q̊×    P̲̊×    ○ 
+
+    ○     Å̲     ○     ○ 
+
+       ○     ○ 
+`);
+
+    expect(actualCoords).toEqual(
+      Option.some(
+        HashSet.make(
+          Coords.Init(1, 0),
+          Coords.Init(2, 0),
+          Coords.Init(1, 2),
+          Coords.Init(0.5, 1),
+          Coords.Init(2.5, 1)
+        )
+      )
+    );
+  });
+
+  test.only("Freedom to move: Beetle can't climb", () => {
+    const TestBug = () =>
+      new Bug.Beetle({
+        number: BugNumber.One(1),
+        side: "black",
+      });
+
+    const swarm = new Swarm.Swarm({
+      lastMoved: BugDto.decode("bA1"),
+      lastMovedByPillbug: false,
+      field: HashMap.make(
+        [
+          Coords.Init(0.5, 1),
+          SwarmMember.Init(BugDto.decode("bP2")).pipe(
+            SwarmMember.addCover(
+              new Bug.Mosquito({
+                number: BugNumber.One(1),
+                side: "white",
+              })
+            )
+          ),
+        ],
+        [Coords.Init(1.5, 1), SwarmMember.Init(TestBug())],
+        [Coords.Zero, SwarmMember.Init(BugDto.decode("wA1"))],
+        [Coords.Init(1, 0), SwarmMember.Init(BugDto.decode("wQ1"))],
+        [
+          Coords.Init(2, 0),
+          SwarmMember.Init(BugDto.decode("bP1")).pipe(
+            SwarmMember.addCover(
+              new Bug.Beetle({
+                number: BugNumber.One(1),
+                side: "white",
+              })
+            )
+          ),
+        ],
+        [Coords.Init(0.5, -1), SwarmMember.Init(BugDto.decode("bA1"))]
+      ),
+    });
+
+    const actualEmptyCells = Swarm.getMovementCellsFor(swarm, TestBug());
+    const actualCoords = actualEmptyCells.pipe(
+      Option.map(HashSet.map((x) => x.coords))
+    );
+    const testBeetleCell = Cell.findFirstOccupied(swarm.graph, (x) =>
+      Cell.withBugInBasis(x, TestBug())
+    );
+
+    assertRefinement(Option.isSome, actualEmptyCells);
+    assertRefinement(Option.isSome, testBeetleCell);
+    // assertRefinement(Array.every(Cell.refine("Empty")), actualEmptyCells.value);
+
+    console.log(
+      Swarm.toString(swarm, {
+        highlight: actualEmptyCells.value,
+        target: testBeetleCell.value,
+      })
+    );
+
+    expect(
+      Swarm.toString(swarm, {
+        highlight: actualEmptyCells.value,
+        target: testBeetleCell.value,
+      })
+    ).toBe(trimNewline`
+       ○     ×     ○ 
+
+    ○     P̲̈×M̊   _B̲̊_    × 
+
+ ○    (Å)    Q̊     P̲̊×B̊    ○ 
+
+    ○     Å̲     ○     ○ 
+
+       ○     ○ 
+`);
+
+    expect(actualCoords).toEqual(
+      Option.some(
+        HashSet.make(
+          Coords.Init(2, 0),
+          Coords.Init(1, 2),
+          Coords.Init(2.5, 1),
+          Coords.Init(0.5, 1)
+        )
+      )
+    );
   });
 });

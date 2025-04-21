@@ -330,8 +330,8 @@ const slideableNeighborsEmptyCellsStep = (
 };
 
 const movesStrategies: Record<
-  Exclude<Bug.Bug["_tag"], "Beetle"> | "BeetleCover" | "BeetleBottom",
-  (from: Cell.Occupied) => HashSet.HashSet<Cell.Cell>
+  Bug.Bug["_tag"],
+  (from: Cell.Occupied, level: number) => HashSet.HashSet<Cell.Cell>
 > = {
   Ant: (from) => {
     let result = HashSet.make(from.coords);
@@ -374,14 +374,19 @@ const movesStrategies: Record<
       })
     );
   },
-  BeetleBottom: (from) =>
-    HashSet.union<Cell.Cell>(
-      Cell.slideableNeighborsEmptyCells(from),
-      HashSet.fromIterable(
+  Beetle: (from, level) => {
+    if (level === 0) {
+      return HashSet.fromIterable(
         Array.filter(from.neighbors, Cell.refine("Occupied"))
-      )
-    ),
-  BeetleCover: (from) => HashSet.fromIterable(from.neighbors),
+      ).pipe(
+        HashSet.difference(Cell.climbableNeighbors(from, level)),
+        HashSet.union<Cell.Cell>(Cell.slideableNeighborsEmptyCells(from))
+      );
+    } else {
+      //TODO add // Cell.climbableNeighbors(from, level)
+      return HashSet.fromIterable(from.neighbors);
+    }
+  },
   Ladybug: (from) =>
     HashSet.fromIterable(
       Array.filter(from.neighbors, Cell.refine("Occupied"))
@@ -392,24 +397,18 @@ const movesStrategies: Record<
       HashSet.difference(HashSet.make(from)),
       HashSet.flatMap((x) => Array.filter(x.neighbors, Cell.refine("Empty")))
     ),
-  Mosquito: (from) =>
-    pipe(
-      HashSet.fromIterable(from.neighbors),
+  Mosquito: (from, level) => {
+    if (level !== 0) {
+      return movesStrategies["Beetle"](from, level);
+    }
+    return HashSet.fromIterable(from.neighbors).pipe(
       HashSet.filter(Cell.refine("Occupied")),
       HashSet.filter((x) => !Bug.refine("Mosquito")(Cell.masterBug(x))),
-      HashSet.flatMap((x) => {
-        const masterBug = Cell.masterBug(x);
-        if (Bug.refine("Beetle")(masterBug)) {
-          return movesStrategies["BeetleBottom"](from);
-        }
-        // TODO: add Pillbug
-        if (Bug.refine("Pillbug")(masterBug)) {
-          return movesStrategies["Pillbug"](from);
-        }
-
-        return movesStrategies[masterBug._tag](from);
-      })
-    ),
+      HashSet.flatMap((x) =>
+        movesStrategies[Cell.masterBug(x)._tag](from, level)
+      )
+    );
+  },
   Grasshopper: (from) =>
     pipe(
       Cell.bordersWithNeighborsOccupied(from),
@@ -479,25 +478,18 @@ export const getMovementCellsFor: {
       swarm.graph,
       Cell.match({
         Empty: () => Option.none(),
-        Occupied: Option.liftPredicate(Cell.hasBug(bug)),
+        Occupied: (occupied) =>
+          Cell.hasBug(occupied, bug).pipe(
+            Option.map((level) => ({
+              level,
+              occupied,
+            }))
+          ),
       })
     ),
-    Option.map((x) => {
-      if (Bug.refine("Mosquito")(bug)) {
-        // если ходят комаром и он стоит на другом жуке
-        if (!Cell.withBugInBasis(x, bug)) {
-          return movesStrategies["BeetleCover"](x);
-        }
-      }
-      if (Bug.refine("Beetle")(bug)) {
-        const beetleStrategy = Cell.withBugInBasis(x, bug)
-          ? "BeetleBottom"
-          : "BeetleCover";
-
-        return movesStrategies[beetleStrategy](x);
-      }
-      return movesStrategies[bug._tag](x);
-    })
+    Option.map(({ level, occupied }) =>
+      movesStrategies[bug._tag](occupied, level)
+    )
   )
 );
 
@@ -518,9 +510,8 @@ export const pillbugAbilityMovingCells: {
     move: Move.MovingMove
   ): Either.Either<HashSet.HashSet<Cell.Empty>, SwarmError.BugNotFound> =>
     Either.gen(function* () {
-      const fromCell = yield* Cell.findFirstOccupied(
-        swarm.graph,
-        Cell.hasBug(move.bug)
+      const fromCell = yield* Cell.findFirstOccupied(swarm.graph, (x) =>
+        Cell.hasBug(x, move.bug).pipe(Option.isSome)
       ).pipe(
         Either.fromOption(() => new SwarmError.BugNotFound({ bug: move.bug }))
       );
@@ -583,9 +574,8 @@ export const move: {
   ): Either.Either<Swarm, SwarmError.SwarmError> =>
     Either.gen(function* () {
       const targetCell = yield* findTargetMovingCell(swarm, move);
-      const fromCell = Cell.findFirstOccupied(
-        swarm.graph,
-        Cell.hasBug(move.bug)
+      const fromCell = Cell.findFirstOccupied(swarm.graph, (x) =>
+        Cell.hasBug(x, move.bug).pipe(Option.isSome)
       );
 
       if (Option.isNone(fromCell)) {
