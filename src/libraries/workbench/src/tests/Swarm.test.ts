@@ -479,6 +479,41 @@ describe("Swarm", () => {
         )
       );
     });
+
+    test("Mosquito with mosquito", () => {
+      const TestBug = () => BugDto.decode("wM1");
+
+      const swarm = new Swarm.Swarm({
+        lastMoved: TestBug(),
+        lastMovedByPillbug: false,
+        field: HashMap.make(
+          [Coords.Zero, SwarmMember.Init(BugDto.decode("bM1"))],
+          [Coords.Init(1, 0), SwarmMember.Init(TestBug())]
+        ),
+      });
+
+      const actualEmptyCells = Swarm.getMovementCellsFor(swarm, TestBug());
+      const actualCoords = actualEmptyCells.pipe(
+        Option.map(HashSet.map((x) => x.coords))
+      );
+      const testBeetleCell = Cell.findFirstOccupied(swarm.graph, (x) =>
+        Cell.hasBug(x, TestBug())
+      );
+
+      assertRefinement(Option.isSome, actualEmptyCells);
+      assertRefinement(Option.isSome, testBeetleCell);
+      // assertRefinement(Array.every(Cell.refine("Empty")), actualEmptyCells.value);
+
+      console.log(
+        Swarm.toString(swarm, {
+          highlight: actualEmptyCells.value,
+          target: testBeetleCell.value,
+        })
+      );
+
+      expect(actualCoords).toEqual(Option.some(HashSet.make()));
+    });
+
     test("Spider", () => {
       const TestBug = () => BugDto.decode("bS1");
 
