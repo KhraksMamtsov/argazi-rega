@@ -387,15 +387,18 @@ const movesStrategies: Record<
       return HashSet.fromIterable(from.neighbors);
     }
   },
-  Ladybug: (from) =>
+  Ladybug: (from, level) =>
     HashSet.fromIterable(
       Array.filter(from.neighbors, Cell.refine("Occupied"))
     ).pipe(
+      HashSet.difference(Cell.climbableNeighbors(from, level)),
       HashSet.flatMap((x) =>
         Array.filter(x.neighbors, Cell.refine("Occupied"))
       ),
+      // add HashSet.difference(Cell.climbableNeighbors(from, level same !!!.1.!!!)),
       HashSet.difference(HashSet.make(from)),
       HashSet.flatMap((x) => Array.filter(x.neighbors, Cell.refine("Empty")))
+      // add HashSet.difference(Cell.climbableNeighbors(from, level down  !!!.1.!!!)),
     ),
   Mosquito: (from, level) => {
     if (level !== 0) {

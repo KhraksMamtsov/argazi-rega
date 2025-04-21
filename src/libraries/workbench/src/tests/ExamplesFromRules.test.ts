@@ -10,6 +10,7 @@ import * as SwarmError from "../game/SwarmError.ts";
 import * as Cell from "../game/Cell.ts";
 import { BugDto } from "../api/Bug.dto.ts";
 import { assertRefinement, trimNewline } from "./TestUtills.ts";
+import { MoveDto, MovingMoveDto } from "../api/Move.dto.ts";
 
 describe("Examples from rules", () => {
   test("QueenBee", () => {
@@ -432,13 +433,52 @@ describe("Examples from rules", () => {
     });
 
     const actualEmptyCells = Swarm.getMovementCellsFor(swarm, BlackQueenBee());
-    const actualCoords = actualEmptyCells.pipe(
-      Option.map(HashSet.map((x) => x.coords))
-    );
 
     const testQueenBee = Cell.findFirstOccupied(
       swarm.graph,
       Cell.withBugInBasis(BlackQueenBee())
+    );
+
+    assertRefinement(Option.isSome, actualEmptyCells);
+    assertRefinement(Option.isSome, testQueenBee);
+
+    const validateResult = Swarm.validateSplit(swarm, testQueenBee.value);
+
+    console.log(
+      Swarm.toString(swarm, {
+        highlight: actualEmptyCells.value,
+        target: testQueenBee.value,
+      })
+    );
+
+    assertRefinement(Either.isLeft, validateResult);
+
+    expect(validateResult.left._tag).toBe("SplitSwarm");
+  });
+
+  test("One swarm rule: Ladybug", () => {
+    const blackLadybug = () => BugDto.decode("bL1");
+
+    const swarm = new Swarm.Swarm({
+      lastMovedByPillbug: false,
+      lastMoved: BugDto.decode("bA1"),
+      field: HashMap.make(
+        [Coords.Init(2, 3), SwarmMember.Init(BugDto.decode("wP1"))],
+        [Coords.Init(2.5, 1), SwarmMember.Init(BugDto.decode("wB1"))],
+        [Coords.Zero, SwarmMember.Init(BugDto.decode("bG1"))],
+        [Coords.Init(1, 0), SwarmMember.Init(BugDto.decode("bP1"))],
+        [Coords.Init(3, 0), SwarmMember.Init(BugDto.decode("wG1"))],
+        [Coords.Init(0.5, -1), SwarmMember.Init(BugDto.decode("bA1"))],
+        [Coords.Init(1.5, -1), SwarmMember.Init(blackLadybug())],
+        [Coords.Init(2.5, -1), SwarmMember.Init(BugDto.decode("wS1"))]
+      ),
+    });
+
+    const actualEmptyCells = Swarm.getMovementCellsFor(swarm, blackLadybug());
+
+    const testQueenBee = Cell.findFirstOccupied(
+      swarm.graph,
+      Cell.withBugInBasis(blackLadybug())
     );
 
     assertRefinement(Option.isSome, actualEmptyCells);
@@ -620,6 +660,93 @@ describe("Examples from rules", () => {
           Coords.Init(1, 2),
           Coords.Init(2.5, 1),
           Coords.Init(0.5, 1)
+        )
+      )
+    );
+  });
+  test("Freedom to move: Ladybug can't climb", () => {
+    const TestBug = () =>
+      new Bug.Ladybug({
+        number: BugNumber.One(1),
+        side: "black",
+      });
+
+    const swarm = new Swarm.Swarm({
+      lastMoved: BugDto.decode("bA1"),
+      lastMovedByPillbug: false,
+      field: HashMap.make(
+        [
+          Coords.Init(0.5, 1),
+          SwarmMember.Init(BugDto.decode("bP2")).pipe(
+            SwarmMember.addCover(
+              new Bug.Mosquito({
+                number: BugNumber.One(1),
+                side: "white",
+              })
+            )
+          ),
+        ],
+        [Coords.Init(1.5, 1), SwarmMember.Init(TestBug())],
+        [Coords.Zero, SwarmMember.Init(BugDto.decode("wA1"))],
+        [Coords.Init(1, 0), SwarmMember.Init(BugDto.decode("wQ1"))],
+        [
+          Coords.Init(2, 0),
+          SwarmMember.Init(BugDto.decode("bP1")).pipe(
+            SwarmMember.addCover(
+              new Bug.Beetle({
+                number: BugNumber.One(1),
+                side: "white",
+              })
+            )
+          ),
+        ],
+        [Coords.Init(0.5, -1), SwarmMember.Init(BugDto.decode("bA1"))]
+      ),
+    });
+
+    const actualEmptyCells = Swarm.getMovementCellsFor(swarm, TestBug());
+    const actualCoords = actualEmptyCells.pipe(
+      Option.map(HashSet.map((x) => x.coords))
+    );
+    const testBeetleCell = Cell.findFirstOccupied(swarm.graph, (x) =>
+      Cell.withBugInBasis(x, TestBug())
+    );
+
+    assertRefinement(Option.isSome, actualEmptyCells);
+    assertRefinement(Option.isSome, testBeetleCell);
+    // assertRefinement(Array.every(Cell.refine("Empty")), actualEmptyCells.value);
+
+    console.log(
+      Swarm.toString(swarm, {
+        highlight: actualEmptyCells.value,
+        target: testBeetleCell.value,
+      })
+    );
+
+    expect(
+      Swarm.toString(swarm, {
+        highlight: actualEmptyCells.value,
+        target: testBeetleCell.value,
+      })
+    ).toBe(trimNewline`
+       ○     ○     ○ 
+
+    ×     P̲̈ M̊   _L̲̊_    ○ 
+
+ ×    (Å)    Q̊     P̲̊ B̊    ○ 
+
+    ×     Å̲     ×     ○ 
+
+       ○     ○ 
+`);
+
+    expect(actualCoords).toEqual(
+      Option.some(
+        HashSet.make(
+          Coords.Init(1.5, -1),
+          Coords.Init(-1, 0),
+          Coords.Init(-0.5, -1),
+          Coords.Init(-0.5, 1)
         )
       )
     );
