@@ -118,6 +118,84 @@ b: A1 A2 A3 B1 B2 G1 G2 G3 P1 S1 S2
   );
 
   it.effect(
+    "stunned pillbug",
+    Effect.fn(function* () {
+      const swarm = new Swarm.Swarm({
+        field: HashMap.make(
+          [Coords.Zero, SwarmMember.Init(BugDto.decode("bA1"))],
+          [Coords.Init(1, 0), SwarmMember.Init(BugDto.decode("wP1"))],
+          [Coords.Init(0.5, -1), SwarmMember.Init(BugDto.decode("bQ1"))]
+        ),
+        lastMoved: BugDto.decode("wP1"),
+        lastMovedByPillbug: true,
+      });
+
+      const possibleCells = yield* Swarm.pillbugAbilityMovingCells(
+        swarm,
+        MovingMoveDto.decode("w: bQ1 /wP1")
+      );
+
+      console.log(
+        Swarm.toString(swarm, {
+          highlight: possibleCells,
+        })
+      );
+
+      expect(
+        Swarm.toString(swarm, {
+          highlight: possibleCells,
+        })
+      ).toBe(trimNewline`
+    ○     ○     ○ 
+
+ ○    (Å̲)    P̊     ○ 
+
+    ○     Q̲̊     ○ 
+
+       ○     ○ `);
+    })
+  );
+
+  it.effect(
+    "stunned mosquito in touch with pillbug",
+    Effect.fn(function* () {
+      const swarm = new Swarm.Swarm({
+        field: HashMap.make(
+          [Coords.Zero, SwarmMember.Init(BugDto.decode("bP1"))],
+          [Coords.Init(1, 0), SwarmMember.Init(BugDto.decode("wM1"))],
+          [Coords.Init(0.5, -1), SwarmMember.Init(BugDto.decode("bQ1"))]
+        ),
+        lastMoved: BugDto.decode("wM1"),
+        lastMovedByPillbug: true,
+      });
+
+      const possibleCells = yield* Swarm.pillbugAbilityMovingCells(
+        swarm,
+        MovingMoveDto.decode("w: bQ1 /wM1")
+      );
+
+      console.log(
+        Swarm.toString(swarm, {
+          highlight: possibleCells,
+        })
+      );
+
+      expect(
+        Swarm.toString(swarm, {
+          highlight: possibleCells,
+        })
+      ).toBe(trimNewline`
+    ○     ○     ○ 
+
+ ○    (P̲̊)    M̊     ○ 
+
+    ○     Q̲̊     ○ 
+
+       ○     ○ `);
+    })
+  );
+
+  it.effect(
     "mosquito not mimics with no pillbug in touch",
     Effect.fn(function* () {
       const swarm = new Swarm.Swarm({

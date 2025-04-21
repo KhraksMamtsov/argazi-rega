@@ -556,6 +556,13 @@ export const pillbugAbilityMovingCells: {
       return pipe(
         pillbugNeighbors,
         Array.prependAll(mosquotoNeighbors),
+        Array.filter((x) => {
+          if (Equal.equals(swarm.lastMoved, x.member.bug)) {
+            return !swarm.lastMovedByPillbug;
+          } else {
+            return true;
+          }
+        }),
         Array.flatMap((x) => Array.filter(x.neighbors, Cell.refine("Empty"))),
         HashSet.fromIterable
       );

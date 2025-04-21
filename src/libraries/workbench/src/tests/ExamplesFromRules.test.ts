@@ -62,8 +62,8 @@ describe("Examples from rules", () => {
     );
   });
 
-  test("Peelbug", () => {
-    const WhitePeelbug = () => BugDto.decode("wP1");
+  test("Pillbug", () => {
+    const WhitePillbug = () => BugDto.decode("wP1");
 
     const swarm = new Swarm.Swarm({
       lastMovedByPillbug: false,
@@ -73,16 +73,16 @@ describe("Examples from rules", () => {
         [Coords.Init(2.5, 1), SwarmMember.Init(BugDto.decode("wQ1"))],
         [Coords.Zero, SwarmMember.Init(BugDto.decode("bB1"))],
         [Coords.Init(1, 0), SwarmMember.Init(BugDto.decode("wS1"))],
-        [Coords.Init(2, 0), SwarmMember.Init(WhitePeelbug())],
+        [Coords.Init(2, 0), SwarmMember.Init(WhitePillbug())],
         [Coords.Init(1.5, -1), SwarmMember.Init(BugDto.decode("bQ1"))]
       ),
     });
 
     const testPillbug = Cell.findFirstOccupied(
       swarm.graph,
-      Cell.withBugInBasis(WhitePeelbug())
+      Cell.withBugInBasis(WhitePillbug())
     );
-    const actualEmptyCells = Swarm.getMovementCellsFor(swarm, WhitePeelbug());
+    const actualEmptyCells = Swarm.getMovementCellsFor(swarm, WhitePillbug());
     const actualCoords = actualEmptyCells.pipe(
       Option.map(HashSet.map((x) => x.coords))
     );
