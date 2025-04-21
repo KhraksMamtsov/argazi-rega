@@ -510,6 +510,7 @@ export const pillbugAbilityMovingCells: {
     move: Move.MovingMove
   ): Either.Either<HashSet.HashSet<Cell.Empty>, SwarmError.BugNotFound> =>
     Either.gen(function* () {
+      //TODO add // Cell.climbableNeighbors(from, level)
       const fromCell = yield* Cell.findFirstOccupied(swarm.graph, (x) =>
         Cell.hasBug(x, move.bug).pipe(Option.isSome)
       ).pipe(

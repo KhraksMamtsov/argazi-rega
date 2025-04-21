@@ -144,8 +144,8 @@ describe("Examples from rules", () => {
     expect(actualCoords).toEqual(
       Option.some(
         HashSet.make(
-          Coords.Init(0.5, 1),
           Coords.Init(2.5, 1),
+          Coords.Init(0.5, 1),
           Coords.Init(2, 0),
           Coords.Init(1, 2)
         )
@@ -530,14 +530,14 @@ describe("Examples from rules", () => {
           Coords.Init(1, 0),
           Coords.Init(2, 0),
           Coords.Init(1, 2),
-          Coords.Init(0.5, 1),
-          Coords.Init(2.5, 1)
+          Coords.Init(2.5, 1),
+          Coords.Init(0.5, 1)
         )
       )
     );
   });
 
-  test.only("Freedom to move: Beetle can't climb", () => {
+  test("Freedom to move: Beetle can't climb", () => {
     const TestBug = () =>
       new Bug.Beetle({
         number: BugNumber.One(1),
