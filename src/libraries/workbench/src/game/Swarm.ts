@@ -547,7 +547,7 @@ export const pillbugAbilityMovingCells: {
             Array.some(Cell.neighborsOccupied(x), (x) => {
               return (
                 !Cell.isWithCover(x.occupied) &&
-                Cell.refineBugInBasis(Bug.refine("Pillbug"))(x.occupied)
+                Cell.refineBugInBasis(x.occupied, Bug.refine("Pillbug"))
               );
             })
         )
