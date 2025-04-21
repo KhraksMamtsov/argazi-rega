@@ -686,6 +686,51 @@ describe("Swarm", () => {
         Option.some(HashSet.make(Coords.Init(1, -4), Coords.Init(-0.5, 1)))
       );
     });
+
+    test.only("Spider no backtrack", () => {
+      const TestBug = () => BugDto.decode("bS1");
+
+      const swarm = new Swarm.Swarm({
+        lastMoved: BugDto.decode("bA1"),
+        lastMovedByPillbug: false,
+        field: HashMap.make(
+          [Coords.Zero, SwarmMember.Init(BugDto.decode("bA1"))],
+          [Coords.Init(1, 0), SwarmMember.Init(BugDto.decode("wA2"))],
+          [Coords.Init(-0.5, -1), SwarmMember.Init(TestBug())],
+          [Coords.Init(-1, -2), SwarmMember.Init(BugDto.decode("bA2"))],
+          [Coords.Init(1, -2), SwarmMember.Init(BugDto.decode("bP2"))],
+          [Coords.Init(-0.5, -3), SwarmMember.Init(BugDto.decode("wG3"))],
+          [Coords.Init(0.5, -3), SwarmMember.Init(BugDto.decode("wB2"))]
+        ),
+      });
+
+      const actualEmptyCells = Swarm.getMovementCellsFor(swarm, TestBug());
+      const actualCoords = actualEmptyCells.pipe(
+        Option.map(HashSet.map((x) => x.coords))
+      );
+      const testSpider = Cell.findFirstOccupied(
+        swarm.graph,
+        Cell.withBugInBasis(TestBug())
+      );
+
+      assertRefinement(Option.isSome, actualEmptyCells);
+      assertRefinement(Option.isSome, testSpider);
+      assertRefinement(
+        HashSet.every(Cell.refine("Empty")),
+        actualEmptyCells.value
+      );
+
+      console.log(
+        Swarm.toString(swarm, {
+          highlight: actualEmptyCells.value,
+          target: testSpider.value,
+        })
+      );
+
+      expect(actualCoords).toEqual(
+        Option.some(HashSet.make(Coords.Init(0.5, 1), Coords.Init(-1.5, -3)))
+      );
+    });
     test("Ant", () => {
       const TestBug = () => BugDto.decode("bA2");
 
