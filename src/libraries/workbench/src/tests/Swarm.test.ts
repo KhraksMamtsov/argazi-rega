@@ -12,7 +12,7 @@ import { BugDto } from "../api/Bug.dto.ts";
 import { assertRefinement, trimNewline } from "./TestUtills.ts";
 
 describe("Swarm", () => {
-  test("one member", () => {
+  test.concurrent("one member", () => {
     const swarm = new Swarm.Swarm({
       field: HashMap.make([
         Coords.Zero,
@@ -34,7 +34,7 @@ describe("Swarm", () => {
     });
   });
 
-  test("two members", () => {
+  test.concurrent("two members", () => {
     const swarm = new Swarm.Swarm({
       field: HashMap.make(
         [Coords.Zero, SwarmMember.Init(BugDto.decode("bA1"))],
@@ -56,7 +56,7 @@ describe("Swarm", () => {
     });
   });
 
-  test("three triangle", () => {
+  test.concurrent("three triangle", () => {
     const swarm = new Swarm.Swarm({
       field: HashMap.make(
         [Coords.Zero, SwarmMember.Init(BugDto.decode("bA1"))],
@@ -79,7 +79,7 @@ describe("Swarm", () => {
     });
   });
 
-  test("three line", () => {
+  test.concurrent("three line", () => {
     const swarm = new Swarm.Swarm({
       lastMoved: BugDto.decode("bA1"),
       lastMovedByPillbug: false,
@@ -116,7 +116,7 @@ describe("Swarm", () => {
       },
     });
   });
-  test("three tube", () => {
+  test.concurrent("three tube", () => {
     const swarm = new Swarm.Swarm({
       lastMoved: BugDto.decode("bA1"),
       lastMovedByPillbug: false,
@@ -155,7 +155,7 @@ describe("Swarm", () => {
   });
 
   describe("getMovementCellsFor", () => {
-    test("bug not found", () => {
+    test.concurrent("bug not found", () => {
       const swarm = new Swarm.Swarm({
         field: HashMap.make([
           Coords.Zero,
@@ -172,7 +172,7 @@ describe("Swarm", () => {
       expect(actualResult).toEqual(Option.none());
     });
 
-    test("Grasshopper", () => {
+    test.concurrent("Grasshopper", () => {
       const TestGrasshopper = () =>
         new Bug.Grasshopper({
           number: BugNumber.One(1),
@@ -236,7 +236,7 @@ describe("Swarm", () => {
       );
     });
 
-    test("QueenBee", () => {
+    test.concurrent("QueenBee", () => {
       const TestQueenBee = () =>
         new Bug.QueenBee({ side: "black", number: BugNumber.One(1) });
 
@@ -288,7 +288,7 @@ describe("Swarm", () => {
       );
     });
 
-    test("Slideable move: QueenBee", () => {
+    test.concurrent("Slideable move: QueenBee", () => {
       const TestQueenBee = () => BugDto.decode("wQ1");
 
       const swarm = new Swarm.Swarm({
@@ -339,7 +339,7 @@ describe("Swarm", () => {
       );
     });
 
-    test("Ladybug", () => {
+    test.concurrent("Ladybug", () => {
       const TestQueenBee = () => BugDto.decode("wL1");
 
       const swarm = new Swarm.Swarm({
@@ -390,7 +390,7 @@ describe("Swarm", () => {
       );
     });
 
-    test("Pillbug", () => {
+    test.concurrent("Pillbug", () => {
       const TestQueenBee = () =>
         new Bug.Pillbug({ side: "white", number: BugNumber.One(1) });
 
@@ -426,7 +426,7 @@ describe("Swarm", () => {
         Option.some(HashSet.make(Coords.Init(0, -2), Coords.Init(-0.5, -1)))
       );
     });
-    test("Beetle", () => {
+    test.concurrent("Beetle", () => {
       const TestBug = () => BugDto.decode("bB1");
 
       const swarm = new Swarm.Swarm({
@@ -484,7 +484,7 @@ describe("Swarm", () => {
       );
     });
 
-    test("Beetle cover", () => {
+    test.concurrent("Beetle cover", () => {
       const TestBug = () =>
         new Bug.Beetle({
           number: BugNumber.One(1),
@@ -540,7 +540,7 @@ describe("Swarm", () => {
       );
     });
 
-    test("Mosquito cover", () => {
+    test.concurrent("Mosquito cover", () => {
       const TestBug = () =>
         new Bug.Mosquito({
           number: BugNumber.One(1),
@@ -610,7 +610,7 @@ describe("Swarm", () => {
       );
     });
 
-    test("Mosquito with mosquito", () => {
+    test.concurrent("Mosquito with mosquito", () => {
       const TestBug = () => BugDto.decode("wM1");
 
       const swarm = new Swarm.Swarm({
@@ -644,7 +644,7 @@ describe("Swarm", () => {
       expect(actualCoords).toEqual(Option.some(HashSet.make()));
     });
 
-    test("Spider", () => {
+    test.concurrent("Spider", () => {
       const TestBug = () => BugDto.decode("bS1");
 
       const swarm = new Swarm.Swarm({
@@ -687,7 +687,7 @@ describe("Swarm", () => {
       );
     });
 
-    test.only("Spider no backtrack", () => {
+    test.concurrent("Spider no backtrack", () => {
       const TestBug = () => BugDto.decode("bS1");
 
       const swarm = new Swarm.Swarm({
@@ -731,7 +731,7 @@ describe("Swarm", () => {
         Option.some(HashSet.make(Coords.Init(0.5, 1), Coords.Init(-1.5, -3)))
       );
     });
-    test("Ant", () => {
+    test.concurrent("Ant", () => {
       const TestBug = () => BugDto.decode("bA2");
 
       const swarm = new Swarm.Swarm({
@@ -795,7 +795,7 @@ describe("Swarm", () => {
     });
   });
 
-  test("validateSplit", () => {
+  test.concurrent("validateSplit", () => {
     const TestBug = () =>
       new Bug.Beetle({ number: BugNumber.One(1), side: "black" });
 
@@ -824,7 +824,7 @@ describe("Swarm", () => {
 
     expect(result.right).toEqual(swarm);
   });
-  test("validateSplit SplitError", () => {
+  test.concurrent("validateSplit SplitError", () => {
     const swarm = new Swarm.Swarm({
       lastMoved: BugDto.decode("bA1"),
       lastMovedByPillbug: false,

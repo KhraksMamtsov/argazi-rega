@@ -1,19 +1,17 @@
 import * as Bug from "../game/Bug.ts";
 import * as BugNumber from "../game/BugNumber.ts";
-import * as Side from "../game/Side.ts";
 import * as Swarm from "../game/Swarm.ts";
-import { HashMap, Option, Equal, Either, Predicate, HashSet } from "effect";
+import { HashMap, Option, Equal, Either, HashSet } from "effect";
 import * as SwarmMember from "../game/SwarmMember.ts";
 import { Coords } from "../game/Coords.ts";
-import { test, describe, expect, assert } from "@effect/vitest";
-import * as SwarmError from "../game/SwarmError.ts";
+import { test, describe, expect } from "@effect/vitest";
+
 import * as Cell from "../game/Cell.ts";
 import { BugDto } from "../api/Bug.dto.ts";
 import { assertRefinement, trimNewline } from "./TestUtills.ts";
-import { MoveDto, MovingMoveDto } from "../api/Move.dto.ts";
 
-describe("Examples from rules", () => {
-  test("QueenBee", () => {
+describe.concurrent("Examples from rules", () => {
+  test.concurrent("QueenBee", () => {
     const BlackQueenBee = () => BugDto.decode("bQ1");
 
     const swarm = new Swarm.Swarm({
@@ -62,7 +60,7 @@ describe("Examples from rules", () => {
     );
   });
 
-  test("Pillbug", () => {
+  test.concurrent("Pillbug", () => {
     const WhitePillbug = () => BugDto.decode("wP1");
 
     const swarm = new Swarm.Swarm({
@@ -106,7 +104,7 @@ describe("Examples from rules", () => {
     );
   });
 
-  test("Beetle", () => {
+  test.concurrent("Beetle", () => {
     const WhiteBeetle = () => BugDto.decode("wB1");
 
     const swarm = new Swarm.Swarm({
@@ -154,7 +152,7 @@ describe("Examples from rules", () => {
     );
   });
 
-  test("Grasshopper", () => {
+  test.concurrent("Grasshopper", () => {
     const WhiteGrasshopper = () => BugDto.decode("wG1");
 
     const swarm = new Swarm.Swarm({
@@ -203,7 +201,7 @@ describe("Examples from rules", () => {
     );
   });
 
-  test("Spider", () => {
+  test.concurrent("Spider", () => {
     const BlackSpider = () => BugDto.decode("bS1");
 
     const swarm = new Swarm.Swarm({
@@ -249,7 +247,7 @@ describe("Examples from rules", () => {
     );
   });
 
-  test("Ant", () => {
+  test.concurrent("Ant", () => {
     const BlackAnt = () => BugDto.decode("bA1");
 
     const swarm = new Swarm.Swarm({
@@ -307,7 +305,7 @@ describe("Examples from rules", () => {
     ).toBe(true);
   });
 
-  test("Ladybug", () => {
+  test.concurrent("Ladybug", () => {
     const Ladybug = () => BugDto.decode("bL1");
 
     const swarm = new Swarm.Swarm({
@@ -364,7 +362,7 @@ describe("Examples from rules", () => {
     ).toBe(true);
   });
 
-  test("Mosquito", () => {
+  test.concurrent("Mosquito", () => {
     const Mosquito = () => BugDto.decode("wM1");
 
     const swarm = new Swarm.Swarm({
@@ -416,7 +414,7 @@ describe("Examples from rules", () => {
     ).toBe(true);
   });
 
-  test("One swarm rule", () => {
+  test.concurrent("One swarm rule", () => {
     const BlackQueenBee = () => BugDto.decode("bQ1");
 
     const swarm = new Swarm.Swarm({
@@ -456,7 +454,7 @@ describe("Examples from rules", () => {
     expect(validateResult.left._tag).toBe("SplitSwarm");
   });
 
-  test("One swarm rule: Ladybug", () => {
+  test.concurrent("One swarm rule: Ladybug", () => {
     const blackLadybug = () => BugDto.decode("bL1");
 
     const swarm = new Swarm.Swarm({
@@ -498,7 +496,7 @@ describe("Examples from rules", () => {
     expect(validateResult.left._tag).toBe("SplitSwarm");
   });
 
-  test("Freedom to move: Beetle can climb", () => {
+  test.concurrent("Freedom to move: Beetle can climb", () => {
     const TestBug = () =>
       new Bug.Beetle({
         number: BugNumber.One(1),
@@ -577,7 +575,7 @@ describe("Examples from rules", () => {
     );
   });
 
-  test("Freedom to move: Beetle can't climb", () => {
+  test.concurrent("Freedom to move: Beetle can't climb", () => {
     const TestBug = () =>
       new Bug.Beetle({
         number: BugNumber.One(1),
@@ -664,7 +662,7 @@ describe("Examples from rules", () => {
       )
     );
   });
-  test("Freedom to move: Ladybug can't climb", () => {
+  test.concurrent("Freedom to move: Ladybug can't climb", () => {
     const TestBug = () =>
       new Bug.Ladybug({
         number: BugNumber.One(1),

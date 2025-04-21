@@ -14,7 +14,7 @@ import { Coords } from "../game/Coords.ts";
 import * as SwarmMember from "../game/SwarmMember.ts";
 import { BeetleDto, BugDto } from "../api/Bug.dto.ts";
 
-describe("PillBugAbility", () => {
+describe.concurrent("PillBugAbility", () => {
   it.effect(
     "pillbug ability",
     Effect.fn(function* () {

@@ -11,7 +11,7 @@ import * as GameStep from "../game/GameStep.ts";
 import { trimNewline } from "./TestUtills.ts";
 import { InitialMoveDto, MoveDto, MovingMoveDto } from "../api/Move.dto.ts";
 
-describe("Game", () => {
+describe.concurrent("Game", () => {
   it.effect(
     "init",
     Effect.fn(function* () {
