@@ -93,7 +93,8 @@ b: A1 A2 A3 B1 B2 G1 G2 G3 P1 S1 S2
 
       const possibleCells = yield* Swarm.pillbugAbilityMovingCells(
         swarm,
-        MovingMoveDto.decode("w: bQ1 /wP1")
+        "white",
+        BugDto.decode("bQ1")
       );
 
       console.log(
@@ -132,7 +133,8 @@ b: A1 A2 A3 B1 B2 G1 G2 G3 P1 S1 S2
 
       const possibleCells = yield* Swarm.pillbugAbilityMovingCells(
         swarm,
-        MovingMoveDto.decode("w: bQ1 /wP1")
+        "white",
+        BugDto.decode("bQ1")
       );
 
       console.log(
@@ -171,7 +173,8 @@ b: A1 A2 A3 B1 B2 G1 G2 G3 P1 S1 S2
 
       const possibleCells = yield* Swarm.pillbugAbilityMovingCells(
         swarm,
-        MovingMoveDto.decode("w: bQ1 /wM1")
+        "white",
+        BugDto.decode("bQ1")
       );
 
       console.log(
@@ -210,7 +213,8 @@ b: A1 A2 A3 B1 B2 G1 G2 G3 P1 S1 S2
 
       const possibleCells = yield* Swarm.pillbugAbilityMovingCells(
         swarm,
-        MovingMoveDto.decode("w: bQ1 /wM1")
+        "white",
+        BugDto.decode("bQ1")
       );
 
       console.log(
@@ -248,7 +252,8 @@ b: A1 A2 A3 B1 B2 G1 G2 G3 P1 S1 S2
 
       const possibleCells = yield* Swarm.pillbugAbilityMovingCells(
         swarm,
-        MovingMoveDto.decode("w: bQ1 /wM1")
+        "white",
+        BugDto.decode("bQ1")
       );
 
       console.log(
@@ -298,7 +303,8 @@ b: A1 A2 A3 B1 B2 G1 G2 G3 P1 S1 S2
 
       const possibleCells = yield* Swarm.pillbugAbilityMovingCells(
         swarm,
-        MovingMoveDto.decode("w: bQ1 /wM1")
+        "white",
+        BugDto.decode("bQ1")
       );
 
       console.log(

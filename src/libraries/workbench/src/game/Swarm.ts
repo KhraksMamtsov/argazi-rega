@@ -533,27 +533,28 @@ export const getMovementCellsFor: {
 
 export const pillbugAbilityMovingCells: {
   (
-    move: Move.MovingMove
+    side: Side.Side,
+    bug: Bug.Bug
   ): (
     swarm: Swarm
   ) => Either.Either<HashSet.HashSet<Cell.Empty>, SwarmError.SwarmError>;
   (
     swarm: Swarm,
-    move: Move.MovingMove
+    side: Side.Side,
+    bug: Bug.Bug
   ): Either.Either<HashSet.HashSet<Cell.Empty>, SwarmError.SwarmError>;
 } = dual(
-  2,
+  3,
   (
     swarm: Swarm,
-    move: Move.MovingMove
+    side: Side.Side,
+    bug: Bug.Bug
   ): Either.Either<HashSet.HashSet<Cell.Empty>, SwarmError.BugNotFound> =>
     Either.gen(function* () {
       //TODO add // Cell.climbableNeighbors(from, level)
       const fromCell = yield* Cell.findFirstOccupied(swarm.graph, (x) =>
-        Cell.hasBug(x, move.bug).pipe(Option.isSome)
-      ).pipe(
-        Either.fromOption(() => new SwarmError.BugNotFound({ bug: move.bug }))
-      );
+        Cell.hasBug(x, bug).pipe(Option.isSome)
+      ).pipe(Either.fromOption(() => new SwarmError.BugNotFound({ bug })));
 
       if (Cell.isWithCover(fromCell)) {
         return HashSet.empty();
@@ -567,9 +568,7 @@ export const pillbugAbilityMovingCells: {
       const pillbugNeighbors = pipe(
         occupiedNeighbors,
         Array.filter(Cell.refineBugInBasis(Bug.refine("Pillbug"))),
-        Array.filter(
-          (x) => !Cell.isWithCover(x) && x.member.bug.side === Move.side(move)
-        )
+        Array.filter((x) => !Cell.isWithCover(x) && x.member.bug.side === side)
       );
 
       const mosquotoNeighbors = pipe(
@@ -578,7 +577,7 @@ export const pillbugAbilityMovingCells: {
         Array.filter(
           (x) =>
             !Cell.isWithCover(x) &&
-            x.member.bug.side === Move.side(move) &&
+            x.member.bug.side === side &&
             Array.some(Cell.neighborsOccupied(x), (x) => {
               return (
                 !Cell.isWithCover(x.occupied) &&
@@ -975,7 +974,8 @@ const isMovedByPillbug = (
   Either.gen(function* () {
     const pillBugAbilityMovingCells = yield* pillbugAbilityMovingCells(
       swarm,
-      move
+      Move.side(move),
+      move.bug
     );
 
     if (!HashSet.has(pillBugAbilityMovingCells, targetCell)) {
