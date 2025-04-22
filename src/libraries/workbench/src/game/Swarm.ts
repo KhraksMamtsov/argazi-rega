@@ -12,6 +12,7 @@ import {
   Pipeable,
   Iterable,
   Equal,
+  MutableHashMap,
 } from "effect";
 import * as Cell from "./Cell.ts";
 import * as Side from "./Side.ts";
@@ -24,6 +25,11 @@ import { distributive } from "../shared/effect/Types.ts";
 import { QueenBeeState } from "./QueenBeeState.ts";
 import * as SwarmError from "./SwarmError.ts";
 import * as Move from "./Move.ts";
+
+interface CoordsCell {
+  readonly white: HashMap.HashMap<Coords.Coords, Cell.Occupied>;
+  readonly black: HashMap.HashMap<Coords.Coords, Cell.Occupied>;
+}
 
 export interface Swarm extends Pipeable.Pipeable {}
 export class Swarm extends Data.Class<{
@@ -116,7 +122,36 @@ export class Swarm extends Data.Class<{
     return cell;
   }
 
-  #graph: null | Cell.Cell = null;
+  #coordsCell: CoordsCell | null = null;
+
+  get coordsCell(): CoordsCell {
+    if (this.#coordsCell) {
+      return this.#coordsCell;
+    }
+
+    const result: CoordsCell = pipe(
+      Cell.reduceWithFilter(
+        this.graph,
+        {
+          white: MutableHashMap.empty<Coords.Coords, Cell.Occupied>(),
+          black: MutableHashMap.empty<Coords.Coords, Cell.Occupied>(),
+        },
+        Cell.refine("Occupied"),
+        (result, occupied) => {
+          MutableHashMap.set(result[Cell.side(occupied)], occupied);
+          return result;
+        }
+      ),
+      (x) => ({
+        black: HashMap.fromIterable(x.black),
+        white: HashMap.fromIterable(x.white),
+      })
+    );
+
+    return (this.#coordsCell = result);
+  }
+
+  #graph: Cell.Cell | null = null;
 
   get graph(): Cell.Cell {
     if (this.#graph) {
@@ -915,7 +950,8 @@ export const hasIntroducibleCells = (side: Side.Side) => (swarm: Swarm) =>
     })
   );
 
-export const hasMovableSwarmMembers = (side: Side.Side) => (swarm: Swarm) => {
+export const canMakeTurn = (side: Side.Side) => (swarm: Swarm) => {
+  const asda = swarm.coordsCell[side];
   // return reduce(swarm.graph, false, (res, cell) => {
   //   return Cell.match(cell, {
   //     Empty: () => res || false,
