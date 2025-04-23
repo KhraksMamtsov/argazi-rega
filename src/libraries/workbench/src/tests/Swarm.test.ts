@@ -525,6 +525,19 @@ describe("Swarm", () => {
           // target: testBeetleCell.value,
         })
       );
+      expect(
+        Swarm.toString(swarm, {
+          highlight: actualEmptyCells.value,
+          // target: testBeetleCell.value,
+        })
+      ).toBe(trimNewline`
+    ○     ○     ○ 
+
+ ○    (Å̲×    Ä×    ○ 
+
+    ×     Ä̲ B̲̊    × 
+
+       ×     × `);
 
       expect(actualCoords).toEqual(
         Option.some(

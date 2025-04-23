@@ -9,5 +9,8 @@
   // },
   "eslint.validate": ["javascript", "typescript", "javascriptreact", "vue"],
   "typescript.tsdk": "node_modules/typescript/lib",
-  "cSpell.words": ["Argazipa"]
+  "cSpell.words": [
+    "Argazipa",
+    "pillbug"
+  ]
 }

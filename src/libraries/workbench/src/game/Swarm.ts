@@ -369,7 +369,7 @@ const slideableNeighborsEmptyCellsStep = (
   );
 };
 
-const movesStrategies: Record<
+const movingStrategies: Record<
   Bug.Bug["_tag"],
   (from: Cell.Occupied, level: number) => HashSet.HashSet<Cell.Cell>
 > = {
@@ -419,36 +419,57 @@ const movesStrategies: Record<
       return HashSet.fromIterable(
         Array.filter(from.neighbors, Cell.refine("Occupied"))
       ).pipe(
-        HashSet.difference(Cell.climbableNeighbors(from, level)),
+        HashSet.intersection(
+          Cell.beetleMovingNeighbors({ from, level, strategy: "climb" })
+        ),
         HashSet.union<Cell.Cell>(Cell.slideableNeighborsEmptyCells(from))
       );
     } else {
-      //TODO add // Cell.climbableNeighbors(from, level)
-      return HashSet.fromIterable(from.neighbors);
+      return Cell.beetleMovingNeighbors({ from, level, strategy: "pass" });
     }
   },
   Ladybug: (from, level) =>
     HashSet.fromIterable(
       Array.filter(from.neighbors, Cell.refine("Occupied"))
     ).pipe(
-      HashSet.difference(Cell.climbableNeighbors(from, level)),
-      HashSet.flatMap((x) =>
-        Array.filter(x.neighbors, Cell.refine("Occupied"))
+      HashSet.intersection(
+        Cell.beetleMovingNeighbors({ from, level, strategy: "climb" })
       ),
-      // add HashSet.difference(Cell.climbableNeighbors(from, level same !!!.1.!!!)),
+      HashSet.flatMap((x) =>
+        pipe(
+          Array.filter(x.neighbors, Cell.refine("Occupied")),
+          Array.intersection(
+            Cell.beetleMovingNeighbors({
+              from: x,
+              level: level + 1,
+              strategy: "pass",
+            })
+          )
+        )
+      ),
       HashSet.difference(HashSet.make(from)),
-      HashSet.flatMap((x) => Array.filter(x.neighbors, Cell.refine("Empty")))
-      // add HashSet.difference(Cell.climbableNeighbors(from, level down  !!!.1.!!!)),
+      HashSet.flatMap((x) =>
+        pipe(
+          Array.filter(x.neighbors, Cell.refine("Empty")),
+          Array.intersection(
+            Cell.beetleMovingNeighbors({
+              from: x,
+              level: level + 1,
+              strategy: "pass",
+            })
+          )
+        )
+      )
     ),
   Mosquito: (from, level) => {
     if (level !== 0) {
-      return movesStrategies["Beetle"](from, level);
+      return movingStrategies["Beetle"](from, level);
     }
     return HashSet.fromIterable(from.neighbors).pipe(
       HashSet.filter(Cell.refine("Occupied")),
       HashSet.filter((x) => !Bug.refine("Mosquito")(Cell.masterBug(x))),
       HashSet.flatMap((x) =>
-        movesStrategies[Cell.masterBug(x)._tag](from, level)
+        movingStrategies[Cell.masterBug(x)._tag](from, level)
       )
     );
   },
@@ -526,7 +547,7 @@ export const getMovementCellsFor: {
       )
     ),
     Option.map(({ level, occupied }) =>
-      movesStrategies[bug._tag](occupied, level)
+      movingStrategies[bug._tag](occupied, level)
     )
   )
 );
@@ -552,33 +573,44 @@ export const pillbugAbilityMovingCells: {
   ): Either.Either<HashSet.HashSet<Cell.Empty>, SwarmError.BugNotFound> =>
     Either.gen(function* () {
       //TODO add // Cell.climbableNeighbors(from, level)
-      const fromCell = yield* Cell.findFirstOccupied(swarm.graph, (x) =>
-        Cell.hasBug(x, bug).pipe(Option.isSome)
+      const fromCell = yield* Cell.findFirstOccupied(
+        swarm.graph,
+        Cell.withBugInBasis(bug)
       ).pipe(Either.fromOption(() => new SwarmError.BugNotFound({ bug })));
 
       if (Cell.isWithCover(fromCell)) {
         return HashSet.empty();
       }
 
-      const occupiedNeighbors = Array.filter(
-        fromCell.neighbors,
-        Cell.refine("Occupied")
-      );
+      const occupiedNeighbors = Cell.neighborsOccupied(fromCell);
+
+      const climbableCells = Cell.beetleMovingNeighbors({
+        from: fromCell,
+        level: 0,
+        strategy: "climb",
+      });
 
       const pillbugNeighbors = pipe(
         occupiedNeighbors,
-        Array.filter(Cell.refineBugInBasis(Bug.refine("Pillbug"))),
-        Array.filter((x) => !Cell.isWithCover(x) && x.member.bug.side === side)
+        Array.filter((x) =>
+          Cell.refineBugInBasis(x.occupied, Bug.refine("Pillbug"))
+        ),
+        Array.filter(
+          (x) =>
+            !Cell.isWithCover(x.occupied) && x.occupied.member.bug.side === side
+        )
       );
 
       const mosquotoNeighbors = pipe(
         occupiedNeighbors,
-        Array.filter(Cell.refineBugInBasis(Bug.refine("Mosquito"))),
+        Array.filter((x) =>
+          Cell.refineBugInBasis(x.occupied, Bug.refine("Mosquito"))
+        ),
         Array.filter(
           (x) =>
-            !Cell.isWithCover(x) &&
-            x.member.bug.side === side &&
-            Array.some(Cell.neighborsOccupied(x), (x) => {
+            !Cell.isWithCover(x.occupied) &&
+            x.occupied.member.bug.side === side &&
+            Array.some(Cell.neighborsOccupied(x.occupied), (x) => {
               return (
                 !Cell.isWithCover(x.occupied) &&
                 Cell.refineBugInBasis(x.occupied, Bug.refine("Pillbug"))
@@ -590,14 +622,17 @@ export const pillbugAbilityMovingCells: {
       return pipe(
         pillbugNeighbors,
         Array.prependAll(mosquotoNeighbors),
+        Array.filter((x) => HashSet.has(climbableCells, x.occupied)),
         Array.filter((x) => {
-          if (Equal.equals(swarm.lastMoved, x.member.bug)) {
+          if (Equal.equals(swarm.lastMoved, x.occupied.member.bug)) {
             return !swarm.lastMovedByPillbug;
           } else {
             return true;
           }
         }),
-        Array.flatMap((x) => Array.filter(x.neighbors, Cell.refine("Empty"))),
+        Array.flatMap((x) =>
+          Array.filter(x.occupied.neighbors, Cell.refine("Empty"))
+        ),
         HashSet.fromIterable
       );
     })
@@ -879,7 +914,7 @@ export function toString(
   return (
     field
       .map((row) =>
-        [...row].map((cell, i) => {
+        [...row].map((cell) => {
           if (cell === undefined) {
             return "   ";
           } else {
