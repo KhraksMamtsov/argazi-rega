@@ -42,12 +42,6 @@ describe.concurrent("Examples from rules", () => {
       actualEmptyCells.value
     );
 
-    console.log(
-      Swarm.toString(swarm, {
-        highlight: actualEmptyCells.value,
-      })
-    );
-
     expect(actualCoords).toEqual(
       Option.some(
         HashSet.make(
@@ -92,13 +86,6 @@ describe.concurrent("Examples from rules", () => {
       actualEmptyCells.value
     );
 
-    console.log(
-      Swarm.toString(swarm, {
-        highlight: actualEmptyCells.value,
-        target: testPillbug.value,
-      })
-    );
-
     expect(actualCoords).toEqual(
       Option.some(HashSet.make(Coords.Init(3, 0), Coords.Init(2.5, -1)))
     );
@@ -132,13 +119,6 @@ describe.concurrent("Examples from rules", () => {
 
     assertRefinement(Option.isSome, actualEmptyCells);
     assertRefinement(Option.isSome, testBeetle);
-
-    console.log(
-      Swarm.toString(swarm, {
-        highlight: actualEmptyCells.value,
-        target: testBeetle.value,
-      })
-    );
 
     expect(actualCoords).toEqual(
       Option.some(
@@ -184,12 +164,6 @@ describe.concurrent("Examples from rules", () => {
 
     assertRefinement(Option.isSome, actualEmptyCells);
 
-    console.log(
-      Swarm.toString(swarm, {
-        highlight: actualEmptyCells.value,
-      })
-    );
-
     expect(actualCoords).toEqual(
       Option.some(
         HashSet.make(
@@ -228,12 +202,6 @@ describe.concurrent("Examples from rules", () => {
     );
 
     assertRefinement(Option.isSome, actualEmptyCells);
-
-    console.log(
-      Swarm.toString(swarm, {
-        highlight: actualEmptyCells.value,
-      })
-    );
 
     expect(actualCoords).toEqual(
       Option.some(
@@ -275,13 +243,6 @@ describe.concurrent("Examples from rules", () => {
 
     assertRefinement(Option.isSome, actualEmptyCells);
     assertRefinement(Option.isSome, testAnt);
-
-    console.log(
-      Swarm.toString(swarm, {
-        highlight: actualEmptyCells.value,
-        target: testAnt.value,
-      })
-    );
 
     expect(
       Equal.equals(
@@ -334,13 +295,6 @@ describe.concurrent("Examples from rules", () => {
     assertRefinement(Option.isSome, actualEmptyCells);
     assertRefinement(Option.isSome, testAnt);
 
-    console.log(
-      Swarm.toString(swarm, {
-        highlight: actualEmptyCells.value,
-        target: testAnt.value,
-      })
-    );
-
     expect(
       Equal.equals(
         actualCoords,
@@ -390,13 +344,6 @@ describe.concurrent("Examples from rules", () => {
     assertRefinement(Option.isSome, actualEmptyCells);
     assertRefinement(Option.isSome, testAnt);
 
-    console.log(
-      Swarm.toString(swarm, {
-        highlight: actualEmptyCells.value,
-        target: testAnt.value,
-      })
-    );
-
     expect(
       Equal.equals(
         actualCoords,
@@ -442,13 +389,6 @@ describe.concurrent("Examples from rules", () => {
 
     const validateResult = Swarm.validateSplit(swarm, testQueenBee.value);
 
-    console.log(
-      Swarm.toString(swarm, {
-        highlight: actualEmptyCells.value,
-        target: testQueenBee.value,
-      })
-    );
-
     assertRefinement(Either.isLeft, validateResult);
 
     expect(validateResult.left._tag).toBe("SplitSwarm");
@@ -483,13 +423,6 @@ describe.concurrent("Examples from rules", () => {
     assertRefinement(Option.isSome, testQueenBee);
 
     const validateResult = Swarm.validateSplit(swarm, testQueenBee.value);
-
-    console.log(
-      Swarm.toString(swarm, {
-        highlight: actualEmptyCells.value,
-        target: testQueenBee.value,
-      })
-    );
 
     assertRefinement(Either.isLeft, validateResult);
 
@@ -537,13 +470,6 @@ describe.concurrent("Examples from rules", () => {
     assertRefinement(Option.isSome, actualEmptyCells);
     assertRefinement(Option.isSome, testBeetleCell);
     // assertRefinement(Array.every(Cell.refine("Empty")), actualEmptyCells.value);
-
-    console.log(
-      Swarm.toString(swarm, {
-        highlight: actualEmptyCells.value,
-        target: testBeetleCell.value,
-      })
-    );
 
     expect(
       Swarm.toString(swarm, {
@@ -626,13 +552,6 @@ describe.concurrent("Examples from rules", () => {
     assertRefinement(Option.isSome, actualEmptyCells);
     assertRefinement(Option.isSome, testBeetleCell);
     // assertRefinement(Array.every(Cell.refine("Empty")), actualEmptyCells.value);
-
-    console.log(
-      Swarm.toString(swarm, {
-        highlight: actualEmptyCells.value,
-        target: testBeetleCell.value,
-      })
-    );
 
     expect(
       Swarm.toString(swarm, {
@@ -1364,13 +1283,6 @@ describe.concurrent("Examples from rules", () => {
     assertRefinement(Option.isSome, testBeetleCell);
     // assertRefinement(Array.every(Cell.refine("Empty")), actualEmptyCells.value);
 
-    console.log(
-      Swarm.toString(swarm, {
-        highlight: actualEmptyCells.value,
-        target: testBeetleCell.value,
-      })
-    );
-
     expect(
       Swarm.toString(swarm, {
         highlight: actualEmptyCells.value,
@@ -1450,13 +1362,6 @@ describe.concurrent("Examples from rules", () => {
     assertRefinement(Option.isSome, actualEmptyCells);
     assertRefinement(Option.isSome, testBeetleCell);
     // assertRefinement(Array.every(Cell.refine("Empty")), actualEmptyCells.value);
-
-    console.log(
-      Swarm.toString(swarm, {
-        highlight: actualEmptyCells.value,
-        target: testBeetleCell.value,
-      })
-    );
 
     expect(
       Swarm.toString(swarm, {

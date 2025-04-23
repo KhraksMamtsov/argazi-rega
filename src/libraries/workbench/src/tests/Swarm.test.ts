@@ -22,8 +22,6 @@ describe("Swarm", () => {
       lastMovedByPillbug: false,
     });
 
-    console.log(Swarm.toString(swarm));
-
     expect(swarm.graphStats).toEqual({
       empty: 6,
       connections: {
@@ -43,8 +41,6 @@ describe("Swarm", () => {
       lastMoved: BugDto.decode("bA1"),
       lastMovedByPillbug: false,
     });
-
-    console.log(Swarm.toString(swarm));
 
     expect(swarm.graphStats).toEqual({
       empty: 8,
@@ -66,8 +62,6 @@ describe("Swarm", () => {
       lastMoved: BugDto.decode("bA1"),
       lastMovedByPillbug: false,
     });
-
-    console.log(Swarm.toString(swarm));
 
     expect(swarm.graphStats).toEqual({
       empty: 9,
@@ -105,8 +99,6 @@ describe("Swarm", () => {
       ),
     });
 
-    console.log(Swarm.toString(swarm));
-
     expect(swarm.graphStats).toEqual({
       empty: 10,
       occupied: 3,
@@ -141,8 +133,6 @@ describe("Swarm", () => {
         ]
       ),
     });
-
-    console.log(Swarm.toString(swarm));
 
     expect(swarm.graphStats).toEqual({
       empty: 10,
@@ -219,12 +209,6 @@ describe("Swarm", () => {
         actualEmptyCells.value
       );
 
-      console.log(
-        Swarm.toString(swarm, {
-          highlight: actualEmptyCells.value,
-        })
-      );
-
       expect(actualCoords).toEqual(
         Option.some(
           HashSet.make(
@@ -277,12 +261,6 @@ describe("Swarm", () => {
         actualEmptyCells.value
       );
 
-      console.log(
-        Swarm.toString(swarm, {
-          highlight: actualEmptyCells.value,
-        })
-      );
-
       expect(actualCoords).toEqual(
         Option.some(HashSet.make(Coords.Init(0, -2), Coords.Init(-0.5, -1)))
       );
@@ -313,12 +291,6 @@ describe("Swarm", () => {
       assertRefinement(
         HashSet.every(Cell.refine("Empty")),
         actualEmptyCells.value
-      );
-
-      console.log(
-        Swarm.toString(swarm, {
-          highlight: actualEmptyCells.value,
-        })
       );
 
       expect(
@@ -366,12 +338,6 @@ describe("Swarm", () => {
         actualEmptyCells.value
       );
 
-      console.log(
-        Swarm.toString(swarm, {
-          highlight: actualEmptyCells.value,
-        })
-      );
-
       expect(
         Swarm.toString(swarm, {
           highlight: actualEmptyCells.value,
@@ -416,12 +382,6 @@ describe("Swarm", () => {
         actualEmptyCells.value
       );
 
-      console.log(
-        Swarm.toString(swarm, {
-          highlight: actualEmptyCells.value,
-        })
-      );
-
       expect(actualCoords).toEqual(
         Option.some(HashSet.make(Coords.Init(0, -2), Coords.Init(-0.5, -1)))
       );
@@ -451,12 +411,6 @@ describe("Swarm", () => {
       assertRefinement(Option.isSome, testBeetleCell);
       // assertRefinement(Array.every(Cell.refine("Empty")), actualEmptyCells.value);
 
-      console.log(
-        Swarm.toString(swarm, {
-          highlight: actualEmptyCells.value,
-          target: testBeetleCell.value,
-        })
-      );
       expect(
         Swarm.toString(swarm, {
           highlight: actualEmptyCells.value,
@@ -519,12 +473,6 @@ describe("Swarm", () => {
       // assertRefinement(Option.isSome, testBeetleCell);
       // assertRefinement(Array.every(Cell.refine("Empty")), actualEmptyCells.value);
 
-      console.log(
-        Swarm.toString(swarm, {
-          highlight: actualEmptyCells.value,
-          // target: testBeetleCell.value,
-        })
-      );
       expect(
         Swarm.toString(swarm, {
           highlight: actualEmptyCells.value,
@@ -588,13 +536,6 @@ describe("Swarm", () => {
       assertRefinement(Option.isSome, testBeetleCell);
       // assertRefinement(Array.every(Cell.refine("Empty")), actualEmptyCells.value);
 
-      console.log(
-        Swarm.toString(swarm, {
-          highlight: actualEmptyCells.value,
-          target: testBeetleCell.value,
-        })
-      );
-
       expect(
         Swarm.toString(swarm, {
           highlight: actualEmptyCells.value,
@@ -647,13 +588,6 @@ describe("Swarm", () => {
       assertRefinement(Option.isSome, testBeetleCell);
       // assertRefinement(Array.every(Cell.refine("Empty")), actualEmptyCells.value);
 
-      console.log(
-        Swarm.toString(swarm, {
-          highlight: actualEmptyCells.value,
-          target: testBeetleCell.value,
-        })
-      );
-
       expect(actualCoords).toEqual(Option.some(HashSet.make()));
     });
 
@@ -686,13 +620,6 @@ describe("Swarm", () => {
       assertRefinement(
         HashSet.every(Cell.refine("Empty")),
         actualEmptyCells.value
-      );
-
-      console.log(
-        Swarm.toString(swarm, {
-          highlight: actualEmptyCells.value,
-          target: testSpider.value,
-        })
       );
 
       expect(actualCoords).toEqual(
@@ -733,13 +660,6 @@ describe("Swarm", () => {
         actualEmptyCells.value
       );
 
-      console.log(
-        Swarm.toString(swarm, {
-          highlight: actualEmptyCells.value,
-          target: testSpider.value,
-        })
-      );
-
       expect(actualCoords).toEqual(
         Option.some(HashSet.make(Coords.Init(0.5, 1), Coords.Init(-1.5, -3)))
       );
@@ -775,13 +695,6 @@ describe("Swarm", () => {
       );
 
       assertRefinement(Option.isSome, testBugCell);
-
-      console.log(
-        Swarm.toString(swarm, {
-          highlight: actualEmptyCells.value,
-          target: testBugCell.value,
-        })
-      );
 
       expect(
         Equal.equals(
@@ -822,8 +735,6 @@ describe("Swarm", () => {
       ),
     });
 
-    console.log(Swarm.toString(swarm));
-
     const occupiedCell = Cell.findFirstOccupied(swarm.graph, (cell) =>
       Equal.equals(cell.coords, Coords.Init(0.5, -1))
     );
@@ -847,8 +758,6 @@ describe("Swarm", () => {
         [Coords.Init(2, 0), SwarmMember.Init(BugDto.decode("wA3"))]
       ),
     });
-
-    console.log(Swarm.toString(swarm));
 
     const occupiedCell = Cell.findFirstOccupied(swarm.graph, (cell) =>
       Equal.equals(cell.coords, Coords.Init(1, 0))
@@ -878,8 +787,6 @@ describe("Swarm", () => {
         [Coords.Init(-1, 0), SwarmMember.Init(BugDto.decode("wA3"))]
       ),
     });
-
-    console.log(Swarm.toString(swarm));
 
     expect(Swarm.possibleMoves("black")(swarm)).toStrictEqual(HashSet.make());
   });
