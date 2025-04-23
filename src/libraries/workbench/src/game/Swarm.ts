@@ -13,6 +13,7 @@ import {
   Iterable,
   Equal,
   MutableHashMap,
+  Unify,
 } from "effect";
 import * as Cell from "./Cell.ts";
 import * as Side from "./Side.ts";
@@ -138,7 +139,11 @@ export class Swarm extends Data.Class<{
         },
         Cell.refine("Occupied"),
         (result, occupied) => {
-          MutableHashMap.set(result[Cell.side(occupied)], occupied);
+          MutableHashMap.set(
+            result[Cell.side(occupied)],
+            occupied.coords,
+            occupied
+          );
           return result;
         }
       ),
@@ -512,18 +517,13 @@ export const getMovementCellsFor: {
   ): Option.Option<HashSet.HashSet<Cell.Cell>>;
 } = dual(2, <B extends Bug.Bug>(swarm: Swarm, bug: B) =>
   pipe(
-    Cell.findFirstMap(
-      swarm.graph,
-      Cell.match({
-        Empty: () => Option.none(),
-        Occupied: (occupied) =>
-          Cell.hasBug(occupied, bug).pipe(
-            Option.map((level) => ({
-              level,
-              occupied,
-            }))
-          ),
-      })
+    Cell.findFirstOccupiedMap(swarm.graph, (occupied) =>
+      Cell.hasBug(occupied, bug).pipe(
+        Option.map((level) => ({
+          level,
+          occupied,
+        }))
+      )
     ),
     Option.map(({ level, occupied }) =>
       movesStrategies[bug._tag](occupied, level)
@@ -677,7 +677,7 @@ export const move: {
       const validatedSwarm = yield* validateSplit(swarm, fromCell.value);
 
       let lastMovedByPillbug = false;
-      if (move.bug.side === move.side) {
+      if (move.bug.side === Move.side(move)) {
         const movementCells = yield* getMovementCellsFor(
           validatedSwarm,
           move.bug
@@ -725,6 +725,7 @@ export const move: {
           );
         },
       });
+
       const newField = Option.match(newFromMember, {
         onNone: () => HashMap.remove(fieldWithMovedBug, fromCell.value.coords),
         onSome: (x) => HashMap.set(fieldWithMovedBug, fromCell.value.coords, x),
@@ -949,21 +950,76 @@ export const hasIntroducibleCells = (side: Side.Side) => (swarm: Swarm) =>
     })
   );
 
-export const canMakeTurn = (side: Side.Side) => (swarm: Swarm) => {
-  const asda = swarm.coordsCell[side];
-  // return reduce(swarm.graph, false, (res, cell) => {
-  //   return Cell.match(cell, {
-  //     Empty: () => res || false,
-  //     Occupied: (occupied) => {
-  //       Array.some(CellBorder.CellBorders, (cellBorder) => {
-  //         return Cell.match(occupied.neighbors[cellBorder], {
-  //           Empty: (emptyNeighbor) => false,
-  //           Occupied: () => false,
-  //         });
-  //       });
-  //     },
-  //   });
-  // });
+export const possibleMoves = (side: Side.Side) => (swarm: Swarm) => {
+  const pillbugAbilityMoves = HashMap.union(
+    swarm.coordsCell[side],
+    swarm.coordsCell[Side.opposite(side)]
+  ).pipe(
+    HashMap.values,
+    HashSet.fromIterable,
+    HashSet.flatMap((x) => {
+      const bug = Cell.masterBug(x);
+      return pillbugAbilityMovingCells(swarm, side, bug).pipe(
+        Option.getRight,
+        Option.map(
+          HashSet.flatMap((ss) =>
+            pipe(
+              Cell.neighborsOccupied(ss),
+              Array.head,
+              Option.map((x) =>
+                HashSet.make(
+                  new Move.BugMove({
+                    side,
+                    bug,
+                    cellBorder: x.border,
+                    neighbor: Cell.masterBug(x.occupied),
+                  })
+                )
+              ),
+              Option.getOrElse(() => HashSet.empty<Move.BugMove>())
+            )
+          )
+        ),
+        Option.getOrElse(() => HashSet.empty<Move.BugMove>())
+      );
+    })
+  );
+
+  return swarm.coordsCell[side].pipe(
+    HashMap.values,
+    HashSet.fromIterable,
+    HashSet.flatMap((x) => {
+      const bug = Cell.masterBug(x);
+
+      return getMovementCellsFor(swarm, bug).pipe(
+        Option.map((x) =>
+          HashSet.map(x, (ss) =>
+            pipe(
+              Cell.neighborsOccupied(ss),
+              Array.head,
+              Option.map(
+                (x) =>
+                  new Move.BugMove({
+                    side,
+                    bug,
+                    cellBorder: x.border,
+                    neighbor: Cell.masterBug(x.occupied),
+                  })
+              )
+            )
+          ).pipe(
+            HashSet.filter(Option.isSome),
+            HashSet.map((x) => x.value)
+          )
+        ),
+        Option.getOrElse(() => HashSet.empty<Move.BugMove>())
+      );
+    }),
+    HashSet.map((x) => move(swarm, x).pipe(Either.map(() => x))),
+    HashSet.filter(Either.isRight),
+    HashSet.map((x) => x.right),
+    HashSet.union(pillbugAbilityMoves)
+  );
 };
 
 const isMovedByPillbug = (
@@ -984,5 +1040,5 @@ const isMovedByPillbug = (
     return true as const;
   });
 
-export const findBug = (swarm: Swarm, bug: Bug.Bug) =>
+export const findCellWithBug = (swarm: Swarm, bug: Bug.Bug) =>
   Cell.findFirstOccupied(swarm.graph, (x) => Equal.equals(x.member.bug, bug));

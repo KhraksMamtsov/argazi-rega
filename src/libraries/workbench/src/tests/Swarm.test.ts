@@ -841,14 +841,6 @@ describe("Swarm", () => {
       Equal.equals(cell.coords, Coords.Init(1, 0))
     );
 
-    function assertRefinement<A, B extends A>(
-      refinement: Predicate.Refinement<A, B>,
-      value: A,
-      message?: string
-    ): asserts value is B {
-      assert(refinement(value), message);
-    }
-
     expect(occupiedCell).toMatchObject(Option.some(expect.anything()));
 
     assertRefinement(Option.isSome, occupiedCell);
@@ -860,5 +852,22 @@ describe("Swarm", () => {
     expect(result.left).toEqual(
       new SwarmError.SplitSwarm({ cell: occupiedCell.value })
     );
+  });
+
+  test.concurrent(".possibleMoves", () => {
+    const swarm = new Swarm.Swarm({
+      lastMoved: BugDto.decode("bA1"),
+      lastMovedByPillbug: false,
+      field: HashMap.make(
+        [Coords.Zero, SwarmMember.Init(BugDto.decode("bQ1"))],
+        [Coords.Init(1, 0), SwarmMember.Init(BugDto.decode("bB2"))],
+        [Coords.Init(2, 0), SwarmMember.Init(BugDto.decode("wA2"))],
+        [Coords.Init(-1, 0), SwarmMember.Init(BugDto.decode("wA3"))]
+      ),
+    });
+
+    console.log(Swarm.toString(swarm));
+
+    expect(Swarm.possibleMoves("black")(swarm)).toStrictEqual(HashSet.make());
   });
 });

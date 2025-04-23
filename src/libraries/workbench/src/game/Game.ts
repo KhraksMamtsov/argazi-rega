@@ -7,6 +7,7 @@ import {
   Pipeable,
   Effect,
   Option,
+  HashSet,
 } from "effect";
 import * as Hand from "./Hand.ts";
 import * as Side from "./Side.ts";
@@ -134,10 +135,27 @@ export const validateFinish = (game: Game) =>
     Free: () => Either.right(game),
   });
 
-export const validateSkip = (game: Game) => {
+export const skipTurnIfNeeded = (game: Game) => {
   const currentSide_ = currentSide(game.step);
-  // if (Hand.isEmpty(game[Side.opposite(currentSide_)])) {
-  // }
+
+  const possibleMoves = Swarm.possibleMoves(currentSide_)(game.swarm);
+  const noPossibleMoves = HashSet.size(possibleMoves) === 0;
+  const hasIntroducibleCells = Swarm.hasIntroducibleCells(currentSide_)(
+    game.swarm
+  );
+  const handIsEmpty = Hand.isEmpty(game[Side.opposite(currentSide_)]);
+
+  const canNotIntroduce =
+    handIsEmpty || (!handIsEmpty && !hasIntroducibleCells);
+
+  if (canNotIntroduce && noPossibleMoves) {
+    return new Game({
+      ...game,
+      step: GameStep.next(game.step),
+    });
+  } else {
+    return game;
+  }
 };
 
 export const makeMove: {
@@ -169,7 +187,7 @@ export const makeMove: {
 
     if (
       !Hand.containsBug(game[moveSide], move.bug) &&
-      Option.isNone(Swarm.findBug(game.swarm, move.bug))
+      Option.isNone(Swarm.findCellWithBug(game.swarm, move.bug))
     ) {
       return yield* Either.left(
         new GameError.BugNotFound({ move, step: game.step })
@@ -203,7 +221,9 @@ export const makeMove: {
       })
     );
 
-    return yield* validateFinish(afterMoveGame);
+    const unfinishedGame = yield* validateFinish(afterMoveGame);
+
+    return skipTurnIfNeeded(unfinishedGame);
   })
 );
 
