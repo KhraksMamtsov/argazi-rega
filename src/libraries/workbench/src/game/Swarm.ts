@@ -582,7 +582,10 @@ export const pillbugAbilityMovingCells: {
         return HashSet.empty();
       }
 
-      const occupiedNeighbors = Cell.neighborsOccupied(fromCell);
+      const occupiedNeighbors = Array.map(
+        Cell.neighborsOccupied(fromCell),
+        (x) => x.occupied
+      );
 
       const climbableCells = Cell.beetleMovingNeighbors({
         from: fromCell,
@@ -592,25 +595,18 @@ export const pillbugAbilityMovingCells: {
 
       const pillbugNeighbors = pipe(
         occupiedNeighbors,
-        Array.filter((x) =>
-          Cell.refineBugInBasis(x.occupied, Bug.refine("Pillbug"))
-        ),
-        Array.filter(
-          (x) =>
-            !Cell.isWithCover(x.occupied) && x.occupied.member.bug.side === side
-        )
+        Array.filter((x) => Cell.refineBugInBasis(x, Bug.refine("Pillbug"))),
+        Array.filter((x) => !Cell.isWithCover(x) && x.member.bug.side === side)
       );
 
       const mosquotoNeighbors = pipe(
         occupiedNeighbors,
-        Array.filter((x) =>
-          Cell.refineBugInBasis(x.occupied, Bug.refine("Mosquito"))
-        ),
+        Array.filter(Cell.refineBugInBasis(Bug.refine("Mosquito"))),
         Array.filter(
           (x) =>
-            !Cell.isWithCover(x.occupied) &&
-            x.occupied.member.bug.side === side &&
-            Array.some(Cell.neighborsOccupied(x.occupied), (x) => {
+            !Cell.isWithCover(x) &&
+            x.member.bug.side === side &&
+            Array.some(Cell.neighborsOccupied(x), (x) => {
               return (
                 !Cell.isWithCover(x.occupied) &&
                 Cell.refineBugInBasis(x.occupied, Bug.refine("Pillbug"))
@@ -620,19 +616,28 @@ export const pillbugAbilityMovingCells: {
       );
 
       return pipe(
-        pillbugNeighbors,
-        Array.prependAll(mosquotoNeighbors),
-        Array.filter((x) => HashSet.has(climbableCells, x.occupied)),
+        Array.prependAll(pillbugNeighbors, mosquotoNeighbors),
+        Array.filter((x) => HashSet.has(climbableCells, x)),
         Array.filter((x) => {
-          if (Equal.equals(swarm.lastMoved, x.occupied.member.bug)) {
+          if (Equal.equals(swarm.lastMoved, x.member.bug)) {
             return !swarm.lastMovedByPillbug;
           } else {
             return true;
           }
         }),
-        Array.flatMap((x) =>
-          Array.filter(x.occupied.neighbors, Cell.refine("Empty"))
-        ),
+        Array.flatMap((pillbugOrMosquito) => {
+          const passableCells = Cell.beetleMovingNeighbors({
+            from: pillbugOrMosquito,
+            level: 1,
+            strategy: "pass",
+          });
+          return pipe(
+            pillbugOrMosquito.neighbors,
+
+            Array.filter((x) => HashSet.has(passableCells, x)),
+            Array.filter(Cell.refine("Empty"))
+          );
+        }),
         HashSet.fromIterable
       );
     })
