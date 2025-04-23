@@ -1,7 +1,3 @@
-import * as Bug from "../game/Bug.ts";
-import * as BugNumber from "../game/BugNumber.ts";
-import * as Swarm from "../game/Swarm.ts";
-import * as Move from "../game/Move.ts";
 import * as GameError from "../game/GameError.ts";
 import * as SwarmError from "../game/SwarmError.ts";
 import { Either, Effect, Equal } from "effect";
@@ -50,14 +46,14 @@ b: A1 A2 A3 B1 B2 G1 G2 G3 Q1 S1
       const gameError = yield* Game.Init().pipe(
         Game.moveAll({
           init: InitialMoveDto.decode("wQ1"),
-          moves: [MovingMoveDto.decode("b: bP2 wQ1|")],
+          moves: [MovingMoveDto.decode("b: bP1 wQ1|")],
         }),
         Either.flip
       );
 
       expect(gameError).toStrictEqual(
         new GameError.BugNotFound({
-          move: MovingMoveDto.decode("b: bP2 wQ1|"),
+          move: MovingMoveDto.decode("b: bP1 wQ1|"),
           step: GameStep.GameStep(1),
         })
       );

@@ -638,7 +638,7 @@ describe("Swarm", () => {
           [Coords.Init(1, 0), SwarmMember.Init(BugDto.decode("wA2"))],
           [Coords.Init(-0.5, -1), SwarmMember.Init(TestBug())],
           [Coords.Init(-1, -2), SwarmMember.Init(BugDto.decode("bA2"))],
-          [Coords.Init(1, -2), SwarmMember.Init(BugDto.decode("bP2"))],
+          [Coords.Init(1, -2), SwarmMember.Init(BugDto.decode("bP1"))],
           [Coords.Init(-0.5, -3), SwarmMember.Init(BugDto.decode("wG3"))],
           [Coords.Init(0.5, -3), SwarmMember.Init(BugDto.decode("wB2"))]
         ),

@@ -25,11 +25,11 @@ describe.concurrent("PillBugAbility", () => {
         Game.moveAll({
           init: InitialMoveDto.decode("wQ1"),
           moves: [
-            MovingMoveDto.decode("b: bP2 wQ1|"),
+            MovingMoveDto.decode("b: bP1 wQ1|"),
             MovingMoveDto.decode("w: wG2 |wQ1"),
-            MovingMoveDto.decode("b: bQ1 bP2|"),
+            MovingMoveDto.decode("b: bQ1 bP1|"),
             MovingMoveDto.decode("w: wG2 bQ1|"),
-            MovingMoveDto.decode("b: wQ1 bP2\\"),
+            MovingMoveDto.decode("b: wQ1 bP1\\"),
           ],
         })
       );
@@ -37,28 +37,28 @@ describe.concurrent("PillBugAbility", () => {
       expect(Game.toString(game)).toBe(trimNewline`
 №: 6
 ⇄: w
-w: A1 A2 A3 B1 B2 G1 G3 P1 P2 S1 S2
-b: A1 A2 A3 B1 B2 G1 G2 G3 P1 S1 S2
+w: A1 A2 A3 B1 B2 G1 G3 P1 S1 S2
+b: A1 A2 A3 B1 B2 G1 G2 G3 S1 S2
 ♻: Q̊ !P
        ○     ○ 
 
     ○     Q̊     ○     ○ 
 
-(○)    P̲̈     Q̲̊     G̈     ○ 
+(○)    P̲̊     Q̲̊     G̈     ○ 
 
     ○     ○     ○     ○ 
 `);
 
       const gameError = yield* Game.makeMove(
         game,
-        MovingMoveDto.decode("w: wQ1 |bP2")
+        MovingMoveDto.decode("w: wQ1 |bP1")
       ).pipe(Either.flip);
 
       // expect(gameError).toStrictEqual(
       //   new GameError.ImpossibleMove({
-      //     move: MovingMoveDto.decode("w: wQ1 |bP2"),
+      //     move: MovingMoveDto.decode("w: wQ1 |bP1"),
       //     swarmError: new SwarmError.LastMovedByPillbugViolation({
-      //       move: MovingMoveDto.decode("w: wQ1 |bP2"),
+      //       move: MovingMoveDto.decode("w: wQ1 |bP1"),
       //     }),
       //     step: GameStep.GameStep(6),
       //   })
@@ -68,9 +68,9 @@ b: A1 A2 A3 B1 B2 G1 G2 G3 P1 S1 S2
         Equal.equals(
           gameError,
           new GameError.ImpossibleMove({
-            move: MovingMoveDto.decode("w: wQ1 |bP2"),
+            move: MovingMoveDto.decode("w: wQ1 |bP1"),
             swarmError: new SwarmError.LastMovedByPillbugViolation({
-              move: MovingMoveDto.decode("w: wQ1 |bP2"),
+              move: MovingMoveDto.decode("w: wQ1 |bP1"),
             }),
             step: GameStep.GameStep(6),
           })
@@ -306,7 +306,7 @@ b: A1 A2 A3 B1 B2 G1 G2 G3 P1 S1 S2
       field: HashMap.make(
         [
           Coords.Init(0.5, 1),
-          SwarmMember.Init(BugDto.decode("bP2")).pipe(
+          SwarmMember.Init(BugDto.decode("bP1")).pipe(
             SwarmMember.addCover(
               new Bug.Mosquito({
                 number: BugNumber.One(1),
@@ -358,7 +358,7 @@ b: A1 A2 A3 B1 B2 G1 G2 G3 P1 S1 S2
     ).toBe(trimNewline`
     ○     ○     ○ 
 
- ○     P̲̈ M̊   _L̲̊_    ○ 
+ ○     P̲̊ M̊   _L̲̊_    ○ 
 
    (○)    P̊     P̲̊ B̊    ○ 
 
@@ -383,7 +383,7 @@ b: A1 A2 A3 B1 B2 G1 G2 G3 P1 S1 S2
       field: HashMap.make(
         [
           Coords.Init(0.5, 1),
-          SwarmMember.Init(BugDto.decode("bP2")).pipe(
+          SwarmMember.Init(BugDto.decode("bP1")).pipe(
             SwarmMember.addCover(
               new Bug.Mosquito({
                 number: BugNumber.One(1),
@@ -434,7 +434,7 @@ b: A1 A2 A3 B1 B2 G1 G2 G3 P1 S1 S2
     ).toBe(trimNewline`
     ○     ○ 
 
- ○     P̲̈ M̊    ○     ○ 
+ ○     P̲̊ M̊    ○     ○ 
 
    (×)    P̊     P̲̊ B̊    ○ 
 
@@ -461,7 +461,7 @@ b: A1 A2 A3 B1 B2 G1 G2 G3 P1 S1 S2
       field: HashMap.make(
         [
           Coords.Init(0.5, 1),
-          SwarmMember.Init(BugDto.decode("bP2")).pipe(
+          SwarmMember.Init(BugDto.decode("bP1")).pipe(
             SwarmMember.addCover(
               new Bug.Mosquito({
                 number: BugNumber.One(1),
@@ -512,7 +512,7 @@ b: A1 A2 A3 B1 B2 G1 G2 G3 P1 S1 S2
     ).toBe(trimNewline`
     ○     ○ 
 
- ○     P̲̈ M̲̊    ○     ○ 
+ ○     P̲̊ M̲̊    ○     ○ 
 
    (×)    M̊     P̲̊ B̊    ○ 
 
@@ -539,7 +539,7 @@ b: A1 A2 A3 B1 B2 G1 G2 G3 P1 S1 S2
       field: HashMap.make(
         [
           Coords.Init(0.5, 1),
-          SwarmMember.Init(BugDto.decode("bP2")).pipe(
+          SwarmMember.Init(BugDto.decode("bP1")).pipe(
             SwarmMember.addCover(
               new Bug.Mosquito({
                 number: BugNumber.One(1),
@@ -561,7 +561,7 @@ b: A1 A2 A3 B1 B2 G1 G2 G3 P1 S1 S2
             )
           ),
         ],
-        [Coords.Init(0.5, -1), SwarmMember.Init(BugDto.decode("wP2"))]
+        [Coords.Init(0.5, -1), SwarmMember.Init(BugDto.decode("wP1"))]
       ),
     });
 
@@ -591,11 +591,11 @@ b: A1 A2 A3 B1 B2 G1 G2 G3 P1 S1 S2
     ).toBe(trimNewline`
     ○     ○     ○ 
 
- ○     P̲̈ M̊   _L̲̊_    ○ 
+ ○     P̲̊ M̊   _L̲̊_    ○ 
 
    (○)    M̊     P̲̊ B̊    ○ 
 
- ○     P̈     ○     ○ 
+ ○     P̊     ○     ○ 
 
     ○     ○ 
 `);

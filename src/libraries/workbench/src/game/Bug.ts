@@ -88,10 +88,7 @@ export class Pillbug extends Schema.TaggedClass<Pillbug>("Pillbug")("Pillbug", {
   number: Schema.Literal(...BugNumber._OneTwo),
 }) {
   static Init(side: Side.Side) {
-    return Tuple.map(
-      BugNumber._OneTwo,
-      (number) => new Pillbug({ number, side })
-    );
+    return Tuple.map(BugNumber._One, (number) => new Pillbug({ number, side }));
   }
 }
 

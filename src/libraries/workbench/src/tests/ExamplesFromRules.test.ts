@@ -442,7 +442,7 @@ describe.concurrent("Examples from rules", () => {
       field: HashMap.make(
         [
           Coords.Init(0.5, 1),
-          SwarmMember.Init(BugDto.decode("bP2")).pipe(
+          SwarmMember.Init(BugDto.decode("bP1")).pipe(
             SwarmMember.addCover(
               new Bug.Mosquito({
                 number: BugNumber.One(1),
@@ -479,7 +479,7 @@ describe.concurrent("Examples from rules", () => {
     ).toBe(trimNewline`
        ○     ×     ○ 
 
-    ○     P̲̈×M̊   _B̲̊_    × 
+    ○     P̲̊×M̊   _B̲̊_    × 
 
  ○    (Å)    Q̊×    P̲̊×    ○ 
 
@@ -514,7 +514,7 @@ describe.concurrent("Examples from rules", () => {
       field: HashMap.make(
         [
           Coords.Init(0.5, 1),
-          SwarmMember.Init(BugDto.decode("bP2")).pipe(
+          SwarmMember.Init(BugDto.decode("bP1")).pipe(
             SwarmMember.addCover(
               new Bug.Mosquito({
                 number: BugNumber.One(1),
@@ -561,7 +561,7 @@ describe.concurrent("Examples from rules", () => {
     ).toBe(trimNewline`
        ○     ×     ○ 
 
-    ○     P̲̈×M̊   _B̲̊_    × 
+    ○     P̲̊×M̊   _B̲̊_    × 
 
  ○    (Å)    Q̊     P̲̊×B̊    ○ 
 
@@ -595,7 +595,7 @@ describe.concurrent("Examples from rules", () => {
       field: HashMap.make(
         [
           Coords.Init(0.5, 1),
-          SwarmMember.Init(BugDto.decode("bP2")).pipe(
+          SwarmMember.Init(BugDto.decode("bP1")).pipe(
             SwarmMember.addCover(
               new Bug.Mosquito({
                 number: BugNumber.One(1),
@@ -643,7 +643,7 @@ describe.concurrent("Examples from rules", () => {
     ).toBe(trimNewline`
     ○     ○ 
 
- ○     P̲̈×M̊    × 
+ ○     P̲̊×M̊    × 
 
    (○)   _Å_B̲̊    × 
 
@@ -677,7 +677,7 @@ describe.concurrent("Examples from rules", () => {
       field: HashMap.make(
         [
           Coords.Init(0.5, 1),
-          SwarmMember.Init(BugDto.decode("bP2")).pipe(
+          SwarmMember.Init(BugDto.decode("bP1")).pipe(
             SwarmMember.addCover(
               new Bug.Mosquito({
                 number: BugNumber.One(1),
@@ -725,7 +725,7 @@ describe.concurrent("Examples from rules", () => {
     ).toBe(trimNewline`
     ○     ○ 
 
- ○     P̲̈×M̊    × 
+ ○     P̲̊×M̊    × 
 
    (○)   _Å_M̲̊    × 
 
@@ -759,7 +759,7 @@ describe.concurrent("Examples from rules", () => {
       field: HashMap.make(
         [
           Coords.Init(0.5, 1),
-          SwarmMember.Init(BugDto.decode("bP2")).pipe(
+          SwarmMember.Init(BugDto.decode("bP1")).pipe(
             SwarmMember.addCover(
               new Bug.Mosquito({
                 number: BugNumber.One(1),
@@ -804,7 +804,7 @@ describe.concurrent("Examples from rules", () => {
     ).toBe(trimNewline`
     ○     ○ 
 
- ○     P̲̈ M̊    ×     ○     ○ 
+ ○     P̲̊ M̊    ×     ○     ○ 
 
    (○)    Å     Ä    _L̲̊_    ○ 
 
@@ -831,7 +831,7 @@ describe.concurrent("Examples from rules", () => {
       field: HashMap.make(
         [
           Coords.Init(0.5, 1),
-          SwarmMember.Init(BugDto.decode("bP2")).pipe(
+          SwarmMember.Init(BugDto.decode("bP1")).pipe(
             SwarmMember.addCover(
               new Bug.Mosquito({
                 number: BugNumber.One(1),
@@ -876,7 +876,7 @@ describe.concurrent("Examples from rules", () => {
     ).toBe(trimNewline`
              ○     ○ 
 
-    ○     ×     P̲̈ M̊    ○ 
+    ○     ×     P̲̊ M̊    ○ 
 
  ○     Å    (Ä)   _L̲̊_    ○ 
 
@@ -904,7 +904,7 @@ describe.concurrent("Examples from rules", () => {
       field: HashMap.make(
         [
           Coords.Init(0.5, 1),
-          SwarmMember.Init(BugDto.decode("bP2")).pipe(
+          SwarmMember.Init(BugDto.decode("bP1")).pipe(
             SwarmMember.addCover(
               new Bug.Mosquito({
                 number: BugNumber.One(1),
@@ -950,7 +950,7 @@ describe.concurrent("Examples from rules", () => {
     ).toBe(trimNewline`
              ○     ○ 
 
-    ○     ×     P̲̈×M̊    ○     ○ 
+    ○     ×     P̲̊×M̊    ○     ○ 
 
  ○     Å    (Ä)   _M̲̊_    L̊×    ○ 
 
@@ -989,7 +989,7 @@ describe.concurrent("Examples from rules", () => {
       field: HashMap.make(
         [
           Coords.Init(1.5, 1),
-          SwarmMember.Init(BugDto.decode("bP2")).pipe(
+          SwarmMember.Init(BugDto.decode("bP1")).pipe(
             SwarmMember.addCover(
               new Bug.Mosquito({
                 number: BugNumber.One(1),
@@ -1034,7 +1034,7 @@ describe.concurrent("Examples from rules", () => {
     ).toBe(trimNewline`
        ×     × 
 
-    ×     P̲̈ M̊    ×     ○ 
+    ×     P̲̊ M̊    ×     ○ 
 
 (○)    Å     Ä    _L̲̊_    ○ 
 
@@ -1072,7 +1072,7 @@ describe.concurrent("Examples from rules", () => {
       field: HashMap.make(
         [
           Coords.Init(0.5, 1),
-          SwarmMember.Init(BugDto.decode("bP2")).pipe(
+          SwarmMember.Init(BugDto.decode("bP1")).pipe(
             SwarmMember.addCover(
               new Bug.Mosquito({
                 number: BugNumber.One(1),
@@ -1116,7 +1116,7 @@ describe.concurrent("Examples from rules", () => {
     ).toBe(trimNewline`
     ×     × 
 
- ×     P̲̈ M̊    ×     ○ 
+ ×     P̲̊ M̊    ×     ○ 
 
    (×)    Å    _L̲̊_    ○ 
 
@@ -1156,7 +1156,7 @@ describe.concurrent("Examples from rules", () => {
       field: HashMap.make(
         [
           Coords.Init(0.5, 1),
-          SwarmMember.Init(BugDto.decode("bP2")).pipe(
+          SwarmMember.Init(BugDto.decode("bP1")).pipe(
             SwarmMember.addCover(
               new Bug.Mosquito({
                 number: BugNumber.One(1),
@@ -1210,7 +1210,7 @@ describe.concurrent("Examples from rules", () => {
     ).toBe(trimNewline`
     ○     ○ 
 
- ○     P̲̈×M̊M̲̊    × 
+ ○     P̲̊×M̊M̲̊    × 
 
    (○)   _Å_B̲̊    × 
 
@@ -1244,7 +1244,7 @@ describe.concurrent("Examples from rules", () => {
       field: HashMap.make(
         [
           Coords.Init(0.5, 1),
-          SwarmMember.Init(BugDto.decode("bP2")).pipe(
+          SwarmMember.Init(BugDto.decode("bP1")).pipe(
             SwarmMember.addCover(
               new Bug.Mosquito({
                 number: BugNumber.One(1),
@@ -1291,7 +1291,7 @@ describe.concurrent("Examples from rules", () => {
     ).toBe(trimNewline`
        ○     ×     ○ 
 
-    ○     P̲̈×M̊   _M̲̊_    × 
+    ○     P̲̊×M̊   _M̲̊_    × 
 
  ○    (Å)    Q̊     P̲̊×B̊    ○ 
 
@@ -1324,7 +1324,7 @@ describe.concurrent("Examples from rules", () => {
       field: HashMap.make(
         [
           Coords.Init(0.5, 1),
-          SwarmMember.Init(BugDto.decode("bP2")).pipe(
+          SwarmMember.Init(BugDto.decode("bP1")).pipe(
             SwarmMember.addCover(
               new Bug.Mosquito({
                 number: BugNumber.One(1),
@@ -1371,7 +1371,7 @@ describe.concurrent("Examples from rules", () => {
     ).toBe(trimNewline`
        ○     ○     ○ 
 
-    ×     P̲̈ M̊   _L̲̊_    ○ 
+    ×     P̲̊ M̊   _L̲̊_    ○ 
 
  ×    (Å)    Q̊     P̲̊ B̊    ○ 
 

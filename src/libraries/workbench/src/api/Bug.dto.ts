@@ -118,7 +118,7 @@ const PILLBUG_SIGN = "P";
 export const _PillbugDto = Schema.TemplateLiteralParser(
   Schema.encodedSchema(SideSchema),
   Schema.Literal(PILLBUG_SIGN),
-  OneTwo
+  One
 ).annotations({
   identifier: "_PillbugDto",
 });
