@@ -1,4 +1,4 @@
-import { Data, Predicate, Tuple } from "effect";
+import { Brand, Data, Predicate, Tuple } from "effect";
 import { Schema } from "effect";
 import * as Side from "./Side.ts";
 import * as BugNumber from "./BugNumber.ts";
@@ -135,10 +135,6 @@ export const emoji = Bug.$match({
   Pillbug: () => "🪱",
 });
 
-const one = "\u030A";
-const two = "\u0308";
-const three = one + two;
-const numberMap = ["", one, two, three] as const;
 const underline = "\u0332";
 
 const colorMap: Record<Side.Side, string> = {
@@ -156,6 +152,14 @@ const symbolMap: Record<Bug["_tag"], string> = {
   Pillbug: "P",
 };
 
+const one = "\u030A";
+const two = "\u0308";
+const three = one + two;
+const numberMap = ["", one, two, three] as const;
+
 export const symbol = (bug: Bug) => {
-  return symbolMap[bug._tag] + colorMap[bug.side] + numberMap[bug.number];
+  const { number } = bug;
+  const unbranded: Brand.Brand.Unbranded<typeof bug.number> = number;
+
+  return symbolMap[bug._tag] + colorMap[bug.side] + numberMap[unbranded];
 };

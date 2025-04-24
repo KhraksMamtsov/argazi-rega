@@ -25,6 +25,6 @@ export class Coords extends Data.Class<{
   }
 
   override toString() {
-    return `${this.x}|${this.y}`;
+    return `${this.x.toString()}|${this.y.toString()}`;
   }
 }

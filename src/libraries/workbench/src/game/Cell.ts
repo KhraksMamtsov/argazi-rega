@@ -4,7 +4,6 @@ import {
   Option,
   Predicate,
   Equal,
-  Equivalence as _Equivalence,
   Tuple,
   Hash,
   HashSet,
@@ -126,6 +125,7 @@ export class Occupied<B extends Bug.Bug = Bug.Bug>
       const currentCellBorder = CellBorder.opposite(i as CellBorder.CellBorder);
       currentCell.neighbors[currentCellBorder] = Option.some(occupiedCell);
 
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       const nextCell = _neighbors[(i + 1) % CellBorder.CELL_BORDERS]!;
       const currentCellNextBorder = ((CellBorder.CELL_BORDERS +
         currentCellBorder -
@@ -246,9 +246,7 @@ export const bordersWithNeighborsOccupied = (cell: Cell) =>
     Array.map((x) => x.border)
   );
 
-export const isSurroundedWithOccupiedCells = <O extends Occupied>(
-  occupied: O
-) =>
+export const isSurroundedWithOccupiedCells = (occupied: Occupied) =>
   pipe(occupied.neighbors, Array.filter(refine("Occupied"))).length ===
   CellBorder.CELL_BORDERS;
 
@@ -507,6 +505,7 @@ export const beetleMovingNeighbors: {
   level: number;
   strategy: BeetleGateStrategy;
 }) =>
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-return
   pipe(
     options.strategy === "climb"
       ? Array.map(neighborsOccupied(options.from), (x) => ({

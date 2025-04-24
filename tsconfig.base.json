@@ -36,6 +36,13 @@
     "importHelpers": true,
     "useUnknownInCatchVariables": true,
     "noFallthroughCasesInSwitch": true,
+    "plugins": [
+      {
+        "name": "@effect/language-service",
+        "diagnostics": true,
+        "quickinfo": true
+      }
+    ]
   },
   "watchOptions": {
     // Use native file system events for files and directories

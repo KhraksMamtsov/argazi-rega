@@ -99,6 +99,9 @@ importers:
       '@effect/eslint-plugin':
         specifier: ^0.3.2
         version: 0.3.2
+      '@effect/language-service':
+        specifier: ^0.8.1
+        version: 0.8.1
       '@effect/vitest':
         specifier: ^0.20.14
         version: 0.20.14(effect@3.14.14)(vitest@3.1.2(@types/node@22.14.0)(yaml@2.7.1))
@@ -329,6 +332,9 @@ packages:
         optional: true
       lmdb:
         optional: true
+
+  '@effect/language-service@0.8.1':
+    resolution: {integrity: sha512-/ygWSqB04wSwazhd9APMAbOKkxduMkKQ8CtGC3za2VSh+58CkoUu+7Zme86zCSWLAWENYz5sbm9tz5W2Z+TCyw==}
 
   '@effect/platform-node-shared@0.31.2':
     resolution: {integrity: sha512-WVGJoamOpLOQiqsYdpyEbgZOnUk0lDmJ4D7S/R95cw4K140GaSllTbsY0ijiXQOLdc/n7uCdBs+G6GyBDbFghQ==}
@@ -2342,6 +2348,8 @@ snapshots:
       '@effect/platform': 0.80.14(effect@3.14.14)
       effect: 3.14.14
       uuid: 11.1.0
+
+  '@effect/language-service@0.8.1': {}
 
   '@effect/platform-node-shared@0.31.2(@effect/cluster@0.29.9(@effect/platform@0.80.14(effect@3.14.14))(@effect/rpc@0.55.7(@effect/platform@0.80.14(effect@3.14.14))(effect@3.14.14))(@effect/sql@0.33.5(@effect/experimental@0.44.5(@effect/platform@0.80.14(effect@3.14.14))(effect@3.14.14))(@effect/platform@0.80.14(effect@3.14.14))(effect@3.14.14))(effect@3.14.14))(@effect/platform@0.80.14(effect@3.14.14))(@effect/rpc@0.55.7(@effect/platform@0.80.14(effect@3.14.14))(effect@3.14.14))(@effect/sql@0.33.5(@effect/experimental@0.44.5(@effect/platform@0.80.14(effect@3.14.14))(effect@3.14.14))(@effect/platform@0.80.14(effect@3.14.14))(effect@3.14.14))(effect@3.14.14)':
     dependencies:
