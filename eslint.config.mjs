@@ -23,11 +23,11 @@ export default [
   ...compat.extends(
     "eslint:recommended",
     "plugin:@typescript-eslint/strict-type-checked",
-    "plugin:@typescript-eslint/stylistic",
+    "plugin:@typescript-eslint/stylistic"
     // "plugin:functional/no-exceptions",
     // "plugin:typescript-sort-keys/recommended",
-    "plugin:vue/vue3-recommended",
-    "plugin:prettier/recommended"
+    // "plugin:vue/vue3-recommended",
+    // "plugin:prettier/recommended"
   ),
   {
     plugins: {
