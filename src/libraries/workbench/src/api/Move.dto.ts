@@ -1,9 +1,9 @@
 import { Schema, hole } from "effect";
 import { BugDto } from "./Bug.dto.ts";
-import * as _Move from "../game/Move.ts";
-import * as _Bug from "../game/Bug.ts";
-import * as Side from "../game/Side.ts";
-import type { CellBorder } from "../game/CellBorder.ts";
+import * as _Move from "../domain/GameMove.ts";
+import * as _Bug from "../domain/Bug.ts";
+import * as Side from "../domain/Side.ts";
+import type { CellBorder } from "../domain/CellBorder.ts";
 
 export class CellBorderRightDto extends Schema.transformLiterals(
   ["\\", 0],
@@ -36,7 +36,7 @@ export const _MovingMoveDto = Schema.TemplateLiteralParser(
 
 export class MovingMoveDto extends Schema.transform(
   _MovingMoveDto,
-  Schema.typeSchema(_Move.BugMove),
+  Schema.typeSchema(_Move.BugGameMove),
   {
     strict: true,
     decode: ([side, __, bug, _, target]) => {
@@ -48,7 +48,7 @@ export class MovingMoveDto extends Schema.transform(
         [neighbor, cellBorder] = target;
       }
 
-      return new _Move.BugMove({
+      return new _Move.BugGameMove({
         bug,
         cellBorder,
         neighbor,
@@ -71,11 +71,11 @@ export class MovingMoveDto extends Schema.transform(
 
 export class InitialMoveDto extends Schema.transform(
   BugDto,
-  Schema.typeSchema(_Move.InitialMove),
+  Schema.typeSchema(_Move.InitialGameMove),
   {
     strict: true,
     encode: (x) => x.bug,
-    decode: (bug) => new _Move.InitialMove({ bug }),
+    decode: (bug) => new _Move.InitialGameMove({ bug }),
   }
 ).annotations({
   identifier: "InitialMoveDto",

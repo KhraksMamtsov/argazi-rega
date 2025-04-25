@@ -1,9 +1,9 @@
-import * as GameError from "../game/GameError.ts";
-import * as SwarmError from "../game/SwarmError.ts";
+import * as GameError from "../domain/GameError.ts";
+import * as SwarmError from "../domain/SwarmError.ts";
 import { Either, Effect, Equal } from "effect";
 import { describe, expect, it } from "@effect/vitest";
-import * as Game from "../game/Game.ts";
-import * as GameStep from "../game/GameStep.ts";
+import * as Game from "../domain/Game.ts";
+import * as GameStep from "../domain/GameStep.ts";
 import { trimNewline } from "./TestUtills.ts";
 import { InitialMoveDto, MoveDto, MovingMoveDto } from "../api/Move.dto.ts";
 

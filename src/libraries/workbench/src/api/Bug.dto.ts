@@ -1,7 +1,7 @@
 import { Schema } from "effect";
-import * as Bug from "../game/Bug.ts";
-import * as BugNumber from "../game/BugNumber.ts";
-import { SideSchema } from "../game/Side.ts";
+import * as Bug from "../domain/Bug.ts";
+import * as BugNumber from "../domain/BugNumber.ts";
+import { SideSchema } from "../domain/Side.ts";
 
 // #region common
 const One = BugNumber.OneSchema;

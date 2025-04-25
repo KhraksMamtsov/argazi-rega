@@ -1,12 +1,12 @@
-import * as Bug from "../game/Bug.ts";
-import * as BugNumber from "../game/BugNumber.ts";
-import * as Swarm from "../game/Swarm.ts";
+import * as Bug from "../domain/Bug.ts";
+import * as BugNumber from "../domain/BugNumber.ts";
+import * as Swarm from "../domain/Swarm.ts";
 import { HashMap, Option, Equal, Either, HashSet } from "effect";
-import * as SwarmMember from "../game/SwarmMember.ts";
-import { Coords } from "../game/Coords.ts";
+import * as SwarmMember from "../domain/SwarmMember.ts";
+import { Coords } from "../domain/Coords.ts";
 import { test, describe, expect } from "@effect/vitest";
 
-import * as Cell from "../game/Cell.ts";
+import * as Cell from "../domain/Cell.ts";
 import { BugDto } from "../api/Bug.dto.ts";
 import { assertRefinement, trimNewline } from "./TestUtills.ts";
 

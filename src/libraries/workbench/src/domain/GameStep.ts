@@ -7,7 +7,7 @@ export type GameStep = Brand.Branded<number, _GameStep>;
 
 export const GameStep = Brand.refined<GameStep>(
   (n) => n >= 0 && Number.isInteger(n),
-  (n) => Brand.error(`Expected ${n} to be an positive integer or 0`)
+  (n) => Brand.error(`Expected ${n.toString()} to be an positive integer or 0`)
 );
 
 const init = GameStep(0);

@@ -13,7 +13,6 @@ import {
   Iterable,
   Equal,
   MutableHashMap,
-  Unify,
 } from "effect";
 import * as Cell from "./Cell.ts";
 import * as Side from "./Side.ts";
@@ -25,7 +24,7 @@ import { dual } from "effect/Function";
 import { distributive } from "../shared/effect/Types.ts";
 import { QueenBeeState } from "./QueenBeeState.ts";
 import * as SwarmError from "./SwarmError.ts";
-import * as Move from "./Move.ts";
+import * as GameMove from "./GameMove.ts";
 
 interface CoordsCell {
   readonly white: HashMap.HashMap<Coords.Coords, Cell.Occupied>;
@@ -47,7 +46,7 @@ export class Swarm extends Data.Class<{
   private getFor<C extends Cell.Cell>(
     cell: C,
     cache: {
-      reversedField: HashMap.HashMap<Coords.Coords, Cell.Occupied<Bug.Bug>>;
+      reversedField: HashMap.HashMap<Coords.Coords, Cell.Occupied>;
       cellCache: Map<string, Cell.Cell>;
     }
   ): C {
@@ -107,7 +106,7 @@ export class Swarm extends Data.Class<{
       }
 
       Cell.match(cell, {
-        Empty: () => {},
+        Empty: () => undefined,
         Occupied: (x) => {
           const neighbor = this.getFor(Cell.Empty.Detached(neighborCoords), {
             cellCache: cache.cellCache,
@@ -529,14 +528,9 @@ const movingStrategies: Record<
 };
 
 export const getMovementCellsFor: {
-  <B extends Bug.Bug>(
-    bug: B
-  ): (swarm: Swarm) => Option.Option<HashSet.HashSet<Cell.Cell>>;
-  <B extends Bug.Bug>(
-    swarm: Swarm,
-    bug: B
-  ): Option.Option<HashSet.HashSet<Cell.Cell>>;
-} = dual(2, <B extends Bug.Bug>(swarm: Swarm, bug: B) =>
+  (bug: Bug.Bug): (swarm: Swarm) => Option.Option<HashSet.HashSet<Cell.Cell>>;
+  (swarm: Swarm, bug: Bug.Bug): Option.Option<HashSet.HashSet<Cell.Cell>>;
+} = dual(2, (swarm: Swarm, bug: Bug.Bug) =>
   pipe(
     Cell.findFirstOccupiedMap(swarm.graph, (occupied) =>
       Cell.hasBug(occupied, bug).pipe(
@@ -645,17 +639,17 @@ export const pillbugAbilityMovingCells: {
 
 export const move: {
   (
-    move: Move.MovingMove
+    move: GameMove.BugGameMove
   ): (swarm: Swarm) => Either.Either<Swarm, SwarmError.SwarmError>;
   (
     swarm: Swarm,
-    move: Move.MovingMove
+    move: GameMove.BugGameMove
   ): Either.Either<Swarm, SwarmError.SwarmError>;
 } = dual(
   2,
   (
     swarm: Swarm,
-    move: Move.MovingMove
+    move: GameMove.BugGameMove
   ): Either.Either<Swarm, SwarmError.SwarmError> =>
     Either.gen(function* () {
       const targetCell = yield* findTargetMovingCell(swarm, move);
@@ -669,7 +663,7 @@ export const move: {
           Empty: (cell) => {
             const isOnlyNeighborsWithMoveSide = pipe(
               Cell.neighborsOccupied(cell),
-              Array.every((x) => Cell.side(x.occupied) === Move.side(move))
+              Array.every((x) => Cell.side(x.occupied) === GameMove.side(move))
             );
 
             if (isOnlyNeighborsWithMoveSide || occupiedCount(swarm) === 1) {
@@ -687,7 +681,7 @@ export const move: {
         });
       }
 
-      const queenBeeFromSwarm = getQueenBee(swarm, Move.side(move));
+      const queenBeeFromSwarm = getQueenBee(swarm, GameMove.side(move));
       if (Option.isNone(queenBeeFromSwarm)) {
         // ходить только если королева размещена
         return yield* Either.left(
@@ -717,7 +711,7 @@ export const move: {
       const validatedSwarm = yield* validateSplit(swarm, fromCell.value);
 
       let lastMovedByPillbug = false;
-      if (move.bug.side === Move.side(move)) {
+      if (move.bug.side === GameMove.side(move)) {
         const movementCells = yield* getMovementCellsFor(
           validatedSwarm,
           move.bug
@@ -781,13 +775,13 @@ export const move: {
 
 export const findTargetMovingCell: {
   (
-    move: Move.MovingMove
+    move: GameMove.BugGameMove
   ): (swarm: Swarm) => Either.Either<Cell.Cell, SwarmError.BugNotFound>;
   (
     swarm: Swarm,
-    move: Move.MovingMove
+    move: GameMove.BugGameMove
   ): Either.Either<Cell.Cell, SwarmError.BugNotFound>;
-} = dual(2, (swarm: Swarm, move: Move.MovingMove) =>
+} = dual(2, (swarm: Swarm, move: GameMove.BugGameMove) =>
   pipe(
     Cell.findFirstOccupiedMap(swarm.graph, (cell) =>
       Cell.withBugInBasis(cell, move.neighbor)
@@ -892,19 +886,17 @@ export function getCoordsMap(cell: Cell.Cell) {
 const underline = "\u0332";
 export function toString(
   swarm: Swarm,
-  options?:
-    | {
-        target?: Cell.Cell | undefined;
-        highlight?: HashSet.HashSet<Cell.Cell> | undefined;
-      }
-    | undefined
+  options?: {
+    target?: Cell.Cell | undefined;
+    highlight?: HashSet.HashSet<Cell.Cell> | undefined;
+  }
 ) {
   const map = getCoordsMap(swarm.graph);
   const field: Array<Array<Cell.Cell | undefined>> = [];
   let minX = 0;
   let minY = 0;
 
-  for (const [_cell, coords] of map) {
+  for (const [, coords] of map) {
     minX = Math.min(minX, coords.x * 2);
     minY = Math.min(minY, coords.y);
   }
@@ -1008,7 +1000,7 @@ export const possibleMoves = (side: Side.Side) => (swarm: Swarm) => {
               Array.head,
               Option.map((x) =>
                 HashSet.make(
-                  new Move.BugMove({
+                  new GameMove.BugGameMove({
                     side,
                     bug,
                     cellBorder: x.border,
@@ -1016,11 +1008,11 @@ export const possibleMoves = (side: Side.Side) => (swarm: Swarm) => {
                   })
                 )
               ),
-              Option.getOrElse(() => HashSet.empty<Move.BugMove>())
+              Option.getOrElse(() => HashSet.empty<GameMove.BugGameMove>())
             )
           )
         ),
-        Option.getOrElse(() => HashSet.empty<Move.BugMove>())
+        Option.getOrElse(() => HashSet.empty<GameMove.BugGameMove>())
       );
     })
   );
@@ -1039,7 +1031,7 @@ export const possibleMoves = (side: Side.Side) => (swarm: Swarm) => {
               Array.head,
               Option.map(
                 (x) =>
-                  new Move.BugMove({
+                  new GameMove.BugGameMove({
                     side,
                     bug,
                     cellBorder: x.border,
@@ -1052,7 +1044,7 @@ export const possibleMoves = (side: Side.Side) => (swarm: Swarm) => {
             HashSet.map((x) => x.value)
           )
         ),
-        Option.getOrElse(() => HashSet.empty<Move.BugMove>())
+        Option.getOrElse(() => HashSet.empty<GameMove.BugGameMove>())
       );
     }),
     HashSet.map((x) => move(swarm, x).pipe(Either.map(() => x))),
@@ -1064,13 +1056,13 @@ export const possibleMoves = (side: Side.Side) => (swarm: Swarm) => {
 
 const isMovedByPillbug = (
   swarm: Swarm,
-  move: Move.MovingMove,
+  move: GameMove.BugGameMove,
   targetCell: Cell.Cell
 ) =>
   Either.gen(function* () {
     const pillBugAbilityMovingCells = yield* pillbugAbilityMovingCells(
       swarm,
-      Move.side(move),
+      GameMove.side(move),
       move.bug
     );
 

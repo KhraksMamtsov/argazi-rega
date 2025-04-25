@@ -10,10 +10,10 @@ export class Hand extends Data.Class<{
 
 export const Init = (
   side: Side.Side,
-  option?: {
-    mosquito?: boolean;
-    pillbug?: boolean;
-    ladybug?: boolean;
+  option: {
+    mosquito: boolean;
+    ladybug: boolean;
+    pillbug: boolean;
   }
 ) =>
   new Hand({
@@ -24,9 +24,9 @@ export const Init = (
       ...Bug.Spider.Init(side),
       ...Bug.Ant.Init(side),
       ...Bug.Grasshopper.Init(side),
-      ...(option?.ladybug ? Bug.Ladybug.Init(side) : []),
-      ...(option?.mosquito ? Bug.Mosquito.Init(side) : []),
-      ...(option?.pillbug ? Bug.Pillbug.Init(side) : []),
+      ...(option.ladybug ? Bug.Ladybug.Init(side) : []),
+      ...(option.mosquito ? Bug.Mosquito.Init(side) : []),
+      ...(option.pillbug ? Bug.Pillbug.Init(side) : []),
     ]),
   });
 
@@ -34,11 +34,9 @@ export const isWithQueenBee = (hand: Hand) =>
   HashSet.has(hand.bugs, Bug.QueenBee.Init(hand.side));
 
 export const containsBug: {
-  <B extends Bug.Bug>(bug: B): (hand: Hand) => boolean;
-  <B extends Bug.Bug>(hand: Hand, bug: B): boolean;
-} = dual(2, <B extends Bug.Bug>(hand: Hand, bug: B) =>
-  HashSet.has(hand.bugs, bug)
-);
+  (bug: Bug.Bug): (hand: Hand) => boolean;
+  (hand: Hand, bug: Bug.Bug): boolean;
+} = dual(2, (hand: Hand, bug: Bug.Bug) => HashSet.has(hand.bugs, bug));
 export const extractBug: {
   <B extends Bug.Bug>(bug: B): (hand: Hand) => [Option.Option<B>, Hand];
   <B extends Bug.Bug>(hand: Hand, bug: B): [Option.Option<B>, Hand];

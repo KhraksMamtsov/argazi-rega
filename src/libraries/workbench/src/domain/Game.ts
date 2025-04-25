@@ -1,17 +1,7 @@
-import {
-  Data,
-  Array,
-  Either,
-  Match,
-  Unify,
-  Pipeable,
-  Effect,
-  Option,
-  HashSet,
-} from "effect";
+import { Data, Array, Either, Match, Pipeable, Option, HashSet } from "effect";
 import * as Hand from "./Hand.ts";
 import * as Side from "./Side.ts";
-import * as Move from "./Move.ts";
+import * as Move from "./GameMove.ts";
 import * as Bug from "./Bug.ts";
 import * as GameStep from "./GameStep.ts";
 import { distributive } from "../shared/effect/Types.ts";
@@ -22,8 +12,8 @@ import * as Swarm from "./Swarm.ts";
 import * as GameError from "./GameError.ts";
 import { dual } from "effect/Function";
 
-export interface Game extends Pipeable.Pipeable {}
-export class Game extends Data.TaggedClass("Game")<{
+export interface GameInProgress extends Pipeable.Pipeable {}
+export class GameInProgress extends Data.TaggedClass("GameInProgress")<{
   step: GameStep.GameStep;
   swarm: Swarm.Swarm;
   black: Hand.Hand;
@@ -49,10 +39,12 @@ export class InitGame extends Data.TaggedClass("InitGame")<{
   }
 }
 
-export const Init = (option?: {
-  mosquito?: boolean;
-  pillbug?: boolean;
-  ladybug?: boolean;
+export type Game = GameInProgress | InitGame;
+
+export const Init = (option: {
+  mosquito: boolean;
+  pillbug: boolean;
+  ladybug: boolean;
 }) =>
   new InitGame({
     step: GameStep.Init(),
@@ -69,15 +61,18 @@ export type MoveResult = Either.Either.Left<
 
 const makeInitialMove: {
   (
-    initialMove: Move.InitialMove
+    initialMove: Move.InitialGameMove
   ): (
     game: InitGame
-  ) => Either.Either<Game, GameError.ForbiddenInitialMove | GameError.Absurd>;
+  ) => Either.Either<
+    GameInProgress,
+    GameError.ForbiddenInitialMove | GameError.Absurd
+  >;
   (
     game: InitGame,
-    initialMove: Move.InitialMove
-  ): Either.Either<Game, GameError.WrongSideMove | GameError.Absurd>;
-} = dual(2, (game: InitGame, initialMove: Move.InitialMove) => {
+    initialMove: Move.InitialGameMove
+  ): Either.Either<GameInProgress, GameError.WrongSideMove | GameError.Absurd>;
+} = dual(2, (game: InitGame, initialMove: Move.InitialGameMove) => {
   if (currentSide(game.step) !== initialMove.bug.side) {
     return Either.left(
       new GameError.WrongSideMove({ move: initialMove, step: game.step })
@@ -112,7 +107,7 @@ const makeInitialMove: {
     .pipe(
       Either.map(
         (x) =>
-          new Game({
+          new GameInProgress({
             white,
             black,
             swarm: Swarm.Init(x),
@@ -122,7 +117,7 @@ const makeInitialMove: {
     );
 });
 
-export const validateFinish = (game: Game) =>
+export const validateFinish = (game: GameInProgress) =>
   QueenBeeState.$match(Swarm.queenBeesState(game.swarm), {
     BothSurrounded: () => Either.left(Finish.Draw({ step: game.step })),
     OneSurrounded: (x) =>
@@ -135,7 +130,7 @@ export const validateFinish = (game: Game) =>
     Free: () => Either.right(game),
   });
 
-export const skipTurnIfNeeded = (game: Game) => {
+export const skipTurnIfNeeded = (game: GameInProgress) => {
   const currentSide_ = currentSide(game.step);
 
   const possibleMoves = Swarm.possibleMoves(currentSide_)(game.swarm);
@@ -149,8 +144,10 @@ export const skipTurnIfNeeded = (game: Game) => {
     handIsEmpty || (!handIsEmpty && !hasIntroducibleCells);
 
   if (canNotIntroduce && noPossibleMoves) {
-    return new Game({
-      ...game,
+    return new GameInProgress({
+      black: game.black,
+      swarm: game.swarm,
+      white: game.white,
       step: GameStep.next(game.step),
     });
   } else {
@@ -160,13 +157,15 @@ export const skipTurnIfNeeded = (game: Game) => {
 
 export const makeMove: {
   (
-    game: Game,
-    move: Move.MovingMove
-  ): Either.Either<Game, GameError.GameError | Finish>;
+    game: GameInProgress,
+    move: Move.BugGameMove
+  ): Either.Either<GameInProgress, GameError.GameError | Finish>;
   (
-    move: Move.MovingMove
-  ): (game: Game) => Either.Either<Game, GameError.GameError | Finish>;
-} = dual(2, (game: Game, move: Move.MovingMove) =>
+    move: Move.BugGameMove
+  ): (
+    game: GameInProgress
+  ) => Either.Either<GameInProgress, GameError.GameError | Finish>;
+} = dual(2, (game: GameInProgress, move: Move.BugGameMove) =>
   Either.gen(function* () {
     const moveSide = Move.side(move);
     const gameCurrentSide = currentSide(game.step);
@@ -204,15 +203,9 @@ export const makeMove: {
           })
       ),
       Either.map((newSwarm) => {
-        const [_extractedWhiteBug, white] = Hand.extractBug(
-          game.white,
-          move.bug
-        );
-        const [_extractedBlackBug, black] = Hand.extractBug(
-          game.black,
-          move.bug
-        );
-        return new Game({
+        const [, white] = Hand.extractBug(game.white, move.bug);
+        const [, black] = Hand.extractBug(game.black, move.bug);
+        return new GameInProgress({
           step: GameStep.next(game.step),
           white,
           black,
@@ -228,21 +221,27 @@ export const makeMove: {
 );
 
 export const moveAll =
-  (options: { init: Move.InitialMove; moves: Iterable<Move.MovingMove> }) =>
+  (options: {
+    init: Move.InitialGameMove;
+    moves: Iterable<Move.BugGameMove>;
+  }) =>
   (game: InitGame) =>
     Array.reduce(
       options.moves,
-      makeInitialMove(game, options.init) as Either.Either<Game, MoveResult>,
+      makeInitialMove(game, options.init) as Either.Either<
+        GameInProgress,
+        MoveResult
+      >,
       (gameState, currentMove) =>
         gameState.pipe(Either.flatMap(makeMove(currentMove)))
     );
 
-const G = Data.taggedEnum<InitGame | Game>();
+const G = Data.taggedEnum<Game>();
 
-export const toString = (game: InitGame | Game) =>
+export const toString = (game: Game) =>
   G.$match(game, {
     InitGame: () => "...",
-    Game: (game) =>
+    GameInProgress: (game) =>
       [
         "№: " + game.step,
         "⇄: " + Side.toString(currentSide(game.step)),

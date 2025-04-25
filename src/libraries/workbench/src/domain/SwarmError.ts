@@ -1,5 +1,5 @@
 import { Data } from "effect";
-import * as Move from "./Move.ts";
+import * as Move from "./GameMove.ts";
 import * as Bug from "./Bug.ts";
 import * as Cell from "./Cell.ts";
 
@@ -12,27 +12,27 @@ export class BugNotFound extends Data.TaggedError("BugNotFound")<{
 }> {}
 
 export class BeetlePressure extends Data.TaggedError("BeetlePressure")<{
-  move: Move.MovingMove;
+  move: Move.BugGameMove;
 }> {}
 
 export class ImpossibleMove extends Data.TaggedError("ImpossibleMove")<{
-  move: Move.MovingMove;
+  move: Move.BugGameMove;
 }> {}
 export class IntroductionMoveViolation extends Data.TaggedError(
   "IntroductionMoveViolation"
 )<{
-  move: Move.MovingMove;
+  move: Move.BugGameMove;
 }> {}
 export class MoveBeforeQueenBeePlacementViolation extends Data.TaggedError(
   "MoveBeforeQueenBeePlacementViolation"
 )<{
-  move: Move.MovingMove;
+  move: Move.BugGameMove;
 }> {}
 
 export class LastMovedByPillbugViolation extends Data.TaggedError(
   "LastMovedByPillbugViolation"
 )<{
-  move: Move.MovingMove;
+  move: Move.BugGameMove;
 }> {}
 
 export type SwarmError =
