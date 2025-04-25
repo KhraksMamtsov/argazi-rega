@@ -2,6 +2,7 @@ import { Schema } from "effect";
 import * as Bug from "../domain/Bug.ts";
 import * as BugNumber from "../domain/BugNumber.ts";
 import { SideSchema } from "../domain/Side.ts";
+import type { AssertTrue, IsExtends } from "../shared/effect/Types.ts";
 
 // #region common
 const One = BugNumber.OneSchema;
@@ -194,3 +195,40 @@ export class BugDto extends Schema.Union(
   static decode = Schema.decodeSync(this);
 }
 // #endregion
+
+export const AllBugs = [
+  "wQ1",
+  "bQ1",
+  "wB2",
+  "wB1",
+  "bB2",
+  "bB1",
+  "wS2",
+  "wS1",
+  "bS2",
+  "bS1",
+  "wA2",
+  "wA1",
+  "wA3",
+  "bA2",
+  "bA1",
+  "bA3",
+  "wG2",
+  "wG1",
+  "wG3",
+  "bG2",
+  "bG1",
+  "bG3",
+  "wL1",
+  "bL1",
+  "wM1",
+  "bM1",
+  "wP1",
+  "bP1",
+] as const satisfies ReadonlyArray<typeof BugDto.Encoded>;
+
+type TypeTestCheckLength = AssertTrue<IsExtends<typeof AllBugs.length, 28>>;
+
+type TypeTestCheckUniqness = AssertTrue<
+  IsExtends<typeof BugDto.Encoded, (typeof AllBugs)[number]>
+>;

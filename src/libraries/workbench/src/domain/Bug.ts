@@ -85,7 +85,7 @@ export class Mosquito extends Schema.TaggedClass<Mosquito>("Mosquito")(
 
 export class Pillbug extends Schema.TaggedClass<Pillbug>("Pillbug")("Pillbug", {
   ..._Bug.fields,
-  number: Schema.Literal(...BugNumber._OneTwo),
+  number: Schema.Literal(...BugNumber._One),
 }) {
   static Init(side: Side.Side) {
     return Tuple.map(BugNumber._One, (number) => new Pillbug({ number, side }));

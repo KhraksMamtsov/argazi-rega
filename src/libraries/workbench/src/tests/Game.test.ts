@@ -11,7 +11,11 @@ describe.concurrent("Game", () => {
   it.effect(
     "init",
     Effect.fn(function* () {
-      const game = Game.Init();
+      const game = Game.Init({
+        ladybug: false,
+        mosquito: false,
+        pillbug: false,
+      });
 
       expect(Game.toString(game)).toBe("...");
     })
@@ -20,7 +24,11 @@ describe.concurrent("Game", () => {
   it.effect(
     "toString",
     Effect.fn(function* () {
-      const game = yield* Game.Init().pipe(
+      const game = yield* Game.Init({
+        ladybug: false,
+        mosquito: false,
+        pillbug: false,
+      }).pipe(
         Game.moveAll({
           init: InitialMoveDto.decode("wA1"),
           moves: [MovingMoveDto.decode("b: bS2 wA1|")],
@@ -43,7 +51,11 @@ b: A1 A2 A3 B1 B2 G1 G2 G3 Q1 S1
   it.effect(
     "BugNotFound in game",
     Effect.fn(function* () {
-      const gameError = yield* Game.Init().pipe(
+      const gameError = yield* Game.Init({
+        ladybug: false,
+        mosquito: false,
+        pillbug: false,
+      }).pipe(
         Game.moveAll({
           init: InitialMoveDto.decode("wQ1"),
           moves: [MovingMoveDto.decode("b: bP1 wQ1|")],
@@ -54,7 +66,7 @@ b: A1 A2 A3 B1 B2 G1 G2 G3 Q1 S1
       expect(gameError).toStrictEqual(
         new GameError.BugNotFound({
           move: MovingMoveDto.decode("b: bP1 wQ1|"),
-          step: GameStep.GameStep(1),
+          step: GameStep.GameStep.make(1),
         })
       );
     })
@@ -63,7 +75,11 @@ b: A1 A2 A3 B1 B2 G1 G2 G3 Q1 S1
   it.effect(
     "wrong turn initial move",
     Effect.fn(function* () {
-      const turnError = yield* Game.Init().pipe(
+      const turnError = yield* Game.Init({
+        ladybug: false,
+        mosquito: false,
+        pillbug: false,
+      }).pipe(
         Game.moveAll({
           init: InitialMoveDto.decode("bA1"),
           moves: [],
@@ -83,9 +99,11 @@ b: A1 A2 A3 B1 B2 G1 G2 G3 Q1 S1
   it.effect(
     "makeMove",
     Effect.fn(function* () {
-      const game = yield* Game.Init().pipe(
-        Game.moveAll({ init: InitialMoveDto.decode("wA1"), moves: [] })
-      );
+      const game = yield* Game.Init({
+        ladybug: false,
+        mosquito: false,
+        pillbug: false,
+      }).pipe(Game.moveAll({ init: InitialMoveDto.decode("wA1"), moves: [] }));
 
       expect(game.step, "step increased").toBe(1);
       expect(Game.toString(game)).toBe(
@@ -149,6 +167,8 @@ b: A1 A2 A3 B1 B2 G1 G2 G3 Q1 S1 S2
     "introduction violation",
     Effect.fn(function* () {
       const gameError = yield* Game.Init({
+        ladybug: false,
+        mosquito: false,
         pillbug: true,
       }).pipe(
         Game.moveAll({
@@ -169,7 +189,7 @@ b: A1 A2 A3 B1 B2 G1 G2 G3 Q1 S1 S2
             swarmError: new SwarmError.IntroductionMoveViolation({
               move: MovingMoveDto.decode("w: wP1 wQ1\\"),
             }),
-            step: GameStep.GameStep(2),
+            step: GameStep.GameStep.make(2),
           })
         )
       ).toBe(true);

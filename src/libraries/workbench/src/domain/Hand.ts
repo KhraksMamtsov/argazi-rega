@@ -1,12 +1,13 @@
-import { Data, HashSet, Option, Array, String } from "effect";
+import { HashSet, Option, Array, String, Schema } from "effect";
 import * as Bug from "./Bug.ts";
 import * as Side from "./Side.ts";
 import { dual } from "effect/Function";
+import { BugDto } from "../api/Bug.dto.ts";
 
-export class Hand extends Data.Class<{
-  bugs: HashSet.HashSet<Bug.Bug>;
-  side: Side.Side;
-}> {}
+export class Hand extends Schema.Class<Hand>("Hand")({
+  bugs: Schema.HashSet(BugDto),
+  side: Side.SideSchema,
+}) {}
 
 export const Init = (
   side: Side.Side,

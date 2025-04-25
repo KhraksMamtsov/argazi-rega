@@ -1,6 +1,5 @@
 import { drizzle } from "drizzle-orm/better-sqlite3";
 import { Config, Data, Effect, Schema } from "effect";
-import * as D from "drizzle-orm/sqlite-core";
 import * as ParseError from "effect/ParseResult";
 
 export class DrizzleError extends Data.TaggedError("DrizzleError")<{
@@ -38,6 +37,7 @@ export class DrizzleClientEncodeError extends Data.TaggedError(
 export class DrizzleClient extends Effect.Service<DrizzleClient>()(
   "DrizzleClient",
   {
+    dependencies: [Drizzle.Default],
     effect: Effect.gen(function* () {
       const _drizzle = yield* Drizzle;
 

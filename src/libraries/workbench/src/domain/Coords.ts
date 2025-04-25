@@ -1,20 +1,33 @@
-import { Data, Tuple } from "effect";
+import { Schema, Tuple } from "effect";
 import * as CellBorder from "./CellBorder.ts";
 import * as CoordsDelta from "./CoordsDelta.ts";
 
-export class Coords extends Data.Class<{
-  x: number;
-  y: number;
-}> {
-  static Init = (x: number, y: number) => new Coords({ x, y });
+export type _CoordId = typeof _CoordId;
+export const _CoordId: unique symbol = Symbol.for("domain/CoordId");
+export const Coord = Schema.Number.pipe(
+  Schema.filter((x) => x % 0.5 === 0),
+  Schema.brand(_CoordId),
+  Schema.annotations({
+    identifier: "Coord",
+  })
+);
+
+export type Coord = typeof Coord.Type;
+
+export class Coords extends Schema.Class<Coords>("Coords")({
+  x: Coord,
+  y: Coord,
+}) {
+  static Init = (x: number, y: number) =>
+    new Coords({ x: Coord.make(x), y: Coord.make(y) });
   static Zero = this.Init(0, 0);
 
   static Neighbor(coords: Coords, cellBorder: CellBorder.CellBorder): Coords {
     const neighborDelta = CoordsDelta.NeighborsVector[cellBorder];
 
     return new Coords({
-      x: coords.x + neighborDelta.x,
-      y: coords.y + neighborDelta.y,
+      x: Coord.make(coords.x + neighborDelta.x),
+      y: Coord.make(coords.y + neighborDelta.y),
     });
   }
 

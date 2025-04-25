@@ -1,4 +1,13 @@
-import { Data, Array, Either, Match, Pipeable, Option, HashSet } from "effect";
+import {
+  Data,
+  Array,
+  Either,
+  Match,
+  Pipeable,
+  Option,
+  HashSet,
+  Schema,
+} from "effect";
 import * as Hand from "./Hand.ts";
 import * as Side from "./Side.ts";
 import * as Move from "./GameMove.ts";
@@ -13,12 +22,14 @@ import * as GameError from "./GameError.ts";
 import { dual } from "effect/Function";
 
 export interface GameInProgress extends Pipeable.Pipeable {}
-export class GameInProgress extends Data.TaggedClass("GameInProgress")<{
-  step: GameStep.GameStep;
-  swarm: Swarm.Swarm;
-  black: Hand.Hand;
-  white: Hand.Hand;
-}> {
+export class GameInProgress extends Schema.TaggedClass<GameInProgress>(
+  "GameInProgress"
+)("GameInProgress", {
+  step: GameStep.GameStep,
+  swarm: Swarm.Swarm,
+  black: Hand.Hand,
+  white: Hand.Hand,
+}) {
   static {
     this.prototype.pipe = function () {
       return Pipeable.pipeArguments(this, arguments);
@@ -27,18 +38,21 @@ export class GameInProgress extends Data.TaggedClass("GameInProgress")<{
 }
 
 export interface InitGame extends Pipeable.Pipeable {}
-export class InitGame extends Data.TaggedClass("InitGame")<{
-  step: GameStep.GameStep;
-  black: Hand.Hand;
-  white: Hand.Hand;
-}> {
+export class InitGame extends Schema.TaggedClass<InitGame>("InitGame")(
+  "InitGame",
+  {
+    step: GameStep.GameStep,
+    black: Hand.Hand,
+    white: Hand.Hand,
+  }
+) {
   static {
     this.prototype.pipe = function () {
       return Pipeable.pipeArguments(this, arguments);
     };
   }
 }
-
+export const Game = Schema.Union(GameInProgress, InitGame);
 export type Game = GameInProgress | InitGame;
 
 export const Init = (option: {

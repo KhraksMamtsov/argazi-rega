@@ -84,12 +84,12 @@ export class Occupied<B extends Bug.Bug = Bug.Bug>
   implements Hash.Hash, Equal.Equal
 {
   readonly _tag = "Occupied";
-  member: SwarmMember.SwarmMember<B>;
+  member: SwarmMember.SwarmMember.With<B>;
   readonly neighbors: OccupiedNeighbors;
   readonly coords: Coords.Coords;
 
   constructor(options: {
-    member: SwarmMember.SwarmMember<B>;
+    member: SwarmMember.SwarmMember.With<B>;
     neighbors: OccupiedNeighbors;
     coords: Coords.Coords;
   }) {
@@ -323,8 +323,8 @@ export function getCellRelationByCoords(options: {
   const { main, neighbor } = options;
 
   const delta = new CoordsDelta.CoordsDelta({
-    x: main.x - neighbor.x,
-    y: main.y - neighbor.y,
+    x: CoordsDelta.CoordDelta.make(main.x - neighbor.x),
+    y: CoordsDelta.CoordDelta.make(main.y - neighbor.y),
   });
 
   const equalsDelta = Equal.equals(delta);

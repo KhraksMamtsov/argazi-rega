@@ -54,6 +54,8 @@ export default [
 
     rules: {
       //   "sort-keys": ["error"],
+      "@typescript-eslint/no-unsafe-declaration-merging": ["off"],
+      "@typescript-eslint/no-namespace": ["off"],
       "@typescript-eslint/no-empty-interface": ["off"],
       "@typescript-eslint/unbound-method": ["off"],
       //   "functional/readonly-type": ["error", "keyword"],

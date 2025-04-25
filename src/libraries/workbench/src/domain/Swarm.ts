@@ -1,5 +1,4 @@
 import {
-  Data,
   Option,
   Array,
   pipe,
@@ -13,6 +12,7 @@ import {
   Iterable,
   Equal,
   MutableHashMap,
+  Schema,
 } from "effect";
 import * as Cell from "./Cell.ts";
 import * as Side from "./Side.ts";
@@ -32,11 +32,11 @@ interface CoordsCell {
 }
 
 export interface Swarm extends Pipeable.Pipeable {}
-export class Swarm extends Data.Class<{
-  field: HashMap.HashMap<Coords.Coords, SwarmMember.SwarmMember>;
-  lastMoved: Bug.Bug;
-  lastMovedByPillbug: boolean;
-}> {
+export class Swarm extends Schema.Class<Swarm>("Swarm")({
+  field: Schema.HashMap({ key: Coords.Coords, value: SwarmMember.SwarmMember }),
+  lastMoved: Bug.BugSchema,
+  lastMovedByPillbug: Schema.Boolean,
+}) {
   static {
     this.prototype.pipe = function () {
       return Pipeable.pipeArguments(this, arguments);

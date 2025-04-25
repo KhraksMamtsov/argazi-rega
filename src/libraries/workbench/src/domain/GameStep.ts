@@ -1,20 +1,19 @@
-import { Brand } from "effect";
+import { Schema } from "effect";
 
 export type _GameStep = typeof _GameStep;
 export const _GameStep: unique symbol = Symbol.for("game/GameStep");
 
-export type GameStep = Brand.Branded<number, _GameStep>;
-
-export const GameStep = Brand.refined<GameStep>(
-  (n) => n >= 0 && Number.isInteger(n),
-  (n) => Brand.error(`Expected ${n.toString()} to be an positive integer or 0`)
+export const GameStep = Schema.Int.pipe(
+  Schema.nonNegative(),
+  Schema.brand(_GameStep)
 );
+export type GameStep = typeof GameStep.Type;
 
-const init = GameStep(0);
+const init = GameStep.make(0);
 export const Init = () => init;
 
-export const next = (step: GameStep) => GameStep(step + 1);
+export const next = (step: GameStep) => GameStep.make(step + 1);
 
-export const QueenPlacementViolationStep = GameStep(9);
+export const QueenPlacementViolationStep = GameStep.make(9);
 
 export const isInitialStep = (step: GameStep) => step === init;

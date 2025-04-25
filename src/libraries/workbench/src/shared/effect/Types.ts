@@ -14,3 +14,9 @@ export const distributive = <const T extends ReadonlyArray<any>>(
 ): Distributive<T> => {
   return value as any as Distributive<T>;
 };
+
+export type AssertTrue<T extends true> = T;
+
+export type IsExtends<Actual, Expected> = [Actual] extends [Expected]
+  ? true
+  : false;

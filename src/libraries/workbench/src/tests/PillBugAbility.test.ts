@@ -1,7 +1,6 @@
 import * as Bug from "../domain/Bug.ts";
 import * as BugNumber from "../domain/BugNumber.ts";
 import * as Swarm from "../domain/Swarm.ts";
-import * as Move from "../domain/GameMove.ts";
 import * as GameError from "../domain/GameError.ts";
 import * as Cell from "../domain/Cell.ts";
 import * as SwarmError from "../domain/SwarmError.ts";
@@ -10,16 +9,19 @@ import { describe, expect, it } from "@effect/vitest";
 import * as Game from "../domain/Game.ts";
 import * as GameStep from "../domain/GameStep.ts";
 import { assertRefinement, trimNewline } from "./TestUtills.ts";
-import { InitialMoveDto, MoveDto, MovingMoveDto } from "../api/Move.dto.ts";
+import { InitialMoveDto, MovingMoveDto } from "../api/Move.dto.ts";
 import { Coords } from "../domain/Coords.ts";
 import * as SwarmMember from "../domain/SwarmMember.ts";
-import { BeetleDto, BugDto } from "../api/Bug.dto.ts";
+import { BugDto } from "../api/Bug.dto.ts";
 
 describe.concurrent("PillBugAbility", () => {
   it.effect(
     "pillbug ability",
     Effect.fn(function* () {
       const game = yield* Game.Init({
+        ladybug: false,
+        mosquito: false,
+
         pillbug: true,
       }).pipe(
         Game.moveAll({
@@ -72,7 +74,7 @@ b: A1 A2 A3 B1 B2 G1 G2 G3 S1 S2
             swarmError: new SwarmError.LastMovedByPillbugViolation({
               move: MovingMoveDto.decode("w: wQ1 |bP1"),
             }),
-            step: GameStep.GameStep(6),
+            step: GameStep.GameStep.make(6),
           })
         )
       ).toBe(true);

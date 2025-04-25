@@ -75,7 +75,7 @@ export class InitialMoveDto extends Schema.transform(
   {
     strict: true,
     encode: (x) => x.bug,
-    decode: (bug) => new _Move.InitialGameMove({ bug }),
+    decode: (bug) => new _Move.InitialGameMove({ bug, side: "white" }),
   }
 ).annotations({
   identifier: "InitialMoveDto",
