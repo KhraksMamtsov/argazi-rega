@@ -1,22 +1,25 @@
-import { Data, Equal, Option, Either } from "effect";
-import * as Match from "./Match.ts";
-import * as Player from "./Player.ts";
-import * as Bug from "./Bug.ts";
-import * as CellBorder from "./CellBorder.ts";
-import * as Side from "./Side.ts";
-import * as GameMove from "./GameMove.ts";
+import { Schema, Equal, Option, Either } from "effect";
+import * as Match from "./Match.js";
+import * as Player from "./Player.js";
+
+import * as CellBorder from "./CellBorder.js";
+import * as Side from "./Side.js";
+import * as GameMove from "./GameMove.js";
+import { BugStr } from "../api/Bug.str.js";
 
 declare const MathMoveTypeId: unique symbol;
 type MathMoveTypeId = typeof MathMoveTypeId;
 
-export class MatchMove extends Data.Class<{
-  player: Player.Player;
-  bug: Bug.Bug;
-  options: Option.Option<{
-    neighbor: Bug.Bug;
-    cellBorder: CellBorder.CellBorder;
-  }>;
-}> {
+export class MatchMove extends Schema.Class<MatchMove>("MatchMove")({
+  player: Player.Player,
+  bug: BugStr,
+  options: Schema.OptionFromSelf(
+    Schema.Struct({
+      neighbor: BugStr,
+      cellBorder: CellBorder.CellBorderSchema,
+    })
+  ),
+}) {
   declare [MathMoveTypeId]: MathMoveTypeId;
 }
 

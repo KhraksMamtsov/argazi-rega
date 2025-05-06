@@ -1,16 +1,16 @@
-import { Effect, Random, Schema } from "effect";
-import * as MatchId from "./MatchId.ts";
-import * as Player from "./Player.ts";
-import * as Game from "./Game.ts";
-import * as Side from "./Side.ts";
-import type { Invite } from "./Invite.ts";
+import { Context, Effect, Random, Schema } from "effect";
+import * as MatchId from "./MatchId.js";
+import * as Player from "./Player.js";
+import * as Game from "./Game.js";
+import * as Side from "./Side.js";
+import type { Invite } from "./Invite.js";
 
 declare const MatchModeTypeId: unique symbol;
 type MatchModeTypeId = typeof MatchModeTypeId;
 export class MatchMode extends Schema.Class<MatchMode>("MatchMode")({
-  mosquito: Schema.BooleanFromUnknown,
-  ladybug: Schema.BooleanFromUnknown,
-  pillbug: Schema.BooleanFromUnknown,
+  mosquito: Schema.Boolean,
+  ladybug: Schema.Boolean,
+  pillbug: Schema.Boolean,
 }) {
   declare [MatchModeTypeId]: MatchModeTypeId;
 }
@@ -28,6 +28,9 @@ export class MatchSettings extends Schema.Class<MatchSettings>("MatchSettings")(
 
 declare const MathTypeId: unique symbol;
 type MathTypeId = typeof MathTypeId;
+
+export class MatchTag extends Context.Tag("Match")<MatchTag, Match>() {}
+
 export class Match extends Schema.Class<Match>("Match")({
   id: MatchId.MatchId,
   owner: Player.Player,
@@ -36,20 +39,19 @@ export class Match extends Schema.Class<Match>("Match")({
   settings: MatchSettings,
 }) {
   declare [MathTypeId]: MathTypeId;
+  getPlayerBySide(side: Side.Side) {
+    return this.settings.ownerSide === side ? this.owner : this.opponent;
+  }
 }
 
 export const fromInvite = (invite: Invite, opponent: Player.Player) =>
   Effect.gen(function* () {
-    const {
-      matchSettings: { mode },
-      ownerSide: inviteSettingsOwnerSide,
-    } = invite.settings;
+    const { matchMode: mode, ownerSide: inviteSettingsOwnerSide } =
+      invite.settings;
 
     const ownerSide =
       inviteSettingsOwnerSide === "random"
-        ? (yield* Random.nextBoolean)
-          ? "white"
-          : "black"
+        ? yield* Random.choice(Side.sides)
         : inviteSettingsOwnerSide;
 
     return new Match({

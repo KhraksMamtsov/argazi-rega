@@ -1,6 +1,9 @@
 import { drizzle } from "drizzle-orm/better-sqlite3";
+// import * as D from "drizzle-orm";
 import { Config, Data, Effect, Schema } from "effect";
 import * as ParseError from "effect/ParseResult";
+// import { _MatchDb } from "./schema/Match.db.ts";
+// import { _PlayerDb } from "./schema/Player.db.ts";
 
 export class DrizzleError extends Data.TaggedError("DrizzleError")<{
   cause: Error;
@@ -42,6 +45,14 @@ export class DrizzleClient extends Effect.Service<DrizzleClient>()(
       const _drizzle = yield* Drizzle;
 
       return {
+        query: Effect.fn("DrizzleClient.query")(function* <T>(
+          cb: (drizzle: typeof _drizzle) => Promise<T>
+        ) {
+          return yield* Effect.tryPromise({
+            try: async () => cb(_drizzle),
+            catch: (cause) => new DrizzleClientError({ cause }),
+          });
+        }),
         queryAndDecode: Effect.fn("DrizzleClient.queryAndDecode")(function* <
           A,
           I,

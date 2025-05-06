@@ -1,24 +1,24 @@
-import * as Bug from "../domain/Bug.ts";
-import * as BugNumber from "../domain/BugNumber.ts";
+import * as Bug from "../domain/Bug.js";
+import * as BugNumber from "../domain/BugNumber.js";
 
-import * as Swarm from "../domain/Swarm.ts";
-import { HashMap, Option, Equal, Either, Predicate, HashSet } from "effect";
-import * as SwarmMember from "../domain/SwarmMember.ts";
-import { Coords } from "../domain/Coords.ts";
-import { test, describe, expect, assert } from "@effect/vitest";
-import * as SwarmError from "../domain/SwarmError.ts";
-import * as Cell from "../domain/Cell.ts";
-import { BugDto } from "../api/Bug.dto.ts";
-import { assertRefinement, trimNewline } from "./TestUtills.ts";
+import * as Swarm from "../domain/Swarm.js";
+import { HashMap, Option, Equal, Either, HashSet } from "effect";
+import * as SwarmMember from "../domain/SwarmMember.js";
+import { Coords } from "../domain/Coords.js";
+import { test, describe, expect } from "@effect/vitest";
+import * as SwarmError from "../domain/SwarmError.js";
+import * as Cell from "../domain/Cell.js";
+import { BugStr } from "../api/Bug.str.js";
+import { assertRefinement, trimNewline } from "./TestUtills.js";
 
 describe("Swarm", () => {
   test.concurrent("one member", () => {
     const swarm = new Swarm.Swarm({
       field: HashMap.make([
         Coords.Zero,
-        SwarmMember.Init(BugDto.decode("bA1")),
+        SwarmMember.Init(BugStr.decode("bA1")),
       ]),
-      lastMoved: BugDto.decode("bA1"),
+      lastMoved: BugStr.decode("bA1"),
       lastMovedByPillbug: false,
     });
 
@@ -35,10 +35,10 @@ describe("Swarm", () => {
   test.concurrent("two members", () => {
     const swarm = new Swarm.Swarm({
       field: HashMap.make(
-        [Coords.Zero, SwarmMember.Init(BugDto.decode("bA1"))],
-        [Coords.Init(1, 0), SwarmMember.Init(BugDto.decode("wA2"))]
+        [Coords.Zero, SwarmMember.Init(BugStr.decode("bA1"))],
+        [Coords.Init(1, 0), SwarmMember.Init(BugStr.decode("wA2"))]
       ),
-      lastMoved: BugDto.decode("bA1"),
+      lastMoved: BugStr.decode("bA1"),
       lastMovedByPillbug: false,
     });
 
@@ -55,11 +55,11 @@ describe("Swarm", () => {
   test.concurrent("three triangle", () => {
     const swarm = new Swarm.Swarm({
       field: HashMap.make(
-        [Coords.Zero, SwarmMember.Init(BugDto.decode("bA1"))],
-        [Coords.Init(1, 0), SwarmMember.Init(BugDto.decode("wA1"))],
-        [Coords.Init(0.5, -1), SwarmMember.Init(BugDto.decode("wA2"))]
+        [Coords.Zero, SwarmMember.Init(BugStr.decode("bA1"))],
+        [Coords.Init(1, 0), SwarmMember.Init(BugStr.decode("wA1"))],
+        [Coords.Init(0.5, -1), SwarmMember.Init(BugStr.decode("wA2"))]
       ),
-      lastMoved: BugDto.decode("bA1"),
+      lastMoved: BugStr.decode("bA1"),
       lastMovedByPillbug: false,
     });
 
@@ -75,25 +75,25 @@ describe("Swarm", () => {
 
   test.concurrent("three line", () => {
     const swarm = new Swarm.Swarm({
-      lastMoved: BugDto.decode("bA1"),
+      lastMoved: BugStr.decode("bA1"),
       lastMovedByPillbug: false,
       field: HashMap.make(
         [
           Coords.Zero,
           SwarmMember.Init(
-            new Bug.Ant({ number: BugNumber.One(1), side: "black" })
+            new Bug.Ant({ number: BugNumber.One.make(1), side: "black" })
           ),
         ],
         [
           Coords.Init(1, 0),
           SwarmMember.Init(
-            new Bug.Ant({ number: BugNumber.Two(2), side: "white" })
+            new Bug.Ant({ number: BugNumber.Two.make(2), side: "white" })
           ),
         ],
         [
           Coords.Init(2, 0),
           SwarmMember.Init(
-            new Bug.Ant({ number: BugNumber.Two(2), side: "white" })
+            new Bug.Ant({ number: BugNumber.Two.make(2), side: "white" })
           ),
         ]
       ),
@@ -110,25 +110,25 @@ describe("Swarm", () => {
   });
   test.concurrent("three tube", () => {
     const swarm = new Swarm.Swarm({
-      lastMoved: BugDto.decode("bA1"),
+      lastMoved: BugStr.decode("bA1"),
       lastMovedByPillbug: false,
       field: HashMap.make(
         [
           Coords.Zero,
           SwarmMember.Init(
-            new Bug.Ant({ number: BugNumber.One(1), side: "black" })
+            new Bug.Ant({ number: BugNumber.One.make(1), side: "black" })
           ),
         ],
         [
           Coords.Init(1, 0),
           SwarmMember.Init(
-            new Bug.Ant({ number: BugNumber.Two(2), side: "white" })
+            new Bug.Ant({ number: BugNumber.Two.make(2), side: "white" })
           ),
         ],
         [
           Coords.Init(1.5, -1),
           SwarmMember.Init(
-            new Bug.Ant({ number: BugNumber.Two(2), side: "white" })
+            new Bug.Ant({ number: BugNumber.Two.make(2), side: "white" })
           ),
         ]
       ),
@@ -149,15 +149,15 @@ describe("Swarm", () => {
       const swarm = new Swarm.Swarm({
         field: HashMap.make([
           Coords.Zero,
-          SwarmMember.Init(BugDto.decode("bA2")),
+          SwarmMember.Init(BugStr.decode("bA2")),
         ]),
-        lastMoved: BugDto.decode("bA2"),
+        lastMoved: BugStr.decode("bA2"),
         lastMovedByPillbug: false,
       });
 
       const actualResult = Swarm.getMovementCellsFor(
         swarm,
-        new Bug.Ant({ number: BugNumber.One(1), side: "black" })
+        new Bug.Ant({ number: BugNumber.One.make(1), side: "black" })
       );
       expect(actualResult).toEqual(Option.none());
     });
@@ -165,31 +165,31 @@ describe("Swarm", () => {
     test.concurrent("Grasshopper", () => {
       const TestGrasshopper = () =>
         new Bug.Grasshopper({
-          number: BugNumber.One(1),
+          number: BugNumber.One.make(1),
           side: "black",
         });
 
       const swarm = new Swarm.Swarm({
-        lastMoved: BugDto.decode("bA1"),
+        lastMoved: BugStr.decode("bA1"),
         lastMovedByPillbug: false,
         field: HashMap.make(
           [
             Coords.Zero,
             SwarmMember.Init(
-              new Bug.Ant({ number: BugNumber.One(1), side: "black" })
+              new Bug.Ant({ number: BugNumber.One.make(1), side: "black" })
             ),
           ],
           [
             Coords.Init(1, 0),
             SwarmMember.Init(
-              new Bug.Ant({ number: BugNumber.Two(2), side: "white" })
+              new Bug.Ant({ number: BugNumber.Two.make(2), side: "white" })
             ),
           ],
           [Coords.Init(0.5, -1), SwarmMember.Init(TestGrasshopper())],
           [
             Coords.Init(1, -2),
             SwarmMember.Init(
-              new Bug.Ant({ number: BugNumber.Two(2), side: "white" })
+              new Bug.Ant({ number: BugNumber.Two.make(2), side: "white" })
             ),
           ]
         ),
@@ -222,29 +222,29 @@ describe("Swarm", () => {
 
     test.concurrent("QueenBee", () => {
       const TestQueenBee = () =>
-        new Bug.QueenBee({ side: "black", number: BugNumber.One(1) });
+        new Bug.QueenBee({ side: "black", number: BugNumber.One.make(1) });
 
       const swarm = new Swarm.Swarm({
-        lastMoved: BugDto.decode("bA1"),
+        lastMoved: BugStr.decode("bA1"),
         lastMovedByPillbug: false,
         field: HashMap.make(
           [
             Coords.Zero,
             SwarmMember.Init(
-              new Bug.Ant({ number: BugNumber.One(1), side: "black" })
+              new Bug.Ant({ number: BugNumber.One.make(1), side: "black" })
             ),
           ],
           [
             Coords.Init(1, 0),
             SwarmMember.Init(
-              new Bug.Ant({ number: BugNumber.Two(2), side: "white" })
+              new Bug.Ant({ number: BugNumber.Two.make(2), side: "white" })
             ),
           ],
           [Coords.Init(0.5, -1), SwarmMember.Init(TestQueenBee())],
           [
             Coords.Init(1, -2),
             SwarmMember.Init(
-              new Bug.Ant({ number: BugNumber.Two(2), side: "white" })
+              new Bug.Ant({ number: BugNumber.Two.make(2), side: "white" })
             ),
           ]
         ),
@@ -267,25 +267,25 @@ describe("Swarm", () => {
     });
 
     test.concurrent("Slideable move: QueenBee", () => {
-      const TestQueenBee = () => BugDto.decode("wQ1");
+      const TestQueenBee = () => BugStr.decode("wQ1");
 
       const swarm = new Swarm.Swarm({
-        lastMoved: BugDto.decode("bA1"),
+        lastMoved: BugStr.decode("bA1"),
         lastMovedByPillbug: false,
         field: HashMap.make(
           [Coords.Init(1.5, 1), SwarmMember.Init(TestQueenBee())],
-          [Coords.Zero, SwarmMember.Init(BugDto.decode("wG1"))],
-          [Coords.Init(1, 0), SwarmMember.Init(BugDto.decode("bG1"))],
-          [Coords.Init(3, 0), SwarmMember.Init(BugDto.decode("bS1"))],
-          [Coords.Init(1.5, -1), SwarmMember.Init(BugDto.decode("wA1"))],
-          [Coords.Init(2.5, -1), SwarmMember.Init(BugDto.decode("wA2"))]
+          [Coords.Zero, SwarmMember.Init(BugStr.decode("wG1"))],
+          [Coords.Init(1, 0), SwarmMember.Init(BugStr.decode("bG1"))],
+          [Coords.Init(3, 0), SwarmMember.Init(BugStr.decode("bS1"))],
+          [Coords.Init(1.5, -1), SwarmMember.Init(BugStr.decode("wA1"))],
+          [Coords.Init(2.5, -1), SwarmMember.Init(BugStr.decode("wA2"))]
         ),
       });
 
       const actualEmptyCells = Swarm.getMovementCellsFor(swarm, TestQueenBee());
-      const actualCoords = actualEmptyCells.pipe(
-        Option.map(HashSet.map((x) => x.coords))
-      );
+      // const actualCoords = actualEmptyCells.pipe(
+      //   Option.map(HashSet.map((x) => x.coords))
+      // );
 
       assertRefinement(Option.isSome, actualEmptyCells);
       assertRefinement(
@@ -312,25 +312,25 @@ describe("Swarm", () => {
     });
 
     test.concurrent("Ladybug", () => {
-      const TestQueenBee = () => BugDto.decode("wL1");
+      const TestQueenBee = () => BugStr.decode("wL1");
 
       const swarm = new Swarm.Swarm({
-        lastMoved: BugDto.decode("bA1"),
+        lastMoved: BugStr.decode("bA1"),
         lastMovedByPillbug: false,
         field: HashMap.make(
           [Coords.Init(1.5, 1), SwarmMember.Init(TestQueenBee())],
-          [Coords.Zero, SwarmMember.Init(BugDto.decode("wG1"))],
-          [Coords.Init(1, 0), SwarmMember.Init(BugDto.decode("bG1"))],
-          [Coords.Init(3, 0), SwarmMember.Init(BugDto.decode("bS1"))],
-          [Coords.Init(1.5, -1), SwarmMember.Init(BugDto.decode("wA1"))],
-          [Coords.Init(2.5, -1), SwarmMember.Init(BugDto.decode("wA2"))]
+          [Coords.Zero, SwarmMember.Init(BugStr.decode("wG1"))],
+          [Coords.Init(1, 0), SwarmMember.Init(BugStr.decode("bG1"))],
+          [Coords.Init(3, 0), SwarmMember.Init(BugStr.decode("bS1"))],
+          [Coords.Init(1.5, -1), SwarmMember.Init(BugStr.decode("wA1"))],
+          [Coords.Init(2.5, -1), SwarmMember.Init(BugStr.decode("wA2"))]
         ),
       });
 
       const actualEmptyCells = Swarm.getMovementCellsFor(swarm, TestQueenBee());
-      const actualCoords = actualEmptyCells.pipe(
-        Option.map(HashSet.map((x) => x.coords))
-      );
+      // const actualCoords = actualEmptyCells.pipe(
+      //   Option.map(HashSet.map((x) => x.coords))
+      // );
 
       assertRefinement(Option.isSome, actualEmptyCells);
       assertRefinement(
@@ -358,16 +358,16 @@ describe("Swarm", () => {
 
     test.concurrent("Pillbug", () => {
       const TestQueenBee = () =>
-        new Bug.Pillbug({ side: "white", number: BugNumber.One(1) });
+        new Bug.Pillbug({ side: "white", number: BugNumber.One.make(1) });
 
       const swarm = new Swarm.Swarm({
-        lastMoved: BugDto.decode("bA1"),
+        lastMoved: BugStr.decode("bA1"),
         lastMovedByPillbug: false,
         field: HashMap.make(
-          [Coords.Zero, SwarmMember.Init(BugDto.decode("bA1"))],
-          [Coords.Init(1, 0), SwarmMember.Init(BugDto.decode("wA2"))],
+          [Coords.Zero, SwarmMember.Init(BugStr.decode("bA1"))],
+          [Coords.Init(1, 0), SwarmMember.Init(BugStr.decode("wA2"))],
           [Coords.Init(0.5, -1), SwarmMember.Init(TestQueenBee())],
-          [Coords.Init(1, -2), SwarmMember.Init(BugDto.decode("wA2"))]
+          [Coords.Init(1, -2), SwarmMember.Init(BugStr.decode("wA2"))]
         ),
       });
 
@@ -387,12 +387,12 @@ describe("Swarm", () => {
       );
     });
     test.concurrent("Beetle", () => {
-      const TestBug = () => BugDto.decode("bB1");
+      const TestBug = () => BugStr.decode("bB1");
 
       const swarm = new Swarm.Swarm({
         field: HashMap.make(
-          [Coords.Zero, SwarmMember.Init(BugDto.decode("bA1"))],
-          [Coords.Init(1, 0), SwarmMember.Init(BugDto.decode("wA2"))],
+          [Coords.Zero, SwarmMember.Init(BugStr.decode("bA1"))],
+          [Coords.Init(1, 0), SwarmMember.Init(BugStr.decode("wA2"))],
           [Coords.Init(0.5, -1), SwarmMember.Init(TestBug())]
         ),
         lastMoved: TestBug(),
@@ -441,20 +441,20 @@ describe("Swarm", () => {
     test.concurrent("Beetle cover", () => {
       const TestBug = () =>
         new Bug.Beetle({
-          number: BugNumber.One(1),
+          number: BugNumber.One.make(1),
           side: "black",
         });
 
       const swarm = new Swarm.Swarm({
-        lastMoved: BugDto.decode("bA1"),
+        lastMoved: BugStr.decode("bA1"),
         lastMovedByPillbug: false,
         field: HashMap.make(
-          [Coords.Zero, SwarmMember.Init(BugDto.decode("bA1"))],
-          [Coords.Init(1, 0), SwarmMember.Init(BugDto.decode("wA2"))],
+          [Coords.Zero, SwarmMember.Init(BugStr.decode("bA1"))],
+          [Coords.Init(1, 0), SwarmMember.Init(BugStr.decode("wA2"))],
           [
             Coords.Init(0.5, -1),
             new SwarmMember.SwarmMember({
-              bug: BugDto.decode("bA2"),
+              bug: BugStr.decode("bA2"),
               cover: [TestBug()],
             }),
           ]
@@ -466,24 +466,29 @@ describe("Swarm", () => {
         Option.map(HashSet.map((x) => x.coords))
       );
       const testBeetleCell = Cell.findFirstOccupied(swarm.graph, (x) =>
-        Cell.withBugInBasis(x, TestBug())
+        Cell.hasBug(x, TestBug()).pipe(
+          Option.match({
+            onNone: () => false,
+            onSome: () => true,
+          })
+        )
       );
 
       assertRefinement(Option.isSome, actualEmptyCells);
-      // assertRefinement(Option.isSome, testBeetleCell);
+      assertRefinement(Option.isSome, testBeetleCell);
       // assertRefinement(Array.every(Cell.refine("Empty")), actualEmptyCells.value);
 
       expect(
         Swarm.toString(swarm, {
           highlight: actualEmptyCells.value,
-          // target: testBeetleCell.value,
+          target: testBeetleCell.value,
         })
       ).toBe(trimNewline`
     ○     ○     ○ 
 
  ○    (Å̲×    Ä×    ○ 
 
-    ×     Ä̲ B̲̊    × 
+    ×    _Ä̲_B̲̊    × 
 
        ×     × `);
 
@@ -504,20 +509,20 @@ describe("Swarm", () => {
     test.concurrent("Mosquito cover", () => {
       const TestBug = () =>
         new Bug.Mosquito({
-          number: BugNumber.One(1),
+          number: BugNumber.One.make(1),
           side: "black",
         });
 
       const swarm = new Swarm.Swarm({
-        lastMoved: BugDto.decode("bA1"),
+        lastMoved: BugStr.decode("bA1"),
         lastMovedByPillbug: false,
         field: HashMap.make(
-          [Coords.Zero, SwarmMember.Init(BugDto.decode("bA1"))],
-          [Coords.Init(1, 0), SwarmMember.Init(BugDto.decode("wA2"))],
+          [Coords.Zero, SwarmMember.Init(BugStr.decode("bA1"))],
+          [Coords.Init(1, 0), SwarmMember.Init(BugStr.decode("wA2"))],
           [
             Coords.Init(0.5, -1),
             new SwarmMember.SwarmMember({
-              bug: BugDto.decode("bA2"),
+              bug: BugStr.decode("bA2"),
               cover: [TestBug()],
             }),
           ]
@@ -565,13 +570,13 @@ describe("Swarm", () => {
     });
 
     test.concurrent("Mosquito with mosquito", () => {
-      const TestBug = () => BugDto.decode("wM1");
+      const TestBug = () => BugStr.decode("wM1");
 
       const swarm = new Swarm.Swarm({
         lastMoved: TestBug(),
         lastMovedByPillbug: false,
         field: HashMap.make(
-          [Coords.Zero, SwarmMember.Init(BugDto.decode("bM1"))],
+          [Coords.Zero, SwarmMember.Init(BugStr.decode("bM1"))],
           [Coords.Init(1, 0), SwarmMember.Init(TestBug())]
         ),
       });
@@ -592,17 +597,17 @@ describe("Swarm", () => {
     });
 
     test.concurrent("Spider", () => {
-      const TestBug = () => BugDto.decode("bS1");
+      const TestBug = () => BugStr.decode("bS1");
 
       const swarm = new Swarm.Swarm({
-        lastMoved: BugDto.decode("bA1"),
+        lastMoved: BugStr.decode("bA1"),
         lastMovedByPillbug: false,
         field: HashMap.make(
-          [Coords.Zero, SwarmMember.Init(BugDto.decode("bA1"))],
-          [Coords.Init(1, 0), SwarmMember.Init(BugDto.decode("wA2"))],
+          [Coords.Zero, SwarmMember.Init(BugStr.decode("bA1"))],
+          [Coords.Init(1, 0), SwarmMember.Init(BugStr.decode("wA2"))],
           [Coords.Init(0.5, -1), SwarmMember.Init(TestBug())],
-          [Coords.Init(1, -2), SwarmMember.Init(BugDto.decode("bA2"))],
-          [Coords.Init(1.5, -3), SwarmMember.Init(BugDto.decode("bG3"))]
+          [Coords.Init(1, -2), SwarmMember.Init(BugStr.decode("bA2"))],
+          [Coords.Init(1.5, -3), SwarmMember.Init(BugStr.decode("bG3"))]
         ),
       });
 
@@ -628,19 +633,19 @@ describe("Swarm", () => {
     });
 
     test.concurrent("Spider no backtrack", () => {
-      const TestBug = () => BugDto.decode("bS1");
+      const TestBug = () => BugStr.decode("bS1");
 
       const swarm = new Swarm.Swarm({
-        lastMoved: BugDto.decode("bA1"),
+        lastMoved: BugStr.decode("bA1"),
         lastMovedByPillbug: false,
         field: HashMap.make(
-          [Coords.Zero, SwarmMember.Init(BugDto.decode("bA1"))],
-          [Coords.Init(1, 0), SwarmMember.Init(BugDto.decode("wA2"))],
+          [Coords.Zero, SwarmMember.Init(BugStr.decode("bA1"))],
+          [Coords.Init(1, 0), SwarmMember.Init(BugStr.decode("wA2"))],
           [Coords.Init(-0.5, -1), SwarmMember.Init(TestBug())],
-          [Coords.Init(-1, -2), SwarmMember.Init(BugDto.decode("bA2"))],
-          [Coords.Init(1, -2), SwarmMember.Init(BugDto.decode("bP1"))],
-          [Coords.Init(-0.5, -3), SwarmMember.Init(BugDto.decode("wG3"))],
-          [Coords.Init(0.5, -3), SwarmMember.Init(BugDto.decode("wB2"))]
+          [Coords.Init(-1, -2), SwarmMember.Init(BugStr.decode("bA2"))],
+          [Coords.Init(1, -2), SwarmMember.Init(BugStr.decode("bP1"))],
+          [Coords.Init(-0.5, -3), SwarmMember.Init(BugStr.decode("wG3"))],
+          [Coords.Init(0.5, -3), SwarmMember.Init(BugStr.decode("wB2"))]
         ),
       });
 
@@ -665,17 +670,17 @@ describe("Swarm", () => {
       );
     });
     test.concurrent("Ant", () => {
-      const TestBug = () => BugDto.decode("bA2");
+      const TestBug = () => BugStr.decode("bA2");
 
       const swarm = new Swarm.Swarm({
-        lastMoved: BugDto.decode("bA1"),
+        lastMoved: BugStr.decode("bA1"),
         lastMovedByPillbug: false,
         field: HashMap.make(
-          [Coords.Zero, SwarmMember.Init(BugDto.decode("bA1"))],
-          [Coords.Init(1, 0), SwarmMember.Init(BugDto.decode("wA2"))],
+          [Coords.Zero, SwarmMember.Init(BugStr.decode("bA1"))],
+          [Coords.Init(1, 0), SwarmMember.Init(BugStr.decode("wA2"))],
           [Coords.Init(0.5, -1), SwarmMember.Init(TestBug())],
-          [Coords.Init(1, -2), SwarmMember.Init(BugDto.decode("wA3"))],
-          [Coords.Init(2, -2), SwarmMember.Init(BugDto.decode("bG3"))]
+          [Coords.Init(1, -2), SwarmMember.Init(BugStr.decode("wA3"))],
+          [Coords.Init(2, -2), SwarmMember.Init(BugStr.decode("bG3"))]
         ),
       });
 
@@ -723,14 +728,14 @@ describe("Swarm", () => {
 
   test.concurrent("validateSplit", () => {
     const TestBug = () =>
-      new Bug.Beetle({ number: BugNumber.One(1), side: "black" });
+      new Bug.Beetle({ number: BugNumber.One.make(1), side: "black" });
 
     const swarm = new Swarm.Swarm({
-      lastMoved: BugDto.decode("bA1"),
+      lastMoved: BugStr.decode("bA1"),
       lastMovedByPillbug: false,
       field: HashMap.make(
-        [Coords.Zero, SwarmMember.Init(BugDto.decode("bA1"))],
-        [Coords.Init(1, 0), SwarmMember.Init(BugDto.decode("wA2"))],
+        [Coords.Zero, SwarmMember.Init(BugStr.decode("bA1"))],
+        [Coords.Init(1, 0), SwarmMember.Init(BugStr.decode("wA2"))],
         [Coords.Init(0.5, -1), SwarmMember.Init(TestBug())]
       ),
     });
@@ -750,12 +755,12 @@ describe("Swarm", () => {
   });
   test.concurrent("validateSplit SplitError", () => {
     const swarm = new Swarm.Swarm({
-      lastMoved: BugDto.decode("bA1"),
+      lastMoved: BugStr.decode("bA1"),
       lastMovedByPillbug: false,
       field: HashMap.make(
-        [Coords.Zero, SwarmMember.Init(BugDto.decode("bA1"))],
-        [Coords.Init(1, 0), SwarmMember.Init(BugDto.decode("wA2"))],
-        [Coords.Init(2, 0), SwarmMember.Init(BugDto.decode("wA3"))]
+        [Coords.Zero, SwarmMember.Init(BugStr.decode("bA1"))],
+        [Coords.Init(1, 0), SwarmMember.Init(BugStr.decode("wA2"))],
+        [Coords.Init(2, 0), SwarmMember.Init(BugStr.decode("wA3"))]
       ),
     });
 
@@ -778,13 +783,13 @@ describe("Swarm", () => {
 
   test.concurrent(".possibleMoves", () => {
     const swarm = new Swarm.Swarm({
-      lastMoved: BugDto.decode("bA1"),
+      lastMoved: BugStr.decode("bA1"),
       lastMovedByPillbug: false,
       field: HashMap.make(
-        [Coords.Zero, SwarmMember.Init(BugDto.decode("bQ1"))],
-        [Coords.Init(1, 0), SwarmMember.Init(BugDto.decode("bB2"))],
-        [Coords.Init(2, 0), SwarmMember.Init(BugDto.decode("wA2"))],
-        [Coords.Init(-1, 0), SwarmMember.Init(BugDto.decode("wA3"))]
+        [Coords.Zero, SwarmMember.Init(BugStr.decode("bQ1"))],
+        [Coords.Init(1, 0), SwarmMember.Init(BugStr.decode("bB2"))],
+        [Coords.Init(2, 0), SwarmMember.Init(BugStr.decode("wA2"))],
+        [Coords.Init(-1, 0), SwarmMember.Init(BugStr.decode("wA3"))]
       ),
     });
 

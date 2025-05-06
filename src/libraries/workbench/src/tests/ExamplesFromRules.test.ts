@@ -1,33 +1,33 @@
-import * as Bug from "../domain/Bug.ts";
-import * as BugNumber from "../domain/BugNumber.ts";
-import * as Swarm from "../domain/Swarm.ts";
+import * as Bug from "../domain/Bug.js";
+import * as BugNumber from "../domain/BugNumber.js";
+import * as Swarm from "../domain/Swarm.js";
 import { HashMap, Option, Equal, Either, HashSet } from "effect";
-import * as SwarmMember from "../domain/SwarmMember.ts";
-import { Coords } from "../domain/Coords.ts";
+import * as SwarmMember from "../domain/SwarmMember.js";
+import { Coords } from "../domain/Coords.js";
 import { test, describe, expect } from "@effect/vitest";
 
-import * as Cell from "../domain/Cell.ts";
-import { BugDto } from "../api/Bug.dto.ts";
-import { assertRefinement, trimNewline } from "./TestUtills.ts";
+import * as Cell from "../domain/Cell.js";
+import { BugStr } from "../api/Bug.str.js";
+import { assertRefinement, trimNewline } from "./TestUtills.js";
 
 describe.concurrent("Examples from rules", () => {
   test.concurrent("QueenBee", () => {
-    const BlackQueenBee = () => BugDto.decode("bQ1");
+    const BlackQueenBee = () => BugStr.decode("bQ1");
 
     const swarm = new Swarm.Swarm({
       lastMovedByPillbug: false,
-      lastMoved: BugDto.decode("bA1"),
+      lastMoved: BugStr.decode("bA1"),
       field: HashMap.make(
-        [Coords.Init(1, 2), SwarmMember.Init(BugDto.decode("bA1"))],
-        [Coords.Init(2, 2), SwarmMember.Init(BugDto.decode("wS1"))],
-        [Coords.Init(2.5, 1), SwarmMember.Init(BugDto.decode("bS1"))],
+        [Coords.Init(1, 2), SwarmMember.Init(BugStr.decode("bA1"))],
+        [Coords.Init(2, 2), SwarmMember.Init(BugStr.decode("wS1"))],
+        [Coords.Init(2.5, 1), SwarmMember.Init(BugStr.decode("bS1"))],
         [Coords.Init(0.5, 1), SwarmMember.Init(BlackQueenBee())],
-        [Coords.Zero, SwarmMember.Init(BugDto.decode("bG1"))],
-        [Coords.Init(2, 0), SwarmMember.Init(BugDto.decode("wQ1"))],
-        [Coords.Init(3, 0), SwarmMember.Init(BugDto.decode("bB1"))],
-        [Coords.Init(0.5, -1), SwarmMember.Init(BugDto.decode("wG1"))],
-        [Coords.Init(1.5, -1), SwarmMember.Init(BugDto.decode("wA1"))],
-        [Coords.Init(2.5, -1), SwarmMember.Init(BugDto.decode("wB1"))]
+        [Coords.Zero, SwarmMember.Init(BugStr.decode("bG1"))],
+        [Coords.Init(2, 0), SwarmMember.Init(BugStr.decode("wQ1"))],
+        [Coords.Init(3, 0), SwarmMember.Init(BugStr.decode("bB1"))],
+        [Coords.Init(0.5, -1), SwarmMember.Init(BugStr.decode("wG1"))],
+        [Coords.Init(1.5, -1), SwarmMember.Init(BugStr.decode("wA1"))],
+        [Coords.Init(2.5, -1), SwarmMember.Init(BugStr.decode("wB1"))]
       ),
     });
 
@@ -55,18 +55,18 @@ describe.concurrent("Examples from rules", () => {
   });
 
   test.concurrent("Pillbug", () => {
-    const WhitePillbug = () => BugDto.decode("wP1");
+    const WhitePillbug = () => BugStr.decode("wP1");
 
     const swarm = new Swarm.Swarm({
       lastMovedByPillbug: false,
-      lastMoved: BugDto.decode("bA1"),
+      lastMoved: BugStr.decode("bA1"),
       field: HashMap.make(
-        [Coords.Init(1.5, 1), SwarmMember.Init(BugDto.decode("bA1"))],
-        [Coords.Init(2.5, 1), SwarmMember.Init(BugDto.decode("wQ1"))],
-        [Coords.Zero, SwarmMember.Init(BugDto.decode("bB1"))],
-        [Coords.Init(1, 0), SwarmMember.Init(BugDto.decode("wS1"))],
+        [Coords.Init(1.5, 1), SwarmMember.Init(BugStr.decode("bA1"))],
+        [Coords.Init(2.5, 1), SwarmMember.Init(BugStr.decode("wQ1"))],
+        [Coords.Zero, SwarmMember.Init(BugStr.decode("bB1"))],
+        [Coords.Init(1, 0), SwarmMember.Init(BugStr.decode("wS1"))],
         [Coords.Init(2, 0), SwarmMember.Init(WhitePillbug())],
-        [Coords.Init(1.5, -1), SwarmMember.Init(BugDto.decode("bQ1"))]
+        [Coords.Init(1.5, -1), SwarmMember.Init(BugStr.decode("bQ1"))]
       ),
     });
 
@@ -92,19 +92,19 @@ describe.concurrent("Examples from rules", () => {
   });
 
   test.concurrent("Beetle", () => {
-    const WhiteBeetle = () => BugDto.decode("wB1");
+    const WhiteBeetle = () => BugStr.decode("wB1");
 
     const swarm = new Swarm.Swarm({
       lastMovedByPillbug: false,
-      lastMoved: BugDto.decode("bA1"),
+      lastMoved: BugStr.decode("bA1"),
       field: HashMap.make(
-        [Coords.Init(0.5, 1), SwarmMember.Init(BugDto.decode("wS1"))],
+        [Coords.Init(0.5, 1), SwarmMember.Init(BugStr.decode("wS1"))],
         [Coords.Init(1.5, 1), SwarmMember.Init(WhiteBeetle())],
-        [Coords.Zero, SwarmMember.Init(BugDto.decode("wQ1"))],
-        [Coords.Init(2, 0), SwarmMember.Init(BugDto.decode("bA1"))],
-        [Coords.Init(0.5, -1), SwarmMember.Init(BugDto.decode("wA1"))],
-        [Coords.Init(1.5, -1), SwarmMember.Init(BugDto.decode("bQ1"))],
-        [Coords.Init(2.5, -1), SwarmMember.Init(BugDto.decode("bG1"))]
+        [Coords.Zero, SwarmMember.Init(BugStr.decode("wQ1"))],
+        [Coords.Init(2, 0), SwarmMember.Init(BugStr.decode("bA1"))],
+        [Coords.Init(0.5, -1), SwarmMember.Init(BugStr.decode("wA1"))],
+        [Coords.Init(1.5, -1), SwarmMember.Init(BugStr.decode("bQ1"))],
+        [Coords.Init(2.5, -1), SwarmMember.Init(BugStr.decode("bG1"))]
       ),
     });
 
@@ -133,24 +133,24 @@ describe.concurrent("Examples from rules", () => {
   });
 
   test.concurrent("Grasshopper", () => {
-    const WhiteGrasshopper = () => BugDto.decode("wG1");
+    const WhiteGrasshopper = () => BugStr.decode("wG1");
 
     const swarm = new Swarm.Swarm({
       lastMovedByPillbug: false,
-      lastMoved: BugDto.decode("bA1"),
+      lastMoved: BugStr.decode("bA1"),
       field: HashMap.make(
-        [Coords.Init(0.5, 1), SwarmMember.Init(BugDto.decode("bA1"))],
-        [Coords.Init(1.5, 1), SwarmMember.Init(BugDto.decode("wA1"))],
-        [Coords.Zero, SwarmMember.Init(BugDto.decode("bQ1"))],
-        [Coords.Init(2, 0), SwarmMember.Init(BugDto.decode("wS1"))],
-        [Coords.Init(3, 0), SwarmMember.Init(BugDto.decode("bB1"))],
-        [Coords.Init(4, 0), SwarmMember.Init(BugDto.decode("bS1"))],
+        [Coords.Init(0.5, 1), SwarmMember.Init(BugStr.decode("bA1"))],
+        [Coords.Init(1.5, 1), SwarmMember.Init(BugStr.decode("wA1"))],
+        [Coords.Zero, SwarmMember.Init(BugStr.decode("bQ1"))],
+        [Coords.Init(2, 0), SwarmMember.Init(BugStr.decode("wS1"))],
+        [Coords.Init(3, 0), SwarmMember.Init(BugStr.decode("bB1"))],
+        [Coords.Init(4, 0), SwarmMember.Init(BugStr.decode("bS1"))],
         [Coords.Init(0.5, -1), SwarmMember.Init(WhiteGrasshopper())],
-        [Coords.Init(1.5, -1), SwarmMember.Init(BugDto.decode("bG1"))],
-        [Coords.Init(2.5, -1), SwarmMember.Init(BugDto.decode("wQ1"))],
-        [Coords.Init(4.5, -1), SwarmMember.Init(BugDto.decode("wS2"))],
-        [Coords.Init(1, -2), SwarmMember.Init(BugDto.decode("wB1"))],
-        [Coords.Init(4, -2), SwarmMember.Init(BugDto.decode("bS2"))]
+        [Coords.Init(1.5, -1), SwarmMember.Init(BugStr.decode("bG1"))],
+        [Coords.Init(2.5, -1), SwarmMember.Init(BugStr.decode("wQ1"))],
+        [Coords.Init(4.5, -1), SwarmMember.Init(BugStr.decode("wS2"))],
+        [Coords.Init(1, -2), SwarmMember.Init(BugStr.decode("wB1"))],
+        [Coords.Init(4, -2), SwarmMember.Init(BugStr.decode("bS2"))]
       ),
     });
 
@@ -176,23 +176,23 @@ describe.concurrent("Examples from rules", () => {
   });
 
   test.concurrent("Spider", () => {
-    const BlackSpider = () => BugDto.decode("bS1");
+    const BlackSpider = () => BugStr.decode("bS1");
 
     const swarm = new Swarm.Swarm({
       lastMovedByPillbug: false,
-      lastMoved: BugDto.decode("bA1"),
+      lastMoved: BugStr.decode("bA1"),
       field: HashMap.make(
         [Coords.Init(2.5, 3), SwarmMember.Init(BlackSpider())],
-        [Coords.Init(1, 2), SwarmMember.Init(BugDto.decode("wB1"))],
-        [Coords.Init(3, 2), SwarmMember.Init(BugDto.decode("wS1"))],
+        [Coords.Init(1, 2), SwarmMember.Init(BugStr.decode("wB1"))],
+        [Coords.Init(3, 2), SwarmMember.Init(BugStr.decode("wS1"))],
         //
-        [Coords.Init(0.5, 1), SwarmMember.Init(BugDto.decode("bA1"))],
-        [Coords.Init(3.5, 1), SwarmMember.Init(BugDto.decode("wQ1"))],
-        [Coords.Zero, SwarmMember.Init(BugDto.decode("bQ1"))],
-        [Coords.Init(3, 0), SwarmMember.Init(BugDto.decode("bB1"))],
-        [Coords.Init(0.5, -1), SwarmMember.Init(BugDto.decode("wG1"))],
-        [Coords.Init(1.5, -1), SwarmMember.Init(BugDto.decode("bG1"))],
-        [Coords.Init(2.5, -1), SwarmMember.Init(BugDto.decode("wA1"))]
+        [Coords.Init(0.5, 1), SwarmMember.Init(BugStr.decode("bA1"))],
+        [Coords.Init(3.5, 1), SwarmMember.Init(BugStr.decode("wQ1"))],
+        [Coords.Zero, SwarmMember.Init(BugStr.decode("bQ1"))],
+        [Coords.Init(3, 0), SwarmMember.Init(BugStr.decode("bB1"))],
+        [Coords.Init(0.5, -1), SwarmMember.Init(BugStr.decode("wG1"))],
+        [Coords.Init(1.5, -1), SwarmMember.Init(BugStr.decode("bG1"))],
+        [Coords.Init(2.5, -1), SwarmMember.Init(BugStr.decode("wA1"))]
       ),
     });
 
@@ -216,17 +216,17 @@ describe.concurrent("Examples from rules", () => {
   });
 
   test.concurrent("Ant", () => {
-    const BlackAnt = () => BugDto.decode("bA1");
+    const BlackAnt = () => BugStr.decode("bA1");
 
     const swarm = new Swarm.Swarm({
       lastMovedByPillbug: false,
-      lastMoved: BugDto.decode("bA1"),
+      lastMoved: BugStr.decode("bA1"),
       field: HashMap.make(
-        [Coords.Init(0.5, 1), SwarmMember.Init(BugDto.decode("bQ1"))],
-        [Coords.Zero, SwarmMember.Init(BugDto.decode("wG1"))],
-        [Coords.Init(2, 0), SwarmMember.Init(BugDto.decode("wQ1"))],
-        [Coords.Init(0.5, -1), SwarmMember.Init(BugDto.decode("wB1"))],
-        [Coords.Init(1.5, -1), SwarmMember.Init(BugDto.decode("bB1"))],
+        [Coords.Init(0.5, 1), SwarmMember.Init(BugStr.decode("bQ1"))],
+        [Coords.Zero, SwarmMember.Init(BugStr.decode("wG1"))],
+        [Coords.Init(2, 0), SwarmMember.Init(BugStr.decode("wQ1"))],
+        [Coords.Init(0.5, -1), SwarmMember.Init(BugStr.decode("wB1"))],
+        [Coords.Init(1.5, -1), SwarmMember.Init(BugStr.decode("bB1"))],
         [Coords.Init(1, -2), SwarmMember.Init(BlackAnt())]
       ),
     });
@@ -267,17 +267,17 @@ describe.concurrent("Examples from rules", () => {
   });
 
   test.concurrent("Ladybug", () => {
-    const Ladybug = () => BugDto.decode("bL1");
+    const Ladybug = () => BugStr.decode("bL1");
 
     const swarm = new Swarm.Swarm({
       lastMovedByPillbug: false,
-      lastMoved: BugDto.decode("bQ1"),
+      lastMoved: BugStr.decode("bQ1"),
       field: HashMap.make(
-        [Coords.Init(0.5, 1), SwarmMember.Init(BugDto.decode("bQ1"))],
-        [Coords.Zero, SwarmMember.Init(BugDto.decode("wG1"))],
-        [Coords.Init(2, 0), SwarmMember.Init(BugDto.decode("wQ1"))],
-        [Coords.Init(0.5, -1), SwarmMember.Init(BugDto.decode("wB1"))],
-        [Coords.Init(1.5, -1), SwarmMember.Init(BugDto.decode("bB1"))],
+        [Coords.Init(0.5, 1), SwarmMember.Init(BugStr.decode("bQ1"))],
+        [Coords.Zero, SwarmMember.Init(BugStr.decode("wG1"))],
+        [Coords.Init(2, 0), SwarmMember.Init(BugStr.decode("wQ1"))],
+        [Coords.Init(0.5, -1), SwarmMember.Init(BugStr.decode("wB1"))],
+        [Coords.Init(1.5, -1), SwarmMember.Init(BugStr.decode("bB1"))],
         [Coords.Init(1, -2), SwarmMember.Init(Ladybug())]
       ),
     });
@@ -317,16 +317,16 @@ describe.concurrent("Examples from rules", () => {
   });
 
   test.concurrent("Mosquito", () => {
-    const Mosquito = () => BugDto.decode("wM1");
+    const Mosquito = () => BugStr.decode("wM1");
 
     const swarm = new Swarm.Swarm({
       lastMovedByPillbug: false,
-      lastMoved: BugDto.decode("bA1"),
+      lastMoved: BugStr.decode("bA1"),
       field: HashMap.make(
-        [Coords.Init(1.5, 1), SwarmMember.Init(BugDto.decode("bQ1"))],
-        [Coords.Zero, SwarmMember.Init(BugDto.decode("bS1"))],
-        [Coords.Init(1, 0), SwarmMember.Init(BugDto.decode("wB1"))],
-        [Coords.Init(2, 0), SwarmMember.Init(BugDto.decode("wQ1"))],
+        [Coords.Init(1.5, 1), SwarmMember.Init(BugStr.decode("bQ1"))],
+        [Coords.Zero, SwarmMember.Init(BugStr.decode("bS1"))],
+        [Coords.Init(1, 0), SwarmMember.Init(BugStr.decode("wB1"))],
+        [Coords.Init(2, 0), SwarmMember.Init(BugStr.decode("wQ1"))],
         [Coords.Init(0.5, -1), SwarmMember.Init(Mosquito())]
       ),
     });
@@ -362,18 +362,18 @@ describe.concurrent("Examples from rules", () => {
   });
 
   test.concurrent("One swarm rule", () => {
-    const BlackQueenBee = () => BugDto.decode("bQ1");
+    const BlackQueenBee = () => BugStr.decode("bQ1");
 
     const swarm = new Swarm.Swarm({
       lastMovedByPillbug: false,
-      lastMoved: BugDto.decode("bA1"),
+      lastMoved: BugStr.decode("bA1"),
       field: HashMap.make(
-        [Coords.Zero, SwarmMember.Init(BugDto.decode("bG1"))],
+        [Coords.Zero, SwarmMember.Init(BugStr.decode("bG1"))],
         [Coords.Init(1, 0), SwarmMember.Init(BlackQueenBee())],
-        [Coords.Init(2, 0), SwarmMember.Init(BugDto.decode("bA1"))],
-        [Coords.Init(2.5, -1), SwarmMember.Init(BugDto.decode("wS1"))],
-        [Coords.Init(1, -2), SwarmMember.Init(BugDto.decode("bB1"))],
-        [Coords.Init(2, -2), SwarmMember.Init(BugDto.decode("wB1"))]
+        [Coords.Init(2, 0), SwarmMember.Init(BugStr.decode("bA1"))],
+        [Coords.Init(2.5, -1), SwarmMember.Init(BugStr.decode("wS1"))],
+        [Coords.Init(1, -2), SwarmMember.Init(BugStr.decode("bB1"))],
+        [Coords.Init(2, -2), SwarmMember.Init(BugStr.decode("wB1"))]
       ),
     });
 
@@ -395,20 +395,20 @@ describe.concurrent("Examples from rules", () => {
   });
 
   test.concurrent("One swarm rule: Ladybug", () => {
-    const blackLadybug = () => BugDto.decode("bL1");
+    const blackLadybug = () => BugStr.decode("bL1");
 
     const swarm = new Swarm.Swarm({
       lastMovedByPillbug: false,
-      lastMoved: BugDto.decode("bA1"),
+      lastMoved: BugStr.decode("bA1"),
       field: HashMap.make(
-        [Coords.Init(2, 3), SwarmMember.Init(BugDto.decode("wP1"))],
-        [Coords.Init(2.5, 1), SwarmMember.Init(BugDto.decode("wB1"))],
-        [Coords.Zero, SwarmMember.Init(BugDto.decode("bG1"))],
-        [Coords.Init(1, 0), SwarmMember.Init(BugDto.decode("bP1"))],
-        [Coords.Init(3, 0), SwarmMember.Init(BugDto.decode("wG1"))],
-        [Coords.Init(0.5, -1), SwarmMember.Init(BugDto.decode("bA1"))],
+        [Coords.Init(2, 3), SwarmMember.Init(BugStr.decode("wP1"))],
+        [Coords.Init(2.5, 1), SwarmMember.Init(BugStr.decode("wB1"))],
+        [Coords.Zero, SwarmMember.Init(BugStr.decode("bG1"))],
+        [Coords.Init(1, 0), SwarmMember.Init(BugStr.decode("bP1"))],
+        [Coords.Init(3, 0), SwarmMember.Init(BugStr.decode("wG1"))],
+        [Coords.Init(0.5, -1), SwarmMember.Init(BugStr.decode("bA1"))],
         [Coords.Init(1.5, -1), SwarmMember.Init(blackLadybug())],
-        [Coords.Init(2.5, -1), SwarmMember.Init(BugDto.decode("wS1"))]
+        [Coords.Init(2.5, -1), SwarmMember.Init(BugStr.decode("wS1"))]
       ),
     });
 
@@ -432,30 +432,30 @@ describe.concurrent("Examples from rules", () => {
   test.concurrent("Freedom to move: Beetle can climb", () => {
     const TestBug = () =>
       new Bug.Beetle({
-        number: BugNumber.One(1),
+        number: BugNumber.One.make(1),
         side: "black",
       });
 
     const swarm = new Swarm.Swarm({
-      lastMoved: BugDto.decode("bA1"),
+      lastMoved: BugStr.decode("bA1"),
       lastMovedByPillbug: false,
       field: HashMap.make(
         [
           Coords.Init(0.5, 1),
-          SwarmMember.Init(BugDto.decode("bP1")).pipe(
+          SwarmMember.Init(BugStr.decode("bP1")).pipe(
             SwarmMember.addCover(
               new Bug.Mosquito({
-                number: BugNumber.One(1),
+                number: BugNumber.One.make(1),
                 side: "white",
               })
             )
           ),
         ],
         [Coords.Init(1.5, 1), SwarmMember.Init(TestBug())],
-        [Coords.Zero, SwarmMember.Init(BugDto.decode("wA1"))],
-        [Coords.Init(1, 0), SwarmMember.Init(BugDto.decode("wQ1"))],
-        [Coords.Init(2, 0), SwarmMember.Init(BugDto.decode("bP1"))],
-        [Coords.Init(0.5, -1), SwarmMember.Init(BugDto.decode("bA1"))]
+        [Coords.Zero, SwarmMember.Init(BugStr.decode("wA1"))],
+        [Coords.Init(1, 0), SwarmMember.Init(BugStr.decode("wQ1"))],
+        [Coords.Init(2, 0), SwarmMember.Init(BugStr.decode("bP1"))],
+        [Coords.Init(0.5, -1), SwarmMember.Init(BugStr.decode("bA1"))]
       ),
     });
 
@@ -504,40 +504,40 @@ describe.concurrent("Examples from rules", () => {
   test.concurrent("Freedom to move: Beetle can't climb", () => {
     const TestBug = () =>
       new Bug.Beetle({
-        number: BugNumber.One(1),
+        number: BugNumber.One.make(1),
         side: "black",
       });
 
     const swarm = new Swarm.Swarm({
-      lastMoved: BugDto.decode("bA1"),
+      lastMoved: BugStr.decode("bA1"),
       lastMovedByPillbug: false,
       field: HashMap.make(
         [
           Coords.Init(0.5, 1),
-          SwarmMember.Init(BugDto.decode("bP1")).pipe(
+          SwarmMember.Init(BugStr.decode("bP1")).pipe(
             SwarmMember.addCover(
               new Bug.Mosquito({
-                number: BugNumber.One(1),
+                number: BugNumber.One.make(1),
                 side: "white",
               })
             )
           ),
         ],
         [Coords.Init(1.5, 1), SwarmMember.Init(TestBug())],
-        [Coords.Zero, SwarmMember.Init(BugDto.decode("wA1"))],
-        [Coords.Init(1, 0), SwarmMember.Init(BugDto.decode("wQ1"))],
+        [Coords.Zero, SwarmMember.Init(BugStr.decode("wA1"))],
+        [Coords.Init(1, 0), SwarmMember.Init(BugStr.decode("wQ1"))],
         [
           Coords.Init(2, 0),
-          SwarmMember.Init(BugDto.decode("bP1")).pipe(
+          SwarmMember.Init(BugStr.decode("bP1")).pipe(
             SwarmMember.addCover(
               new Bug.Beetle({
-                number: BugNumber.One(1),
+                number: BugNumber.One.make(1),
                 side: "white",
               })
             )
           ),
         ],
-        [Coords.Init(0.5, -1), SwarmMember.Init(BugDto.decode("bA1"))]
+        [Coords.Init(0.5, -1), SwarmMember.Init(BugStr.decode("bA1"))]
       ),
     });
 
@@ -585,20 +585,20 @@ describe.concurrent("Examples from rules", () => {
   test.concurrent("Freedom to move: Beetle can't descend", () => {
     const TestBug = () =>
       new Bug.Beetle({
-        number: BugNumber.One(1),
+        number: BugNumber.One.make(1),
         side: "black",
       });
 
     const swarm = new Swarm.Swarm({
-      lastMoved: BugDto.decode("bA1"),
+      lastMoved: BugStr.decode("bA1"),
       lastMovedByPillbug: false,
       field: HashMap.make(
         [
           Coords.Init(0.5, 1),
-          SwarmMember.Init(BugDto.decode("bP1")).pipe(
+          SwarmMember.Init(BugStr.decode("bP1")).pipe(
             SwarmMember.addCover(
               new Bug.Mosquito({
-                number: BugNumber.One(1),
+                number: BugNumber.One.make(1),
                 side: "white",
               })
             )
@@ -606,16 +606,16 @@ describe.concurrent("Examples from rules", () => {
         ],
         [
           Coords.Init(1, 0),
-          SwarmMember.Init(BugDto.decode("wA1")).pipe(
+          SwarmMember.Init(BugStr.decode("wA1")).pipe(
             SwarmMember.addCover(TestBug())
           ),
         ],
         [
           Coords.Init(0.5, -1),
-          SwarmMember.Init(BugDto.decode("bP1")).pipe(
+          SwarmMember.Init(BugStr.decode("bP1")).pipe(
             SwarmMember.addCover(
               new Bug.Beetle({
-                number: BugNumber.One(1),
+                number: BugNumber.One.make(1),
                 side: "white",
               })
             )
@@ -667,20 +667,20 @@ describe.concurrent("Examples from rules", () => {
   test.concurrent("Freedom to move: Mosquito can't descend", () => {
     const TestBug = () =>
       new Bug.Mosquito({
-        number: BugNumber.One(1),
+        number: BugNumber.One.make(1),
         side: "black",
       });
 
     const swarm = new Swarm.Swarm({
-      lastMoved: BugDto.decode("bA1"),
+      lastMoved: BugStr.decode("bA1"),
       lastMovedByPillbug: false,
       field: HashMap.make(
         [
           Coords.Init(0.5, 1),
-          SwarmMember.Init(BugDto.decode("bP1")).pipe(
+          SwarmMember.Init(BugStr.decode("bP1")).pipe(
             SwarmMember.addCover(
               new Bug.Mosquito({
-                number: BugNumber.One(1),
+                number: BugNumber.One.make(1),
                 side: "white",
               })
             )
@@ -688,16 +688,16 @@ describe.concurrent("Examples from rules", () => {
         ],
         [
           Coords.Init(1, 0),
-          SwarmMember.Init(BugDto.decode("wA1")).pipe(
+          SwarmMember.Init(BugStr.decode("wA1")).pipe(
             SwarmMember.addCover(TestBug())
           ),
         ],
         [
           Coords.Init(0.5, -1),
-          SwarmMember.Init(BugDto.decode("bP1")).pipe(
+          SwarmMember.Init(BugStr.decode("bP1")).pipe(
             SwarmMember.addCover(
               new Bug.Beetle({
-                number: BugNumber.One(1),
+                number: BugNumber.One.make(1),
                 side: "white",
               })
             )
@@ -749,34 +749,34 @@ describe.concurrent("Examples from rules", () => {
   test.concurrent("Freedom to move: Ladybug can't descend", () => {
     const TestBug = () =>
       new Bug.Ladybug({
-        number: BugNumber.One(1),
+        number: BugNumber.One.make(1),
         side: "black",
       });
 
     const swarm = new Swarm.Swarm({
-      lastMoved: BugDto.decode("bA1"),
+      lastMoved: BugStr.decode("bA1"),
       lastMovedByPillbug: false,
       field: HashMap.make(
         [
           Coords.Init(0.5, 1),
-          SwarmMember.Init(BugDto.decode("bP1")).pipe(
+          SwarmMember.Init(BugStr.decode("bP1")).pipe(
             SwarmMember.addCover(
               new Bug.Mosquito({
-                number: BugNumber.One(1),
+                number: BugNumber.One.make(1),
                 side: "white",
               })
             )
           ),
         ],
-        [Coords.Init(1, 0), SwarmMember.Init(BugDto.decode("wA1"))],
-        [Coords.Init(2, 0), SwarmMember.Init(BugDto.decode("wA2"))],
+        [Coords.Init(1, 0), SwarmMember.Init(BugStr.decode("wA1"))],
+        [Coords.Init(2, 0), SwarmMember.Init(BugStr.decode("wA2"))],
         [Coords.Init(3, 0), SwarmMember.Init(TestBug())],
         [
           Coords.Init(0.5, -1),
-          SwarmMember.Init(BugDto.decode("bP1")).pipe(
+          SwarmMember.Init(BugStr.decode("bP1")).pipe(
             SwarmMember.addCover(
               new Bug.Beetle({
-                number: BugNumber.One(1),
+                number: BugNumber.One.make(1),
                 side: "white",
               })
             )
@@ -821,34 +821,34 @@ describe.concurrent("Examples from rules", () => {
   test.concurrent("Freedom to move: Ladybug can't climb", () => {
     const TestBug = () =>
       new Bug.Ladybug({
-        number: BugNumber.One(1),
+        number: BugNumber.One.make(1),
         side: "black",
       });
 
     const swarm = new Swarm.Swarm({
-      lastMoved: BugDto.decode("bA1"),
+      lastMoved: BugStr.decode("bA1"),
       lastMovedByPillbug: false,
       field: HashMap.make(
         [
           Coords.Init(0.5, 1),
-          SwarmMember.Init(BugDto.decode("bP1")).pipe(
+          SwarmMember.Init(BugStr.decode("bP1")).pipe(
             SwarmMember.addCover(
               new Bug.Mosquito({
-                number: BugNumber.One(1),
+                number: BugNumber.One.make(1),
                 side: "white",
               })
             )
           ),
         ],
-        [Coords.Init(-1, 0), SwarmMember.Init(BugDto.decode("wA1"))],
-        [Coords.Init(0, 0), SwarmMember.Init(BugDto.decode("wA2"))],
+        [Coords.Init(-1, 0), SwarmMember.Init(BugStr.decode("wA1"))],
+        [Coords.Init(0, 0), SwarmMember.Init(BugStr.decode("wA2"))],
         [Coords.Init(1, 0), SwarmMember.Init(TestBug())],
         [
           Coords.Init(0.5, -1),
-          SwarmMember.Init(BugDto.decode("bP1")).pipe(
+          SwarmMember.Init(BugStr.decode("bP1")).pipe(
             SwarmMember.addCover(
               new Bug.Beetle({
-                number: BugNumber.One(1),
+                number: BugNumber.One.make(1),
                 side: "white",
               })
             )
@@ -894,35 +894,35 @@ describe.concurrent("Examples from rules", () => {
   test.concurrent("Freedom to move: Mosquito can't climb like Ladybug", () => {
     const TestBug = () =>
       new Bug.Mosquito({
-        number: BugNumber.One(1),
+        number: BugNumber.One.make(1),
         side: "black",
       });
 
     const swarm = new Swarm.Swarm({
-      lastMoved: BugDto.decode("bA1"),
+      lastMoved: BugStr.decode("bA1"),
       lastMovedByPillbug: false,
       field: HashMap.make(
         [
           Coords.Init(0.5, 1),
-          SwarmMember.Init(BugDto.decode("bP1")).pipe(
+          SwarmMember.Init(BugStr.decode("bP1")).pipe(
             SwarmMember.addCover(
               new Bug.Mosquito({
-                number: BugNumber.One(1),
+                number: BugNumber.One.make(1),
                 side: "white",
               })
             )
           ),
         ],
-        [Coords.Init(-1, 0), SwarmMember.Init(BugDto.decode("wA1"))],
-        [Coords.Init(0, 0), SwarmMember.Init(BugDto.decode("wA2"))],
+        [Coords.Init(-1, 0), SwarmMember.Init(BugStr.decode("wA1"))],
+        [Coords.Init(0, 0), SwarmMember.Init(BugStr.decode("wA2"))],
         [Coords.Init(1, 0), SwarmMember.Init(TestBug())],
-        [Coords.Init(2, 0), SwarmMember.Init(BugDto.decode("wL1"))],
+        [Coords.Init(2, 0), SwarmMember.Init(BugStr.decode("wL1"))],
         [
           Coords.Init(0.5, -1),
-          SwarmMember.Init(BugDto.decode("bP1")).pipe(
+          SwarmMember.Init(BugStr.decode("bP1")).pipe(
             SwarmMember.addCover(
               new Bug.Beetle({
-                number: BugNumber.One(1),
+                number: BugNumber.One.make(1),
                 side: "white",
               })
             )
@@ -979,34 +979,34 @@ describe.concurrent("Examples from rules", () => {
   test.concurrent("Freedom to move: Ladybug can't descend 2", () => {
     const TestBug = () =>
       new Bug.Ladybug({
-        number: BugNumber.One(1),
+        number: BugNumber.One.make(1),
         side: "black",
       });
 
     const swarm = new Swarm.Swarm({
-      lastMoved: BugDto.decode("bA1"),
+      lastMoved: BugStr.decode("bA1"),
       lastMovedByPillbug: false,
       field: HashMap.make(
         [
           Coords.Init(1.5, 1),
-          SwarmMember.Init(BugDto.decode("bP1")).pipe(
+          SwarmMember.Init(BugStr.decode("bP1")).pipe(
             SwarmMember.addCover(
               new Bug.Mosquito({
-                number: BugNumber.One(1),
+                number: BugNumber.One.make(1),
                 side: "white",
               })
             )
           ),
         ],
-        [Coords.Init(1, 0), SwarmMember.Init(BugDto.decode("wA1"))],
-        [Coords.Init(2, 0), SwarmMember.Init(BugDto.decode("wA2"))],
+        [Coords.Init(1, 0), SwarmMember.Init(BugStr.decode("wA1"))],
+        [Coords.Init(2, 0), SwarmMember.Init(BugStr.decode("wA2"))],
         [Coords.Init(3, 0), SwarmMember.Init(TestBug())],
         [
           Coords.Init(1.5, -1),
-          SwarmMember.Init(BugDto.decode("bP1")).pipe(
+          SwarmMember.Init(BugStr.decode("bP1")).pipe(
             SwarmMember.addCover(
               new Bug.Beetle({
-                number: BugNumber.One(1),
+                number: BugNumber.One.make(1),
                 side: "white",
               })
             )
@@ -1062,33 +1062,33 @@ describe.concurrent("Examples from rules", () => {
   test.concurrent("Freedom to move: Ladybug can descend", () => {
     const TestBug = () =>
       new Bug.Ladybug({
-        number: BugNumber.One(1),
+        number: BugNumber.One.make(1),
         side: "black",
       });
 
     const swarm = new Swarm.Swarm({
-      lastMoved: BugDto.decode("bA1"),
+      lastMoved: BugStr.decode("bA1"),
       lastMovedByPillbug: false,
       field: HashMap.make(
         [
           Coords.Init(0.5, 1),
-          SwarmMember.Init(BugDto.decode("bP1")).pipe(
+          SwarmMember.Init(BugStr.decode("bP1")).pipe(
             SwarmMember.addCover(
               new Bug.Mosquito({
-                number: BugNumber.One(1),
+                number: BugNumber.One.make(1),
                 side: "white",
               })
             )
           ),
         ],
-        [Coords.Init(1, 0), SwarmMember.Init(BugDto.decode("wA1"))],
+        [Coords.Init(1, 0), SwarmMember.Init(BugStr.decode("wA1"))],
         [Coords.Init(2, 0), SwarmMember.Init(TestBug())],
         [
           Coords.Init(0.5, -1),
-          SwarmMember.Init(BugDto.decode("bP1")).pipe(
+          SwarmMember.Init(BugStr.decode("bP1")).pipe(
             SwarmMember.addCover(
               new Bug.Beetle({
-                number: BugNumber.One(1),
+                number: BugNumber.One.make(1),
                 side: "white",
               })
             )
@@ -1146,26 +1146,26 @@ describe.concurrent("Examples from rules", () => {
   test.concurrent("Freedom to move: Beetle can't descend 2", () => {
     const TestBug = () =>
       new Bug.Beetle({
-        number: BugNumber.One(1),
+        number: BugNumber.One.make(1),
         side: "black",
       });
 
     const swarm = new Swarm.Swarm({
-      lastMoved: BugDto.decode("bA1"),
+      lastMoved: BugStr.decode("bA1"),
       lastMovedByPillbug: false,
       field: HashMap.make(
         [
           Coords.Init(0.5, 1),
-          SwarmMember.Init(BugDto.decode("bP1")).pipe(
+          SwarmMember.Init(BugStr.decode("bP1")).pipe(
             SwarmMember.addCover(
               new Bug.Mosquito({
-                number: BugNumber.One(1),
+                number: BugNumber.One.make(1),
                 side: "white",
               })
             ),
             SwarmMember.addCover(
               new Bug.Mosquito({
-                number: BugNumber.One(1),
+                number: BugNumber.One.make(1),
                 side: "black",
               })
             )
@@ -1173,16 +1173,16 @@ describe.concurrent("Examples from rules", () => {
         ],
         [
           Coords.Init(1, 0),
-          SwarmMember.Init(BugDto.decode("wA1")).pipe(
+          SwarmMember.Init(BugStr.decode("wA1")).pipe(
             SwarmMember.addCover(TestBug())
           ),
         ],
         [
           Coords.Init(0.5, -1),
-          SwarmMember.Init(BugDto.decode("bP1")).pipe(
+          SwarmMember.Init(BugStr.decode("bP1")).pipe(
             SwarmMember.addCover(
               new Bug.Beetle({
-                number: BugNumber.One(1),
+                number: BugNumber.One.make(1),
                 side: "white",
               })
             )
@@ -1234,40 +1234,40 @@ describe.concurrent("Examples from rules", () => {
   test.concurrent("Freedom to move: Mosquito can't climb", () => {
     const TestBug = () =>
       new Bug.Mosquito({
-        number: BugNumber.One(1),
+        number: BugNumber.One.make(1),
         side: "black",
       });
 
     const swarm = new Swarm.Swarm({
-      lastMoved: BugDto.decode("bA1"),
+      lastMoved: BugStr.decode("bA1"),
       lastMovedByPillbug: false,
       field: HashMap.make(
         [
           Coords.Init(0.5, 1),
-          SwarmMember.Init(BugDto.decode("bP1")).pipe(
+          SwarmMember.Init(BugStr.decode("bP1")).pipe(
             SwarmMember.addCover(
               new Bug.Mosquito({
-                number: BugNumber.One(1),
+                number: BugNumber.One.make(1),
                 side: "white",
               })
             )
           ),
         ],
         [Coords.Init(1.5, 1), SwarmMember.Init(TestBug())],
-        [Coords.Zero, SwarmMember.Init(BugDto.decode("wA1"))],
-        [Coords.Init(1, 0), SwarmMember.Init(BugDto.decode("wQ1"))],
+        [Coords.Zero, SwarmMember.Init(BugStr.decode("wA1"))],
+        [Coords.Init(1, 0), SwarmMember.Init(BugStr.decode("wQ1"))],
         [
           Coords.Init(2, 0),
-          SwarmMember.Init(BugDto.decode("bP1")).pipe(
+          SwarmMember.Init(BugStr.decode("bP1")).pipe(
             SwarmMember.addCover(
               new Bug.Beetle({
-                number: BugNumber.One(1),
+                number: BugNumber.One.make(1),
                 side: "white",
               })
             )
           ),
         ],
-        [Coords.Init(0.5, -1), SwarmMember.Init(BugDto.decode("bA1"))]
+        [Coords.Init(0.5, -1), SwarmMember.Init(BugStr.decode("bA1"))]
       ),
     });
 
@@ -1314,40 +1314,40 @@ describe.concurrent("Examples from rules", () => {
   test.concurrent("Freedom to move: Ladybug can't climb", () => {
     const TestBug = () =>
       new Bug.Ladybug({
-        number: BugNumber.One(1),
+        number: BugNumber.One.make(1),
         side: "black",
       });
 
     const swarm = new Swarm.Swarm({
-      lastMoved: BugDto.decode("bA1"),
+      lastMoved: BugStr.decode("bA1"),
       lastMovedByPillbug: false,
       field: HashMap.make(
         [
           Coords.Init(0.5, 1),
-          SwarmMember.Init(BugDto.decode("bP1")).pipe(
+          SwarmMember.Init(BugStr.decode("bP1")).pipe(
             SwarmMember.addCover(
               new Bug.Mosquito({
-                number: BugNumber.One(1),
+                number: BugNumber.One.make(1),
                 side: "white",
               })
             )
           ),
         ],
         [Coords.Init(1.5, 1), SwarmMember.Init(TestBug())],
-        [Coords.Zero, SwarmMember.Init(BugDto.decode("wA1"))],
-        [Coords.Init(1, 0), SwarmMember.Init(BugDto.decode("wQ1"))],
+        [Coords.Zero, SwarmMember.Init(BugStr.decode("wA1"))],
+        [Coords.Init(1, 0), SwarmMember.Init(BugStr.decode("wQ1"))],
         [
           Coords.Init(2, 0),
-          SwarmMember.Init(BugDto.decode("bP1")).pipe(
+          SwarmMember.Init(BugStr.decode("bP1")).pipe(
             SwarmMember.addCover(
               new Bug.Beetle({
-                number: BugNumber.One(1),
+                number: BugNumber.One.make(1),
                 side: "white",
               })
             )
           ),
         ],
-        [Coords.Init(0.5, -1), SwarmMember.Init(BugDto.decode("bA1"))]
+        [Coords.Init(0.5, -1), SwarmMember.Init(BugStr.decode("bA1"))]
       ),
     });
 

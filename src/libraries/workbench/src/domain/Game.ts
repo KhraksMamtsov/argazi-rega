@@ -8,17 +8,17 @@ import {
   HashSet,
   Schema,
 } from "effect";
-import * as Hand from "./Hand.ts";
-import * as Side from "./Side.ts";
-import * as Move from "./GameMove.ts";
-import * as Bug from "./Bug.ts";
-import * as GameStep from "./GameStep.ts";
-import { distributive } from "../shared/effect/Types.ts";
-import { QueenBeeState } from "./QueenBeeState.ts";
-import { Finish } from "./Finish.ts";
-import * as Cell from "./Cell.ts";
-import * as Swarm from "./Swarm.ts";
-import * as GameError from "./GameError.ts";
+import * as Hand from "./Hand.js";
+import * as Side from "./Side.js";
+import * as Move from "./GameMove.js";
+import * as Bug from "./Bug.js";
+import * as GameStep from "./GameStep.js";
+import { distributive } from "../shared/effect/Types.js";
+import { QueenBeeState } from "./QueenBeeState.js";
+import { Finish } from "./Finish.js";
+import * as Cell from "./Cell.js";
+import * as Swarm from "./Swarm.js";
+import * as GameError from "./GameError.js";
 import { dual } from "effect/Function";
 
 export interface GameInProgress extends Pipeable.Pipeable {}
@@ -73,7 +73,7 @@ export type MoveResult = Either.Either.Left<
   ReturnType<ReturnType<typeof makeMove>>
 >;
 
-const makeInitialMove: {
+export const makeInitialMove: {
   (
     initialMove: Move.InitialGameMove
   ): (
@@ -219,6 +219,7 @@ export const makeMove: {
       Either.map((newSwarm) => {
         const [, white] = Hand.extractBug(game.white, move.bug);
         const [, black] = Hand.extractBug(game.black, move.bug);
+
         return new GameInProgress({
           step: GameStep.next(game.step),
           white,

@@ -1,7 +1,7 @@
 import { Data } from "effect";
-import * as Move from "./GameMove.ts";
-import * as Bug from "./Bug.ts";
-import * as Cell from "./Cell.ts";
+import * as Move from "./GameMove.js";
+import * as Bug from "./Bug.js";
+import * as Cell from "./Cell.js";
 
 export class SplitSwarm extends Data.TaggedError("SplitSwarm")<{
   cell: Cell.Occupied;

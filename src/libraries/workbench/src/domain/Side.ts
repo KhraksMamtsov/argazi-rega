@@ -1,17 +1,11 @@
 import { Schema } from "effect";
-import type { AssertTrue, IsExtends } from "../shared/effect/Types.ts";
+import type { AssertTrue, IsExtends } from "../shared/effect/Types.js";
 
-export class WhiteSideSchema extends Schema.transformLiteral(
-  "w",
-  "white"
-).annotations({
+export class WhiteSideSchema extends Schema.Literal("white").annotations({
   identifier: "WhiteSideSchema",
 }) {}
 
-export class BlackSideSchema extends Schema.transformLiteral(
-  "b",
-  "black"
-).annotations({
+export class BlackSideSchema extends Schema.Literal("black").annotations({
   identifier: "BlackSideSchema",
 }) {}
 

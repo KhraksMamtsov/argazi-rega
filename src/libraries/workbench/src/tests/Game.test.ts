@@ -1,11 +1,15 @@
-import * as GameError from "../domain/GameError.ts";
-import * as SwarmError from "../domain/SwarmError.ts";
+import * as GameError from "../domain/GameError.js";
+import * as SwarmError from "../domain/SwarmError.js";
 import { Either, Effect, Equal } from "effect";
 import { describe, expect, it } from "@effect/vitest";
-import * as Game from "../domain/Game.ts";
-import * as GameStep from "../domain/GameStep.ts";
-import { trimNewline } from "./TestUtills.ts";
-import { InitialMoveDto, MoveDto, MovingMoveDto } from "../api/Move.dto.ts";
+import * as Game from "../domain/Game.js";
+import * as GameStep from "../domain/GameStep.js";
+import { trimNewline } from "./TestUtills.js";
+import {
+  InitialGameMoveStr,
+  GameMoveStr,
+  BugGameMoveStr,
+} from "../api/GameMove.str.js";
 
 describe.concurrent("Game", () => {
   it.effect(
@@ -30,8 +34,8 @@ describe.concurrent("Game", () => {
         pillbug: false,
       }).pipe(
         Game.moveAll({
-          init: InitialMoveDto.decode("wA1"),
-          moves: [MovingMoveDto.decode("b: bS2 wA1|")],
+          init: InitialGameMoveStr.decode("wA1"),
+          moves: [BugGameMoveStr.decode("b: bS2 wA1|")],
         })
       );
 
@@ -57,15 +61,15 @@ b: A1 A2 A3 B1 B2 G1 G2 G3 Q1 S1
         pillbug: false,
       }).pipe(
         Game.moveAll({
-          init: InitialMoveDto.decode("wQ1"),
-          moves: [MovingMoveDto.decode("b: bP1 wQ1|")],
+          init: InitialGameMoveStr.decode("wQ1"),
+          moves: [BugGameMoveStr.decode("b: bP1 wQ1|")],
         }),
         Either.flip
       );
 
       expect(gameError).toStrictEqual(
         new GameError.BugNotFound({
-          move: MovingMoveDto.decode("b: bP1 wQ1|"),
+          move: BugGameMoveStr.decode("b: bP1 wQ1|"),
           step: GameStep.GameStep.make(1),
         })
       );
@@ -81,7 +85,7 @@ b: A1 A2 A3 B1 B2 G1 G2 G3 Q1 S1
         pillbug: false,
       }).pipe(
         Game.moveAll({
-          init: InitialMoveDto.decode("bA1"),
+          init: InitialGameMoveStr.decode("bA1"),
           moves: [],
         }),
         Either.flip
@@ -89,7 +93,7 @@ b: A1 A2 A3 B1 B2 G1 G2 G3 Q1 S1
 
       expect(turnError).toStrictEqual(
         new GameError.WrongSideMove({
-          move: MoveDto.decode("bA1"),
+          move: GameMoveStr.decode("bA1"),
           step: GameStep.Init(),
         })
       );
@@ -103,7 +107,9 @@ b: A1 A2 A3 B1 B2 G1 G2 G3 Q1 S1
         ladybug: false,
         mosquito: false,
         pillbug: false,
-      }).pipe(Game.moveAll({ init: InitialMoveDto.decode("wA1"), moves: [] }));
+      }).pipe(
+        Game.moveAll({ init: InitialGameMoveStr.decode("wA1"), moves: [] })
+      );
 
       expect(game.step, "step increased").toBe(1);
       expect(Game.toString(game)).toBe(
@@ -172,10 +178,10 @@ b: A1 A2 A3 B1 B2 G1 G2 G3 Q1 S1 S2
         pillbug: true,
       }).pipe(
         Game.moveAll({
-          init: InitialMoveDto.decode("wQ1"),
+          init: InitialGameMoveStr.decode("wQ1"),
           moves: [
-            MovingMoveDto.decode("b: bA1 wQ1|"),
-            MovingMoveDto.decode("w: wP1 wQ1\\"),
+            BugGameMoveStr.decode("b: bA1 wQ1|"),
+            BugGameMoveStr.decode("w: wP1 wQ1\\"),
           ],
         }),
         Either.flip
@@ -185,9 +191,9 @@ b: A1 A2 A3 B1 B2 G1 G2 G3 Q1 S1 S2
         Equal.equals(
           gameError,
           new GameError.ImpossibleMove({
-            move: MovingMoveDto.decode("w: wP1 wQ1\\"),
+            move: BugGameMoveStr.decode("w: wP1 wQ1\\"),
             swarmError: new SwarmError.IntroductionMoveViolation({
-              move: MovingMoveDto.decode("w: wP1 wQ1\\"),
+              move: BugGameMoveStr.decode("w: wP1 wQ1\\"),
             }),
             step: GameStep.GameStep.make(2),
           })

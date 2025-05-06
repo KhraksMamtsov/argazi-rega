@@ -9,14 +9,14 @@ import {
   HashSet,
   HashMap,
 } from "effect";
-import * as Bug from "./Bug.ts";
+import * as Bug from "./Bug.js";
 import { dual, pipe } from "effect/Function";
-import * as CellBorder from "./CellBorder.ts";
+import * as CellBorder from "./CellBorder.js";
 
-import * as CellRelation from "./CellRelation.ts";
-import * as CoordsDelta from "./CoordsDelta.ts";
-import * as Coords from "./Coords.ts";
-import * as SwarmMember from "./SwarmMember.ts";
+import * as CellRelation from "./CellRelation.js";
+import * as CoordsDelta from "./CoordsDelta.js";
+import * as Coords from "./Coords.js";
+import * as SwarmMember from "./SwarmMember.js";
 
 export type Cell = Empty | Occupied;
 const Cell = Data.taggedEnum<Cell>();
@@ -383,7 +383,7 @@ export const reduce = <B>(
   initialCell: Cell,
   b: B,
   f: (b: B, a: Cell) => B
-): B => reduceWithFilter(initialCell, b, (x): x is Cell => true, f);
+): B => reduceWithFilter(initialCell, b, (_): _ is Cell => true, f);
 
 export const toField = (cell: Cell) =>
   reduce(

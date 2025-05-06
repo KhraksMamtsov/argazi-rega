@@ -1,98 +1,97 @@
-import { Brand, Data, Predicate, Tuple } from "effect";
+import { Brand, Data, Predicate } from "effect";
 import { Schema } from "effect";
-import * as Side from "./Side.ts";
-import * as BugNumber from "./BugNumber.ts";
+import * as Side from "./Side.js";
+import * as BugNumber from "./BugNumber.js";
 import { dual } from "effect/Function";
 
-export class _Bug extends Schema.Struct({
+export class BugBase extends Schema.Struct({
   side: Side.SideSchema,
 }) {}
 
 export class QueenBee extends Schema.TaggedClass<QueenBee>("QueenBee")(
   "QueenBee",
-  { ..._Bug.fields, number: Schema.Literal(...BugNumber._One) }
+  { ...BugBase.fields, number: BugNumber.One }
 ) {
   static Init(side: Side.Side) {
-    return new QueenBee({ number: BugNumber._One[0], side });
+    return new QueenBee({ number: BugNumber.One.make(1), side });
   }
 }
 
 export class Beetle extends Schema.TaggedClass<Beetle>("Beetle")("Beetle", {
-  ..._Bug.fields,
-  number: Schema.Literal(...BugNumber._OneTwo),
+  ...BugBase.fields,
+  number: BugNumber.OneTwo,
 }) {
-  static Init = (side: Side.Side) =>
-    Tuple.map(BugNumber._OneTwo, (number) => new Beetle({ number, side }));
+  static Init = (side: Side.Side) => [
+    new Beetle({ number: BugNumber.One.make(1), side }),
+    new Beetle({ number: BugNumber.Two.make(2), side }),
+  ];
 }
 
 export class Grasshopper extends Schema.TaggedClass<Grasshopper>("Grasshopper")(
   "Grasshopper",
   {
-    ..._Bug.fields,
-    number: Schema.Literal(...BugNumber._OneTwoThree),
+    ...BugBase.fields,
+    number: BugNumber.BugNumber,
   }
 ) {
-  static Init(side: Side.Side) {
-    return Tuple.map(
-      BugNumber._OneTwoThree,
-      (number) => new Grasshopper({ number, side })
-    );
-  }
+  static Init = (side: Side.Side) => [
+    new Grasshopper({ number: BugNumber.One.make(1), side }),
+    new Grasshopper({ number: BugNumber.Two.make(2), side }),
+    new Grasshopper({ number: BugNumber.Three.make(3), side }),
+  ];
 }
 
 export class Spider extends Schema.TaggedClass<Spider>("Spider")("Spider", {
-  ..._Bug.fields,
-  number: Schema.Literal(...BugNumber._OneTwo),
+  ...BugBase.fields,
+  number: BugNumber.OneTwo,
 }) {
-  static Init(side: Side.Side) {
-    return Tuple.map(
-      BugNumber._OneTwo,
-      (number) => new Spider({ number, side })
-    );
-  }
+  static Init = (side: Side.Side) => [
+    new Spider({ number: BugNumber.One.make(1), side }),
+    new Spider({ number: BugNumber.Two.make(2), side }),
+  ];
 }
 
 export class Ant extends Schema.TaggedClass<Ant>("Ant")("Ant", {
-  ..._Bug.fields,
-  number: Schema.Literal(...BugNumber._OneTwoThree),
+  ...BugBase.fields,
+  number: BugNumber.BugNumber,
 }) {
-  static Init(side: Side.Side) {
-    return Tuple.map(
-      BugNumber._OneTwoThree,
-      (number) => new Ant({ number, side })
-    );
-  }
+  static Init = (side: Side.Side) => [
+    new Ant({ number: BugNumber.One.make(1), side }),
+    new Ant({ number: BugNumber.Two.make(2), side }),
+    new Ant({ number: BugNumber.Three.make(3), side }),
+  ];
 }
 
 export class Ladybug extends Schema.TaggedClass<Ladybug>("Ladybug")(
   "Ladybug",
 
-  { ..._Bug.fields, number: Schema.Literal(...BugNumber._One) }
+  { ...BugBase.fields, number: BugNumber.One }
 ) {
   static Init(side: Side.Side) {
-    return [new Ladybug({ number: BugNumber._One[0], side })];
+    return new Ladybug({ number: BugNumber.One.make(1), side });
   }
 }
 
 export class Mosquito extends Schema.TaggedClass<Mosquito>("Mosquito")(
   "Mosquito",
-  { ..._Bug.fields, number: Schema.Literal(...BugNumber._One) }
+
+  { ...BugBase.fields, number: BugNumber.One }
 ) {
   static Init(side: Side.Side) {
-    return [new Mosquito({ number: BugNumber._One[0], side })];
+    return new Mosquito({ number: BugNumber.One.make(1), side });
   }
 }
 
 export class Pillbug extends Schema.TaggedClass<Pillbug>("Pillbug")("Pillbug", {
-  ..._Bug.fields,
-  number: Schema.Literal(...BugNumber._One),
+  ...BugBase.fields,
+  number: BugNumber.One,
 }) {
   static Init(side: Side.Side) {
-    return Tuple.map(BugNumber._One, (number) => new Pillbug({ number, side }));
+    return new Pillbug({ number: BugNumber.One.make(1), side });
   }
 }
 
-export const BugSchema = Schema.Union(
+export const Bug = Schema.Union(
   QueenBee,
   Beetle,
   Grasshopper,
@@ -101,16 +100,15 @@ export const BugSchema = Schema.Union(
   Ladybug,
   Mosquito,
   Pillbug
-);
-export type Bug = typeof BugSchema.Type;
+).annotations({
+  identifier: "Bug",
+});
+export type Bug = typeof Bug.Type;
 
-const Bug = Data.taggedEnum<Bug>();
+const __Bug = Data.taggedEnum<Bug>();
+export const match = __Bug.$match;
+export const is = __Bug.$is;
 
-export const refineNotQueen = (bug: Bug): bug is Exclude<Bug, QueenBee> =>
-  Predicate.not(refineQueen)(bug);
-
-export const match = Bug.$match;
-// export const refine = Bug.$is;
 export const refine: {
   <T extends Bug["_tag"]>(
     tag: T
@@ -119,12 +117,14 @@ export const refine: {
 } = dual(
   2,
   <T extends Bug["_tag"]>(bug: Bug, tag: T): bug is Extract<Bug, { _tag: T }> =>
-    Bug.$is(tag)(bug)
+    is(tag)(bug)
 );
 
 export const refineQueen = refine("QueenBee");
+export const refineNotQueen = (bug: Bug): bug is Exclude<Bug, QueenBee> =>
+  Predicate.not(refineQueen)(bug);
 
-export const emoji = Bug.$match({
+export const emoji = match({
   Ant: () => "🐜",
   QueenBee: () => "🐝",
   Beetle: () => "🪲",

@@ -1,6 +1,6 @@
 import { Schema, Tuple } from "effect";
-import * as CellBorder from "./CellBorder.ts";
-import * as CoordsDelta from "./CoordsDelta.ts";
+import * as CellBorder from "./CellBorder.js";
+import * as CoordsDelta from "./CoordsDelta.js";
 
 export type _CoordId = typeof _CoordId;
 export const _CoordId: unique symbol = Symbol.for("domain/CoordId");

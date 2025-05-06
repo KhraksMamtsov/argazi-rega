@@ -1,41 +1,41 @@
-import { Schema, hole } from "effect";
-import { BugDto } from "./Bug.dto.ts";
-import * as _Move from "../domain/GameMove.ts";
-import * as _Bug from "../domain/Bug.ts";
-import * as Side from "../domain/Side.ts";
-import type { CellBorder } from "../domain/CellBorder.ts";
+import { Schema } from "effect";
+import { BugStr } from "./Bug.str.js";
+import * as _Move from "../domain/GameMove.js";
+import * as _Bug from "../domain/Bug.js";
+import type { CellBorder } from "../domain/CellBorder.js";
+import { SideStr } from "./Side.str.js";
 
-export class CellBorderRightDto extends Schema.transformLiterals(
+export class CellBorderRightStr extends Schema.transformLiterals(
   ["\\", 0],
   ["|", 1],
   ["/", 2]
 ).annotations({
-  identifier: "CellBorderRightDto",
+  identifier: "CellBorderRightStr",
 }) {}
 
-export class CellBorderLeftDto extends Schema.transformLiterals(
+export class CellBorderLeftStr extends Schema.transformLiterals(
   ["/", 5],
   ["|", 4],
   ["\\", 3]
 ).annotations({
-  identifier: "CellBorderLeftDto",
+  identifier: "CellBorderLeftStr",
 }) {}
 
-export const _MovingMoveDto = Schema.TemplateLiteralParser(
-  Side.SideSchema,
+export const _MovingMoveStr = Schema.TemplateLiteralParser(
+  SideStr,
   Schema.Literal(": "),
-  BugDto,
+  BugStr,
   Schema.Literal(" "),
   Schema.Union(
-    Schema.TemplateLiteralParser(CellBorderLeftDto, BugDto),
-    Schema.TemplateLiteralParser(BugDto, CellBorderRightDto)
+    Schema.TemplateLiteralParser(CellBorderLeftStr, BugStr),
+    Schema.TemplateLiteralParser(BugStr, CellBorderRightStr)
   )
 ).annotations({
-  identifier: "_MovingMoveDto",
+  identifier: "_MovingMoveStr",
 });
 
-export class MovingMoveDto extends Schema.transform(
-  _MovingMoveDto,
+export class BugGameMoveStr extends Schema.transform(
+  _MovingMoveStr,
   Schema.typeSchema(_Move.BugGameMove),
   {
     strict: true,
@@ -64,13 +64,13 @@ export class MovingMoveDto extends Schema.transform(
     },
   }
 ).annotations({
-  identifier: "MovingMoveDto",
+  identifier: "BugGameMoveStr",
 }) {
   static decode = Schema.decodeSync(this);
 }
 
-export class InitialMoveDto extends Schema.transform(
-  BugDto,
+export class InitialGameMoveStr extends Schema.transform(
+  BugStr,
   Schema.typeSchema(_Move.InitialGameMove),
   {
     strict: true,
@@ -78,16 +78,16 @@ export class InitialMoveDto extends Schema.transform(
     decode: (bug) => new _Move.InitialGameMove({ bug, side: "white" }),
   }
 ).annotations({
-  identifier: "InitialMoveDto",
+  identifier: "InitialGameMoveStr",
 }) {
   static decode = Schema.decodeSync(this);
 }
 
-export class MoveDto extends Schema.Union(
-  MovingMoveDto,
-  InitialMoveDto
+export class GameMoveStr extends Schema.Union(
+  BugGameMoveStr,
+  InitialGameMoveStr
 ).annotations({
-  identifier: "MoveDto",
+  identifier: "GameMoveStr",
 }) {
   static decode = Schema.decodeSync(this);
 }

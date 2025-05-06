@@ -1,7 +1,7 @@
 import { Data } from "effect";
-import * as Move from "./GameMove.ts";
-import * as GameStep from "./GameStep.ts";
-import * as _SwarmError from "./SwarmError.ts";
+import * as Move from "./GameMove.js";
+import * as GameStep from "./GameStep.js";
+import * as _SwarmError from "./SwarmError.js";
 
 export class WrongSideMove extends Data.TaggedError("WrongSideMove")<{
   move: Move.GameMove;

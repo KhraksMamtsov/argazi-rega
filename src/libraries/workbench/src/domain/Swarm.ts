@@ -14,17 +14,17 @@ import {
   MutableHashMap,
   Schema,
 } from "effect";
-import * as Cell from "./Cell.ts";
-import * as Side from "./Side.ts";
-import * as CellBorder from "./CellBorder.ts";
-import * as Coords from "./Coords.ts";
-import * as Bug from "./Bug.ts";
-import * as SwarmMember from "./SwarmMember.ts";
+import * as Cell from "./Cell.js";
+import * as Side from "./Side.js";
+import * as CellBorder from "./CellBorder.js";
+import * as Coords from "./Coords.js";
+import * as Bug from "./Bug.js";
+import * as SwarmMember from "./SwarmMember.js";
 import { dual } from "effect/Function";
-import { distributive } from "../shared/effect/Types.ts";
-import { QueenBeeState } from "./QueenBeeState.ts";
-import * as SwarmError from "./SwarmError.ts";
-import * as GameMove from "./GameMove.ts";
+import { distributive } from "../shared/effect/Types.js";
+import { QueenBeeState } from "./QueenBeeState.js";
+import * as SwarmError from "./SwarmError.js";
+import * as GameMove from "./GameMove.js";
 
 interface CoordsCell {
   readonly white: HashMap.HashMap<Coords.Coords, Cell.Occupied>;
@@ -32,11 +32,17 @@ interface CoordsCell {
 }
 
 export interface Swarm extends Pipeable.Pipeable {}
-export class Swarm extends Schema.Class<Swarm>("Swarm")({
-  field: Schema.HashMap({ key: Coords.Coords, value: SwarmMember.SwarmMember }),
-  lastMoved: Bug.BugSchema,
-  lastMovedByPillbug: Schema.Boolean,
-}) {
+export class Swarm
+  extends Schema.Class<Swarm>("Swarm")({
+    field: Schema.HashMap({
+      key: Coords.Coords,
+      value: SwarmMember.SwarmMember,
+    }),
+    lastMoved: Bug.Bug,
+    lastMovedByPillbug: Schema.Boolean,
+  })
+  implements Pipeable.Pipeable
+{
   static {
     this.prototype.pipe = function () {
       return Pipeable.pipeArguments(this, arguments);

@@ -1,11 +1,11 @@
 import { HashSet, Option, Array, String, Schema } from "effect";
-import * as Bug from "./Bug.ts";
-import * as Side from "./Side.ts";
+import * as Bug from "./Bug.js";
+import * as Side from "./Side.js";
 import { dual } from "effect/Function";
-import { BugDto } from "../api/Bug.dto.ts";
+import { BugStr } from "../api/Bug.str.js";
 
 export class Hand extends Schema.Class<Hand>("Hand")({
-  bugs: Schema.HashSet(BugDto),
+  bugs: Schema.HashSet(BugStr),
   side: Side.SideSchema,
 }) {}
 
@@ -25,9 +25,9 @@ export const Init = (
       ...Bug.Spider.Init(side),
       ...Bug.Ant.Init(side),
       ...Bug.Grasshopper.Init(side),
-      ...(option.ladybug ? Bug.Ladybug.Init(side) : []),
-      ...(option.mosquito ? Bug.Mosquito.Init(side) : []),
-      ...(option.pillbug ? Bug.Pillbug.Init(side) : []),
+      ...(option.ladybug ? [Bug.Ladybug.Init(side)] : []),
+      ...(option.mosquito ? [Bug.Mosquito.Init(side)] : []),
+      ...(option.pillbug ? [Bug.Pillbug.Init(side)] : []),
     ]),
   });
 

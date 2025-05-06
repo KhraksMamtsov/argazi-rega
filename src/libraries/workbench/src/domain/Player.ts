@@ -8,7 +8,6 @@ export type PlayerId = typeof PlayerId.Type;
 
 export const PlayerTypeId: unique symbol = Symbol.for("game/PlayerTypeId");
 export type PlayerTypeId = typeof PlayerTypeId;
-
 export class Player extends Schema.Class<Player>("Player")({
   id: PlayerId,
 }) {

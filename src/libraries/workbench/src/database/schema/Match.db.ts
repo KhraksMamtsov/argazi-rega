@@ -1,51 +1,51 @@
 import * as DB from "drizzle-orm/sqlite-core";
-import { AllBugs } from "../../api/Bug.dto.ts";
-import { sides } from "../../domain/Side.ts";
 
-export const PlayerTable = DB.sqliteTable("Player", {
-  id: DB.text().primaryKey().notNull(),
-  nickname: DB.text({ mode: "text" }).notNull(),
+import { sides } from "../../domain/Side.js";
+import { PlayerDb } from "./Player.db.js";
+import { Schema, hole } from "effect";
+import { Match } from "../../domain/Match.js";
+
+export const _MatchDb = DB.sqliteTable("Match", {
+  id: DB.text().primaryKey().notNull().unique(),
+  idOwner: DB.text({ mode: "text" })
+    .notNull()
+    .references(() => PlayerDb._.id),
+  idOpponent: DB.text({ mode: "text" })
+    .notNull()
+    .references(() => PlayerDb._.id),
 });
 
-export const MatchTable = DB.sqliteTable("Match", {
-  id: DB.text().primaryKey().notNull(),
-  owner: DB.text({ mode: "text" })
-    .notNull()
-    .references(() => PlayerTable.id),
-  opponent: DB.text({ mode: "text" })
-    .notNull()
-    .references(() => PlayerTable.id),
-});
+export class MatchDbFromSelf extends Schema.Class<MatchDbFromSelf>(
+  "MatchDbFromSelf"
+)({
+  id: Schema.String,
+  idOwner: Schema.String,
+  idOpponent: Schema.String,
+}) {
+  static _ = _MatchDb;
+}
 
-export const MatchSettingsTable = DB.sqliteTable("MatchSettings", {
-  match: DB.text()
+MatchDbFromSelf.Encoded satisfies typeof _MatchDb.$inferSelect;
+MatchDbFromSelf.Encoded satisfies typeof _MatchDb.$inferInsert;
+
+export class MatchDb extends Schema.transform(MatchDbFromSelf, Match, {
+  strict: true,
+  decode: () => hole(),
+  encode: () => hole(),
+}) {
+  static _ = _MatchDb;
+}
+
+export const MatchSettingsDb = DB.sqliteTable("MatchSettings", {
+  idMatch: DB.text()
     .notNull()
-    .references(() => PlayerTable.id),
+    .references(() => MatchDb._.id)
+    .unique(),
   ownerSide: DB.text({
     enum: sides,
     mode: "text",
-  }),
-  ladybug: DB.integer({ mode: "boolean" }).notNull(),
-  pillpug: DB.integer({ mode: "boolean" }).notNull(),
-  mosquito: DB.integer({ mode: "boolean" }).notNull(),
-});
-
-export const MoveTable = DB.sqliteTable("Move", {
-  match: DB.text({ mode: "text" })
-    .notNull()
-    .references(() => MatchTable.id),
-  side: DB.integer({ mode: "boolean" }).notNull(),
-  index: DB.integer({ mode: "number" }).notNull(),
-  bug: DB.text({
-    enum: AllBugs,
-    mode: "text",
   }).notNull(),
-
-  neighbor: DB.text({
-    enum: AllBugs,
-    mode: "text",
-  }),
-  cellBorder: DB.integer({
-    mode: "number",
-  }),
+  ladybug: DB.integer({ mode: "boolean" }).notNull(),
+  pillbug: DB.integer({ mode: "boolean" }).notNull(),
+  mosquito: DB.integer({ mode: "boolean" }).notNull(),
 });

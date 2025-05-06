@@ -1,6 +1,6 @@
 import { Data } from "effect";
-import * as Cell from "./Cell.ts";
-import * as Bug from "./Bug.ts";
+import * as Cell from "./Cell.js";
+import * as Bug from "./Bug.js";
 
 export class OneSurrounded extends Data.TaggedClass("OneSurrounded")<{
   cell: Cell.Occupied<Bug.QueenBee>;

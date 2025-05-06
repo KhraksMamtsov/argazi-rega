@@ -1,5 +1,5 @@
 import { Array, Option, Pipeable, Schema } from "effect";
-import * as Bug from "./Bug.ts";
+import * as Bug from "./Bug.js";
 import { dual } from "effect/Function";
 
 export interface SwarmMember extends Pipeable.Pipeable {}
@@ -8,7 +8,7 @@ export declare namespace SwarmMember {
   export type With<B extends Bug.Bug> = SwarmMember & { readonly bug: B };
 }
 export class SwarmMember extends Schema.Class<SwarmMember>("SwarmMember")({
-  bug: Bug.BugSchema,
+  bug: Bug.Bug,
   cover: Schema.Array(Schema.Union(Bug.Beetle, Bug.Mosquito)),
 }) {
   static {
